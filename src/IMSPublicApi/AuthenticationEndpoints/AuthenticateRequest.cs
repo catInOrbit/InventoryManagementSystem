@@ -1,4 +1,4 @@
-﻿namespace InventoryManagementSystem.PublicApi.AuthEndpoints
+﻿namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 {
     public class AuthenticateRequest : BaseRequest 
     {

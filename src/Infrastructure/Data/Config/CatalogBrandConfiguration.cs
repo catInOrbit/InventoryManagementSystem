@@ -4,9 +4,9 @@ using Microsoft.eShopWeb.ApplicationCore.Entities;
 
 namespace Microsoft.eShopWeb.Infrastructure.Data.Config
 {
-    public class CatalogBrandConfiguration : IEntityTypeConfiguration<CatalogBrand>
+    public class CatalogBrandConfiguration : IEntityTypeConfiguration<ProductBrand>
     {
-        public void Configure(EntityTypeBuilder<CatalogBrand> builder)
+        public void Configure(EntityTypeBuilder<ProductBrand> builder)
         {
             builder.HasKey(ci => ci.Id);
 

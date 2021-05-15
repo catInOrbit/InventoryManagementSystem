@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Interfaces
 {
-    public interface IAsyncRepository<T> where T : BaseEntity, IAggregateRoot
+    public interface IAsyncRepository<T> where T : BaseEntity
     {
         Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default);
         Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default);

@@ -1,16 +1,17 @@
-﻿using System;
+using System;
 
-namespace InventoryManagementSystem.PublicApi.AuthEndpoints
+namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
 {
-    public class AuthenticateResponse : BaseResponse
+    public class RegisterResponse : BaseResponse
     {
-        public AuthenticateResponse(Guid correlationId) : base(correlationId)
+        public RegisterResponse(Guid correlationId) : base(correlationId)
         {
         }
 
-        public AuthenticateResponse()
+        public RegisterResponse()
         {
         }
+        
         public bool Result { get; set; } = false;
         public string Token { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;

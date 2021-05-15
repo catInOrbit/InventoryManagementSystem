@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace InventoryManagementSystem.PublicApi.AuthEndpoints
+namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 {
     public class UserInfo
     {

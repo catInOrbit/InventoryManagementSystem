@@ -4,6 +4,7 @@ using AutoMapper;
 using BlazorShared;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -47,9 +48,12 @@ namespace InventoryManagementSystem.PublicApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<IdentityUser, IdentityRole>()
                     .AddEntityFrameworkStores<AppIdentityDbContext>()
+                    .AddRoles<IdentityRole>()
                     .AddDefaultTokenProviders();
+            
+           
 
             //The AddScoped method registers the service with a scoped lifetime, the lifetime of a single request.
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
@@ -95,12 +99,18 @@ namespace InventoryManagementSystem.PublicApi
             });
 
             services.AddControllers();
-            services.AddMediatR(typeof(CatalogItem).Assembly);
+            services.AddMediatR(typeof(Product).Assembly);
 
             services.AddAutoMapper(typeof(Startup).Assembly);
+            services.AddAuthorization(options =>
+            {
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "IMS Public API", Version = "v1" });
                 c.EnableAnnotations();
                 c.SchemaFilter<CustomSchemaFilters>();
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

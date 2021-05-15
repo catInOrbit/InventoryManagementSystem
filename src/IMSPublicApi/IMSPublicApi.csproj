@@ -37,5 +37,9 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TestEndpoints" />
+  </ItemGroup>
+
 
 </Project>

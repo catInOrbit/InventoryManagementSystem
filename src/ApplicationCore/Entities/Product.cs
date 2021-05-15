@@ -4,7 +4,7 @@ using System;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Entities
 {
-    public class CatalogItem : BaseEntity, IAggregateRoot
+    public class Product : BaseEntity
     {
         public string Name { get; private set; }
         public string Description { get; private set; }
@@ -13,9 +13,9 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities
         public int CatalogTypeId { get; private set; }
         public CatalogType CatalogType { get; private set; }
         public int CatalogBrandId { get; private set; }
-        public CatalogBrand CatalogBrand { get; private set; }
+        public ProductBrand ProductBrand { get; private set; }
 
-        public CatalogItem(int catalogTypeId,
+        public Product(int catalogTypeId,
             int catalogBrandId,
             string description,
             string name,

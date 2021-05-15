@@ -4,9 +4,9 @@ using Microsoft.eShopWeb.ApplicationCore.Entities;
 
 namespace Microsoft.eShopWeb.Infrastructure.Data.Config
 {
-    public class CatalogItemConfiguration : IEntityTypeConfiguration<CatalogItem>
+    public class CatalogItemConfiguration : IEntityTypeConfiguration<Product>
     {
-        public void Configure(EntityTypeBuilder<CatalogItem> builder)
+        public void Configure(EntityTypeBuilder<Product> builder)
         {
             builder.ToTable("Catalog");
 
@@ -25,7 +25,7 @@ namespace Microsoft.eShopWeb.Infrastructure.Data.Config
             builder.Property(ci => ci.PictureUri)
                 .IsRequired(false);
 
-            builder.HasOne(ci => ci.CatalogBrand)
+            builder.HasOne(ci => ci.ProductBrand)
                 .WithMany()
                 .HasForeignKey(ci => ci.CatalogBrandId);
 

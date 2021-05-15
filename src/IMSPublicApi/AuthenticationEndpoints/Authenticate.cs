@@ -4,19 +4,18 @@ using Ardalis.ApiEndpoints;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
-using Microsoft.eShopWeb.Infrastructure.Identity;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace InventoryManagementSystem.PublicApi.AuthEndpoints
+namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 {
     public class Authenticate : BaseAsyncEndpoint
         .WithRequest<AuthenticateRequest>
         .WithResponse<AuthenticateResponse>
     {
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ITokenClaimsService _tokenClaimsService;
 
-        public Authenticate(SignInManager<ApplicationUser> signInManager,
+        public Authenticate(SignInManager<IdentityUser> signInManager,
             ITokenClaimsService tokenClaimsService)
         {
             _signInManager = signInManager;
@@ -28,7 +27,7 @@ namespace InventoryManagementSystem.PublicApi.AuthEndpoints
             Summary = "Authenticates a user",
             Description = "Authenticates a user",
             OperationId = "auth.authenticate",
-            Tags = new[] { "AuthEndpoints" })
+            Tags = new[] { "IMSAuthenticationEndpoints" })
         ]
         public override async Task<ActionResult<AuthenticateResponse>> HandleAsync(AuthenticateRequest request, CancellationToken cancellationToken)
         {
@@ -52,5 +51,7 @@ namespace InventoryManagementSystem.PublicApi.AuthEndpoints
 
             return response;
         }
+        
+      
     }
 }

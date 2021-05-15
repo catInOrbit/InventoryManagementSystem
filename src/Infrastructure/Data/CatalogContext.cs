@@ -12,8 +12,8 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
         }
 
         // public DbSet<Basket> Baskets { get; set; }
-        public DbSet<CatalogItem> CatalogItems { get; set; }
-        public DbSet<CatalogBrand> CatalogBrands { get; set; }
+        public DbSet<Product> CatalogItems { get; set; }
+        public DbSet<ProductBrand> CatalogBrands { get; set; }
         public DbSet<CatalogType> CatalogTypes { get; set; }
         // public DbSet<Order> Orders { get; set; }
         // public DbSet<OrderItem> OrderItems { get; set; }
