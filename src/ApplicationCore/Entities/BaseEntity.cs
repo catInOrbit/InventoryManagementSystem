@@ -1,14 +1,9 @@
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace ApplicationCore.Entities
+﻿namespace Microsoft.eShopWeb.ApplicationCore.Entities
 {
-    public class BaseEntity
+    // This can easily be modified to be BaseEntity<T> and public T Id to support different key types.
+    // Using non-generic integer types for simplicity and to ease caching logic
+    public abstract class BaseEntity
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public virtual int ID { get; protected set; }
-        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
-        public string CreatedBy { get; set; }
-        
+        public virtual int Id { get; protected set; }
     }
 }
