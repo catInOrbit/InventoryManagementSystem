@@ -2,12 +2,14 @@ using System.Collections.Generic;
 using System.Text;
 using AutoMapper;
 using BlazorShared;
+using ContactManager.Authorization;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopWeb;
 using Microsoft.eShopWeb.ApplicationCore.Constants;
@@ -98,7 +100,15 @@ namespace InventoryManagementSystem.PublicApi
                                   });
             });
 
-            services.AddControllers();
+            services.AddControllers(config =>
+            {
+                // using Microsoft.AspNetCore.Mvc.Authorization;
+                // using Microsoft.AspNetCore.Authorization;
+                var policy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+                config.Filters.Add(new AuthorizeFilter(policy));
+            });
             services.AddMediatR(typeof(Product).Assembly);
 
             services.AddAutoMapper(typeof(Startup).Assembly);
@@ -108,6 +118,18 @@ namespace InventoryManagementSystem.PublicApi
                     .RequireAuthenticatedUser()
                     .Build();
             });
+            
+            
+            services.AddScoped<IAuthorizationHandler,
+                ContactIsOwnerAuthorizationHandler>();
+
+            services.AddSingleton<IAuthorizationHandler,
+                ContactAdministratorsAuthorizationHandler>();
+
+            services.AddSingleton<IAuthorizationHandler,
+                ContactManagerAuthorizationHandler>();
+            
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "IMS Public API", Version = "v1" });

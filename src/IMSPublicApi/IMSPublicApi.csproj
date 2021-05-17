@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="TestEndpoints" />
+    <Folder Include="AccountantEndpoints" />
   </ItemGroup>
 
 
