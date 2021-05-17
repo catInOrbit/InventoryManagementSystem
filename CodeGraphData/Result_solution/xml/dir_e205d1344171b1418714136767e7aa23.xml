@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="dir_e205d1344171b1418714136767e7aa23" kind="dir">
+    <compoundname>C:/InventoryManagementSystem/src/ApplicationCore/Entities</compoundname>
+    <innerfile refid="_base_entity_8cs">BaseEntity.cs</innerfile>
+    <innerfile refid="_catalog_type_8cs">CatalogType.cs</innerfile>
+    <innerfile refid="_i_m_s_user_8cs">IMSUser.cs</innerfile>
+    <innerfile refid="_product_8cs">Product.cs</innerfile>
+    <innerfile refid="_product_brand_8cs">ProductBrand.cs</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/Entities/"/>
+  </compounddef>
+</doxygen>

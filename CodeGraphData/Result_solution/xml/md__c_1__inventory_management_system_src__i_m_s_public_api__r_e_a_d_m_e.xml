@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="md__c_1__inventory_management_system_src__i_m_s_public_api__r_e_a_d_m_e" kind="page">
+    <compoundname>md_C:_InventoryManagementSystem_src_IMSPublicApi_README</compoundname>
+    <title>API Endpoints</title>
+    <detaileddescription>
+<para>This folder demonstrates how to configure API endpoints as individual classes. You can compare it to the traditional controller-based approach found in /Controllers/Api. </para>    </detaileddescription>
+  </compounddef>
+</doxygen>

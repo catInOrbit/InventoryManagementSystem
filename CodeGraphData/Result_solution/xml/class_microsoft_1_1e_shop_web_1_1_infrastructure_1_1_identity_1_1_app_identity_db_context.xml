@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_app_identity_db_context" kind="class" prot="public">
+    <compoundname>Microsoft::eShopWeb::Infrastructure::Identity::AppIdentityDbContext</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">IdentityDbContext&lt; IdentityUser &gt;</basecompoundref>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_app_identity_db_context_1a9ec94a8e012dec8a1d4a9365729507ab" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Microsoft.eShopWeb.Infrastructure.Identity.AppIdentityDbContext.AppIdentityDbContext</definition>
+        <argsstring>(DbContextOptions&lt; AppIdentityDbContext &gt; options)</argsstring>
+        <name>AppIdentityDbContext</name>
+        <param>
+          <type>DbContextOptions&lt; <ref refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_app_identity_db_context" kindref="compound">AppIdentityDbContext</ref> &gt;</type>
+          <declname>options</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Identity/AppIdentityDbContext.cs" line="10" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Identity/AppIdentityDbContext.cs" bodystart="10" bodyend="13"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_app_identity_db_context_1a62f566e3126f1d90ba3dc3ea7464a47d" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>override void</type>
+        <definition>override void Microsoft.eShopWeb.Infrastructure.Identity.AppIdentityDbContext.OnModelCreating</definition>
+        <argsstring>(ModelBuilder builder)</argsstring>
+        <name>OnModelCreating</name>
+        <param>
+          <type>ModelBuilder</type>
+          <declname>builder</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Identity/AppIdentityDbContext.cs" line="15" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Identity/AppIdentityDbContext.cs" bodystart="15" bodyend="21"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="0">
+        <label>Microsoft.eShopWeb.Infrastructure.Identity.AppIdentityDbContext</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_app_identity_db_context"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>IdentityDbContext&lt; IdentityUser &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Microsoft.eShopWeb.Infrastructure.Identity.AppIdentityDbContext</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_app_identity_db_context"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>IdentityDbContext&lt; IdentityUser &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Identity/AppIdentityDbContext.cs" line="9" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Identity/AppIdentityDbContext.cs" bodystart="8" bodyend="22"/>
+    <listofallmembers>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_app_identity_db_context_1a9ec94a8e012dec8a1d4a9365729507ab" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Identity::AppIdentityDbContext</scope><name>AppIdentityDbContext</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_app_identity_db_context_1a62f566e3126f1d90ba3dc3ea7464a47d" prot="protected" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Identity::AppIdentityDbContext</scope><name>OnModelCreating</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item" kind="class" prot="public">
+    <compoundname>Microsoft::eShopWeb::Infrastructure::Data::FileItem</compoundname>
+      <sectiondef kind="property">
+      <memberdef kind="property" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1af21fbb07d30a94b822f7bd1c8fae18e7" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string Microsoft.eShopWeb.Infrastructure.Data.FileItem.FileName</definition>
+        <argsstring></argsstring>
+        <name>FileName</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/FileItem.cs" line="5" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/FileItem.cs" bodystart="5" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1a57fa144dd4f8a42bc1182aaf96a8e771" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string Microsoft.eShopWeb.Infrastructure.Data.FileItem.Url</definition>
+        <argsstring></argsstring>
+        <name>Url</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/FileItem.cs" line="6" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/FileItem.cs" bodystart="6" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1a54ef9fed10a9e08f93eb24547bd97e7d" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>long</type>
+        <definition>long Microsoft.eShopWeb.Infrastructure.Data.FileItem.Size</definition>
+        <argsstring></argsstring>
+        <name>Size</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/FileItem.cs" line="7" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/FileItem.cs" bodystart="7" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1ad78bffbb5d56b49121bbfd3388c611b2" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string Microsoft.eShopWeb.Infrastructure.Data.FileItem.Ext</definition>
+        <argsstring></argsstring>
+        <name>Ext</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/FileItem.cs" line="8" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/FileItem.cs" bodystart="8" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1aedb2e4b2ab591bb2718cbc866966624e" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string Microsoft.eShopWeb.Infrastructure.Data.FileItem.Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/FileItem.cs" line="9" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/FileItem.cs" bodystart="9" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1a98e75afb2cbab855813cb4abe5bab4b4" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string Microsoft.eShopWeb.Infrastructure.Data.FileItem.DataBase64</definition>
+        <argsstring></argsstring>
+        <name>DataBase64</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/FileItem.cs" line="10" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/FileItem.cs" bodystart="10" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/FileItem.cs" line="4" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/FileItem.cs" bodystart="3" bodyend="11"/>
+    <listofallmembers>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1a98e75afb2cbab855813cb4abe5bab4b4" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::FileItem</scope><name>DataBase64</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1ad78bffbb5d56b49121bbfd3388c611b2" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::FileItem</scope><name>Ext</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1af21fbb07d30a94b822f7bd1c8fae18e7" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::FileItem</scope><name>FileName</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1a54ef9fed10a9e08f93eb24547bd97e7d" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::FileItem</scope><name>Size</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1aedb2e4b2ab591bb2718cbc866966624e" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::FileItem</scope><name>Type</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1a57fa144dd4f8a42bc1182aaf96a8e771" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::FileItem</scope><name>Url</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

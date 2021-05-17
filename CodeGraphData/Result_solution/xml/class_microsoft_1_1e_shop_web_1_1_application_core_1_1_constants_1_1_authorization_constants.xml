@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_constants_1_1_authorization_constants" kind="class" prot="public">
+    <compoundname>Microsoft::eShopWeb::ApplicationCore::Constants::AuthorizationConstants</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_constants_1_1_authorization_constants_1ae89b5af9d8d9e3cf3767574acf2d13d3" prot="public" static="no" mutable="no">
+        <type>const string</type>
+        <definition>const string Microsoft.eShopWeb.ApplicationCore.Constants.AuthorizationConstants.AUTH_KEY</definition>
+        <argsstring></argsstring>
+        <name>AUTH_KEY</name>
+        <initializer>= &quot;AuthKeyOfDoomThatMustBeAMinimumNumberOfBytes&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Constants/AuthorizationConstants.cs" line="5" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Constants/AuthorizationConstants.cs" bodystart="5" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_constants_1_1_authorization_constants_1a6f51e55e6b2d09d04b65df7f8f2b6af7" prot="public" static="no" mutable="no">
+        <type>const string</type>
+        <definition>const string Microsoft.eShopWeb.ApplicationCore.Constants.AuthorizationConstants.DEFAULT_PASSWORD</definition>
+        <argsstring></argsstring>
+        <name>DEFAULT_PASSWORD</name>
+        <initializer>= &quot;Pass@word1&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Constants/AuthorizationConstants.cs" line="8" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Constants/AuthorizationConstants.cs" bodystart="8" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_constants_1_1_authorization_constants_1a196e68e1c01b7c935f014125df70a13f" prot="public" static="no" mutable="no">
+        <type>const string</type>
+        <definition>const string Microsoft.eShopWeb.ApplicationCore.Constants.AuthorizationConstants.JWT_SECRET_KEY</definition>
+        <argsstring></argsstring>
+        <name>JWT_SECRET_KEY</name>
+        <initializer>= &quot;SecretKeyOfDoomThatMustBeAMinimumNumberOfBytes&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Constants/AuthorizationConstants.cs" line="11" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Constants/AuthorizationConstants.cs" bodystart="11" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/Constants/AuthorizationConstants.cs" line="4" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Constants/AuthorizationConstants.cs" bodystart="3" bodyend="12"/>
+    <listofallmembers>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_constants_1_1_authorization_constants_1ae89b5af9d8d9e3cf3767574acf2d13d3" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Constants::AuthorizationConstants</scope><name>AUTH_KEY</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_constants_1_1_authorization_constants_1a6f51e55e6b2d09d04b65df7f8f2b6af7" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Constants::AuthorizationConstants</scope><name>DEFAULT_PASSWORD</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_constants_1_1_authorization_constants_1a196e68e1c01b7c935f014125df70a13f" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Constants::AuthorizationConstants</scope><name>JWT_SECRET_KEY</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

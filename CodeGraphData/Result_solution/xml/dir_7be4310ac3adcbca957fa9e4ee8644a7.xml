@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="dir_7be4310ac3adcbca957fa9e4ee8644a7" kind="dir">
+    <compoundname>C:/InventoryManagementSystem/src/IMSPublicApi/Authorization</compoundname>
+    <innerfile refid="_contact_administrators_authorization_handler_8cs">ContactAdministratorsAuthorizationHandler.cs</innerfile>
+    <innerfile refid="_contact_is_owner_authorization_handler_8cs">ContactIsOwnerAuthorizationHandler.cs</innerfile>
+    <innerfile refid="_contact_manager_authorization_handler_8cs">ContactManagerAuthorizationHandler.cs</innerfile>
+    <innerfile refid="_contact_operations_8cs">ContactOperations.cs</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/"/>
+  </compounddef>
+</doxygen>

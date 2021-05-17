@@ -1,0 +1,245 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4" kind="interface" prot="public">
+    <compoundname>Microsoft::eShopWeb::ApplicationCore::Interfaces::IAsyncRepository&lt; T &gt;</compoundname>
+    <derivedcompoundref refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4" prot="public" virt="non-virtual">Microsoft.eShopWeb.Infrastructure.Data.EfRepository&lt; T &gt;</derivedcompoundref>
+    <templateparamlist>
+      <param>
+        <type>T</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a8714b6aaedbb4ada99f4f897579b175d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Task&lt; T &gt;</type>
+        <definition>Task&lt;T&gt; Microsoft.eShopWeb.ApplicationCore.Interfaces.IAsyncRepository&lt; T &gt;.GetByIdAsync</definition>
+        <argsstring>(int id, CancellationToken cancellationToken=default)</argsstring>
+        <name>GetByIdAsync</name>
+        <reimplementedby refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a931f2126ce8c6d56122c8cecec2865d6">GetByIdAsync</reimplementedby>
+        <param>
+          <type>int</type>
+          <declname>id</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Interfaces/IAsyncRepository.cs" line="11" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a3d375dca36b64cd7a28d1dee256f8862" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Task&lt; IReadOnlyList&lt; T &gt; &gt;</type>
+        <definition>Task&lt;IReadOnlyList&lt;T&gt; &gt; Microsoft.eShopWeb.ApplicationCore.Interfaces.IAsyncRepository&lt; T &gt;.ListAllAsync</definition>
+        <argsstring>(CancellationToken cancellationToken=default)</argsstring>
+        <name>ListAllAsync</name>
+        <reimplementedby refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a3dbb92febc6e7914f215aebcaf73501a">ListAllAsync</reimplementedby>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Interfaces/IAsyncRepository.cs" line="12" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1aaac2dcd8b2a346f8cd7ddfcaa16273a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Task&lt; IReadOnlyList&lt; T &gt; &gt;</type>
+        <definition>Task&lt;IReadOnlyList&lt;T&gt; &gt; Microsoft.eShopWeb.ApplicationCore.Interfaces.IAsyncRepository&lt; T &gt;.ListAsync</definition>
+        <argsstring>(ISpecification&lt; T &gt; spec, CancellationToken cancellationToken=default)</argsstring>
+        <name>ListAsync</name>
+        <reimplementedby refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a15e92d19c7df35a9c6d13e7ea757ae69">ListAsync</reimplementedby>
+        <param>
+          <type>ISpecification&lt; T &gt;</type>
+          <declname>spec</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Interfaces/IAsyncRepository.cs" line="13" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a685572d3af9c21d8c45a9fc326775e12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Task&lt; T &gt;</type>
+        <definition>Task&lt;T&gt; Microsoft.eShopWeb.ApplicationCore.Interfaces.IAsyncRepository&lt; T &gt;.AddAsync</definition>
+        <argsstring>(T entity, CancellationToken cancellationToken=default)</argsstring>
+        <name>AddAsync</name>
+        <reimplementedby refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a6c011ef4875aeae091cccafa090b0765">AddAsync</reimplementedby>
+        <param>
+          <type>T</type>
+          <declname>entity</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Interfaces/IAsyncRepository.cs" line="14" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a804f3108ec7642080a87907150dace99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Task</type>
+        <definition>Task Microsoft.eShopWeb.ApplicationCore.Interfaces.IAsyncRepository&lt; T &gt;.UpdateAsync</definition>
+        <argsstring>(T entity, CancellationToken cancellationToken=default)</argsstring>
+        <name>UpdateAsync</name>
+        <reimplementedby refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1afe0c2848b12beaaa86f8274a5c59172a">UpdateAsync</reimplementedby>
+        <param>
+          <type>T</type>
+          <declname>entity</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Interfaces/IAsyncRepository.cs" line="15" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1ac28f09d5b0b6d5402d0c81556c89b786" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Task</type>
+        <definition>Task Microsoft.eShopWeb.ApplicationCore.Interfaces.IAsyncRepository&lt; T &gt;.DeleteAsync</definition>
+        <argsstring>(T entity, CancellationToken cancellationToken=default)</argsstring>
+        <name>DeleteAsync</name>
+        <reimplementedby refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1aad0126e9447262672e794dcd594cca92">DeleteAsync</reimplementedby>
+        <param>
+          <type>T</type>
+          <declname>entity</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Interfaces/IAsyncRepository.cs" line="16" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a5244e7758feebd17f22100415deb2ed6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Task&lt; int &gt;</type>
+        <definition>Task&lt;int&gt; Microsoft.eShopWeb.ApplicationCore.Interfaces.IAsyncRepository&lt; T &gt;.CountAsync</definition>
+        <argsstring>(ISpecification&lt; T &gt; spec, CancellationToken cancellationToken=default)</argsstring>
+        <name>CountAsync</name>
+        <reimplementedby refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1af9881f2b3caf7219f46d6a1b4458c87a">CountAsync</reimplementedby>
+        <param>
+          <type>ISpecification&lt; T &gt;</type>
+          <declname>spec</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Interfaces/IAsyncRepository.cs" line="17" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a5633ffdcb1651d06e3b091df4d89418d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Task&lt; T &gt;</type>
+        <definition>Task&lt;T&gt; Microsoft.eShopWeb.ApplicationCore.Interfaces.IAsyncRepository&lt; T &gt;.FirstAsync</definition>
+        <argsstring>(ISpecification&lt; T &gt; spec, CancellationToken cancellationToken=default)</argsstring>
+        <name>FirstAsync</name>
+        <reimplementedby refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a8c058b139df5074715edafdd5facd25f">FirstAsync</reimplementedby>
+        <param>
+          <type>ISpecification&lt; T &gt;</type>
+          <declname>spec</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Interfaces/IAsyncRepository.cs" line="18" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a2e4375a2c1635b15883a345c972be256" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Task&lt; T &gt;</type>
+        <definition>Task&lt;T&gt; Microsoft.eShopWeb.ApplicationCore.Interfaces.IAsyncRepository&lt; T &gt;.FirstOrDefaultAsync</definition>
+        <argsstring>(ISpecification&lt; T &gt; spec, CancellationToken cancellationToken=default)</argsstring>
+        <name>FirstOrDefaultAsync</name>
+        <reimplementedby refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a6ae5a6f2ef503499c24a821aabc1a185">FirstOrDefaultAsync</reimplementedby>
+        <param>
+          <type>ISpecification&lt; T &gt;</type>
+          <declname>spec</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Interfaces/IAsyncRepository.cs" line="19" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="117">
+        <label>Microsoft.eShopWeb.ApplicationCore.Interfaces.IAsyncRepository&lt; T &gt;</label>
+        <link refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4"/>
+      </node>
+      <node id="118">
+        <label>Microsoft.eShopWeb.Infrastructure.Data.EfRepository&lt; T &gt;</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4"/>
+        <childnode refid="117" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/Interfaces/IAsyncRepository.cs" line="10" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Interfaces/IAsyncRepository.cs" bodystart="9" bodyend="20"/>
+    <listofallmembers>
+      <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a685572d3af9c21d8c45a9fc326775e12" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Interfaces::IAsyncRepository&lt; T &gt;</scope><name>AddAsync</name></member>
+      <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a5244e7758feebd17f22100415deb2ed6" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Interfaces::IAsyncRepository&lt; T &gt;</scope><name>CountAsync</name></member>
+      <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1ac28f09d5b0b6d5402d0c81556c89b786" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Interfaces::IAsyncRepository&lt; T &gt;</scope><name>DeleteAsync</name></member>
+      <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a5633ffdcb1651d06e3b091df4d89418d" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Interfaces::IAsyncRepository&lt; T &gt;</scope><name>FirstAsync</name></member>
+      <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a2e4375a2c1635b15883a345c972be256" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Interfaces::IAsyncRepository&lt; T &gt;</scope><name>FirstOrDefaultAsync</name></member>
+      <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a8714b6aaedbb4ada99f4f897579b175d" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Interfaces::IAsyncRepository&lt; T &gt;</scope><name>GetByIdAsync</name></member>
+      <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a3d375dca36b64cd7a28d1dee256f8862" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Interfaces::IAsyncRepository&lt; T &gt;</scope><name>ListAllAsync</name></member>
+      <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1aaac2dcd8b2a346f8cd7ddfcaa16273a6" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Interfaces::IAsyncRepository&lt; T &gt;</scope><name>ListAsync</name></member>
+      <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a804f3108ec7642080a87907150dace99" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Interfaces::IAsyncRepository&lt; T &gt;</scope><name>UpdateAsync</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

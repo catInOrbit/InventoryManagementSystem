@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system" kind="class" prot="public">
+    <compoundname>Microsoft::eShopWeb::Infrastructure::Services::WebFileSystem</compoundname>
+    <basecompoundref refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_file_system" prot="public" virt="non-virtual">Microsoft.eShopWeb.ApplicationCore.Interfaces.IFileSystem</basecompoundref>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a244ec9f01ff2fbdd3006023a531b4952" prot="private" static="no" mutable="no">
+        <type>readonly HttpClient</type>
+        <definition>readonly HttpClient Microsoft.eShopWeb.Infrastructure.Services.WebFileSystem._httpClient</definition>
+        <argsstring></argsstring>
+        <name>_httpClient</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" line="15" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a28602bb67845e20ced41f1f8bbf9cd11" prot="private" static="no" mutable="no">
+        <type>readonly string</type>
+        <definition>readonly string Microsoft.eShopWeb.Infrastructure.Services.WebFileSystem._url</definition>
+        <argsstring></argsstring>
+        <name>_url</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" line="16" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a09097d4c8f9e729a92422c18efb958da" prot="public" static="no" mutable="no">
+        <type>const string</type>
+        <definition>const string Microsoft.eShopWeb.Infrastructure.Services.WebFileSystem.AUTH_KEY</definition>
+        <argsstring></argsstring>
+        <name>AUTH_KEY</name>
+        <initializer>= &quot;AuthKeyOfDoomThatMustBeAMinimumNumberOfBytes&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" line="17" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a7239a97a42574d770c34623671ff7cc2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Microsoft.eShopWeb.Infrastructure.Services.WebFileSystem.WebFileSystem</definition>
+        <argsstring>(string url)</argsstring>
+        <name>WebFileSystem</name>
+        <param>
+          <type>string</type>
+          <declname>url</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" line="19" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" bodystart="19" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a157d11ab389eb2d69c2f199a599487a8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>async Task&lt; bool &gt;</type>
+        <definition>async Task&lt;bool&gt; Microsoft.eShopWeb.Infrastructure.Services.WebFileSystem.SavePicture</definition>
+        <argsstring>(string pictureName, string pictureBase64, CancellationToken cancellationToken)</argsstring>
+        <name>SavePicture</name>
+        <reimplements refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_file_system_1a015b16ac024344abc0df8e5a62bf5930">SavePicture</reimplements>
+        <param>
+          <type>string</type>
+          <declname>pictureName</declname>
+        </param>
+        <param>
+          <type>string</type>
+          <declname>pictureBase64</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" line="26" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" bodystart="26" bodyend="34"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a7b7dd1817964f651db2773953ec46d9e" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>async Task&lt; bool &gt;</type>
+        <definition>async Task&lt;bool&gt; Microsoft.eShopWeb.Infrastructure.Services.WebFileSystem.UploadFile</definition>
+        <argsstring>(string fileName, byte[] fileData, CancellationToken cancellationToken)</argsstring>
+        <name>UploadFile</name>
+        <param>
+          <type>string</type>
+          <declname>fileName</declname>
+        </param>
+        <param>
+          <type>byte[]</type>
+          <declname>fileData</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" line="36" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" bodystart="36" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1acd8197e023609080ab3c7ea868e27955" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>async Task&lt; bool &gt;</type>
+        <definition>async Task&lt;bool&gt; Microsoft.eShopWeb.Infrastructure.Services.WebFileSystem.UploadToWeb</definition>
+        <argsstring>(string fileName, byte[] fileData, CancellationToken cancellationToken)</argsstring>
+        <name>UploadToWeb</name>
+        <param>
+          <type>string</type>
+          <declname>fileName</declname>
+        </param>
+        <param>
+          <type>byte[]</type>
+          <declname>fileData</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" line="46" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" bodystart="46" bodyend="62"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="196">
+        <label>Microsoft.eShopWeb.Infrastructure.Services.WebFileSystem</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system"/>
+        <childnode refid="197" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="197">
+        <label>IFileSystem</label>
+        <link refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_file_system"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="198">
+        <label>Microsoft.eShopWeb.Infrastructure.Services.WebFileSystem</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system"/>
+        <childnode refid="199" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="199">
+        <label>IFileSystem</label>
+        <link refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_file_system"/>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" line="14" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" bodystart="13" bodyend="63"/>
+    <listofallmembers>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a244ec9f01ff2fbdd3006023a531b4952" prot="private" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Services::WebFileSystem</scope><name>_httpClient</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a28602bb67845e20ced41f1f8bbf9cd11" prot="private" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Services::WebFileSystem</scope><name>_url</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a09097d4c8f9e729a92422c18efb958da" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Services::WebFileSystem</scope><name>AUTH_KEY</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a157d11ab389eb2d69c2f199a599487a8" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Services::WebFileSystem</scope><name>SavePicture</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a7b7dd1817964f651db2773953ec46d9e" prot="private" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Services::WebFileSystem</scope><name>UploadFile</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1acd8197e023609080ab3c7ea868e27955" prot="private" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Services::WebFileSystem</scope><name>UploadToWeb</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a7239a97a42574d770c34623671ff7cc2" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Services::WebFileSystem</scope><name>WebFileSystem</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

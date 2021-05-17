@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="namespace_inventory_management_system_1_1_public_api" kind="namespace">
+    <compoundname>InventoryManagementSystem::PublicApi</compoundname>
+    <innerclass refid="class_inventory_management_system_1_1_public_api_1_1_base_message" prot="public">InventoryManagementSystem::PublicApi::BaseMessage</innerclass>
+    <innerclass refid="class_inventory_management_system_1_1_public_api_1_1_base_request" prot="public">InventoryManagementSystem::PublicApi::BaseRequest</innerclass>
+    <innerclass refid="class_inventory_management_system_1_1_public_api_1_1_base_response" prot="public">InventoryManagementSystem::PublicApi::BaseResponse</innerclass>
+    <innerclass refid="class_inventory_management_system_1_1_public_api_1_1_custom_schema_filters" prot="public">InventoryManagementSystem::PublicApi::CustomSchemaFilters</innerclass>
+    <innerclass refid="class_inventory_management_system_1_1_public_api_1_1_image_validators" prot="public">InventoryManagementSystem::PublicApi::ImageValidators</innerclass>
+    <innerclass refid="class_inventory_management_system_1_1_public_api_1_1_program" prot="public">InventoryManagementSystem::PublicApi::Program</innerclass>
+    <innerclass refid="class_inventory_management_system_1_1_public_api_1_1_service_page_model" prot="public">InventoryManagementSystem::PublicApi::ServicePageModel</innerclass>
+    <innerclass refid="class_inventory_management_system_1_1_public_api_1_1_startup" prot="public">InventoryManagementSystem::PublicApi::Startup</innerclass>
+    <innernamespace refid="namespace_inventory_management_system_1_1_public_api_1_1_authentication_endpoints">InventoryManagementSystem::PublicApi::AuthenticationEndpoints</innernamespace>
+    <innernamespace refid="namespace_inventory_management_system_1_1_public_api_1_1_registration_endpoints">InventoryManagementSystem::PublicApi::RegistrationEndpoints</innernamespace>
+    <innernamespace refid="namespace_inventory_management_system_1_1_public_api_1_1_stockkeeper_endpoints">InventoryManagementSystem::PublicApi::StockkeeperEndpoints</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="[generated]" line="1" column="1"/>
+  </compounddef>
+</doxygen>

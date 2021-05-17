@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="dir_37b011f3a5b47d323e79eefc578bd5e7" kind="dir">
+    <compoundname>C:/InventoryManagementSystem/src</compoundname>
+    <innerdir refid="dir_15af9a96cc5e7aad882755f68bc45e05">C:/InventoryManagementSystem/src/ApplicationCore</innerdir>
+    <innerdir refid="dir_fc65e7301c449c4400ffe479460c9ca4">C:/InventoryManagementSystem/src/IMSPublicApi</innerdir>
+    <innerdir refid="dir_de48de634865c40a420ab7b9408c7f96">C:/InventoryManagementSystem/src/Infrastructure</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/"/>
+  </compounddef>
+</doxygen>

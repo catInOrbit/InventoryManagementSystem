@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="_uri_composer_8cs" kind="file">
+    <compoundname>UriComposer.cs</compoundname>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer" prot="public">Microsoft::eShopWeb::ApplicationCore::Services::UriComposer</innerclass>
+    <innernamespace refid="namespace_microsoft_1_1e_shop_web_1_1_application_core_1_1_services">Microsoft::eShopWeb::ApplicationCore::Services</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="keyword">using</highlight><highlight class="normal"><sp/>Microsoft.eShopWeb.ApplicationCore.Interfaces;</highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3" refid="namespace_microsoft_1_1e_shop_web_1_1_application_core_1_1_services" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">Microsoft.eShopWeb.ApplicationCore.Services</highlight></codeline>
+<codeline lineno="4"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="5" refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer" kindref="compound">UriComposer</ref><sp/>:<sp/><ref refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_uri_composer" kindref="compound">IUriComposer</ref></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="7" refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer_1ad5bd1290a5f5562865b912c9c982c885" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal"><sp/>readonly<sp/><ref refid="class_microsoft_1_1e_shop_web_1_1_catalog_settings" kindref="compound">CatalogSettings</ref><sp/><ref refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer_1ad5bd1290a5f5562865b912c9c982c885" kindref="member">_catalogSettings</ref>;</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer" kindref="compound">UriComposer</ref>(<ref refid="class_microsoft_1_1e_shop_web_1_1_catalog_settings" kindref="compound">CatalogSettings</ref><sp/>catalogSettings)<sp/>=&gt;<sp/>_catalogSettings<sp/>=<sp/>catalogSettings;</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11" refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer_1ab8397bd1806b9e0935a31b617f1a1156" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/><ref refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer_1ab8397bd1806b9e0935a31b617f1a1156" kindref="member">ComposePicUri</ref>(</highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>uriTemplate)</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>uriTemplate.Replace(</highlight><highlight class="stringliteral">&quot;http://catalogbaseurltobereplaced&quot;</highlight><highlight class="normal">,<sp/>_catalogSettings.CatalogBaseUrl);</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="16"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/Services/UriComposer.cs"/>
+  </compounddef>
+</doxygen>

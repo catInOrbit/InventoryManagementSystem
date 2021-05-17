@@ -54,9 +54,7 @@ namespace InventoryManagementSystem.PublicApi
                     .AddEntityFrameworkStores<AppIdentityDbContext>()
                     .AddRoles<IdentityRole>()
                     .AddDefaultTokenProviders();
-            
            
-
             //The AddScoped method registers the service with a scoped lifetime, the lifetime of a single request.
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             
@@ -100,26 +98,29 @@ namespace InventoryManagementSystem.PublicApi
                                   });
             });
 
-            services.AddControllers(config =>
-            {
-                // using Microsoft.AspNetCore.Mvc.Authorization;
-                // using Microsoft.AspNetCore.Authorization;
-                var policy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-                config.Filters.Add(new AuthorizeFilter(policy));
-            });
+            //services.AddControllers(config =>
+            //{
+            //    // using Microsoft.AspNetCore.Mvc.Authorization;
+            //    // using Microsoft.AspNetCore.Authorization;
+            //    var policy = new AuthorizationPolicyBuilder()
+            //        .RequireAuthenticatedUser()
+            //        .Build();
+            //    config.Filters.Add(new AuthorizeFilter(policy));
+            //});
+    
+            services.AddControllers();
             services.AddMediatR(typeof(Product).Assembly);
 
             services.AddAutoMapper(typeof(Startup).Assembly);
-            services.AddAuthorization(options =>
-            {
-                options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                    .RequireAuthenticatedUser()
-                    .Build();
-            });
-            
-            
+
+            //services.AddAuthorization(options =>
+            //{
+            //    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+            //        .RequireAuthenticatedUser()
+            //        .Build();
+            //});
+
+
             services.AddScoped<IAuthorizationHandler,
                 ContactIsOwnerAuthorizationHandler>();
 
@@ -182,6 +183,7 @@ namespace InventoryManagementSystem.PublicApi
             app.UseCors(CORS_POLICY);
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();

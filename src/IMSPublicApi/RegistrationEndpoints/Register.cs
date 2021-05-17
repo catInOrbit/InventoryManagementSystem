@@ -55,7 +55,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
             return response;
         }
 
-        public async Task<string> UserCreatimgHelper(IServiceProvider serviceProvider, string password, string username)
+        private async Task<string> UserCreatimgHelper(IServiceProvider serviceProvider, string password, string username)
         {
             var user = await _userManager.FindByNameAsync(username);
             if (user == null)
@@ -86,7 +86,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
 
             if (!await _roleManager.RoleExistsAsync(role))
             {
-                result = await _roleManager.CreateAsync(new IdentityRole());
+                result = await _roleManager.CreateAsync(new IdentityRole(role));
             }
             
             var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
@@ -102,7 +102,5 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
 
             return result;
         }
-
-
     }
 }

@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="_product_brand_8cs" kind="file">
+    <compoundname>ProductBrand.cs</compoundname>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand" prot="public">Microsoft::eShopWeb::ApplicationCore::Entities::ProductBrand</innerclass>
+    <innernamespace refid="namespace_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities">Microsoft::eShopWeb::ApplicationCore::Entities</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="keyword">using</highlight><highlight class="normal"><sp/>Microsoft.eShopWeb.ApplicationCore.Interfaces;</highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">Microsoft.eShopWeb.ApplicationCore.Entities</highlight></codeline>
+<codeline lineno="4"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="5" refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand" kindref="compound">ProductBrand</ref><sp/>:<sp/><ref refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_base_entity" kindref="compound">BaseEntity</ref></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="7" refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand_1a06a04c55882520bd09938cb000a1525e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>Brand<sp/>{<sp/></highlight><highlight class="keyword">get</highlight><highlight class="normal">;<sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal"><sp/>set;<sp/>}</highlight></codeline>
+<codeline lineno="8" refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand_1abef85e1231cf12742cc1619879e27fe6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand_1abef85e1231cf12742cc1619879e27fe6" kindref="member">ProductBrand</ref>(</highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>brand)</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Brand<sp/>=<sp/>brand;</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="13"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/Entities/ProductBrand.cs"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="dir_99afc8db06f5090c5cfb11a03de75a03" kind="dir">
+    <compoundname>C:/InventoryManagementSystem/src/ApplicationCore/Services</compoundname>
+    <innerfile refid="_uri_composer_8cs">UriComposer.cs</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/Services/"/>
+  </compounddef>
+</doxygen>

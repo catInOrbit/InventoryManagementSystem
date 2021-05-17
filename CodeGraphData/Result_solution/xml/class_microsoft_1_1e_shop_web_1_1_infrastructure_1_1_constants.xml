@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_constants" kind="class" prot="public">
+    <compoundname>Microsoft::eShopWeb::Infrastructure::Constants</compoundname>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_constants_1_1_roles" prot="public">Microsoft::eShopWeb::Infrastructure::Constants::Roles</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Constants.cs" line="4" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Constants.cs" bodystart="3" bodyend="9"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

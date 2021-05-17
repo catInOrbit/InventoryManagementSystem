@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_inventory_management_system_1_1_public_api_1_1_base_response" kind="class" prot="public">
+    <compoundname>InventoryManagementSystem::PublicApi::BaseResponse</compoundname>
+    <basecompoundref refid="class_inventory_management_system_1_1_public_api_1_1_base_message" prot="public" virt="non-virtual">InventoryManagementSystem.PublicApi.BaseMessage</basecompoundref>
+    <derivedcompoundref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response" prot="public" virt="non-virtual">InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateResponse</derivedcompoundref>
+    <derivedcompoundref refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response" prot="public" virt="non-virtual">InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterResponse</derivedcompoundref>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_base_response_1ade56cf54c8e9ece0d5e938717a7bd46a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>InventoryManagementSystem.PublicApi.BaseResponse.BaseResponse</definition>
+        <argsstring>(Guid correlationId)</argsstring>
+        <name>BaseResponse</name>
+        <param>
+          <type>Guid</type>
+          <declname>correlationId</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/BaseResponse.cs" line="10" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/BaseResponse.cs" bodystart="10" bodyend="13"/>
+      </memberdef>
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_base_response_1a0e194d464f1d529ec2bc139cfa0d01fa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>InventoryManagementSystem.PublicApi.BaseResponse.BaseResponse</definition>
+        <argsstring>()</argsstring>
+        <name>BaseResponse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/BaseResponse.cs" line="15" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/BaseResponse.cs" bodystart="15" bodyend="17"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Base class used by API responses </para>    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="49">
+        <label>BaseMessage</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_message"/>
+      </node>
+      <node id="50">
+        <label>InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateResponse</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response"/>
+        <childnode refid="48" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterResponse</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response"/>
+        <childnode refid="48" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>InventoryManagementSystem.PublicApi.BaseResponse</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_response"/>
+        <childnode refid="49" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="53">
+        <label>BaseMessage</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_message"/>
+      </node>
+      <node id="52">
+        <label>InventoryManagementSystem.PublicApi.BaseResponse</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_response"/>
+        <childnode refid="53" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/BaseResponse.cs" line="9" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/BaseResponse.cs" bodystart="8" bodyend="18"/>
+    <listofallmembers>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1a957ab0420a8796545fa44dfd85f37d77" prot="protected" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::BaseResponse</scope><name>_correlationId</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_response_1ade56cf54c8e9ece0d5e938717a7bd46a" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::BaseResponse</scope><name>BaseResponse</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_response_1a0e194d464f1d529ec2bc139cfa0d01fa" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::BaseResponse</scope><name>BaseResponse</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1ac2ad0cd8ef8cb4ed8249ed6a67083c50" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::BaseResponse</scope><name>CorrelationId</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

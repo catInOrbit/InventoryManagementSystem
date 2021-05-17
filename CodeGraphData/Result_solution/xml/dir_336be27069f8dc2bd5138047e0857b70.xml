@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="dir_336be27069f8dc2bd5138047e0857b70" kind="dir">
+    <compoundname>C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints</compoundname>
+    <innerfile refid="_register_8cs">Register.cs</innerfile>
+    <innerfile refid="_register_request_8cs">RegisterRequest.cs</innerfile>
+    <innerfile refid="_register_response_8cs">RegisterResponse.cs</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/"/>
+  </compounddef>
+</doxygen>

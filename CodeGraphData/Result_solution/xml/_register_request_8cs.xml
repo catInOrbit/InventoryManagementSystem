@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="_register_request_8cs" kind="file">
+    <compoundname>RegisterRequest.cs</compoundname>
+    <innerclass refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request" prot="public">InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterRequest</innerclass>
+    <innernamespace refid="namespace_inventory_management_system_1_1_public_api_1_1_registration_endpoints">InventoryManagementSystem::PublicApi::RegistrationEndpoints</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">InventoryManagementSystem.PublicApi.RegistrationEndpoints</highlight></codeline>
+<codeline lineno="2"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="3" refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request" kindref="compound">RegisterRequest</ref><sp/>:<sp/><ref refid="class_inventory_management_system_1_1_public_api_1_1_base_request" kindref="compound">BaseRequest</ref></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="5" refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request_1ac073df7118b7bb8580a89e7345a2d142" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>Username<sp/>{<sp/></highlight><highlight class="keyword">get</highlight><highlight class="normal">;<sp/>set;<sp/>}</highlight></codeline>
+<codeline lineno="6" refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request_1ae90efcd5282b562658d7b631ce47bd92" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>Password<sp/>{<sp/></highlight><highlight class="keyword">get</highlight><highlight class="normal">;<sp/>set;<sp/>}</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8" refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request_1aa72bd54006953abb0563187e38be8867" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>RoleName<sp/>{<sp/></highlight><highlight class="keyword">get</highlight><highlight class="normal">;<sp/>set;<sp/>}</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="11"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterRequest.cs"/>
+  </compounddef>
+</doxygen>

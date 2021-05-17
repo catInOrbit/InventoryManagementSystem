@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="dir_81b35c0330d0b7e0524c48e5b341e7dd" kind="dir">
+    <compoundname>C:/InventoryManagementSystem/src/ApplicationCore/Interfaces</compoundname>
+    <innerfile refid="_i_app_logger_8cs">IAppLogger.cs</innerfile>
+    <innerfile refid="_i_async_repository_8cs">IAsyncRepository.cs</innerfile>
+    <innerfile refid="_i_email_sender_8cs">IEmailSender.cs</innerfile>
+    <innerfile refid="_i_file_system_8cs">IFileSystem.cs</innerfile>
+    <innerfile refid="_i_token_claims_service_8cs">ITokenClaimsService.cs</innerfile>
+    <innerfile refid="_i_uri_composer_8cs">IUriComposer.cs</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/Interfaces/"/>
+  </compounddef>
+</doxygen>

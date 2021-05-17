@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="namespace_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging" kind="namespace">
+    <compoundname>Microsoft::eShopWeb::Infrastructure::Logging</compoundname>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4" prot="public">Microsoft::eShopWeb::Infrastructure::Logging::LoggerAdapter&lt; T &gt;</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Logging/LoggerAdapter.cs" line="5" column="1"/>
+  </compounddef>
+</doxygen>

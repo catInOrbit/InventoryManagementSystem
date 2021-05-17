@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="_constants_8cs" kind="file">
+    <compoundname>Constants.cs</compoundname>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_constants" prot="public">Microsoft::eShopWeb::Infrastructure::Constants</innerclass>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_constants_1_1_roles" prot="public">Microsoft::eShopWeb::Infrastructure::Constants::Roles</innerclass>
+    <innernamespace refid="namespace_microsoft_1_1e_shop_web_1_1_infrastructure">Microsoft::eShopWeb::Infrastructure</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">Microsoft.eShopWeb.Infrastructure</highlight></codeline>
+<codeline lineno="2"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="3" refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_constants" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_constants" kindref="compound">Constants</ref></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="5" refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_constants_1_1_roles" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_constants_1_1_roles" kindref="compound">Roles</ref></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="7" refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_constants_1_1_roles_1a294b551a2fdf231c049d33c1b4207554" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>ADMINISTRATORS<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;Administrators&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="10"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Constants.cs"/>
+  </compounddef>
+</doxygen>

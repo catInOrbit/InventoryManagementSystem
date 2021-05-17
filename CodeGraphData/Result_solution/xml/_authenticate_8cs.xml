@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="_authenticate_8cs" kind="file">
+    <compoundname>Authenticate.cs</compoundname>
+    <innerclass refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate" prot="public">InventoryManagementSystem::PublicApi::AuthenticationEndpoints::Authenticate</innerclass>
+    <innernamespace refid="namespace_inventory_management_system_1_1_public_api_1_1_authentication_endpoints">InventoryManagementSystem::PublicApi::AuthenticationEndpoints</innernamespace>
+    <innernamespace refid="namespace_ardalis_1_1_api_endpoints">Ardalis::ApiEndpoints</innernamespace>
+    <innernamespace refid="namespace_microsoft_1_1_asp_net_core_1_1_mvc">Microsoft::AspNetCore::Mvc</innernamespace>
+    <innernamespace refid="namespace_swashbuckle_1_1_asp_net_core_1_1_annotations">Swashbuckle::AspNetCore::Annotations</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="keyword">using</highlight><highlight class="normal"><sp/>System.Threading;</highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/>System.Threading.Tasks;</highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/>Ardalis.ApiEndpoints;</highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/>Microsoft.AspNetCore.Identity;</highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/>Microsoft.AspNetCore.Mvc;</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/>Microsoft.eShopWeb.ApplicationCore.Interfaces;</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/>Swashbuckle.AspNetCore.Annotations;</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9" refid="namespace_inventory_management_system_1_1_public_api_1_1_authentication_endpoints" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">InventoryManagementSystem.PublicApi.AuthenticationEndpoints</highlight></codeline>
+<codeline lineno="10"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="11" refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate" kindref="compound">Authenticate</ref><sp/>:<sp/>BaseAsyncEndpoint</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.WithRequest&lt;AuthenticateRequest&gt;</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.WithResponse&lt;AuthenticateResponse&gt;</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="15" refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1a214b6a2a16688f16e8acc9ecdac539e8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal"><sp/>readonly<sp/>SignInManager&lt;IdentityUser&gt;<sp/><ref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1a214b6a2a16688f16e8acc9ecdac539e8" kindref="member">_signInManager</ref>;</highlight></codeline>
+<codeline lineno="16" refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1a9a9d9d4522923929177c53353e9f55ab" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal"><sp/>readonly<sp/><ref refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_token_claims_service" kindref="compound">ITokenClaimsService</ref><sp/><ref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1a9a9d9d4522923929177c53353e9f55ab" kindref="member">_tokenClaimsService</ref>;</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18" refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1a533349942e66853a679220234159fb65" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1a533349942e66853a679220234159fb65" kindref="member">Authenticate</ref>(SignInManager&lt;IdentityUser&gt;<sp/>signInManager,</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_token_claims_service" kindref="compound">ITokenClaimsService</ref><sp/>tokenClaimsService)</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>_signInManager<sp/>=<sp/>signInManager;</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>_tokenClaimsService<sp/>=<sp/>tokenClaimsService;</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[HttpPost(</highlight><highlight class="stringliteral">&quot;api/authenticate&quot;</highlight><highlight class="normal">)]</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>[SwaggerOperation(</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Summary<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;Authenticates<sp/>a<sp/>user&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Description<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;Authenticates<sp/>a<sp/>user&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>OperationId<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;auth.authenticate&quot;</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Tags<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal">[]<sp/>{<sp/></highlight><highlight class="stringliteral">&quot;IMSAuthenticationEndpoints&quot;</highlight><highlight class="normal"><sp/>})</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>]</highlight></codeline>
+<codeline lineno="32" refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1abdff97564d0dcb4874017d78d3e9e033" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">override</highlight><highlight class="normal"><sp/>async<sp/>Task&lt;ActionResult&lt;AuthenticateResponse&gt;&gt;<sp/><ref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1abdff97564d0dcb4874017d78d3e9e033" kindref="member">HandleAsync</ref>(<ref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request" kindref="compound">AuthenticateRequest</ref><sp/>request,<sp/>CancellationToken<sp/>cancellationToken)</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>response<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/><ref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response" kindref="compound">AuthenticateResponse</ref>(request.<ref refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1ac2ad0cd8ef8cb4ed8249ed6a67083c50" kindref="member">CorrelationId</ref>());</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>This<sp/>doesn&apos;t<sp/>count<sp/>login<sp/>failures<sp/>towards<sp/>account<sp/>lockout</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>To<sp/>enable<sp/>password<sp/>failures<sp/>to<sp/>trigger<sp/>account<sp/>lockout,<sp/>set<sp/>lockoutOnFailure:<sp/>true</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//var<sp/>result<sp/>=<sp/>await<sp/>_signInManager.PasswordSignInAsync(Input.Email,<sp/>Input.Password,<sp/>Input.RememberMe,<sp/>lockoutOnFailure:<sp/>true);</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>result<sp/>=<sp/>await<sp/>_signInManager.PasswordSignInAsync(request.Username,<sp/>request.Password,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>response.Result<sp/>=<sp/>result.Succeeded;</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>response.IsLockedOut<sp/>=<sp/>result.IsLockedOut;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>response.IsNotAllowed<sp/>=<sp/>result.IsNotAllowed;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>response.RequiresTwoFactor<sp/>=<sp/>result.RequiresTwoFactor;</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>response.Username<sp/>=<sp/>request.Username;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(result.Succeeded)</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>response.Token<sp/>=<sp/>await<sp/>_tokenClaimsService.GetTokenAsync(request.Username);</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>response;</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="57"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/Authenticate.cs"/>
+  </compounddef>
+</doxygen>

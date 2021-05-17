@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="dir_de48de634865c40a420ab7b9408c7f96" kind="dir">
+    <compoundname>C:/InventoryManagementSystem/src/Infrastructure</compoundname>
+    <innerdir refid="dir_b1f89119bb1b7e6041cfaf680f8fb854">C:/InventoryManagementSystem/src/Infrastructure/Data</innerdir>
+    <innerdir refid="dir_35cb2d1382b0776e30b0bfe91f143d6a">C:/InventoryManagementSystem/src/Infrastructure/Identity</innerdir>
+    <innerdir refid="dir_fdf5982feda91499cc2bfa1c9c75a244">C:/InventoryManagementSystem/src/Infrastructure/Logging</innerdir>
+    <innerdir refid="dir_3e1cdf74672e570bacc22114d4fb682e">C:/InventoryManagementSystem/src/Infrastructure/Services</innerdir>
+    <innerfile refid="_constants_8cs">Constants.cs</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="_base_message_8cs" kind="file">
+    <compoundname>BaseMessage.cs</compoundname>
+    <innerclass refid="class_inventory_management_system_1_1_public_api_1_1_base_message" prot="public">InventoryManagementSystem::PublicApi::BaseMessage</innerclass>
+    <innernamespace refid="namespace_inventory_management_system_1_1_public_api">InventoryManagementSystem::PublicApi</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="keyword">using</highlight><highlight class="normal"><sp/>System;</highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">InventoryManagementSystem.PublicApi</highlight></codeline>
+<codeline lineno="4"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="8" refid="class_inventory_management_system_1_1_public_api_1_1_base_message" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">abstract</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_inventory_management_system_1_1_public_api_1_1_base_message" kindref="compound">BaseMessage</ref></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="13" refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1a957ab0420a8796545fa44dfd85f37d77" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">protected</highlight><highlight class="normal"><sp/>Guid<sp/>_correlationId<sp/>=<sp/>Guid.NewGuid();</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>Guid<sp/>CorrelationId()<sp/>=&gt;<sp/>_correlationId;</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="16"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/BaseMessage.cs"/>
+  </compounddef>
+</doxygen>

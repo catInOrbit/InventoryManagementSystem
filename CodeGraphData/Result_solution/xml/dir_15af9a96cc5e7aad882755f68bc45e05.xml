@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="dir_15af9a96cc5e7aad882755f68bc45e05" kind="dir">
+    <compoundname>C:/InventoryManagementSystem/src/ApplicationCore</compoundname>
+    <innerdir refid="dir_4f4fc4c98be5117f6554002463ee3a28">C:/InventoryManagementSystem/src/ApplicationCore/Constants</innerdir>
+    <innerdir refid="dir_e205d1344171b1418714136767e7aa23">C:/InventoryManagementSystem/src/ApplicationCore/Entities</innerdir>
+    <innerdir refid="dir_bb3880cba17e35de44f3cc9284a9f4a1">C:/InventoryManagementSystem/src/ApplicationCore/Extensions</innerdir>
+    <innerdir refid="dir_81b35c0330d0b7e0524c48e5b341e7dd">C:/InventoryManagementSystem/src/ApplicationCore/Interfaces</innerdir>
+    <innerdir refid="dir_99afc8db06f5090c5cfb11a03de75a03">C:/InventoryManagementSystem/src/ApplicationCore/Services</innerdir>
+    <innerfile refid="_catalog_settings_8cs">CatalogSettings.cs</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/"/>
+  </compounddef>
+</doxygen>

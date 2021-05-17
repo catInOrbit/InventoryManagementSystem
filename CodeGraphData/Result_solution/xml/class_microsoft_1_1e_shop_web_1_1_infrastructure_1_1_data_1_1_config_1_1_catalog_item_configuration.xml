@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_item_configuration" kind="class" prot="public">
+    <compoundname>Microsoft::eShopWeb::Infrastructure::Data::Config::CatalogItemConfiguration</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">IEntityTypeConfiguration&lt; Product &gt;</basecompoundref>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_item_configuration_1a463eb75cf31c557e8d61d1424ea97041" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Microsoft.eShopWeb.Infrastructure.Data.Config.CatalogItemConfiguration.Configure</definition>
+        <argsstring>(EntityTypeBuilder&lt; Product &gt; builder)</argsstring>
+        <name>Configure</name>
+        <param>
+          <type>EntityTypeBuilder&lt; <ref refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product" kindref="compound">Product</ref> &gt;</type>
+          <declname>builder</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/Config/CatalogItemConfiguration.cs" line="9" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/Config/CatalogItemConfiguration.cs" bodystart="9" bodyend="35"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="65">
+        <label>IEntityTypeConfiguration&lt; Product &gt;</label>
+      </node>
+      <node id="64">
+        <label>Microsoft.eShopWeb.Infrastructure.Data.Config.CatalogItemConfiguration</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_item_configuration"/>
+        <childnode refid="65" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="67">
+        <label>IEntityTypeConfiguration&lt; Product &gt;</label>
+      </node>
+      <node id="66">
+        <label>Microsoft.eShopWeb.Infrastructure.Data.Config.CatalogItemConfiguration</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_item_configuration"/>
+        <childnode refid="67" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/Config/CatalogItemConfiguration.cs" line="8" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/Config/CatalogItemConfiguration.cs" bodystart="7" bodyend="36"/>
+    <listofallmembers>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_item_configuration_1a463eb75cf31c557e8d61d1424ea97041" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::Config::CatalogItemConfiguration</scope><name>Configure</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_inventory_management_system_1_1_public_api_1_1_base_request" kind="class" prot="public">
+    <compoundname>InventoryManagementSystem::PublicApi::BaseRequest</compoundname>
+    <basecompoundref refid="class_inventory_management_system_1_1_public_api_1_1_base_message" prot="public" virt="non-virtual">InventoryManagementSystem.PublicApi.BaseMessage</basecompoundref>
+    <derivedcompoundref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request" prot="public" virt="non-virtual">InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateRequest</derivedcompoundref>
+    <derivedcompoundref refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request" prot="public" virt="non-virtual">InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterRequest</derivedcompoundref>
+    <briefdescription>
+<para>Base class used by API requests </para>    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="42">
+        <label>InventoryManagementSystem.PublicApi.BaseRequest</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_request"/>
+        <childnode refid="43" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>BaseMessage</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_message"/>
+      </node>
+      <node id="45">
+        <label>InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterRequest</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request"/>
+        <childnode refid="42" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateRequest</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request"/>
+        <childnode refid="42" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="46">
+        <label>InventoryManagementSystem.PublicApi.BaseRequest</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_request"/>
+        <childnode refid="47" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>BaseMessage</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_message"/>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/BaseRequest.cs" line="7" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/BaseRequest.cs" bodystart="6" bodyend="9"/>
+    <listofallmembers>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1a957ab0420a8796545fa44dfd85f37d77" prot="protected" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::BaseRequest</scope><name>_correlationId</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1ac2ad0cd8ef8cb4ed8249ed6a67083c50" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::BaseRequest</scope><name>CorrelationId</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_inventory_management_system_1_1_public_api_1_1_startup" kind="class" prot="public">
+    <compoundname>InventoryManagementSystem::PublicApi::Startup</compoundname>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_inventory_management_system_1_1_public_api_1_1_startup_1ad46c1205213fe3dc5c0db04d8576e2d3" prot="private" static="no" mutable="no">
+        <type>const string</type>
+        <definition>const string InventoryManagementSystem.PublicApi.Startup.CORS_POLICY</definition>
+        <argsstring></argsstring>
+        <name>CORS_POLICY</name>
+        <initializer>= &quot;CorsPolicy&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Startup.cs" line="33" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Startup.cs" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="property">
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_startup_1a7581533cfa9757b3e6aaf9e1391b5fa8" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="no">
+        <type>IConfiguration</type>
+        <definition>IConfiguration InventoryManagementSystem.PublicApi.Startup.Configuration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Startup.cs" line="40" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Startup.cs" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_startup_1a86ceb9f3d6185007dc7b81e258b525f5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>InventoryManagementSystem.PublicApi.Startup.Startup</definition>
+        <argsstring>(IConfiguration configuration)</argsstring>
+        <name>Startup</name>
+        <param>
+          <type>IConfiguration</type>
+          <declname>configuration</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Startup.cs" line="35" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Startup.cs" bodystart="35" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_startup_1a1b0d92ffe2959d0391d3bfe7b331bcf5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void InventoryManagementSystem.PublicApi.Startup.ConfigureDevelopmentServices</definition>
+        <argsstring>(IServiceCollection services)</argsstring>
+        <name>ConfigureDevelopmentServices</name>
+        <param>
+          <type>IServiceCollection</type>
+          <declname>services</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Startup.cs" line="42" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Startup.cs" bodystart="42" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_startup_1acbd44960d1dccceda94b3f37e7653415" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void InventoryManagementSystem.PublicApi.Startup.ConfigureServices</definition>
+        <argsstring>(IServiceCollection services)</argsstring>
+        <name>ConfigureServices</name>
+        <param>
+          <type>IServiceCollection</type>
+          <declname>services</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Startup.cs" line="51" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Startup.cs" bodystart="51" bodyend="171"/>
+      </memberdef>
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_startup_1a5460e4775103ac02fb00620b3074a3db" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void InventoryManagementSystem.PublicApi.Startup.Configure</definition>
+        <argsstring>(IApplicationBuilder app, IWebHostEnvironment env)</argsstring>
+        <name>Configure</name>
+        <param>
+          <type>IApplicationBuilder</type>
+          <declname>app</declname>
+        </param>
+        <param>
+          <type>IWebHostEnvironment</type>
+          <declname>env</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Startup.cs" line="174" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Startup.cs" bodystart="174" bodyend="203"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Startup.cs" line="32" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Startup.cs" bodystart="31" bodyend="204"/>
+    <listofallmembers>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_startup_1a7581533cfa9757b3e6aaf9e1391b5fa8" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::Startup</scope><name>Configuration</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_startup_1a5460e4775103ac02fb00620b3074a3db" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::Startup</scope><name>Configure</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_startup_1a1b0d92ffe2959d0391d3bfe7b331bcf5" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::Startup</scope><name>ConfigureDevelopmentServices</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_startup_1acbd44960d1dccceda94b3f37e7653415" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::Startup</scope><name>ConfigureServices</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_startup_1ad46c1205213fe3dc5c0db04d8576e2d3" prot="private" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::Startup</scope><name>CORS_POLICY</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_startup_1a86ceb9f3d6185007dc7b81e258b525f5" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::Startup</scope><name>Startup</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

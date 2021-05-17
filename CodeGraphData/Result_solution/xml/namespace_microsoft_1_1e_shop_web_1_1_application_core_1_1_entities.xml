@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="namespace_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities" kind="namespace">
+    <compoundname>Microsoft::eShopWeb::ApplicationCore::Entities</compoundname>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_base_entity" prot="public">Microsoft::eShopWeb::ApplicationCore::Entities::BaseEntity</innerclass>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_catalog_type" prot="public">Microsoft::eShopWeb::ApplicationCore::Entities::CatalogType</innerclass>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user" prot="public">Microsoft::eShopWeb::ApplicationCore::Entities::IMSUser</innerclass>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product" prot="public">Microsoft::eShopWeb::ApplicationCore::Entities::Product</innerclass>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand" prot="public">Microsoft::eShopWeb::ApplicationCore::Entities::ProductBrand</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/Entities/BaseEntity.cs" line="2" column="1"/>
+  </compounddef>
+</doxygen>

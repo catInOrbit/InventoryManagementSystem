@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_inventory_management_system_1_1_public_api_1_1_service_page_model" kind="class" prot="public">
+    <compoundname>InventoryManagementSystem::PublicApi::ServicePageModel</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">PageModel</basecompoundref>
+      <sectiondef kind="property">
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_service_page_model_1a3860a74123a6b6d24193997b1063bf71" prot="protected" static="no" readable="no" writable="no" gettable="yes" settable="no">
+        <type><ref refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_app_identity_db_context" kindref="compound">AppIdentityDbContext</ref></type>
+        <definition>AppIdentityDbContext InventoryManagementSystem.PublicApi.ServicePageModel.Context</definition>
+        <argsstring></argsstring>
+        <name>Context</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/ServicePageModel.cs" line="10" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/ServicePageModel.cs" bodystart="10" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_service_page_model_1ae19b10f933404c5c5943bb18b8fd99d4" prot="protected" static="no" readable="no" writable="no" gettable="yes" settable="no">
+        <type>IAuthorizationService</type>
+        <definition>IAuthorizationService InventoryManagementSystem.PublicApi.ServicePageModel.AuthorizationService</definition>
+        <argsstring></argsstring>
+        <name>AuthorizationService</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/ServicePageModel.cs" line="11" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/ServicePageModel.cs" bodystart="11" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_service_page_model_1a4418e1ce8d2d6dbcddae37ab232cfe86" prot="protected" static="no" readable="no" writable="no" gettable="yes" settable="no">
+        <type>UserManager&lt; IdentityUser &gt;</type>
+        <definition>UserManager&lt;IdentityUser&gt; InventoryManagementSystem.PublicApi.ServicePageModel.UserManager</definition>
+        <argsstring></argsstring>
+        <name>UserManager</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/ServicePageModel.cs" line="12" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/ServicePageModel.cs" bodystart="12" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_service_page_model_1abac5ccad74258e4491651d243b095dd2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>InventoryManagementSystem.PublicApi.ServicePageModel.ServicePageModel</definition>
+        <argsstring>(AppIdentityDbContext context, IAuthorizationService authorizationService, UserManager&lt; IdentityUser &gt; userManager)</argsstring>
+        <name>ServicePageModel</name>
+        <param>
+          <type><ref refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_app_identity_db_context" kindref="compound">AppIdentityDbContext</ref></type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>IAuthorizationService</type>
+          <declname>authorizationService</declname>
+        </param>
+        <param>
+          <type><ref refid="class_inventory_management_system_1_1_public_api_1_1_service_page_model_1a4418e1ce8d2d6dbcddae37ab232cfe86" kindref="member">UserManager</ref>&lt; IdentityUser &gt;</type>
+          <declname>userManager</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/ServicePageModel.cs" line="14" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/ServicePageModel.cs" bodystart="14" bodyend="22"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="181">
+        <label>InventoryManagementSystem.PublicApi.ServicePageModel</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_service_page_model"/>
+        <childnode refid="182" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="182">
+        <label>PageModel</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="183">
+        <label>InventoryManagementSystem.PublicApi.ServicePageModel</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_service_page_model"/>
+        <childnode refid="184" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="184">
+        <label>PageModel</label>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/ServicePageModel.cs" line="9" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/ServicePageModel.cs" bodystart="8" bodyend="23"/>
+    <listofallmembers>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_service_page_model_1ae19b10f933404c5c5943bb18b8fd99d4" prot="protected" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::ServicePageModel</scope><name>AuthorizationService</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_service_page_model_1a3860a74123a6b6d24193997b1063bf71" prot="protected" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::ServicePageModel</scope><name>Context</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_service_page_model_1abac5ccad74258e4491651d243b095dd2" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::ServicePageModel</scope><name>ServicePageModel</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_service_page_model_1a4418e1ce8d2d6dbcddae37ab232cfe86" prot="protected" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::ServicePageModel</scope><name>UserManager</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

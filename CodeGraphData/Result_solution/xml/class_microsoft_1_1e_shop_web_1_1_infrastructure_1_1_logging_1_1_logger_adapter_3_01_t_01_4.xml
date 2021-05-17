@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4" kind="class" prot="public">
+    <compoundname>Microsoft::eShopWeb::Infrastructure::Logging::LoggerAdapter&lt; T &gt;</compoundname>
+    <basecompoundref refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_app_logger_3_01_t_01_4" prot="public" virt="non-virtual">Microsoft.eShopWeb.ApplicationCore.Interfaces.IAppLogger&lt; T &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>T</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4_1a6adea5388c2e8f22f90c68cedd2a43a3" prot="private" static="no" mutable="no">
+        <type>readonly ILogger&lt; T &gt;</type>
+        <definition>readonly ILogger&lt;T&gt; Microsoft.eShopWeb.Infrastructure.Logging.LoggerAdapter&lt; T &gt;._logger</definition>
+        <argsstring></argsstring>
+        <name>_logger</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Logging/LoggerAdapter.cs" line="8" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Logging/LoggerAdapter.cs" bodystart="8" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4_1a181313c43bbe065fbde7bd9e73fe871c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Microsoft.eShopWeb.Infrastructure.Logging.LoggerAdapter&lt; T &gt;.LoggerAdapter</definition>
+        <argsstring>(ILoggerFactory loggerFactory)</argsstring>
+        <name>LoggerAdapter</name>
+        <param>
+          <type>ILoggerFactory</type>
+          <declname>loggerFactory</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Logging/LoggerAdapter.cs" line="9" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Logging/LoggerAdapter.cs" bodystart="9" bodyend="12"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4_1ac32f116d7a7f8333edd4a049945f77b9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Microsoft.eShopWeb.Infrastructure.Logging.LoggerAdapter&lt; T &gt;.LogWarning</definition>
+        <argsstring>(string message, params object[] args)</argsstring>
+        <name>LogWarning</name>
+        <reimplements refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_app_logger_3_01_t_01_4_1a06851df8b0ef2a1e1ea8a49517030b0f">LogWarning</reimplements>
+        <param>
+          <type>string</type>
+          <declname>message</declname>
+        </param>
+        <param>
+          <type>params object[]</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Logging/LoggerAdapter.cs" line="14" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Logging/LoggerAdapter.cs" bodystart="14" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4_1aa13bf1b6d4956f7a141be4c02c1c1303" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Microsoft.eShopWeb.Infrastructure.Logging.LoggerAdapter&lt; T &gt;.LogInformation</definition>
+        <argsstring>(string message, params object[] args)</argsstring>
+        <name>LogInformation</name>
+        <reimplements refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_app_logger_3_01_t_01_4_1a226e24ac44a400453062e31e7d957203">LogInformation</reimplements>
+        <param>
+          <type>string</type>
+          <declname>message</declname>
+        </param>
+        <param>
+          <type>params object[]</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Logging/LoggerAdapter.cs" line="19" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Logging/LoggerAdapter.cs" bodystart="19" bodyend="22"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="148">
+        <label>Microsoft.eShopWeb.Infrastructure.Logging.LoggerAdapter&lt; T &gt;</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4"/>
+        <childnode refid="149" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="149">
+        <label>IAppLogger&lt; T &gt;</label>
+        <link refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_app_logger_3_01_t_01_4"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="150">
+        <label>Microsoft.eShopWeb.Infrastructure.Logging.LoggerAdapter&lt; T &gt;</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4"/>
+        <childnode refid="151" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="151">
+        <label>IAppLogger&lt; T &gt;</label>
+        <link refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_app_logger_3_01_t_01_4"/>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Logging/LoggerAdapter.cs" line="7" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Logging/LoggerAdapter.cs" bodystart="6" bodyend="23"/>
+    <listofallmembers>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4_1a6adea5388c2e8f22f90c68cedd2a43a3" prot="private" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Logging::LoggerAdapter&lt; T &gt;</scope><name>_logger</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4_1a181313c43bbe065fbde7bd9e73fe871c" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Logging::LoggerAdapter&lt; T &gt;</scope><name>LoggerAdapter</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4_1aa13bf1b6d4956f7a141be4c02c1c1303" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Logging::LoggerAdapter&lt; T &gt;</scope><name>LogInformation</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4_1ac32f116d7a7f8333edd4a049945f77b9" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Logging::LoggerAdapter&lt; T &gt;</scope><name>LogWarning</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

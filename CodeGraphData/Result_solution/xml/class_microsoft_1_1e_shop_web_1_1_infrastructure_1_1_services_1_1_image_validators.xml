@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_image_validators" kind="class" prot="public">
+    <compoundname>Microsoft::eShopWeb::Infrastructure::Services::ImageValidators</compoundname>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_image_validators_1a884044c986c317348769f595a89fa64c" prot="private" static="no" mutable="no">
+        <type>const int</type>
+        <definition>const int Microsoft.eShopWeb.Infrastructure.Services.ImageValidators.ImageMaximumBytes</definition>
+        <argsstring></argsstring>
+        <name>ImageMaximumBytes</name>
+        <initializer>= 512000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" line="67" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_image_validators_1aa405dc718a8509c62876159718f58f5c" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool Microsoft.eShopWeb.Infrastructure.Services.ImageValidators.IsValidImage</definition>
+        <argsstring>(this byte[] postedFile, string fileName)</argsstring>
+        <name>IsValidImage</name>
+        <param>
+          <type>this byte[]</type>
+          <declname>postedFile</declname>
+        </param>
+        <param>
+          <type>string</type>
+          <declname>fileName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" line="69" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" bodystart="69" bodyend="72"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_image_validators_1ac0d26b9386d8f21a48327034fbf86772" prot="private" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool Microsoft.eShopWeb.Infrastructure.Services.ImageValidators.IsExtensionValid</definition>
+        <argsstring>(string fileName)</argsstring>
+        <name>IsExtensionValid</name>
+        <param>
+          <type>string</type>
+          <declname>fileName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" line="74" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" bodystart="74" bodyend="82"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" line="66" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Services/WebFileSystem.cs" bodystart="65" bodyend="83"/>
+    <listofallmembers>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_image_validators_1a884044c986c317348769f595a89fa64c" prot="private" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Services::ImageValidators</scope><name>ImageMaximumBytes</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_image_validators_1ac0d26b9386d8f21a48327034fbf86772" prot="private" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Services::ImageValidators</scope><name>IsExtensionValid</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_image_validators_1aa405dc718a8509c62876159718f58f5c" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Services::ImageValidators</scope><name>IsValidImage</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

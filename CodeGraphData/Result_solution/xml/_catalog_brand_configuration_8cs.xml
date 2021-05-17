@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="_catalog_brand_configuration_8cs" kind="file">
+    <compoundname>CatalogBrandConfiguration.cs</compoundname>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_brand_configuration" prot="public">Microsoft::eShopWeb::Infrastructure::Data::Config::CatalogBrandConfiguration</innerclass>
+    <innernamespace refid="namespace_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config">Microsoft::eShopWeb::Infrastructure::Data::Config</innernamespace>
+    <innernamespace refid="namespace_microsoft_1_1_entity_framework_core">Microsoft::EntityFrameworkCore</innernamespace>
+    <innernamespace refid="namespace_microsoft_1_1_entity_framework_core_1_1_metadata_1_1_builders">Microsoft::EntityFrameworkCore::Metadata::Builders</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="keyword">using</highlight><highlight class="normal"><sp/>Microsoft.EntityFrameworkCore;</highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/>Microsoft.EntityFrameworkCore.Metadata.Builders;</highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="keyword">using</highlight><highlight class="normal"><sp/>Microsoft.eShopWeb.ApplicationCore.Entities;</highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5" refid="namespace_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">Microsoft.eShopWeb.Infrastructure.Data.Config</highlight></codeline>
+<codeline lineno="6"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="7" refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_brand_configuration" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_brand_configuration" kindref="compound">CatalogBrandConfiguration</ref><sp/>:<sp/>IEntityTypeConfiguration&lt;ProductBrand&gt;</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="9" refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_brand_configuration_1ae39b551f086cbb5077392122a803c73a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_brand_configuration_1ae39b551f086cbb5077392122a803c73a" kindref="member">Configure</ref>(EntityTypeBuilder&lt;ProductBrand&gt;<sp/>builder)</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>builder.HasKey(ci<sp/>=&gt;<sp/>ci.Id);</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>builder.Property(ci<sp/>=&gt;<sp/>ci.Id)</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.UseHiLo(</highlight><highlight class="stringliteral">&quot;catalog_brand_hilo&quot;</highlight><highlight class="normal">)</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.IsRequired();</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>builder.Property(cb<sp/>=&gt;<sp/>cb.Brand)</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.IsRequired()</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>.HasMaxLength(100);</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="22"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/Config/CatalogBrandConfiguration.cs"/>
+  </compounddef>
+</doxygen>

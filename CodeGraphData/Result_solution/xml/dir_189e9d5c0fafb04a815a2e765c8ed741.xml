@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="dir_189e9d5c0fafb04a815a2e765c8ed741" kind="dir">
+    <compoundname>C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints</compoundname>
+    <innerfile refid="_authenticate_8cs">Authenticate.cs</innerfile>
+    <innerfile refid="_authenticate_request_8cs">AuthenticateRequest.cs</innerfile>
+    <innerfile refid="_authenticate_response_8cs">AuthenticateResponse.cs</innerfile>
+    <innerfile refid="_claim_value_8cs">ClaimValue.cs</innerfile>
+    <innerfile refid="_user_info_8cs">UserInfo.cs</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/"/>
+  </compounddef>
+</doxygen>

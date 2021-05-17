@@ -17,5 +17,7 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
         public bool IsLockedOut { get; set; } = false;
         public bool IsNotAllowed { get; set; } = false;
         public bool RequiresTwoFactor { get; set; } = false;
+        public string UserRole { get; set; }
+
     }
 }

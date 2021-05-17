@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_base_entity" kind="class" prot="public">
+    <compoundname>Microsoft::eShopWeb::ApplicationCore::Entities::BaseEntity</compoundname>
+    <derivedcompoundref refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_catalog_type" prot="public" virt="non-virtual">Microsoft.eShopWeb.ApplicationCore.Entities.CatalogType</derivedcompoundref>
+    <derivedcompoundref refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product" prot="public" virt="non-virtual">Microsoft.eShopWeb.ApplicationCore.Entities.Product</derivedcompoundref>
+    <derivedcompoundref refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand" prot="public" virt="non-virtual">Microsoft.eShopWeb.ApplicationCore.Entities.ProductBrand</derivedcompoundref>
+      <sectiondef kind="property">
+      <memberdef kind="property" id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_base_entity_1aa04e812984e24978c2e8d1ef287b90e6" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>int</type>
+        <definition>virtual int Microsoft.eShopWeb.ApplicationCore.Entities.BaseEntity.Id</definition>
+        <argsstring></argsstring>
+        <name>Id</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Entities/BaseEntity.cs" line="7" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Entities/BaseEntity.cs" bodystart="7" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="32">
+        <label>Microsoft.eShopWeb.ApplicationCore.Entities.ProductBrand</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand"/>
+        <childnode refid="29" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>Microsoft.eShopWeb.ApplicationCore.Entities.CatalogType</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_catalog_type"/>
+        <childnode refid="29" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>Microsoft.eShopWeb.ApplicationCore.Entities.BaseEntity</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_base_entity"/>
+      </node>
+      <node id="31">
+        <label>Microsoft.eShopWeb.ApplicationCore.Entities.Product</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product"/>
+        <childnode refid="29" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/Entities/BaseEntity.cs" line="6" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Entities/BaseEntity.cs" bodystart="5" bodyend="8"/>
+    <listofallmembers>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_base_entity_1aa04e812984e24978c2e8d1ef287b90e6" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Entities::BaseEntity</scope><name>Id</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

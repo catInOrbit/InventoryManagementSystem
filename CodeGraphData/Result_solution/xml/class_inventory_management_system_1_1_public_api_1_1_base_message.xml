@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_inventory_management_system_1_1_public_api_1_1_base_message" kind="class" prot="public">
+    <compoundname>InventoryManagementSystem::PublicApi::BaseMessage</compoundname>
+    <derivedcompoundref refid="class_inventory_management_system_1_1_public_api_1_1_base_request" prot="public" virt="non-virtual">InventoryManagementSystem.PublicApi.BaseRequest</derivedcompoundref>
+    <derivedcompoundref refid="class_inventory_management_system_1_1_public_api_1_1_base_response" prot="public" virt="non-virtual">InventoryManagementSystem.PublicApi.BaseResponse</derivedcompoundref>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="class_inventory_management_system_1_1_public_api_1_1_base_message_1a957ab0420a8796545fa44dfd85f37d77" prot="protected" static="no" mutable="no">
+        <type>Guid</type>
+        <definition>Guid InventoryManagementSystem.PublicApi.BaseMessage._correlationId</definition>
+        <argsstring></argsstring>
+        <name>_correlationId</name>
+        <initializer>= Guid.NewGuid()</initializer>
+        <briefdescription>
+<para>Unique Identifier used by logging </para>        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/BaseMessage.cs" line="13" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/BaseMessage.cs" bodystart="13" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_base_message_1ac2ad0cd8ef8cb4ed8249ed6a67083c50" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Guid</type>
+        <definition>Guid InventoryManagementSystem.PublicApi.BaseMessage.CorrelationId</definition>
+        <argsstring>()</argsstring>
+        <name>CorrelationId</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/BaseMessage.cs" line="14" column="1"/>
+        <referencedby refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1abdff97564d0dcb4874017d78d3e9e033" compoundref="_authenticate_8cs" startline="32" endline="53">InventoryManagementSystem.PublicApi.AuthenticationEndpoints.Authenticate.HandleAsync</referencedby>
+        <referencedby refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a0a45deabd9785235b206455b424dca10" compoundref="_register_8cs" startline="36" endline="56">InventoryManagementSystem.PublicApi.RegistrationEndpoints.Register.HandleAsync</referencedby>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Base class used by API requests </para>    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="35">
+        <label>InventoryManagementSystem.PublicApi.BaseRequest</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_request"/>
+        <childnode refid="34" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateResponse</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response"/>
+        <childnode refid="38" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterResponse</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response"/>
+        <childnode refid="38" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="37">
+        <label>InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterRequest</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request"/>
+        <childnode refid="35" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>InventoryManagementSystem.PublicApi.BaseMessage</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_message"/>
+      </node>
+      <node id="38">
+        <label>InventoryManagementSystem.PublicApi.BaseResponse</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_response"/>
+        <childnode refid="34" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateRequest</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request"/>
+        <childnode refid="35" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/BaseMessage.cs" line="9" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/BaseMessage.cs" bodystart="8" bodyend="15"/>
+    <listofallmembers>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1a957ab0420a8796545fa44dfd85f37d77" prot="protected" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::BaseMessage</scope><name>_correlationId</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1ac2ad0cd8ef8cb4ed8249ed6a67083c50" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::BaseMessage</scope><name>CorrelationId</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

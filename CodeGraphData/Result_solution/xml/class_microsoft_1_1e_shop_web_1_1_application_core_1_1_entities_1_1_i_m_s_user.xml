@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user" kind="class" prot="public">
+    <compoundname>Microsoft::eShopWeb::ApplicationCore::Entities::IMSUser</compoundname>
+      <sectiondef kind="property">
+      <memberdef kind="property" id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1a47d3a2fe9c999c7c3d2126724db4774e" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string Microsoft.eShopWeb.ApplicationCore.Entities.IMSUser.OwnerID</definition>
+        <argsstring></argsstring>
+        <name>OwnerID</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Entities/IMSUser.cs" line="7" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Entities/IMSUser.cs" bodystart="7" bodyend="-1"/>
+        <referencedby refid="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler_1a5eff2d9812df54184d9d4503d2f22173" compoundref="_contact_is_owner_authorization_handler_8cs" startline="21" endline="46">ContactManager.Authorization.ContactIsOwnerAuthorizationHandler.HandleRequirementAsync</referencedby>
+      </memberdef>
+      <memberdef kind="property" id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1a948f9954c3ba6d4ddb8d1bfda08048b2" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string Microsoft.eShopWeb.ApplicationCore.Entities.IMSUser.Fullname</definition>
+        <argsstring></argsstring>
+        <name>Fullname</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Entities/IMSUser.cs" line="8" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Entities/IMSUser.cs" bodystart="8" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1aa02f650161fcae423573dbc4d607ccb1" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>DateTime</type>
+        <definition>DateTime Microsoft.eShopWeb.ApplicationCore.Entities.IMSUser.ShiftStart</definition>
+        <argsstring></argsstring>
+        <name>ShiftStart</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Entities/IMSUser.cs" line="9" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Entities/IMSUser.cs" bodystart="9" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1af8dff4dab893551e273e11f7b0b59e33" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>DateTime</type>
+        <definition>DateTime Microsoft.eShopWeb.ApplicationCore.Entities.IMSUser.ShiftEnd</definition>
+        <argsstring></argsstring>
+        <name>ShiftEnd</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Entities/IMSUser.cs" line="10" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Entities/IMSUser.cs" bodystart="10" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/Entities/IMSUser.cs" line="6" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Entities/IMSUser.cs" bodystart="5" bodyend="11"/>
+    <listofallmembers>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1a948f9954c3ba6d4ddb8d1bfda08048b2" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Entities::IMSUser</scope><name>Fullname</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1a47d3a2fe9c999c7c3d2126724db4774e" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Entities::IMSUser</scope><name>OwnerID</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1af8dff4dab893551e273e11f7b0b59e33" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Entities::IMSUser</scope><name>ShiftEnd</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1aa02f650161fcae423573dbc4d607ccb1" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Entities::IMSUser</scope><name>ShiftStart</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

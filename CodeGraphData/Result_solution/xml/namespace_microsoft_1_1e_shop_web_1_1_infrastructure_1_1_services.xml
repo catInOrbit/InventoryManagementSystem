@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="namespace_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services" kind="namespace">
+    <compoundname>Microsoft::eShopWeb::Infrastructure::Services</compoundname>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_email_sender" prot="public">Microsoft::eShopWeb::Infrastructure::Services::EmailSender</innerclass>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system" prot="public">Microsoft::eShopWeb::Infrastructure::Services::WebFileSystem</innerclass>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_image_validators" prot="public">Microsoft::eShopWeb::Infrastructure::Services::ImageValidators</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Services/EmailSender.cs" line="5" column="1"/>
+  </compounddef>
+</doxygen>

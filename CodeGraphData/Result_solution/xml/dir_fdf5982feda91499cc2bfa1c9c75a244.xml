@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="dir_fdf5982feda91499cc2bfa1c9c75a244" kind="dir">
+    <compoundname>C:/InventoryManagementSystem/src/Infrastructure/Logging</compoundname>
+    <innerfile refid="_logger_adapter_8cs">LoggerAdapter.cs</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Logging/"/>
+  </compounddef>
+</doxygen>

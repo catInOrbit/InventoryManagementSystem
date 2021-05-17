@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="namespace_microsoft_1_1_entity_framework_core_1_1_infrastructure" kind="namespace">
+    <compoundname>Microsoft::EntityFrameworkCore::Infrastructure</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Identity/Migrations/20201202111612_InitialIdentityModel.Designer.cs" line="4" column="1"/>
+  </compounddef>
+</doxygen>

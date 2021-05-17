@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_i_m_s_backend_1_1_tests_1_1_unit_test1" kind="class" prot="public">
+    <compoundname>IMSBackend::Tests::UnitTest1</compoundname>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_i_m_s_backend_1_1_tests_1_1_unit_test1_1a8d9bb4fe99a0e56e3aee27b4b878acaa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void IMSBackend.Tests.UnitTest1.Test1</definition>
+        <argsstring>()</argsstring>
+        <name>Test1</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/test/IMSBackend.Tests/UnitTest1.cs" line="9" column="1" bodyfile="C:/InventoryManagementSystem/test/IMSBackend.Tests/UnitTest1.cs" bodystart="9" bodyend="12"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/test/IMSBackend.Tests/UnitTest1.cs" line="7" column="1" bodyfile="C:/InventoryManagementSystem/test/IMSBackend.Tests/UnitTest1.cs" bodystart="6" bodyend="13"/>
+    <listofallmembers>
+      <member refid="class_i_m_s_backend_1_1_tests_1_1_unit_test1_1a8d9bb4fe99a0e56e3aee27b4b878acaa" prot="public" virt="non-virtual"><scope>IMSBackend::Tests::UnitTest1</scope><name>Test1</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

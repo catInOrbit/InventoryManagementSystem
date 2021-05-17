@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="_i_m_s_user_8cs" kind="file">
+    <compoundname>IMSUser.cs</compoundname>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user" prot="public">Microsoft::eShopWeb::ApplicationCore::Entities::IMSUser</innerclass>
+    <innernamespace refid="namespace_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities">Microsoft::eShopWeb::ApplicationCore::Entities</innernamespace>
+    <innernamespace refid="namespace_system">System</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="keyword">using</highlight><highlight class="normal"><sp/>System;</highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">Microsoft.eShopWeb.ApplicationCore.Entities</highlight></codeline>
+<codeline lineno="4"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="5" refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user" kindref="compound">IMSUser</ref></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="7" refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1a47d3a2fe9c999c7c3d2126724db4774e" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>OwnerID<sp/>{<sp/></highlight><highlight class="keyword">get</highlight><highlight class="normal">;<sp/>set;<sp/>}</highlight></codeline>
+<codeline lineno="8" refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1a948f9954c3ba6d4ddb8d1bfda08048b2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>Fullname<sp/>{<sp/></highlight><highlight class="keyword">get</highlight><highlight class="normal">;<sp/>set;<sp/>}</highlight></codeline>
+<codeline lineno="9" refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1aa02f650161fcae423573dbc4d607ccb1" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>DateTime<sp/>ShiftStart<sp/>{<sp/></highlight><highlight class="keyword">get</highlight><highlight class="normal">;<sp/>set;<sp/>}</highlight></codeline>
+<codeline lineno="10" refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1af8dff4dab893551e273e11f7b0b59e33" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>DateTime<sp/>ShiftEnd<sp/>{<sp/></highlight><highlight class="keyword">get</highlight><highlight class="normal">;<sp/>set;<sp/>}</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="12"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/Entities/IMSUser.cs"/>
+  </compounddef>
+</doxygen>

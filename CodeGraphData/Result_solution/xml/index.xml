@@ -1,0 +1,591 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.8.6">
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_app_identity_db_context" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Identity::AppIdentityDbContext</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_app_identity_db_context_1a9ec94a8e012dec8a1d4a9365729507ab" kind="function"><name>AppIdentityDbContext</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_app_identity_db_context_1a62f566e3126f1d90ba3dc3ea7464a47d" kind="function"><name>OnModelCreating</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_migrations_1_1_app_identity_db_context_model_snapshot" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Identity::Migrations::AppIdentityDbContextModelSnapshot</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_migrations_1_1_app_identity_db_context_model_snapshot_1af4beb09cd67bb75cf48df2a44f3fe38f" kind="function"><name>BuildModel</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_app_identity_db_context_seed" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Identity::AppIdentityDbContextSeed</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_app_identity_db_context_seed_1ab05b2b8947e34973d453efcea98bdfa6" kind="function"><name>SeedAsync</name></member>
+  </compound>
+  <compound refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate" kind="class"><name>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::Authenticate</name>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1a214b6a2a16688f16e8acc9ecdac539e8" kind="variable"><name>_signInManager</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1a9a9d9d4522923929177c53353e9f55ab" kind="variable"><name>_tokenClaimsService</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1a533349942e66853a679220234159fb65" kind="function"><name>Authenticate</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1abdff97564d0dcb4874017d78d3e9e033" kind="function"><name>HandleAsync</name></member>
+  </compound>
+  <compound refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request" kind="class"><name>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateRequest</name>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request_1addac0ec09ba83089330615d52b146405" kind="property"><name>Username</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request_1ac9f95227af2a4f0dba175a4cc03a8d95" kind="property"><name>Password</name></member>
+  </compound>
+  <compound refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response" kind="class"><name>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateResponse</name>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1af24dab69357bd938df2412d33fb0b017" kind="property"><name>Result</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1a1cc0fc7878ea9b0f4cfbeb52c33e70a4" kind="property"><name>Token</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1aa094ef6d03198e6bfe4f447f48f18de8" kind="property"><name>Username</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1af2ca39653e096b7eb35d94b2c43fde0f" kind="property"><name>IsLockedOut</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1ab63410fe2e2fdf7b9a976631fbbc1a2d" kind="property"><name>IsNotAllowed</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1a3b1ee44c41473ddafcef1647c8361353" kind="property"><name>RequiresTwoFactor</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1a45c2a98c8045280843ffa4a5c9040657" kind="function"><name>AuthenticateResponse</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1a1266a704805ed43cb557c44c97d4121e" kind="function"><name>AuthenticateResponse</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_constants_1_1_authorization_constants" kind="class"><name>Microsoft::eShopWeb::ApplicationCore::Constants::AuthorizationConstants</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_constants_1_1_authorization_constants_1ae89b5af9d8d9e3cf3767574acf2d13d3" kind="variable"><name>AUTH_KEY</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_constants_1_1_authorization_constants_1a6f51e55e6b2d09d04b65df7f8f2b6af7" kind="variable"><name>DEFAULT_PASSWORD</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_constants_1_1_authorization_constants_1a196e68e1c01b7c935f014125df70a13f" kind="variable"><name>JWT_SECRET_KEY</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_base_entity" kind="class"><name>Microsoft::eShopWeb::ApplicationCore::Entities::BaseEntity</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_base_entity_1aa04e812984e24978c2e8d1ef287b90e6" kind="property"><name>Id</name></member>
+  </compound>
+  <compound refid="class_inventory_management_system_1_1_public_api_1_1_base_message" kind="class"><name>InventoryManagementSystem::PublicApi::BaseMessage</name>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1a957ab0420a8796545fa44dfd85f37d77" kind="variable"><name>_correlationId</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1ac2ad0cd8ef8cb4ed8249ed6a67083c50" kind="function"><name>CorrelationId</name></member>
+  </compound>
+  <compound refid="class_inventory_management_system_1_1_public_api_1_1_base_request" kind="class"><name>InventoryManagementSystem::PublicApi::BaseRequest</name>
+  </compound>
+  <compound refid="class_inventory_management_system_1_1_public_api_1_1_base_response" kind="class"><name>InventoryManagementSystem::PublicApi::BaseResponse</name>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_base_response_1ade56cf54c8e9ece0d5e938717a7bd46a" kind="function"><name>BaseResponse</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_base_response_1a0e194d464f1d529ec2bc139cfa0d01fa" kind="function"><name>BaseResponse</name></member>
+  </compound>
+  <compound refid="class_blazor_shared_1_1_base_url_configuration" kind="class"><name>BlazorShared::BaseUrlConfiguration</name>
+    <member refid="class_blazor_shared_1_1_base_url_configuration_1a0a6237f5350406efacb81691678a2b28" kind="variable"><name>CONFIG_NAME</name></member>
+    <member refid="class_blazor_shared_1_1_base_url_configuration_1acd2838a6a3b4f376821288012163a4c4" kind="property"><name>ApiBase</name></member>
+    <member refid="class_blazor_shared_1_1_base_url_configuration_1a36d2009417294e4c31392ad44631f7fa" kind="property"><name>WebBase</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_brand_configuration" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Data::Config::CatalogBrandConfiguration</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_brand_configuration_1ae39b551f086cbb5077392122a803c73a" kind="function"><name>Configure</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_catalog_context" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Data::CatalogContext</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_catalog_context_1a86b1e5b3898d67dfd016cee4fbb60a8b" kind="property"><name>CatalogItems</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_catalog_context_1aee8ea2aa78696c9fa699f1d1c2f319d6" kind="property"><name>CatalogBrands</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_catalog_context_1acb3c51e6fa49b148fcd6d12cc87e1d92" kind="property"><name>CatalogTypes</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_catalog_context_1a06a797bea5c91c7369bda1faa6c24bd8" kind="function"><name>CatalogContext</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_catalog_context_1a7c1def14bdbe00bb4a52586570da6e49" kind="function"><name>OnModelCreating</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_item_configuration" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Data::Config::CatalogItemConfiguration</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_item_configuration_1a463eb75cf31c557e8d61d1424ea97041" kind="function"><name>Configure</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_catalog_settings" kind="class"><name>Microsoft::eShopWeb::CatalogSettings</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_catalog_settings_1a7981f253355b9e6fdc1641237d756538" kind="property"><name>CatalogBaseUrl</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_catalog_type" kind="class"><name>Microsoft::eShopWeb::ApplicationCore::Entities::CatalogType</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_catalog_type_1ae9e142d1af565f3913085efcbfc80463" kind="property"><name>Type</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_catalog_type_1abbc679750bb3bdb27ec728f996103478" kind="function"><name>CatalogType</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_type_configuration" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Data::Config::CatalogTypeConfiguration</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_type_configuration_1a9ddc02a98e585987a7b733bdd9abd3ab" kind="function"><name>Configure</name></member>
+  </compound>
+  <compound refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value" kind="class"><name>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::ClaimValue</name>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1a4661e796d36ab04b4b7a08f2f8c863e7" kind="property"><name>Type</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1aa7187e90a4b8fe2754e16b785d6de896" kind="property"><name>Value</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1af64cc4a4e1b3dbc880fc7145d9a6bb46" kind="function"><name>ClaimValue</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1ad33b1dbd89aaf78dfbb3dacd45f73e52" kind="function"><name>ClaimValue</name></member>
+  </compound>
+  <compound refid="class_contact_manager_1_1_authorization_1_1_constants" kind="class"><name>ContactManager::Authorization::Constants</name>
+    <member refid="class_contact_manager_1_1_authorization_1_1_constants_1a0f9197d3147ab57d2082da6457f7e16e" kind="variable"><name>CreateOperationName</name></member>
+    <member refid="class_contact_manager_1_1_authorization_1_1_constants_1afd339ea3f39ef06967c203fb4b3fcce5" kind="variable"><name>ReadOperationName</name></member>
+    <member refid="class_contact_manager_1_1_authorization_1_1_constants_1a733e3ac382073c3c376f6493a4866efe" kind="variable"><name>UpdateOperationName</name></member>
+    <member refid="class_contact_manager_1_1_authorization_1_1_constants_1a3edbae8318d7cc03f36c7b8c73a48c8b" kind="variable"><name>DeleteOperationName</name></member>
+    <member refid="class_contact_manager_1_1_authorization_1_1_constants_1a0113ace7622ec48838d668b05fd14eb3" kind="variable"><name>ApproveOperationName</name></member>
+    <member refid="class_contact_manager_1_1_authorization_1_1_constants_1a0b5818006e3e789c15872d41d3f08266" kind="variable"><name>RejectOperationName</name></member>
+    <member refid="class_contact_manager_1_1_authorization_1_1_constants_1a7e06413f34f99adaed5caede50fbf821" kind="variable"><name>IMSAccountantRole</name></member>
+    <member refid="class_contact_manager_1_1_authorization_1_1_constants_1a3a9877e7a5daff4aab578ab6bc871cd0" kind="variable"><name>IMSManagersRole</name></member>
+    <member refid="class_contact_manager_1_1_authorization_1_1_constants_1a4e7c0323ff5e9cf7e7dc72b6f21044bb" kind="variable"><name>IMSStockKeeperRole</name></member>
+    <member refid="class_contact_manager_1_1_authorization_1_1_constants_1aee23ae389807268af4bd6883536ecda0" kind="variable"><name>IMSEmployee</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_constants" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Constants</name>
+  </compound>
+  <compound refid="class_contact_manager_1_1_authorization_1_1_contact_administrators_authorization_handler" kind="class"><name>ContactManager::Authorization::ContactAdministratorsAuthorizationHandler</name>
+    <member refid="class_contact_manager_1_1_authorization_1_1_contact_administrators_authorization_handler_1ad61b7e2332d14d41f36a39613103f388" kind="function"><name>HandleRequirementAsync</name></member>
+  </compound>
+  <compound refid="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler" kind="class"><name>ContactManager::Authorization::ContactIsOwnerAuthorizationHandler</name>
+    <member refid="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler_1a3508166dabb496aecde63e97f61d9bfb" kind="variable"><name>_userManager</name></member>
+    <member refid="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler_1a62a34b405623fb35299e5bab776f9fa3" kind="function"><name>ContactIsOwnerAuthorizationHandler</name></member>
+    <member refid="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler_1a5eff2d9812df54184d9d4503d2f22173" kind="function"><name>HandleRequirementAsync</name></member>
+  </compound>
+  <compound refid="class_contact_manager_1_1_authorization_1_1_contact_manager_authorization_handler" kind="class"><name>ContactManager::Authorization::ContactManagerAuthorizationHandler</name>
+    <member refid="class_contact_manager_1_1_authorization_1_1_contact_manager_authorization_handler_1a37cc6ed77046db457e86832c7148b126" kind="function"><name>HandleRequirementAsync</name></member>
+  </compound>
+  <compound refid="class_contact_manager_1_1_authorization_1_1_contact_operations" kind="class"><name>ContactManager::Authorization::ContactOperations</name>
+    <member refid="class_contact_manager_1_1_authorization_1_1_contact_operations_1a15f19a10d8604d88111c8839248651e3" kind="variable"><name>Create</name></member>
+    <member refid="class_contact_manager_1_1_authorization_1_1_contact_operations_1a97cbf992477769c3a0891a955026b3f1" kind="variable"><name>Read</name></member>
+    <member refid="class_contact_manager_1_1_authorization_1_1_contact_operations_1a301dffa69e40e1e93e7c41c440a263e0" kind="variable"><name>Update</name></member>
+    <member refid="class_contact_manager_1_1_authorization_1_1_contact_operations_1af1c63e46a780f54face26634caba0b21" kind="variable"><name>Delete</name></member>
+    <member refid="class_contact_manager_1_1_authorization_1_1_contact_operations_1aa3a9d1687d370c1562a75e0e45c0a3f0" kind="variable"><name>Approve</name></member>
+    <member refid="class_contact_manager_1_1_authorization_1_1_contact_operations_1a63a10fdc7e333375f7524e044f275ab9" kind="variable"><name>Reject</name></member>
+  </compound>
+  <compound refid="class_inventory_management_system_1_1_public_api_1_1_custom_schema_filters" kind="class"><name>InventoryManagementSystem::PublicApi::CustomSchemaFilters</name>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_custom_schema_filters_1aa714ac1abbcf21c1d5eda29c53f2319b" kind="function"><name>Apply</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Data::EfRepository&lt; T &gt;</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a76864bb74ee2b8498c7df417b159e755" kind="variable"><name>_dbContext</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a5542a7aaad462a098dea83ddd46be736" kind="function"><name>EfRepository</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a931f2126ce8c6d56122c8cecec2865d6" kind="function"><name>GetByIdAsync</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a3dbb92febc6e7914f215aebcaf73501a" kind="function"><name>ListAllAsync</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a15e92d19c7df35a9c6d13e7ea757ae69" kind="function"><name>ListAsync</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1af9881f2b3caf7219f46d6a1b4458c87a" kind="function"><name>CountAsync</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a6c011ef4875aeae091cccafa090b0765" kind="function"><name>AddAsync</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1afe0c2848b12beaaa86f8274a5c59172a" kind="function"><name>UpdateAsync</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1aad0126e9447262672e794dcd594cca92" kind="function"><name>DeleteAsync</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a8c058b139df5074715edafdd5facd25f" kind="function"><name>FirstAsync</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a6ae5a6f2ef503499c24a821aabc1a185" kind="function"><name>FirstOrDefaultAsync</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1afd3092b35b7fd1c1d4f71af36b9385a3" kind="function"><name>ApplySpecification</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_email_sender" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Services::EmailSender</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_email_sender_1a6e45e41465fc4b6dc525190f3c86b4af" kind="function"><name>SendEmailAsync</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Data::FileItem</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1af21fbb07d30a94b822f7bd1c8fae18e7" kind="property"><name>FileName</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1a57fa144dd4f8a42bc1182aaf96a8e771" kind="property"><name>Url</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1a54ef9fed10a9e08f93eb24547bd97e7d" kind="property"><name>Size</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1ad78bffbb5d56b49121bbfd3388c611b2" kind="property"><name>Ext</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1aedb2e4b2ab591bb2718cbc866966624e" kind="property"><name>Type</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_file_item_1a98e75afb2cbab855813cb4abe5bab4b4" kind="property"><name>DataBase64</name></member>
+  </compound>
+  <compound refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_app_logger_3_01_t_01_4" kind="interface"><name>Microsoft::eShopWeb::ApplicationCore::Interfaces::IAppLogger&lt; T &gt;</name>
+    <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_app_logger_3_01_t_01_4_1a226e24ac44a400453062e31e7d957203" kind="function"><name>LogInformation</name></member>
+    <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_app_logger_3_01_t_01_4_1a06851df8b0ef2a1e1ea8a49517030b0f" kind="function"><name>LogWarning</name></member>
+  </compound>
+  <compound refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4" kind="interface"><name>Microsoft::eShopWeb::ApplicationCore::Interfaces::IAsyncRepository&lt; T &gt;</name>
+    <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a8714b6aaedbb4ada99f4f897579b175d" kind="function"><name>GetByIdAsync</name></member>
+    <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a3d375dca36b64cd7a28d1dee256f8862" kind="function"><name>ListAllAsync</name></member>
+    <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1aaac2dcd8b2a346f8cd7ddfcaa16273a6" kind="function"><name>ListAsync</name></member>
+    <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a685572d3af9c21d8c45a9fc326775e12" kind="function"><name>AddAsync</name></member>
+    <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a804f3108ec7642080a87907150dace99" kind="function"><name>UpdateAsync</name></member>
+    <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1ac28f09d5b0b6d5402d0c81556c89b786" kind="function"><name>DeleteAsync</name></member>
+    <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a5244e7758feebd17f22100415deb2ed6" kind="function"><name>CountAsync</name></member>
+    <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a5633ffdcb1651d06e3b091df4d89418d" kind="function"><name>FirstAsync</name></member>
+    <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a2e4375a2c1635b15883a345c972be256" kind="function"><name>FirstOrDefaultAsync</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_identity_token_claim_service" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Identity::IdentityTokenClaimService</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_identity_token_claim_service_1a0eb3c6c4a208bdd834d76ab384a8e336" kind="variable"><name>_userManager</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_identity_token_claim_service_1a2883052c1eee047c0d0a5c7e2aeafa65" kind="function"><name>IdentityTokenClaimService</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_identity_token_claim_service_1a365d02de3430a5a67e6f8db0de0b3cfe" kind="function"><name>GetTokenAsync</name></member>
+  </compound>
+  <compound refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_email_sender" kind="interface"><name>Microsoft::eShopWeb::ApplicationCore::Interfaces::IEmailSender</name>
+    <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_email_sender_1a426f191e8be27268457ca781e419ea8b" kind="function"><name>SendEmailAsync</name></member>
+  </compound>
+  <compound refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_file_system" kind="interface"><name>Microsoft::eShopWeb::ApplicationCore::Interfaces::IFileSystem</name>
+    <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_file_system_1a015b16ac024344abc0df8e5a62bf5930" kind="function"><name>SavePicture</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_image_validators" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Services::ImageValidators</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_image_validators_1a884044c986c317348769f595a89fa64c" kind="variable"><name>ImageMaximumBytes</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_image_validators_1aa405dc718a8509c62876159718f58f5c" kind="function"><name>IsValidImage</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_image_validators_1ac0d26b9386d8f21a48327034fbf86772" kind="function"><name>IsExtensionValid</name></member>
+  </compound>
+  <compound refid="class_inventory_management_system_1_1_public_api_1_1_image_validators" kind="class"><name>InventoryManagementSystem::PublicApi::ImageValidators</name>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_image_validators_1a67cd3642cf56c93af54da29519883524" kind="variable"><name>ImageMaximumBytes</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_image_validators_1ab62fc41ef7c8ba77aa8493bc50621d96" kind="function"><name>IsValidImage</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_image_validators_1a5a7da982e3e4eb20ef33a79777560593" kind="function"><name>IsExtensionValid</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user" kind="class"><name>Microsoft::eShopWeb::ApplicationCore::Entities::IMSUser</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1a47d3a2fe9c999c7c3d2126724db4774e" kind="property"><name>OwnerID</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1a948f9954c3ba6d4ddb8d1bfda08048b2" kind="property"><name>Fullname</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1aa02f650161fcae423573dbc4d607ccb1" kind="property"><name>ShiftStart</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1af8dff4dab893551e273e11f7b0b59e33" kind="property"><name>ShiftEnd</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_migrations_1_1_initial_identity_model" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Identity::Migrations::InitialIdentityModel</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_migrations_1_1_initial_identity_model_1a26336a8045a6fcd70014bda4fcf6859c" kind="function"><name>Up</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_migrations_1_1_initial_identity_model_1a14ae6ae5f2d478bfaa804853013c0838" kind="function"><name>Down</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_migrations_1_1_initial_identity_model_1a730ef132a3033b52ba0f64af8437a13f" kind="function"><name>BuildTargetModel</name></member>
+  </compound>
+  <compound refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_token_claims_service" kind="interface"><name>Microsoft::eShopWeb::ApplicationCore::Interfaces::ITokenClaimsService</name>
+    <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_token_claims_service_1a16cc6f9675b288cddcffc7ca7a684ecf" kind="function"><name>GetTokenAsync</name></member>
+  </compound>
+  <compound refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_uri_composer" kind="interface"><name>Microsoft::eShopWeb::ApplicationCore::Interfaces::IUriComposer</name>
+    <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_uri_composer_1a78f59c8126f4b336db8067f85cbbd622" kind="function"><name>ComposePicUri</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_json_extensions" kind="class"><name>Microsoft::eShopWeb::JsonExtensions</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_json_extensions_1a50e73b5b99222c89e63ac18d1d51bfeb" kind="variable"><name>_jsonOptions</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_json_extensions_1a502dedd5044c4ca7817a1e7570736da3" kind="function"><name>FromJson&lt; T &gt;</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_json_extensions_1abbceb422228e9f73f6d0b06cf2ebe724" kind="function"><name>ToJson&lt; T &gt;</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Logging::LoggerAdapter&lt; T &gt;</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4_1a6adea5388c2e8f22f90c68cedd2a43a3" kind="variable"><name>_logger</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4_1a181313c43bbe065fbde7bd9e73fe871c" kind="function"><name>LoggerAdapter</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4_1ac32f116d7a7f8333edd4a049945f77b9" kind="function"><name>LogWarning</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging_1_1_logger_adapter_3_01_t_01_4_1aa13bf1b6d4956f7a141be4c02c1c1303" kind="function"><name>LogInformation</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product" kind="class"><name>Microsoft::eShopWeb::ApplicationCore::Entities::Product</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_1a086224be51abf8483d82b08b8ca1e877" kind="property"><name>Name</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_1a9c41517a1282a33f0c5d1fc0418be551" kind="property"><name>Description</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_1a80f91b5585c2d55563087cb5c348beef" kind="property"><name>Price</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_1a6372b37525176f466b25ad9fd29bd439" kind="property"><name>PictureUri</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_1a9766ac0047c9a6e7c3752b9c6d7c7625" kind="property"><name>CatalogTypeId</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_1a30b64172a666a25861b1553d8fd028d0" kind="property"><name>CatalogType</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_1a01610b7085b6dd84231ec4f172bd6763" kind="property"><name>CatalogBrandId</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_1a2bb503af130f2d73f5b4f5bc295b3e2d" kind="property"><name>ProductBrand</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_1a069e1499b3dd01c706ff32a1a93a9c77" kind="function"><name>Product</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_1af1dabcb22db7f8861a892edc593d1c6f" kind="function"><name>UpdateDetails</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_1a028cb777ccf158bfe351df8892615284" kind="function"><name>UpdateBrand</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_1ab25692330ba810239efd192c4703c119" kind="function"><name>UpdateType</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_1ae60a7fc1cb7a56a0275b5bfc9cd0691b" kind="function"><name>UpdatePictureUri</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand" kind="class"><name>Microsoft::eShopWeb::ApplicationCore::Entities::ProductBrand</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand_1a06a04c55882520bd09938cb000a1525e" kind="property"><name>Brand</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand_1abef85e1231cf12742cc1619879e27fe6" kind="function"><name>ProductBrand</name></member>
+  </compound>
+  <compound refid="class_inventory_management_system_1_1_public_api_1_1_program" kind="class"><name>InventoryManagementSystem::PublicApi::Program</name>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_program_1aa4f0df81f56abb5925eaa8025f94e016" kind="function"><name>Main</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_program_1a5fc837e5093725ae729bf21b2584f2a9" kind="function"><name>CreateHostBuilder</name></member>
+  </compound>
+  <compound refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register" kind="class"><name>InventoryManagementSystem::PublicApi::RegistrationEndpoints::Register</name>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1ae12c95155f212bfc7e5e201374b6608b" kind="variable"><name>_tokenClaimsService</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a0ed5122eb98256f0c6989dcf777fb5be" kind="variable"><name>_userManager</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a12cc38ea400b210f4b908521178b79b1" kind="variable"><name>_roleManager</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a96e45535695c4460ee1a5b55b179ca17" kind="variable"><name>_serviceProvider</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1adae4ac71e35e69d14db60f2f2eb2d199" kind="function"><name>Register</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a0a45deabd9785235b206455b424dca10" kind="function"><name>HandleAsync</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a6ca37dafc82ba1f3ef4e86f245de7ed6" kind="function"><name>UserCreatimgHelper</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1afd19ba06d20871bd74a12a8e0fd76297" kind="function"><name>RoleCreatingHelper</name></member>
+  </compound>
+  <compound refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request" kind="class"><name>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterRequest</name>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request_1ac073df7118b7bb8580a89e7345a2d142" kind="property"><name>Username</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request_1ae90efcd5282b562658d7b631ce47bd92" kind="property"><name>Password</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request_1aa72bd54006953abb0563187e38be8867" kind="property"><name>RoleName</name></member>
+  </compound>
+  <compound refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response" kind="class"><name>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterResponse</name>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1a980a2ba0a21d5fac8415f2f6b1371e57" kind="property"><name>Result</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1afb91691064f83c377b85598e608e0365" kind="property"><name>Token</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1a04bb5638b36485cf36778553770a69be" kind="property"><name>Username</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1af8f3baf4660273ca9b1b9aeaf4ced544" kind="property"><name>IsLockedOut</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1a0260d6c650b1a998ce8fe6533d294900" kind="property"><name>IsNotAllowed</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1a7df619f6f04812e708aab47f9a2e2f69" kind="property"><name>RequiresTwoFactor</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1af6f5742837fdccf605c9a0cb6a68b736" kind="function"><name>RegisterResponse</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1a7b0ca8373eed8e048b76fb11fb1eb5eb" kind="function"><name>RegisterResponse</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_constants_1_1_roles" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Constants::Roles</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_constants_1_1_roles_1a294b551a2fdf231c049d33c1b4207554" kind="variable"><name>ADMINISTRATORS</name></member>
+  </compound>
+  <compound refid="class_inventory_management_system_1_1_public_api_1_1_service_page_model" kind="class"><name>InventoryManagementSystem::PublicApi::ServicePageModel</name>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_service_page_model_1a3860a74123a6b6d24193997b1063bf71" kind="property"><name>Context</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_service_page_model_1ae19b10f933404c5c5943bb18b8fd99d4" kind="property"><name>AuthorizationService</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_service_page_model_1a4418e1ce8d2d6dbcddae37ab232cfe86" kind="property"><name>UserManager</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_service_page_model_1abac5ccad74258e4491651d243b095dd2" kind="function"><name>ServicePageModel</name></member>
+  </compound>
+  <compound refid="class_inventory_management_system_1_1_public_api_1_1_startup" kind="class"><name>InventoryManagementSystem::PublicApi::Startup</name>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_startup_1ad46c1205213fe3dc5c0db04d8576e2d3" kind="variable"><name>CORS_POLICY</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_startup_1a7581533cfa9757b3e6aaf9e1391b5fa8" kind="property"><name>Configuration</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_startup_1a86ceb9f3d6185007dc7b81e258b525f5" kind="function"><name>Startup</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_startup_1a1b0d92ffe2959d0391d3bfe7b331bcf5" kind="function"><name>ConfigureDevelopmentServices</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_startup_1acbd44960d1dccceda94b3f37e7653415" kind="function"><name>ConfigureServices</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_startup_1a5460e4775103ac02fb00620b3074a3db" kind="function"><name>Configure</name></member>
+  </compound>
+  <compound refid="class_i_m_s_backend_1_1_tests_1_1_unit_test1" kind="class"><name>IMSBackend::Tests::UnitTest1</name>
+    <member refid="class_i_m_s_backend_1_1_tests_1_1_unit_test1_1a8d9bb4fe99a0e56e3aee27b4b878acaa" kind="function"><name>Test1</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer" kind="class"><name>Microsoft::eShopWeb::ApplicationCore::Services::UriComposer</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer_1ad5bd1290a5f5562865b912c9c982c885" kind="variable"><name>_catalogSettings</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer_1a20db62de7918729f20b21c1ce5bab936" kind="function"><name>UriComposer</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer_1ab8397bd1806b9e0935a31b617f1a1156" kind="function"><name>ComposePicUri</name></member>
+  </compound>
+  <compound refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info" kind="class"><name>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::UserInfo</name>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info_1aae1840a43663dddfdd64240d7e8b3724" kind="variable"><name>Anonymous</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info_1ac530f5f44bf673c6acc372c29ab67f76" kind="property"><name>IsAuthenticated</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info_1a673fc18b3bef1f7f40055d9a57521e89" kind="property"><name>NameClaimType</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info_1a48f77785449fb80ad9976c628bee2108" kind="property"><name>RoleClaimType</name></member>
+    <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info_1a118cc8e18cdaa977ea04f445f8c49c86" kind="property"><name>Claims</name></member>
+  </compound>
+  <compound refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system" kind="class"><name>Microsoft::eShopWeb::Infrastructure::Services::WebFileSystem</name>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a244ec9f01ff2fbdd3006023a531b4952" kind="variable"><name>_httpClient</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a28602bb67845e20ced41f1f8bbf9cd11" kind="variable"><name>_url</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a09097d4c8f9e729a92422c18efb958da" kind="variable"><name>AUTH_KEY</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a7239a97a42574d770c34623671ff7cc2" kind="function"><name>WebFileSystem</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a157d11ab389eb2d69c2f199a599487a8" kind="function"><name>SavePicture</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1a7b7dd1817964f651db2773953ec46d9e" kind="function"><name>UploadFile</name></member>
+    <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_web_file_system_1acd8197e023609080ab3c7ea868e27955" kind="function"><name>UploadToWeb</name></member>
+  </compound>
+  <compound refid="namespace_ardalis_1_1_api_endpoints" kind="namespace"><name>Ardalis::ApiEndpoints</name>
+  </compound>
+  <compound refid="namespace_ardalis_1_1_guard_clauses" kind="namespace"><name>Ardalis::GuardClauses</name>
+  </compound>
+  <compound refid="namespace_ardalis_1_1_specification" kind="namespace"><name>Ardalis::Specification</name>
+  </compound>
+  <compound refid="namespace_ardalis_1_1_specification_1_1_entity_framework_core" kind="namespace"><name>Ardalis::Specification::EntityFrameworkCore</name>
+  </compound>
+  <compound refid="namespace_auto_mapper" kind="namespace"><name>AutoMapper</name>
+  </compound>
+  <compound refid="namespace_blazor_shared" kind="namespace"><name>BlazorShared</name>
+  </compound>
+  <compound refid="namespace_contact_manager" kind="namespace"><name>ContactManager</name>
+  </compound>
+  <compound refid="namespace_contact_manager_1_1_authorization" kind="namespace"><name>ContactManager::Authorization</name>
+  </compound>
+  <compound refid="namespace_i_m_s_backend" kind="namespace"><name>IMSBackend</name>
+  </compound>
+  <compound refid="namespace_i_m_s_backend_1_1_tests" kind="namespace"><name>IMSBackend::Tests</name>
+  </compound>
+  <compound refid="namespace_inventory_management_system" kind="namespace"><name>InventoryManagementSystem</name>
+  </compound>
+  <compound refid="namespace_inventory_management_system_1_1_public_api" kind="namespace"><name>InventoryManagementSystem::PublicApi</name>
+  </compound>
+  <compound refid="namespace_inventory_management_system_1_1_public_api_1_1_authentication_endpoints" kind="namespace"><name>InventoryManagementSystem::PublicApi::AuthenticationEndpoints</name>
+  </compound>
+  <compound refid="namespace_inventory_management_system_1_1_public_api_1_1_registration_endpoints" kind="namespace"><name>InventoryManagementSystem::PublicApi::RegistrationEndpoints</name>
+  </compound>
+  <compound refid="namespace_inventory_management_system_1_1_public_api_1_1_stockkeeper_endpoints" kind="namespace"><name>InventoryManagementSystem::PublicApi::StockkeeperEndpoints</name>
+  </compound>
+  <compound refid="namespace_mediat_r" kind="namespace"><name>MediatR</name>
+  </compound>
+  <compound refid="namespace_microsoft" kind="namespace"><name>Microsoft</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_asp_net_core_1_1_authentication_1_1_jwt_bearer" kind="namespace"><name>Microsoft::AspNetCore::Authentication::JwtBearer</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_asp_net_core_1_1_authorization" kind="namespace"><name>Microsoft::AspNetCore::Authorization</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_asp_net_core_1_1_authorization_1_1_infrastructure" kind="namespace"><name>Microsoft::AspNetCore::Authorization::Infrastructure</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_asp_net_core_1_1_builder" kind="namespace"><name>Microsoft::AspNetCore::Builder</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_asp_net_core_1_1_hosting" kind="namespace"><name>Microsoft::AspNetCore::Hosting</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_asp_net_core_1_1_identity" kind="namespace"><name>Microsoft::AspNetCore::Identity</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_asp_net_core_1_1_identity_1_1_entity_framework_core" kind="namespace"><name>Microsoft::AspNetCore::Identity::EntityFrameworkCore</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_asp_net_core_1_1_mvc" kind="namespace"><name>Microsoft::AspNetCore::Mvc</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_asp_net_core_1_1_mvc_1_1_authorization" kind="namespace"><name>Microsoft::AspNetCore::Mvc::Authorization</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_asp_net_core_1_1_mvc_1_1_razor_pages" kind="namespace"><name>Microsoft::AspNetCore::Mvc::RazorPages</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_entity_framework_core" kind="namespace"><name>Microsoft::EntityFrameworkCore</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_entity_framework_core_1_1_infrastructure" kind="namespace"><name>Microsoft::EntityFrameworkCore::Infrastructure</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_entity_framework_core_1_1_metadata" kind="namespace"><name>Microsoft::EntityFrameworkCore::Metadata</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_entity_framework_core_1_1_metadata_1_1_builders" kind="namespace"><name>Microsoft::EntityFrameworkCore::Metadata::Builders</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_entity_framework_core_1_1_migrations" kind="namespace"><name>Microsoft::EntityFrameworkCore::Migrations</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_entity_framework_core_1_1_storage_1_1_value_conversion" kind="namespace"><name>Microsoft::EntityFrameworkCore::Storage::ValueConversion</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1e_shop_web" kind="namespace"><name>Microsoft::eShopWeb</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1e_shop_web_1_1_application_core" kind="namespace"><name>Microsoft::eShopWeb::ApplicationCore</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1e_shop_web_1_1_application_core_1_1_constants" kind="namespace"><name>Microsoft::eShopWeb::ApplicationCore::Constants</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities" kind="namespace"><name>Microsoft::eShopWeb::ApplicationCore::Entities</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces" kind="namespace"><name>Microsoft::eShopWeb::ApplicationCore::Interfaces</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1e_shop_web_1_1_application_core_1_1_services" kind="namespace"><name>Microsoft::eShopWeb::ApplicationCore::Services</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1e_shop_web_1_1_infrastructure" kind="namespace"><name>Microsoft::eShopWeb::Infrastructure</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data" kind="namespace"><name>Microsoft::eShopWeb::Infrastructure::Data</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config" kind="namespace"><name>Microsoft::eShopWeb::Infrastructure::Data::Config</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity" kind="namespace"><name>Microsoft::eShopWeb::Infrastructure::Identity</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_migrations" kind="namespace"><name>Microsoft::eShopWeb::Infrastructure::Identity::Migrations</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging" kind="namespace"><name>Microsoft::eShopWeb::Infrastructure::Logging</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services" kind="namespace"><name>Microsoft::eShopWeb::Infrastructure::Services</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_extensions_1_1_configuration" kind="namespace"><name>Microsoft::Extensions::Configuration</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_extensions_1_1_dependency_injection" kind="namespace"><name>Microsoft::Extensions::DependencyInjection</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_extensions_1_1_hosting" kind="namespace"><name>Microsoft::Extensions::Hosting</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_extensions_1_1_logging" kind="namespace"><name>Microsoft::Extensions::Logging</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_identity_model_1_1_tokens" kind="namespace"><name>Microsoft::IdentityModel::Tokens</name>
+  </compound>
+  <compound refid="namespace_microsoft_1_1_open_api_1_1_models" kind="namespace"><name>Microsoft::OpenApi::Models</name>
+  </compound>
+  <compound refid="namespace_swashbuckle_1_1_asp_net_core_1_1_annotations" kind="namespace"><name>Swashbuckle::AspNetCore::Annotations</name>
+  </compound>
+  <compound refid="namespace_swashbuckle_1_1_asp_net_core_1_1_swagger_gen" kind="namespace"><name>Swashbuckle::AspNetCore::SwaggerGen</name>
+  </compound>
+  <compound refid="namespace_system" kind="namespace"><name>System</name>
+  </compound>
+  <compound refid="namespace_system_1_1_collections_1_1_generic" kind="namespace"><name>System::Collections::Generic</name>
+  </compound>
+  <compound refid="namespace_system_1_1_identity_model_1_1_tokens_1_1_jwt" kind="namespace"><name>System::IdentityModel::Tokens::Jwt</name>
+  </compound>
+  <compound refid="namespace_system_1_1_i_o" kind="namespace"><name>System::IO</name>
+  </compound>
+  <compound refid="namespace_system_1_1_linq" kind="namespace"><name>System::Linq</name>
+  </compound>
+  <compound refid="namespace_system_1_1_net_1_1_http" kind="namespace"><name>System::Net::Http</name>
+  </compound>
+  <compound refid="namespace_system_1_1_reflection" kind="namespace"><name>System::Reflection</name>
+  </compound>
+  <compound refid="namespace_system_1_1_security_1_1_claims" kind="namespace"><name>System::Security::Claims</name>
+  </compound>
+  <compound refid="namespace_system_1_1_text" kind="namespace"><name>System::Text</name>
+  </compound>
+  <compound refid="namespace_system_1_1_text_1_1_json" kind="namespace"><name>System::Text::Json</name>
+  </compound>
+  <compound refid="namespace_system_1_1_threading" kind="namespace"><name>System::Threading</name>
+  </compound>
+  <compound refid="namespace_system_1_1_threading_1_1_tasks" kind="namespace"><name>System::Threading::Tasks</name>
+  </compound>
+  <compound refid="namespace_xunit" kind="namespace"><name>Xunit</name>
+  </compound>
+  <compound refid="_catalog_settings_8cs" kind="file"><name>CatalogSettings.cs</name>
+  </compound>
+  <compound refid="_authorization_constants_8cs" kind="file"><name>AuthorizationConstants.cs</name>
+  </compound>
+  <compound refid="_base_entity_8cs" kind="file"><name>BaseEntity.cs</name>
+  </compound>
+  <compound refid="_catalog_type_8cs" kind="file"><name>CatalogType.cs</name>
+  </compound>
+  <compound refid="_i_m_s_user_8cs" kind="file"><name>IMSUser.cs</name>
+  </compound>
+  <compound refid="_product_8cs" kind="file"><name>Product.cs</name>
+  </compound>
+  <compound refid="_product_brand_8cs" kind="file"><name>ProductBrand.cs</name>
+  </compound>
+  <compound refid="_json_extensions_8cs" kind="file"><name>JsonExtensions.cs</name>
+  </compound>
+  <compound refid="_i_app_logger_8cs" kind="file"><name>IAppLogger.cs</name>
+  </compound>
+  <compound refid="_i_async_repository_8cs" kind="file"><name>IAsyncRepository.cs</name>
+  </compound>
+  <compound refid="_i_email_sender_8cs" kind="file"><name>IEmailSender.cs</name>
+  </compound>
+  <compound refid="_i_file_system_8cs" kind="file"><name>IFileSystem.cs</name>
+  </compound>
+  <compound refid="_i_token_claims_service_8cs" kind="file"><name>ITokenClaimsService.cs</name>
+  </compound>
+  <compound refid="_i_uri_composer_8cs" kind="file"><name>IUriComposer.cs</name>
+  </compound>
+  <compound refid="_uri_composer_8cs" kind="file"><name>UriComposer.cs</name>
+  </compound>
+  <compound refid="_authenticate_8cs" kind="file"><name>Authenticate.cs</name>
+  </compound>
+  <compound refid="_authenticate_request_8cs" kind="file"><name>AuthenticateRequest.cs</name>
+  </compound>
+  <compound refid="_authenticate_response_8cs" kind="file"><name>AuthenticateResponse.cs</name>
+  </compound>
+  <compound refid="_claim_value_8cs" kind="file"><name>ClaimValue.cs</name>
+  </compound>
+  <compound refid="_user_info_8cs" kind="file"><name>UserInfo.cs</name>
+  </compound>
+  <compound refid="_contact_administrators_authorization_handler_8cs" kind="file"><name>ContactAdministratorsAuthorizationHandler.cs</name>
+  </compound>
+  <compound refid="_contact_is_owner_authorization_handler_8cs" kind="file"><name>ContactIsOwnerAuthorizationHandler.cs</name>
+  </compound>
+  <compound refid="_contact_manager_authorization_handler_8cs" kind="file"><name>ContactManagerAuthorizationHandler.cs</name>
+  </compound>
+  <compound refid="_contact_operations_8cs" kind="file"><name>ContactOperations.cs</name>
+  </compound>
+  <compound refid="_base_message_8cs" kind="file"><name>BaseMessage.cs</name>
+  </compound>
+  <compound refid="_base_request_8cs" kind="file"><name>BaseRequest.cs</name>
+  </compound>
+  <compound refid="_base_response_8cs" kind="file"><name>BaseResponse.cs</name>
+  </compound>
+  <compound refid="_base_url_configuration_8cs" kind="file"><name>BaseUrlConfiguration.cs</name>
+  </compound>
+  <compound refid="_custom_schema_filters_8cs" kind="file"><name>CustomSchemaFilters.cs</name>
+  </compound>
+  <compound refid="_image_validators_8cs" kind="file"><name>ImageValidators.cs</name>
+  </compound>
+  <compound refid="_program_8cs" kind="file"><name>Program.cs</name>
+  </compound>
+  <compound refid="_r_e_a_d_m_e_8md" kind="file"><name>README.md</name>
+  </compound>
+  <compound refid="_register_8cs" kind="file"><name>Register.cs</name>
+  </compound>
+  <compound refid="_register_request_8cs" kind="file"><name>RegisterRequest.cs</name>
+  </compound>
+  <compound refid="_register_response_8cs" kind="file"><name>RegisterResponse.cs</name>
+  </compound>
+  <compound refid="_service_page_model_8cs" kind="file"><name>ServicePageModel.cs</name>
+  </compound>
+  <compound refid="_startup_8cs" kind="file"><name>Startup.cs</name>
+  </compound>
+  <compound refid="_add_product_8cs" kind="file"><name>AddProduct.cs</name>
+  </compound>
+  <compound refid="_add_product_request_8cs" kind="file"><name>AddProductRequest.cs</name>
+  </compound>
+  <compound refid="_constants_8cs" kind="file"><name>Constants.cs</name>
+  </compound>
+  <compound refid="_catalog_context_8cs" kind="file"><name>CatalogContext.cs</name>
+  </compound>
+  <compound refid="_catalog_brand_configuration_8cs" kind="file"><name>CatalogBrandConfiguration.cs</name>
+  </compound>
+  <compound refid="_catalog_item_configuration_8cs" kind="file"><name>CatalogItemConfiguration.cs</name>
+  </compound>
+  <compound refid="_catalog_type_configuration_8cs" kind="file"><name>CatalogTypeConfiguration.cs</name>
+  </compound>
+  <compound refid="_ef_repository_8cs" kind="file"><name>EfRepository.cs</name>
+  </compound>
+  <compound refid="_file_item_8cs" kind="file"><name>FileItem.cs</name>
+  </compound>
+  <compound refid="_app_identity_db_context_8cs" kind="file"><name>AppIdentityDbContext.cs</name>
+  </compound>
+  <compound refid="_app_identity_db_context_seed_8cs" kind="file"><name>AppIdentityDbContextSeed.cs</name>
+  </compound>
+  <compound refid="_identity_token_claim_service_8cs" kind="file"><name>IdentityTokenClaimService.cs</name>
+  </compound>
+  <compound refid="20201202111612___initial_identity_model_8cs" kind="file"><name>20201202111612_InitialIdentityModel.cs</name>
+  </compound>
+  <compound refid="20201202111612___initial_identity_model_8_designer_8cs" kind="file"><name>20201202111612_InitialIdentityModel.Designer.cs</name>
+  </compound>
+  <compound refid="_app_identity_db_context_model_snapshot_8cs" kind="file"><name>AppIdentityDbContextModelSnapshot.cs</name>
+  </compound>
+  <compound refid="_logger_adapter_8cs" kind="file"><name>LoggerAdapter.cs</name>
+  </compound>
+  <compound refid="_email_sender_8cs" kind="file"><name>EmailSender.cs</name>
+  </compound>
+  <compound refid="_web_file_system_8cs" kind="file"><name>WebFileSystem.cs</name>
+  </compound>
+  <compound refid="_unit_test1_8cs" kind="file"><name>UnitTest1.cs</name>
+  </compound>
+  <compound refid="md__c_1__inventory_management_system_src__i_m_s_public_api__r_e_a_d_m_e" kind="page"><name>md_C:_InventoryManagementSystem_src_IMSPublicApi_README</name>
+  </compound>
+  <compound refid="dir_15af9a96cc5e7aad882755f68bc45e05" kind="dir"><name>C:/InventoryManagementSystem/src/ApplicationCore</name>
+  </compound>
+  <compound refid="dir_189e9d5c0fafb04a815a2e765c8ed741" kind="dir"><name>C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints</name>
+  </compound>
+  <compound refid="dir_7be4310ac3adcbca957fa9e4ee8644a7" kind="dir"><name>C:/InventoryManagementSystem/src/IMSPublicApi/Authorization</name>
+  </compound>
+  <compound refid="dir_652a0452712aa28e2f587d037e3a7088" kind="dir"><name>C:/InventoryManagementSystem/src/Infrastructure/Data/Config</name>
+  </compound>
+  <compound refid="dir_4f4fc4c98be5117f6554002463ee3a28" kind="dir"><name>C:/InventoryManagementSystem/src/ApplicationCore/Constants</name>
+  </compound>
+  <compound refid="dir_b1f89119bb1b7e6041cfaf680f8fb854" kind="dir"><name>C:/InventoryManagementSystem/src/Infrastructure/Data</name>
+  </compound>
+  <compound refid="dir_e205d1344171b1418714136767e7aa23" kind="dir"><name>C:/InventoryManagementSystem/src/ApplicationCore/Entities</name>
+  </compound>
+  <compound refid="dir_bb3880cba17e35de44f3cc9284a9f4a1" kind="dir"><name>C:/InventoryManagementSystem/src/ApplicationCore/Extensions</name>
+  </compound>
+  <compound refid="dir_35cb2d1382b0776e30b0bfe91f143d6a" kind="dir"><name>C:/InventoryManagementSystem/src/Infrastructure/Identity</name>
+  </compound>
+  <compound refid="dir_60715dd660b97938244b46302291ba63" kind="dir"><name>C:/InventoryManagementSystem/test/IMSBackend.Tests</name>
+  </compound>
+  <compound refid="dir_fc65e7301c449c4400ffe479460c9ca4" kind="dir"><name>C:/InventoryManagementSystem/src/IMSPublicApi</name>
+  </compound>
+  <compound refid="dir_de48de634865c40a420ab7b9408c7f96" kind="dir"><name>C:/InventoryManagementSystem/src/Infrastructure</name>
+  </compound>
+  <compound refid="dir_81b35c0330d0b7e0524c48e5b341e7dd" kind="dir"><name>C:/InventoryManagementSystem/src/ApplicationCore/Interfaces</name>
+  </compound>
+  <compound refid="dir_bccfd7b9275019c243c71f53af66d0ba" kind="dir"><name>C:/InventoryManagementSystem</name>
+  </compound>
+  <compound refid="dir_fdf5982feda91499cc2bfa1c9c75a244" kind="dir"><name>C:/InventoryManagementSystem/src/Infrastructure/Logging</name>
+  </compound>
+  <compound refid="dir_2d3fc79343c2a709779515f6dda2b820" kind="dir"><name>C:/InventoryManagementSystem/src/Infrastructure/Identity/Migrations</name>
+  </compound>
+  <compound refid="dir_336be27069f8dc2bd5138047e0857b70" kind="dir"><name>C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints</name>
+  </compound>
+  <compound refid="dir_3e1cdf74672e570bacc22114d4fb682e" kind="dir"><name>C:/InventoryManagementSystem/src/Infrastructure/Services</name>
+  </compound>
+  <compound refid="dir_99afc8db06f5090c5cfb11a03de75a03" kind="dir"><name>C:/InventoryManagementSystem/src/ApplicationCore/Services</name>
+  </compound>
+  <compound refid="dir_37b011f3a5b47d323e79eefc578bd5e7" kind="dir"><name>C:/InventoryManagementSystem/src</name>
+  </compound>
+  <compound refid="dir_60c8d875d7469348d93f7cc2c5e45846" kind="dir"><name>C:/InventoryManagementSystem/src/IMSPublicApi/StockkeeperEndpoints</name>
+  </compound>
+  <compound refid="dir_f79eb792eb07ba18d7aa15c4a7a18aba" kind="dir"><name>C:/InventoryManagementSystem/test</name>
+  </compound>
+</doxygenindex>

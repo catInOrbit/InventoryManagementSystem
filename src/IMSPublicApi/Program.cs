@@ -26,8 +26,8 @@ namespace InventoryManagementSystem.PublicApi
                     // var catalogContext = services.GetRequiredService<CatalogContext>();
                     // await CatalogContextSeed.SeedAsync(catalogContext, loggerFactory);
 
-                    // var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-                    // var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                    //var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+                    //var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     // await AppIdentityDbContextSeed.SeedAsync(userManager, roleManager);
                 }
                 catch (Exception ex)

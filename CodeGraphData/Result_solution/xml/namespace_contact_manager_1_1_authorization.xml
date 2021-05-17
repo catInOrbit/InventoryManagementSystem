@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="namespace_contact_manager_1_1_authorization" kind="namespace">
+    <compoundname>ContactManager::Authorization</compoundname>
+    <innerclass refid="class_contact_manager_1_1_authorization_1_1_contact_administrators_authorization_handler" prot="public">ContactManager::Authorization::ContactAdministratorsAuthorizationHandler</innerclass>
+    <innerclass refid="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler" prot="public">ContactManager::Authorization::ContactIsOwnerAuthorizationHandler</innerclass>
+    <innerclass refid="class_contact_manager_1_1_authorization_1_1_contact_manager_authorization_handler" prot="public">ContactManager::Authorization::ContactManagerAuthorizationHandler</innerclass>
+    <innerclass refid="class_contact_manager_1_1_authorization_1_1_contact_operations" prot="public">ContactManager::Authorization::ContactOperations</innerclass>
+    <innerclass refid="class_contact_manager_1_1_authorization_1_1_constants" prot="public">ContactManager::Authorization::Constants</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactAdministratorsAuthorizationHandler.cs" line="7" column="1"/>
+  </compounddef>
+</doxygen>

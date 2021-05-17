@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info" kind="class" prot="public">
+    <compoundname>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::UserInfo</compoundname>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info_1aae1840a43663dddfdd64240d7e8b3724" prot="public" static="yes" mutable="no">
+        <type>readonly <ref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info" kindref="compound">UserInfo</ref></type>
+        <definition>readonly UserInfo InventoryManagementSystem.PublicApi.AuthenticationEndpoints.UserInfo.Anonymous</definition>
+        <argsstring></argsstring>
+        <name>Anonymous</name>
+        <initializer>= new <ref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info" kindref="compound">UserInfo</ref>()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/UserInfo.cs" line="7" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/UserInfo.cs" bodystart="7" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="property">
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info_1ac530f5f44bf673c6acc372c29ab67f76" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>bool</type>
+        <definition>bool InventoryManagementSystem.PublicApi.AuthenticationEndpoints.UserInfo.IsAuthenticated</definition>
+        <argsstring></argsstring>
+        <name>IsAuthenticated</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/UserInfo.cs" line="8" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/UserInfo.cs" bodystart="8" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info_1a673fc18b3bef1f7f40055d9a57521e89" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string InventoryManagementSystem.PublicApi.AuthenticationEndpoints.UserInfo.NameClaimType</definition>
+        <argsstring></argsstring>
+        <name>NameClaimType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/UserInfo.cs" line="9" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/UserInfo.cs" bodystart="9" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info_1a48f77785449fb80ad9976c628bee2108" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string InventoryManagementSystem.PublicApi.AuthenticationEndpoints.UserInfo.RoleClaimType</definition>
+        <argsstring></argsstring>
+        <name>RoleClaimType</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/UserInfo.cs" line="10" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/UserInfo.cs" bodystart="10" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info_1a118cc8e18cdaa977ea04f445f8c49c86" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>IEnumerable&lt; <ref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value" kindref="compound">ClaimValue</ref> &gt;</type>
+        <definition>IEnumerable&lt;ClaimValue&gt; InventoryManagementSystem.PublicApi.AuthenticationEndpoints.UserInfo.Claims</definition>
+        <argsstring></argsstring>
+        <name>Claims</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/UserInfo.cs" line="11" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/UserInfo.cs" bodystart="11" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="195">
+        <label>InventoryManagementSystem.PublicApi.AuthenticationEndpoints.UserInfo</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info"/>
+        <childnode refid="195" relation="usage">
+          <edgelabel>Anonymous</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/UserInfo.cs" line="6" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/UserInfo.cs" bodystart="5" bodyend="12"/>
+    <listofallmembers>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info_1aae1840a43663dddfdd64240d7e8b3724" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::UserInfo</scope><name>Anonymous</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info_1a118cc8e18cdaa977ea04f445f8c49c86" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::UserInfo</scope><name>Claims</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info_1ac530f5f44bf673c6acc372c29ab67f76" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::UserInfo</scope><name>IsAuthenticated</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info_1a673fc18b3bef1f7f40055d9a57521e89" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::UserInfo</scope><name>NameClaimType</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_user_info_1a48f77785449fb80ad9976c628bee2108" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::UserInfo</scope><name>RoleClaimType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
