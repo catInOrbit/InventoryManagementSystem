@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.eShopWeb.ApplicationCore.Entities;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Interfaces
 {
 
     public interface IEmailSender
     {
-        Task SendEmailAsync(string email, string subject, string message);
+        Task SendEmailAsync(EmailMessage emailMessage);
     }
 }

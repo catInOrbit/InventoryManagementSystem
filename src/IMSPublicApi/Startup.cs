@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -31,13 +32,13 @@ namespace InventoryManagementSystem.PublicApi
     public class Startup
     {
         private const string CORS_POLICY = "CorsPolicy";
+        public IConfiguration Configuration { get; set; }
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
 
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
@@ -129,6 +130,20 @@ namespace InventoryManagementSystem.PublicApi
 
             services.AddSingleton<IAuthorizationHandler,
                 ContactManagerAuthorizationHandler>();
+            
+            
+            //Email Service
+            var emailConfig = Configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+            services.AddSingleton(emailConfig);
+            services.AddScoped<IEmailSender, EmailSendingService>();
+
+            services.Configure<FormOptions>(o => {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBodyLengthLimit = int.MaxValue;
+                o.MemoryBufferThreshold = int.MaxValue;
+            });
             
             
             services.AddSwaggerGen(c =>
