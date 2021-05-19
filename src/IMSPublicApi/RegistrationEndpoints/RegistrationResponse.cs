@@ -2,13 +2,13 @@ using System;
 
 namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
 {
-    public class RegisterResponse : BaseResponse
+    public class RegistrationResponse : BaseResponse
     {
-        public RegisterResponse(Guid correlationId) : base(correlationId)
+        public RegistrationResponse(Guid correlationId) : base(correlationId)
         {
         }
 
-        public RegisterResponse()
+        public RegistrationResponse()
         {
         }
         

@@ -27,7 +27,7 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
         }
 
 
-        [HttpPost("api/resetpassrequest")]
+        [HttpPost("api/passwordresetlead")]
         [SwaggerOperation(
             Summary = "Request a reset url sent to user's email",
             Description = "Request a reset url sent to user's email",
@@ -42,7 +42,6 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
             if (user != null && await _userManager.IsEmailConfirmedAsync(user))
             {
                 var token =  await _userManager.GeneratePasswordResetTokenAsync(user);
-
                 var callback = token;
                 var message = new EmailMessage(new string[] { user.Email }, "Reset password token", callback, null);
                 Console.WriteLine(user.Email);

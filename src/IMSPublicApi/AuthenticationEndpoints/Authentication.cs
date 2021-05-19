@@ -8,7 +8,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 {
-    public class Authenticate : BaseAsyncEndpoint
+    public class Authentication : BaseAsyncEndpoint
         .WithRequest<AuthenticateRequest>
         .WithResponse<AuthenticateResponse>
     {
@@ -17,7 +17,7 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 
         private readonly ITokenClaimsService _tokenClaimsService;
 
-        public Authenticate(SignInManager<IdentityUser> signInManager,
+        public Authentication(SignInManager<IdentityUser> signInManager,
             ITokenClaimsService tokenClaimsService, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
@@ -25,7 +25,7 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
             _userManager = userManager;
         }
 
-        [HttpPost("api/authenticate")]
+        [HttpPost("api/authentication")]
         [SwaggerOperation(
             Summary = "Authenticates a user",
             Description = "Authenticates a user",

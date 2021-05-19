@@ -10,14 +10,14 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
 {
-    public class Register : BaseAsyncEndpoint.WithRequest<RegisterRequest>.WithResponse<RegisterResponse>
+    public class Registration : BaseAsyncEndpoint.WithRequest<RegistrationRequest>.WithResponse<RegistrationResponse>
     {
         private readonly ITokenClaimsService _tokenClaimsService;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IServiceProvider _serviceProvider;
 
-        public Register(UserManager<IdentityUser> userManager, ITokenClaimsService tokenClaimsService,
+        public Registration(UserManager<IdentityUser> userManager, ITokenClaimsService tokenClaimsService,
             RoleManager<IdentityRole> roleManager, IServiceProvider serviceProvider)
         {
             _userManager = userManager;
@@ -26,16 +26,16 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
             _serviceProvider = serviceProvider;
         }
         
-        [HttpPost("api/registertest")]
+        [HttpPost("api/registration")]
         [SwaggerOperation(
-            Summary = "Test Registration of a user",
-            Description = "Test Registration a user",
+            Summary = "Registration of a user",
+            Description = "Registration a user",
             OperationId = "auth.registertest",
             Tags = new[] { "IMSRegisterEndpoints" })
         ]
-        public override async Task<ActionResult<RegisterResponse>> HandleAsync(RegisterRequest request, CancellationToken cancellationToken)
+        public override async Task<ActionResult<RegistrationResponse>> HandleAsync(RegistrationRequest request, CancellationToken cancellationToken)
         {
-            var response = new RegisterResponse(request.CorrelationId());
+            var response = new RegistrationResponse(request.CorrelationId());
 
             var newUserID = await UserCreatimgHelper(_serviceProvider, request.Password, request.Username, request.Email);
             var result = await RoleCreatingHelper(_serviceProvider, newUserID, request.RoleName);

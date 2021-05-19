@@ -18,7 +18,7 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
         }
         
 
-        [HttpPost("api/resetpasssubmit")]
+        [HttpPost("api/resetpasss")]
         [SwaggerOperation(
             Summary = "Submit password reset POST action",
             Description = "Submit password reset POST action",
