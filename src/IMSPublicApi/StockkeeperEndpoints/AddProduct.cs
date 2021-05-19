@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.eShopWeb.ApplicationCore.Entities;
-using Microsoft.eShopWeb.Infrastructure.Identity;
 
 namespace InventoryManagementSystem.PublicApi.StockkeeperEndpoints
 {

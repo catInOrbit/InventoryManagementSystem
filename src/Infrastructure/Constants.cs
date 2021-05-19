@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopWeb.Infrastructure
+﻿namespace Infrastructure
 {
     public static class Constants
     {

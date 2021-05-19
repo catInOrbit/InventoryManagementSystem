@@ -1,14 +1,14 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Interfaces;
-using Microsoft.eShopWeb.Infrastructure.Data;
-using System;
+﻿using System;
 using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Infrastructure.Data;
+using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 
-namespace Microsoft.eShopWeb.Infrastructure.Services
+namespace Infrastructure.Services
 {
     public class WebFileSystem : IFileSystem
     {

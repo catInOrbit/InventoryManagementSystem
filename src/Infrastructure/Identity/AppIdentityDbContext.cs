@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 
-namespace Microsoft.eShopWeb.Infrastructure.Identity
+namespace Infrastructure.Identity
 {
     public class AppIdentityDbContext : IdentityDbContext<IdentityUser>
     {

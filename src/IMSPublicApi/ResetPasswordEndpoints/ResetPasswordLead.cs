@@ -1,22 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using InventoryManagementSystem.PublicApi.AuthenticationEndpoints;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.V4.Pages.Account.Internal;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.eShopWeb.ApplicationCore.Entities;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
+namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
 {
     public class ResetPasswordLead : BaseAsyncEndpoint
-        .WithRequest<ResetPasswordRequest>
-        .WithResponse<ResetPasswordResponse>
+        .WithRequest<ResetPasswordLeadRequest>
+        .WithResponse<ResetPasswordLeadResponse>
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ITokenClaimsService _tokenClaimsService;
@@ -30,32 +27,38 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
         }
 
 
-        [HttpPost("api/resetpass")]
+        [HttpPost("api/resetpassrequest")]
         [SwaggerOperation(
-            Summary = "Authenticates a user",
-            Description = "Authenticates a user",
-            OperationId = "auth.authenticate",
-            Tags = new[] { "IMSAuthenticationEndpoints" })
+            Summary = "Request a reset url sent to user's email",
+            Description = "Request a reset url sent to user's email",
+            OperationId = "resetpass",
+            Tags = new[] { "ResetPasswordEndpoints" })
         ]
-        public override async Task<ActionResult<ResetPasswordResponse>> HandleAsync(ResetPasswordRequest request, CancellationToken cancellationToken)
+        public override async Task<ActionResult<ResetPasswordLeadResponse>> HandleAsync(ResetPasswordLeadRequest request, CancellationToken cancellationToken)
         {
-            var response = new ResetPasswordResponse(request.CorrelationId());
+            var response = new ResetPasswordLeadResponse(request.CorrelationId());
             var user = await _userManager.FindByEmailAsync(request.Email);
             Console.WriteLine(user.Email);
             if (user != null && await _userManager.IsEmailConfirmedAsync(user))
             {
                 var token =  await _userManager.GeneratePasswordResetTokenAsync(user);
-                
-                // var callback = Url.Action(nameof(ResetPassword), "ResetPasswordLead", new { token, email = user.Email }, Request.Scheme);
-                var callback = "test";
+
+                var callback = token;
                 var message = new EmailMessage(new string[] { user.Email }, "Reset password token", callback, null);
                 Console.WriteLine(user.Email);
+                Console.WriteLine(token);
                 await _emailSender.SendEmailAsync(message);
                 response.Result = true;
             }
 
+            else
+            {
+                Console.WriteLine("can not find user");
+            }
+
             return response;
         }
+
       
     }
 }

@@ -1,12 +1,14 @@
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MailKit.Net.Smtp;
+using MailKit.Security;
 using Microsoft.eShopWeb.ApplicationCore.Entities;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using MimeKit;
 
-namespace Microsoft.eShopWeb.Infrastructure.Services
+namespace Infrastructure.Services
 {
     public class EmailSendingService : IEmailSender
     {
@@ -30,7 +32,12 @@ namespace Microsoft.eShopWeb.Infrastructure.Services
             {
                 try
                 {
-                    await client.ConnectAsync(_emailConfiguration.SmtpServer, _emailConfiguration.Port, true);
+                    Console.WriteLine(_emailConfiguration.SmtpServer);
+                    Console.WriteLine(_emailConfiguration.Port);
+                    Console.WriteLine(_emailConfiguration.UserName);
+                    Console.WriteLine(_emailConfiguration.Password);
+                    
+                    await client.ConnectAsync(_emailConfiguration.SmtpServer, _emailConfiguration.Port, SecureSocketOptions.StartTls);
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
                     await client.AuthenticateAsync(_emailConfiguration.UserName, _emailConfiguration.Password);
 
@@ -38,8 +45,7 @@ namespace Microsoft.eShopWeb.Infrastructure.Services
                 }
                 catch
                 {
-                    //log an error message or throw an exception, or both.
-                    throw;
+                    Console.WriteLine("Mail Authenticating error");
                 }
                 finally
                 {
@@ -52,7 +58,7 @@ namespace Microsoft.eShopWeb.Infrastructure.Services
         private MimeMessage CreateEmailMessage(EmailMessage message)
         {
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress(_emailConfiguration.From));
+            emailMessage.From.Add(MailboxAddress.Parse(_emailConfiguration.From));
             emailMessage.To.AddRange(message.To);
             emailMessage.Subject = message.Subject;
 
@@ -83,7 +89,9 @@ namespace Microsoft.eShopWeb.Infrastructure.Services
             {
                 try
                 {
-                    client.Connect(_emailConfiguration.SmtpServer, _emailConfiguration.Port, true);
+                  
+                    
+                    client.Connect(_emailConfiguration.SmtpServer, _emailConfiguration.Port, SecureSocketOptions.StartTls);
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
                     client.Authenticate(_emailConfiguration.UserName, _emailConfiguration.Password);
 

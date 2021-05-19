@@ -1,7 +1,7 @@
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.eShopWeb.Infrastructure.Identity;
 
 namespace InventoryManagementSystem.PublicApi
 {

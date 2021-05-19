@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.eShopWeb.ApplicationCore.Constants;
-using System.Threading.Tasks;
 
-namespace Microsoft.eShopWeb.Infrastructure.Identity
+namespace Infrastructure.Identity
 {
     public class AppIdentityDbContextSeed
     {

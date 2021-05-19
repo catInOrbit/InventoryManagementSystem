@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.eShopWeb.ApplicationCore.Entities;
 
-namespace Microsoft.eShopWeb.Infrastructure.Data.Config
+namespace Infrastructure.Data.Config
 {
     public class CatalogItemConfiguration : IEntityTypeConfiguration<Product>
     {

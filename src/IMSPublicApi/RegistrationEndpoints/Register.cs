@@ -37,7 +37,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
         {
             var response = new RegisterResponse(request.CorrelationId());
 
-            var newUserID = await UserCreatimgHelper(_serviceProvider, request.Password, request.Username);
+            var newUserID = await UserCreatimgHelper(_serviceProvider, request.Password, request.Username, request.Email);
             var result = await RoleCreatingHelper(_serviceProvider, newUserID, request.RoleName);
             
             // var user = new IdentityUser { UserName = "test", Email = "Test@gmail.com" };
@@ -55,7 +55,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
             return response;
         }
 
-        private async Task<string> UserCreatimgHelper(IServiceProvider serviceProvider, string password, string username)
+        private async Task<string> UserCreatimgHelper(IServiceProvider serviceProvider, string password, string username, string email)
         {
             var user = await _userManager.FindByNameAsync(username);
             if (user == null)
@@ -63,6 +63,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                 user = new IdentityUser
                 {
                     UserName = username,
+                    Email = email,
                     EmailConfirmed = true
                 };
 

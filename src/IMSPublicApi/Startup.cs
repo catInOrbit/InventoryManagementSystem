@@ -1,8 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Text;
 using AutoMapper;
 using BlazorShared;
 using ContactManager.Authorization;
+using Infrastructure.Data;
+using Infrastructure.Identity;
+using Infrastructure.Logging;
+using Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -10,17 +15,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopWeb;
 using Microsoft.eShopWeb.ApplicationCore.Constants;
 using Microsoft.eShopWeb.ApplicationCore.Entities;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.ApplicationCore.Services;
-using Microsoft.eShopWeb.Infrastructure.Data;
-using Microsoft.eShopWeb.Infrastructure.Identity;
-using Microsoft.eShopWeb.Infrastructure.Logging;
-using Microsoft.eShopWeb.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -43,7 +43,7 @@ namespace InventoryManagementSystem.PublicApi
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
             services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"),  b => b.MigrationsAssembly("IMSPublicApi")));
 
             ConfigureServices(services);
         }
@@ -55,7 +55,10 @@ namespace InventoryManagementSystem.PublicApi
                     .AddEntityFrameworkStores<AppIdentityDbContext>()
                     .AddRoles<IdentityRole>()
                     .AddDefaultTokenProviders();
-           
+            
+            services.Configure<DataProtectionTokenProviderOptions>(opt =>
+                opt.TokenLifespan = TimeSpan.FromHours(1));
+            
             //The AddScoped method registers the service with a scoped lifetime, the lifetime of a single request.
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             

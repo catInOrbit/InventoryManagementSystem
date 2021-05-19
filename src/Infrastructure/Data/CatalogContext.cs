@@ -2,7 +2,7 @@
 using Microsoft.eShopWeb.ApplicationCore.Entities;
 using System.Reflection;
 
-namespace Microsoft.eShopWeb.Infrastructure.Data
+namespace Infrastructure.Data
 {
 
     public class CatalogContext : DbContext

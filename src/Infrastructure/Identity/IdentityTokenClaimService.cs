@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.eShopWeb.ApplicationCore.Constants;
-using Microsoft.eShopWeb.ApplicationCore.Interfaces;
-using Microsoft.IdentityModel.Tokens;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.eShopWeb.ApplicationCore.Constants;
+using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
-namespace Microsoft.eShopWeb.Infrastructure.Identity
+namespace Infrastructure.Identity
 {
     public class IdentityTokenClaimService : ITokenClaimsService
     {
