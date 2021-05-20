@@ -1,6 +1,9 @@
 using System;
 using System.Threading.Tasks;
+using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -24,8 +27,10 @@ namespace InventoryManagementSystem.PublicApi
                     // await CatalogContextSeed.SeedAsync(catalogContext, loggerFactory);
 
                     //var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-                    //var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                    // var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     // await AppIdentityDbContextSeed.SeedAsync(userManager, roleManager);
+                        
+                    // SeedRole.Initialize(roleManager);
                 }
                 catch (Exception ex)
                 {

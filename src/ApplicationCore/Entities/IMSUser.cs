@@ -5,7 +5,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
 {
     public class IMSUser
     {
-        public string OwnerId { get; set; }
+        public string OwnerID { get; set; }
         
         public string Id { get; set; }
 

@@ -61,17 +61,21 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 
                 if (result.Succeeded)
                 {
+                    
                     var token = await _tokenClaimsService.GetTokenAsync(request.Username);
                     // Write the login id in the login claim, so we identify the login context
-                    Claim[] customClaims = { new Claim("UserLoginSessionId", token) };
+                    // Claim[] customClaims = { new Claim("UserLoginSessionId", token) };
                     
-                    await _userManager.AddClaimsAsync(user,  customClaims);
+                    // await _userManager.AddClaimsAsync(user,  customClaims);
                     // Signin User
                     // CookieSignInAndStore(user.Email, user.UserName, roles[0]);
                     
-                    await _signInManager.SignInWithClaimsAsync(user, true, customClaims);
+                    // await _signInManager.SignInWithClaimsAsync(user, true, customClaims);
+                    await _signInManager.PasswordSignInAsync(request.Username, request.Password, true, true);
                     
                     response.Token = token;
+                    response.Verbose = "Success";
+
                     response.Result = result.Succeeded;
                     response.IsLockedOut = result.IsLockedOut;
                     response.IsNotAllowed = result.IsNotAllowed;

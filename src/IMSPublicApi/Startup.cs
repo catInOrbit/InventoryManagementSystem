@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using AutoMapper;
 using BlazorShared;
-using ContactManager.Authorization;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Infrastructure.Logging;
@@ -23,6 +22,7 @@ using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.ApplicationCore.Services;
+using InventoryManagementSystem.PublicApi.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -72,6 +72,8 @@ namespace InventoryManagementSystem.PublicApi
                     .AddEntityFrameworkStores<ApplicationIdentityDbContext>()
                     .AddRoles<IdentityRole>()
                     .AddDefaultTokenProviders();
+            
+           
             
             services.Configure<DataProtectionTokenProviderOptions>(opt =>
                 opt.TokenLifespan = TimeSpan.FromHours(1));
@@ -132,15 +134,9 @@ namespace InventoryManagementSystem.PublicApi
             services.ConfigureApplicationCookie(options => options.LoginPath = "/swagger");
             
             
-            services.AddScoped<IAuthorizationHandler,
-                ContactIsOwnerAuthorizationHandler>();
+          
 
-            services.AddSingleton<IAuthorizationHandler,
-                ContactAdministratorsAuthorizationHandler>();
-
-            services.AddSingleton<IAuthorizationHandler,
-                ContactManagerAuthorizationHandler>();
-            
+         
             
             //Email Service
             var emailConfig = Configuration
@@ -223,6 +219,13 @@ namespace InventoryManagementSystem.PublicApi
                     }
                 });
             });
+            
+            
+            services.AddScoped<IAuthorizationHandler,
+                ManagerAuthorizationHandler>();
+            
+            services.AddScoped<IAuthorizationHandler,
+                AccountantAuthorizationHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

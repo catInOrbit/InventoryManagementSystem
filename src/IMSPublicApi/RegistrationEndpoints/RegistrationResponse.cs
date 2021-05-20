@@ -13,6 +13,9 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
         }
         
         public bool Result { get; set; } = false;
+        
+        public string Verbose { get; set; }
+
         public string Token { get; set; } = string.Empty;
         public string Username { get; set; } = string.Empty;
         public bool IsLockedOut { get; set; } = false;
