@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
+using InventoryManagementSystem.PublicApi.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.eShopWeb.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace ContactManager.Authorization
 {

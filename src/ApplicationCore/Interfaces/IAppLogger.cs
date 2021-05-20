@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopWeb.ApplicationCore.Interfaces
+﻿namespace InventoryManagementSystem.ApplicationCore.Interfaces
 {
     /// <summary>
     /// This type eliminates the need to depend directly on the ASP.NET Core logging types.

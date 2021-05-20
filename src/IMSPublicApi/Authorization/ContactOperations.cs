@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization.Infrastructure;
 
-namespace ContactManager.Authorization
+namespace InventoryManagementSystem.PublicApi.Authorization
 {
     public static class ContactOperations
     {
@@ -27,6 +27,9 @@ namespace ContactManager.Authorization
         public static readonly string ApproveOperationName = "Approve";
         public static readonly string RejectOperationName = "Reject";
 
+        public static readonly string ContactAdministratorsRole = 
+          "ContactAdministrators";
+        
         public static readonly string IMSAccountantRole = 
                                                               "IMSAccountant";
         public static readonly string IMSManagersRole = "IMSManager";

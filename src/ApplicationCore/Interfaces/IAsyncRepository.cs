@@ -1,10 +1,11 @@
 ﻿using Ardalis.Specification;
-using Microsoft.eShopWeb.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using InventoryManagementSystem.ApplicationCore.Entities;
 
-namespace Microsoft.eShopWeb.ApplicationCore.Interfaces
+namespace InventoryManagementSystem.ApplicationCore.Interfaces
 {
     public interface IAsyncRepository<T> where T : BaseEntity
     {

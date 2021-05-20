@@ -1,12 +1,13 @@
 ﻿using Ardalis.Specification;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.eShopWeb.ApplicationCore.Entities;
-using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Specification.EntityFrameworkCore;
+using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace Infrastructure.Data
 {

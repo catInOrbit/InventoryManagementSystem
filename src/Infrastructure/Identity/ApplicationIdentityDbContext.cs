@@ -1,17 +1,18 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using InventoryManagementSystem.ApplicationCore.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace Infrastructure.Identity
 {
-    public class AppIdentityDbContext : IdentityDbContext<IdentityUser>
+    public class ApplicationIdentityDbContext : IdentityDbContext<ApplicationUser>
     {
-        public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options)
+        public ApplicationIdentityDbContext(DbContextOptions<ApplicationIdentityDbContext> options)
             : base(options)
         {
         }
-
+        public DbSet<IMSUser> IMSUser { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

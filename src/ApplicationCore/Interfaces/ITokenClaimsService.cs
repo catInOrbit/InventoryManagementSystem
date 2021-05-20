@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Microsoft.eShopWeb.ApplicationCore.Interfaces
+namespace InventoryManagementSystem.ApplicationCore.Interfaces
 {
     public interface ITokenClaimsService
     {

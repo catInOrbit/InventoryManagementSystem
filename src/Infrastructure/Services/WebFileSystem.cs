@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure.Data;
-using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 
 namespace Infrastructure.Services
 {

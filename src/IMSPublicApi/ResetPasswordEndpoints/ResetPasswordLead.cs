@@ -2,11 +2,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure.Identity;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.PublicApi.AuthenticationEndpoints;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.eShopWeb.ApplicationCore.Entities;
-using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
@@ -15,11 +17,11 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
         .WithRequest<ResetPasswordLeadRequest>
         .WithResponse<ResetPasswordLeadResponse>
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenClaimsService _tokenClaimsService;
         private readonly IEmailSender _emailSender;
 
-        public ResetPasswordLead(ITokenClaimsService tokenClaimsService, UserManager<IdentityUser> userManager, IEmailSender emailSender)
+        public ResetPasswordLead(ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
             _tokenClaimsService = tokenClaimsService;
             _userManager = userManager;

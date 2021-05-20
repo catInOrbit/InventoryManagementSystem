@@ -1,4 +1,4 @@
-namespace Microsoft.eShopWeb.ApplicationCore.Entities
+namespace InventoryManagementSystem.ApplicationCore.Entities
 {
     public class EmailConfiguration
     {

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using MimeKit;
 using Microsoft.AspNetCore.Http;
+using MimeKit;
 
-namespace Microsoft.eShopWeb.ApplicationCore.Entities
+namespace InventoryManagementSystem.ApplicationCore.Entities
 {
     public class EmailMessage
     {

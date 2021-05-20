@@ -1,4 +1,5 @@
-using Microsoft.eShopWeb.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {

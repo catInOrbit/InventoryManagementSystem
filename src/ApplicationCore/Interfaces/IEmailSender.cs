@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.eShopWeb.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities;
 
-namespace Microsoft.eShopWeb.ApplicationCore.Interfaces
+namespace InventoryManagementSystem.ApplicationCore.Interfaces
 {
 
     public interface IEmailSender

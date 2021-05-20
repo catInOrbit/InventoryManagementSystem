@@ -2,16 +2,18 @@
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
-using Microsoft.eShopWeb.ApplicationCore.Entities;
+using Infrastructure.Identity;
+using InventoryManagementSystem.PublicApi.Authorization;
+using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace ContactManager.Authorization
 {
     public class ContactIsOwnerAuthorizationHandler
                 : AuthorizationHandler<OperationAuthorizationRequirement, IMSUser>
     {
-        UserManager<IdentityUser> _userManager;
+        UserManager<ApplicationUser> _userManager;
 
-        public ContactIsOwnerAuthorizationHandler(UserManager<IdentityUser> 
+        public ContactIsOwnerAuthorizationHandler(UserManager<ApplicationUser> 
             userManager)
         {
             _userManager = userManager;
@@ -37,7 +39,7 @@ namespace ContactManager.Authorization
                 return Task.CompletedTask;
             }
 
-            if (resource.OwnerID == _userManager.GetUserId(context.User))
+            if (resource.OwnerId == _userManager.GetUserId(context.User))
             {
                 context.Succeed(requirement);
             }

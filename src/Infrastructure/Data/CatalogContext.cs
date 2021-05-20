@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.eShopWeb.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using System.Reflection;
+using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace Infrastructure.Data
 {

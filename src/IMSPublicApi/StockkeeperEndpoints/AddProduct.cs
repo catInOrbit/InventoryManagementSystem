@@ -5,7 +5,7 @@ using ContactManager.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.eShopWeb.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace InventoryManagementSystem.PublicApi.StockkeeperEndpoints
 {

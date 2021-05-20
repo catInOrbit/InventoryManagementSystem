@@ -1,6 +1,6 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+﻿using InventoryManagementSystem.ApplicationCore.Interfaces;
 
-namespace Microsoft.eShopWeb.ApplicationCore.Services
+namespace InventoryManagementSystem.ApplicationCore.Services
 {
     public class UriComposer : IUriComposer
     {

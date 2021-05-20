@@ -7,14 +7,14 @@ namespace InventoryManagementSystem.PublicApi
 {
     public class ServicePageModel : PageModel
     {
-        protected AppIdentityDbContext Context { get; }
+        protected ApplicationIdentityDbContext Context { get; }
         protected IAuthorizationService AuthorizationService { get; }
-        protected UserManager<IdentityUser> UserManager { get; }
+        protected UserManager<ApplicationUser> UserManager { get; }
 
         public ServicePageModel(
-            AppIdentityDbContext context,
+            ApplicationIdentityDbContext context,
             IAuthorizationService authorizationService,
-            UserManager<IdentityUser> userManager) : base()
+            UserManager<ApplicationUser> userManager) : base()
         {
             Context = context;
             UserManager = userManager;

@@ -1,6 +1,7 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+﻿using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 
-namespace Microsoft.eShopWeb.ApplicationCore.Entities
+namespace InventoryManagementSystem.ApplicationCore.Entities
 {
     public class ProductBrand : BaseEntity
     {

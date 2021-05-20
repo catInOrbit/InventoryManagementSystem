@@ -1,12 +1,18 @@
 using System;
+using System.Collections.Generic;
 
-namespace Microsoft.eShopWeb.ApplicationCore.Entities
+namespace InventoryManagementSystem.ApplicationCore.Entities
 {
     public class IMSUser
     {
-        public string OwnerID { get; set; }
+        public string OwnerId { get; set; }
+        
+        public string Id { get; set; }
+
         public string Fullname { get; set; }
-        public DateTime ShiftStart { get; set; }
-        public DateTime ShiftEnd { get; set; }
+        public string PhoneNumber { get; set; }
+        public bool IsActive { get; set; }
+        
+        public ICollection<Product> Product { get; set; }
     }
 }

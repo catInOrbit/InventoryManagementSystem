@@ -2,9 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -13,11 +14,11 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
     public class Registration : BaseAsyncEndpoint.WithRequest<RegistrationRequest>.WithResponse<RegistrationResponse>
     {
         private readonly ITokenClaimsService _tokenClaimsService;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IServiceProvider _serviceProvider;
 
-        public Registration(UserManager<IdentityUser> userManager, ITokenClaimsService tokenClaimsService,
+        public Registration(UserManager<ApplicationUser> userManager, ITokenClaimsService tokenClaimsService,
             RoleManager<IdentityRole> roleManager, IServiceProvider serviceProvider)
         {
             _userManager = userManager;
@@ -37,7 +38,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
         {
             var response = new RegistrationResponse(request.CorrelationId());
 
-            var newUserID = await UserCreatimgHelper(_serviceProvider, request.Password, request.Username, request.Email);
+            var newUserID = await UserCreatingHelper(_serviceProvider, request.Password, request.Username, request.Email);
             var result = await RoleCreatingHelper(_serviceProvider, newUserID, request.RoleName);
             
             // var user = new IdentityUser { UserName = "test", Email = "Test@gmail.com" };
@@ -48,19 +49,18 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
 
             if (result.Succeeded)
             {
-                // response.Token = await _tokenClaimsService.GetTokenAsync(request.Username);
-                response.Token = "Test";
+                response.Token = await _tokenClaimsService.GetTokenAsync(request.Username);
             }
 
             return response;
         }
 
-        private async Task<string> UserCreatimgHelper(IServiceProvider serviceProvider, string password, string username, string email)
+        private async Task<string> UserCreatingHelper(IServiceProvider serviceProvider, string password, string username, string email)
         {
             var user = await _userManager.FindByNameAsync(username);
             if (user == null)
             {
-                user = new IdentityUser
+                user = new ApplicationUser
                 {
                     UserName = username,
                     Email = email,
@@ -90,7 +90,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                 result = await _roleManager.CreateAsync(new IdentityRole(role));
             }
             
-            var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
+            var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
 
             var user = await userManager.FindByIdAsync(uid);
 

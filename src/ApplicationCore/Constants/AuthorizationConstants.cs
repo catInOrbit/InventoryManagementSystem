@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopWeb.ApplicationCore.Constants
+﻿namespace InventoryManagementSystem.ApplicationCore.Constants
 {
     public class AuthorizationConstants
     {

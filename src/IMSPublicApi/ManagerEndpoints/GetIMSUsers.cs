@@ -4,7 +4,7 @@
 // using AutoMapper;
 // using Microsoft.AspNetCore.Identity;
 // using Microsoft.AspNetCore.Mvc;
-// using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+// using InventoryManagementSystem.ApplicationCore.Interfaces;
 // using Swashbuckle.AspNetCore.Annotations;
 // using System;
 // using System.Threading;

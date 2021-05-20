@@ -1,4 +1,5 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+﻿using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Logging

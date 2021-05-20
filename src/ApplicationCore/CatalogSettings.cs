@@ -1,4 +1,4 @@
-﻿namespace Microsoft.eShopWeb
+﻿namespace InventoryManagementSystem
 {
     public class CatalogSettings
     {

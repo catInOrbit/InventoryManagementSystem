@@ -4,18 +4,18 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.eShopWeb.ApplicationCore.Constants;
-using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Identity
 {
     public class IdentityTokenClaimService : ITokenClaimsService
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public IdentityTokenClaimService(UserManager<IdentityUser> userManager)
+        public IdentityTokenClaimService(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }

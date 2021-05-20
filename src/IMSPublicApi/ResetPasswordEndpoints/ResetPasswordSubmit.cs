@@ -1,6 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -10,9 +11,9 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
     public class ResetPasswordSubmit : BaseAsyncEndpoint
         .WithRequest<ResetPasswordSubmitRequest>.WithResponse<ResetPasswordSubmitResponse>
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ResetPasswordSubmit(UserManager<IdentityUser> userManager)
+        public ResetPasswordSubmit(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }

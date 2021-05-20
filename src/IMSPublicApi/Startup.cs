@@ -8,6 +8,8 @@ using Infrastructure.Data;
 using Infrastructure.Identity;
 using Infrastructure.Logging;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Constants;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -16,11 +18,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.eShopWeb;
-using Microsoft.eShopWeb.ApplicationCore.Constants;
-using Microsoft.eShopWeb.ApplicationCore.Entities;
-using Microsoft.eShopWeb.ApplicationCore.Interfaces;
-using Microsoft.eShopWeb.ApplicationCore.Services;
+using InventoryManagementSystem;
+using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -42,7 +46,7 @@ namespace InventoryManagementSystem.PublicApi
 
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
-            services.AddDbContext<AppIdentityDbContext>(options =>
+            services.AddDbContext<ApplicationIdentityDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"),  b => b.MigrationsAssembly("IMSPublicApi")));
 
             ConfigureServices(services);
@@ -51,8 +55,21 @@ namespace InventoryManagementSystem.PublicApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                    .AddEntityFrameworkStores<AppIdentityDbContext>()
+            
+            var lockoutOptions = new LockoutOptions()
+            {
+                AllowedForNewUsers = true,
+                DefaultLockoutTimeSpan = TimeSpan.FromMinutes(20),
+                MaxFailedAccessAttempts = 3
+            };
+            
+            services.AddIdentity<ApplicationUser, IdentityRole>(
+                    options =>
+                    {
+                        options.Lockout = lockoutOptions;
+                    }
+                )
+                    .AddEntityFrameworkStores<ApplicationIdentityDbContext>()
                     .AddRoles<IdentityRole>()
                     .AddDefaultTokenProviders();
             
@@ -66,6 +83,7 @@ namespace InventoryManagementSystem.PublicApi
             services.AddSingleton<IUriComposer>(new UriComposer(Configuration.Get<CatalogSettings>()));
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddScoped<ITokenClaimsService, IdentityTokenClaimService>();
+
 
             var baseUrlConfig = new BaseUrlConfiguration();
             Configuration.Bind(BaseUrlConfiguration.CONFIG_NAME, baseUrlConfig);
@@ -102,29 +120,18 @@ namespace InventoryManagementSystem.PublicApi
                                   });
             });
 
-            //services.AddControllers(config =>
-            //{
-            //    // using Microsoft.AspNetCore.Mvc.Authorization;
-            //    // using Microsoft.AspNetCore.Authorization;
-            //    var policy = new AuthorizationPolicyBuilder()
-            //        .RequireAuthenticatedUser()
-            //        .Build();
-            //    config.Filters.Add(new AuthorizeFilter(policy));
-            //});
-    
             services.AddControllers();
             services.AddMediatR(typeof(Product).Assembly);
 
             services.AddAutoMapper(typeof(Startup).Assembly);
-
-            //services.AddAuthorization(options =>
-            //{
-            //    options.FallbackPolicy = new AuthorizationPolicyBuilder()
-            //        .RequireAuthenticatedUser()
-            //        .Build();
-            //});
-
-
+            
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                });
+            services.ConfigureApplicationCookie(options => options.LoginPath = "/swagger");
+            
+            
             services.AddScoped<IAuthorizationHandler,
                 ContactIsOwnerAuthorizationHandler>();
 
@@ -146,6 +153,38 @@ namespace InventoryManagementSystem.PublicApi
                 o.ValueLengthLimit = int.MaxValue;
                 o.MultipartBodyLengthLimit = int.MaxValue;
                 o.MemoryBufferThreshold = int.MaxValue;
+            });
+            
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings.
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+
+                // Lockout settings.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+                options.Lockout.AllowedForNewUsers = true;
+
+                // User settings.
+                options.User.AllowedUserNameCharacters =
+                    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+                options.User.RequireUniqueEmail = false;
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                // Cookie settings
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+
+                // options.LoginPath = "/Identity/Account/Login";
+                // options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.SlidingExpiration = true;
             });
             
             
@@ -212,6 +251,13 @@ namespace InventoryManagementSystem.PublicApi
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
+            
+            var cookiePolicyOptions = new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Strict,
+            };
+            
+            app.UseCookiePolicy(cookiePolicyOptions);
 
             app.UseEndpoints(endpoints =>
             {

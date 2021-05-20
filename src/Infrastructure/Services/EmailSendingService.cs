@@ -2,10 +2,11 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using MailKit.Net.Smtp;
 using MailKit.Security;
-using Microsoft.eShopWeb.ApplicationCore.Entities;
-using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 using MimeKit;
 
 namespace Infrastructure.Services
