@@ -79,14 +79,15 @@ namespace InventoryManagementSystem.PublicApi
                 opt.TokenLifespan = TimeSpan.FromHours(1));
             
             //The AddScoped method registers the service with a scoped lifetime, the lifetime of a single request.
-            services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
-            
+            // services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
+            services.AddScoped(typeof(IAsyncRepository<>), typeof(UserRepository<>));
+
             services.Configure<CatalogSettings>(Configuration);
             services.AddSingleton<IUriComposer>(new UriComposer(Configuration.Get<CatalogSettings>()));
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddScoped<ITokenClaimsService, IdentityTokenClaimService>();
 
-
+            
             var baseUrlConfig = new BaseUrlConfiguration();
             Configuration.Bind(BaseUrlConfiguration.CONFIG_NAME, baseUrlConfig);
             services.AddScoped<IFileSystem, WebFileSystem>(x => new WebFileSystem($"{baseUrlConfig.WebBase}File"));
@@ -131,12 +132,17 @@ namespace InventoryManagementSystem.PublicApi
                 .AddCookie(options =>
                 {
                 });
-            services.ConfigureApplicationCookie(options => options.LoginPath = "/swagger");
-            
-            
-          
-
-         
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "IMSCookie";
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                // options.LoginPath = "/Identity/Account/Login";
+                // ReturnUrlParameter requires 
+                //using Microsoft.AspNetCore.Authentication.Cookies;
+                options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+                options.SlidingExpiration = true;
+            });
             
             //Email Service
             var emailConfig = Configuration

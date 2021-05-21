@@ -56,13 +56,13 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
             else
             {
                 var roles = await _userManager.GetRolesAsync(user);
-
                 var result = await _signInManager.PasswordSignInAsync(request.Username, request.Password, true, true);
-
+                    
                 if (result.Succeeded)
                 {
-
-                    var token = await _tokenClaimsService.GetTokenAsync(request.Username);
+                    
+                    // await HttpContext.AuthenticateAsync("Cookie", userPrincipal);
+                    var jwttoken = await _tokenClaimsService.GetTokenAsync(request.Username);
                     // Write the login id in the login claim, so we identify the login context
                     // Claim[] customClaims = { new Claim("UserLoginSessionId", token) };
                     
@@ -72,7 +72,7 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                     
                     // await _signInManager.SignInWithClaimsAsync(user, true, customClaims);
                     
-                    response.Token = token;
+                    response.Token = jwttoken;
                     response.Verbose = "Success";
                 }
 

@@ -22,16 +22,19 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IServiceProvider _serviceProvider;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IAsyncRepository<IMSUser> _userRepository;
+
 
         public IMSUser IMSUser { get; set; } = new IMSUser();
         public Registration(UserManager<ApplicationUser> userManager, ITokenClaimsService tokenClaimsService,
-            RoleManager<IdentityRole> roleManager, IServiceProvider serviceProvider, IAuthorizationService authorizationService)
+            RoleManager<IdentityRole> roleManager, IServiceProvider serviceProvider, IAuthorizationService authorizationService, IAsyncRepository<IMSUser> userRepository)
         {
             _userManager = userManager;
             _tokenClaimsService = tokenClaimsService;
             _roleManager = roleManager;
             _serviceProvider = serviceProvider;
             _authorizationService = authorizationService;
+            _userRepository = userRepository;
         }
         
         [HttpPost("api/registration")]
@@ -47,7 +50,6 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user != null)
             {
-                
                 IMSUser.OwnerID = user.Id.ToString();
                 // requires using ContactManager.Authorization;
                 var isAuthorized = await _authorizationService.AuthorizeAsync(
@@ -58,10 +60,18 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                 {
                     var newUserID = await UserCreatingHelper(_serviceProvider, request.Password, request.Username, request.Email);
                     var result = await RoleCreatingHelper(_serviceProvider, newUserID, request.RoleName);
-            
-                    // var user = new IdentityUser { UserName = "test", Email = "Test@gmail.com" };
-                    // var result = await _userManager.CreateAsync(user, "testPass#1234");
 
+                    var newIMSUser = new IMSUser
+                    {
+                        Id = newUserID,
+                        Fullname =  request.FullName,
+                        PhoneNumber =  request.PhoneNumber,
+                        Address =  request.Address,
+                        IsActive =  true,
+                    };
+                    
+                    await _userRepository.AddAsync(newIMSUser, cancellationToken);
+                    
                     response.Result = result.Succeeded;
                     response.Username = request.Username;
 
@@ -97,7 +107,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                     Email = email,
                     EmailConfirmed = true
                 };
-
+                
                 await _userManager.CreateAsync(user, password);
             }
             
