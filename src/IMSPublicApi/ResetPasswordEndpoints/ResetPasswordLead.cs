@@ -29,7 +29,7 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
         }
 
 
-        [HttpPost("api/passwordresetlead")]
+        [HttpPost("api/resetlead")]
         [SwaggerOperation(
             Summary = "Request a reset url sent to user's email",
             Description = "Request a reset url sent to user's email",
@@ -39,8 +39,7 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
         public override async Task<ActionResult<ResetPasswordLeadResponse>> HandleAsync(ResetPasswordLeadRequest request, CancellationToken cancellationToken)
         {
             var response = new ResetPasswordLeadResponse(request.CorrelationId());
-            var user = await _userManager.FindByEmailAsync(request.Email);
-            Console.WriteLine(user.Email);
+            var user = await _userManager.FindByNameAsync(request.Username);
             if (user != null && await _userManager.IsEmailConfirmedAsync(user))
             {
                 var token =  await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -50,6 +49,7 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
                 Console.WriteLine(token);
                 await _emailSender.SendEmailAsync(message);
                 response.Result = true;
+                response.Verbose = "Password reset sent to: " + user.Email;
             }
 
             else

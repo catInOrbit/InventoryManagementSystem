@@ -29,8 +29,9 @@ namespace InventoryManagementSystem.PublicApi
                     //var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
                     // var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     // await AppIdentityDbContextSeed.SeedAsync(userManager, roleManager);
-                        
+
                     // SeedRole.Initialize(roleManager);
+                    await SeedRole.Initialize(services, "test@12345Aha");
                 }
                 catch (Exception ex)
                 {

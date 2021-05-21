@@ -15,5 +15,8 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
         }
         public bool Result { get; set; } = false;
         public string Username { get; set; } = string.Empty;
+        public string Verbose { get; set; } = string.Empty;
+
+
     }
 }

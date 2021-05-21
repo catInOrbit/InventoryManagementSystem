@@ -55,13 +55,13 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 
             else
             {
-                var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, true);
                 var roles = await _userManager.GetRolesAsync(user);
 
+                var result = await _signInManager.PasswordSignInAsync(request.Username, request.Password, true, true);
 
                 if (result.Succeeded)
                 {
-                    
+
                     var token = await _tokenClaimsService.GetTokenAsync(request.Username);
                     // Write the login id in the login claim, so we identify the login context
                     // Claim[] customClaims = { new Claim("UserLoginSessionId", token) };
@@ -71,18 +71,17 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                     // CookieSignInAndStore(user.Email, user.UserName, roles[0]);
                     
                     // await _signInManager.SignInWithClaimsAsync(user, true, customClaims);
-                    await _signInManager.PasswordSignInAsync(request.Username, request.Password, true, true);
                     
                     response.Token = token;
                     response.Verbose = "Success";
+                }
 
-                    response.Result = result.Succeeded;
-                    response.IsLockedOut = result.IsLockedOut;
-                    response.IsNotAllowed = result.IsNotAllowed;
-                    response.RequiresTwoFactor = result.RequiresTwoFactor;
-                    response.Username = request.Username;
-                    response.UserRole = roles[0];
-                }                
+                response.Result = result.Succeeded;
+                response.IsLockedOut = result.IsLockedOut;
+                response.IsNotAllowed = result.IsNotAllowed;
+                response.RequiresTwoFactor = result.RequiresTwoFactor;
+                response.Username = request.Username;
+                response.UserRole = roles[0];
             }
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
             
