@@ -10,11 +10,11 @@ namespace Infrastructure.Data
         public static readonly string RejectOperationName = "Reject";
 
         public static readonly string IMSAccountantRole = 
-            "IMSAccountant";
-        public static readonly string IMSManagersRole = "IMSManager";
+            "Accountant";
+        public static readonly string IMSManagersRole = "Manager";
         
-        public static readonly string IMSStockKeeperRole = "IMSStockKeeper";
+        public static readonly string IMSStockKeeperRole = "StockKeeper";
         
-        public static readonly string IMSEmployee = "IMSEmployee";
+        public static readonly string IMSEmployee = "Employee";
     }
 }

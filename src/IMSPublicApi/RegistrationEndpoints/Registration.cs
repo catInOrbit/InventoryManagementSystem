@@ -1,4 +1,5 @@
 using System;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
@@ -46,6 +47,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user != null)
             {
+                
                 IMSUser.OwnerID = user.Id.ToString();
                 // requires using ContactManager.Authorization;
                 var isAuthorized = await _authorizationService.AuthorizeAsync(

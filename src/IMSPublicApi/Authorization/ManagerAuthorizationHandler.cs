@@ -11,7 +11,6 @@ namespace InventoryManagementSystem.PublicApi.Authorization
     public class ManagerAuthorizationHandler
                 : AuthorizationHandler<OperationAuthorizationRequirement, IMSUser>
     {
-
         protected override Task HandleRequirementAsync(
             AuthorizationHandlerContext context,
             OperationAuthorizationRequirement requirement, 
@@ -21,7 +20,7 @@ namespace InventoryManagementSystem.PublicApi.Authorization
             {
                 return Task.CompletedTask;
             }
-
+            
             // Administrators can do anything.
             if (context.User.IsInRole(AuthenticationConstants.IMSManagersRole))
             {
