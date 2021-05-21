@@ -66,6 +66,7 @@ namespace InventoryManagementSystem.PublicApi
             services.AddIdentity<ApplicationUser, IdentityRole>(
                     options =>
                     {
+                        options.User.RequireUniqueEmail = true;
                         options.Lockout = lockoutOptions;
                     }
                 )

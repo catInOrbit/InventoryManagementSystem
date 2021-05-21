@@ -39,7 +39,7 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
         public override async Task<ActionResult<ResetPasswordLeadResponse>> HandleAsync(ResetPasswordLeadRequest request, CancellationToken cancellationToken)
         {
             var response = new ResetPasswordLeadResponse(request.CorrelationId());
-            var user = await _userManager.FindByNameAsync(request.Username);
+            var user = await _userManager.FindByEmailAsync(request.Email);
             if (user != null && await _userManager.IsEmailConfirmedAsync(user))
             {
                 var token =  await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -59,7 +59,5 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
 
             return response;
         }
-
-      
     }
 }

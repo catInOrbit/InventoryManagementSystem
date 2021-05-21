@@ -13,6 +13,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         
         public string Address { get; set; }
 
+        public DateTime DateOfBirth { get; set; }
+
         public bool IsActive { get; set; }
         
     }

@@ -28,7 +28,7 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
         ]
         public override async Task<ActionResult<ResetPasswordSubmitResponse>> HandleAsync(ResetPasswordSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            var user = await _userManager.FindByEmailAsync(request.Username);
+            var user = await _userManager.FindByEmailAsync(request.Email);
             var response = new ResetPasswordSubmitResponse(request.CorrelationId());
             response.Result = false;
             if (user != null)

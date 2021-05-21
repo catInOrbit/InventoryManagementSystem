@@ -36,7 +36,8 @@ namespace Infrastructure.Identity
                 user = new ApplicationUser
                 {
                     UserName = "testManager",
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    Email = "tmh1799@gmail.com"
                 };
                 await userManager.CreateAsync(user, testUserPw);
             }

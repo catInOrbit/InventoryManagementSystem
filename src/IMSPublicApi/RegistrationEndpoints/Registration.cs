@@ -23,8 +23,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
         private readonly IServiceProvider _serviceProvider;
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<IMSUser> _userRepository;
-
-
+        
         public IMSUser IMSUser { get; set; } = new IMSUser();
         public Registration(UserManager<ApplicationUser> userManager, ITokenClaimsService tokenClaimsService,
             RoleManager<IdentityRole> roleManager, IServiceProvider serviceProvider, IAuthorizationService authorizationService, IAsyncRepository<IMSUser> userRepository)
@@ -59,27 +58,34 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                 if (isAuthorized.Succeeded)
                 {
                     var newUserID = await UserCreatingHelper(_serviceProvider, request.Password, request.Username, request.Email);
-                    var result = await RoleCreatingHelper(_serviceProvider, newUserID, request.RoleName);
-
-                    var newIMSUser = new IMSUser
+                    if (newUserID != null)
                     {
-                        Id = newUserID,
-                        Fullname =  request.FullName,
-                        PhoneNumber =  request.PhoneNumber,
-                        Address =  request.Address,
-                        IsActive =  true,
-                    };
+                        var result = await RoleCreatingHelper(_serviceProvider, newUserID, request.RoleName);
                     
-                    await _userRepository.AddAsync(newIMSUser, cancellationToken);
+                        var newIMSUser = new IMSUser
+                        {
+                            Id = newUserID,
+                            Fullname =  request.FullName,
+                            PhoneNumber =  request.PhoneNumber,
+                        
+                            Address =  request.Address,
+                            IsActive =  true,
+                            DateOfBirth = request.DateOfBirth
+                        };
                     
-                    response.Result = result.Succeeded;
-                    response.Username = request.Username;
+                        await _userRepository.AddAsync(newIMSUser, cancellationToken);
+                    
+                        response.Result = result.Succeeded;
+                        response.Username = request.Username;
 
-                    if (result.Succeeded)
-                    {
-                        response.Token = await _tokenClaimsService.GetTokenAsync(request.Username);
-                        response.Verbose = "Authorized";
+                        if (result.Succeeded)
+                        {
+                            response.Token = await _tokenClaimsService.GetTokenAsync(request.Email);
+                            response.Verbose = "Authorized";
+                        }
                     }
+                    else
+                        response.Verbose = "Duplicated Email or Incorrect Request";
                 }
 
                 else
@@ -98,7 +104,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
 
         private async Task<string> UserCreatingHelper(IServiceProvider serviceProvider, string password, string username, string email)
         {
-            var user = await _userManager.FindByNameAsync(username);
+            var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
             {
                 user = new ApplicationUser
@@ -110,7 +116,11 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                 
                 await _userManager.CreateAsync(user, password);
             }
-            
+
+            else
+            {
+                user.Id = null;
+            }
             //TODO: Throw Error saying authentication fail
             return user.Id;
         }

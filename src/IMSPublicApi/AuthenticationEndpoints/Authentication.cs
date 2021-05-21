@@ -45,24 +45,23 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
         {
             var response = new AuthenticateResponse(request.CorrelationId());
             
-            var user = await _userManager.FindByNameAsync(request.Username);
+            var user = await _userManager.FindByEmailAsync(request.Email);
 
             if (user == null)
             {
                 response.Result = false;
-                response.Verbose = "Can not find user with username" + request.Username;
+                response.Verbose = "Can not find user with username" + request.Email;
             }
 
             else
             {
                 var roles = await _userManager.GetRolesAsync(user);
-                var result = await _signInManager.PasswordSignInAsync(request.Username, request.Password, true, true);
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, true, true);
                     
                 if (result.Succeeded)
                 {
-                    
                     // await HttpContext.AuthenticateAsync("Cookie", userPrincipal);
-                    var jwttoken = await _tokenClaimsService.GetTokenAsync(request.Username);
+                    var jwttoken = await _tokenClaimsService.GetTokenAsync(user.Email);
                     // Write the login id in the login claim, so we identify the login context
                     // Claim[] customClaims = { new Claim("UserLoginSessionId", token) };
                     
@@ -80,7 +79,7 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                 response.IsLockedOut = result.IsLockedOut;
                 response.IsNotAllowed = result.IsNotAllowed;
                 response.RequiresTwoFactor = result.RequiresTwoFactor;
-                response.Username = request.Username;
+                response.Username = request.Email;
                 response.UserRole = roles[0];
             }
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true

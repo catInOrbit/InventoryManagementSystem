@@ -20,13 +20,13 @@ namespace Infrastructure.Identity
             _userManager = userManager;
         }
 
-        public async Task<string> GetTokenAsync(string userName)
+        public async Task<string> GetTokenAsync(string email)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(AuthorizationConstants.JWT_SECRET_KEY);
-            var user = await _userManager.FindByNameAsync(userName);
+            var user = await _userManager.FindByEmailAsync(email);
             var roles = await _userManager.GetRolesAsync(user);
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, userName) };
+            var claims = new List<Claim> { new Claim(ClaimTypes.Name, email) };
             
             foreach(var role in roles)
             {
