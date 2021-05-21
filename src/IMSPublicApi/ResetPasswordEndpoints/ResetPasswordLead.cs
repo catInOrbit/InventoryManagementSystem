@@ -10,9 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
 {
+    [Authorize]
     public class ResetPasswordLead : BaseAsyncEndpoint
         .WithRequest<ResetPasswordLeadRequest>
         .WithResponse<ResetPasswordLeadResponse>
