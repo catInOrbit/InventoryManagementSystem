@@ -243,16 +243,11 @@ namespace InventoryManagementSystem.PublicApi
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseCors(CORS_POLICY);
-
-            app.UseAuthorization();
             app.UseAuthentication();
-
+            app.UseRouting();
+            app.UseHttpsRedirection();
+            app.UseCors(CORS_POLICY);
+            app.UseAuthorization();
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 

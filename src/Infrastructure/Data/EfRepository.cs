@@ -25,7 +25,7 @@ namespace Infrastructure.Data
             _dbContext = dbContext;
         }
 
-        public virtual async Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+        public virtual async Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default)
         {
             var keyValues = new object[] { id };
             return await _dbContext.Set<T>().FindAsync(keyValues, cancellationToken);

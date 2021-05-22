@@ -5,6 +5,8 @@ using Ardalis.Specification;
 using Infrastructure.Identity;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
@@ -17,15 +19,15 @@ namespace Infrastructure.Data
             _applicationIdentityDbContext = applicationIdentityDbContext;
         }
 
-        public async Task<T> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+        public async Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default)
         {
             var keyValues = new object[] { id };
             return await _applicationIdentityDbContext.Set<T>().FindAsync(keyValues, cancellationToken);
         }
 
-        public Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            return await _applicationIdentityDbContext.Set<T>().ToListAsync(cancellationToken);
         }
 
         public Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec, CancellationToken cancellationToken = default)

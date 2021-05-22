@@ -68,7 +68,8 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                             Id = newUserID,
                             Fullname =  request.FullName,
                             PhoneNumber =  request.PhoneNumber,
-                        
+                            Email = user.Email,
+                            Username = user.UserName,
                             Address =  request.Address,
                             IsActive =  true,
                             DateOfBirth = request.DateOfBirth
