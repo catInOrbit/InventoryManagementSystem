@@ -79,7 +79,6 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                     
                         response.Result = result.Succeeded;
                         response.Username = request.Username;
-
                         if (result.Succeeded)
                         {
                             response.Token = await _tokenClaimsService.GetTokenAsync(request.Email);
@@ -91,17 +90,17 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                 }
 
                 else
-                    response.Verbose = "Not Authorized";
+                    response.Verbose = "Not Authorized as Privileged User";
             }
             
             else
             {
-                
-                response.Verbose = "Not authorized";
+
+                return Unauthorized();
             }
 
             
-            return response;
+            return Ok(response);
         }
 
         private async Task<string> UserCreatingHelper(IServiceProvider serviceProvider, string password, string username, string email)
