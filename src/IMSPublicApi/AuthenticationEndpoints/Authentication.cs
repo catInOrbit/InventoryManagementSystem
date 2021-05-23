@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
-
+using InventoryManagementSystem.ApplicationCore.Entities;
 namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 {
     [AllowAnonymous]
@@ -22,17 +22,23 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
         .WithRequest<AuthenticateRequest>
         .WithResponse<AuthenticateResponse>
     {
+
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
-
         private readonly ITokenClaimsService _tokenClaimsService;
 
-        public Authentication(SignInManager<ApplicationUser> signInManager,
+        private readonly IAsyncRepository<UserInfo> _userRepository;
+
+        public UserInfoAuth UserInfo { get; set; } = new UserInfoAuth();
+
+        public Authentication(IAsyncRepository<UserInfo> userRepository, SignInManager<ApplicationUser> signInManager,
             ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager)
         {
             _signInManager = signInManager;
             _tokenClaimsService = tokenClaimsService;
             _userManager = userManager;
+            _userRepository = userRepository;
+
         }
 
         [HttpPost("api/authentication")]
@@ -74,14 +80,16 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                     
                     response.Token = jwttoken;
                     response.Verbose = "Success";
-                }
+                    var userGet = await _userRepository.GetByIdAsync(user.Id, cancellationToken);
 
-                response.Result = result.Succeeded;
-                response.IsLockedOut = result.IsLockedOut;
-                response.IsNotAllowed = result.IsNotAllowed;
-                response.RequiresTwoFactor = result.RequiresTwoFactor;
-                response.Username = request.Email;
-                response.UserRole = roles[0];
+                    response.Result = result.Succeeded;
+                    response.IsLockedOut = result.IsLockedOut;
+                    response.IsNotAllowed = result.IsNotAllowed;
+                    response.RequiresTwoFactor = result.RequiresTwoFactor;
+                    response.Username = user.UserName;
+                    response.UserRole = roles[0];
+                    response.UserInfo = userGet;
+                }
             }
             // To enable password failures to trigger account lockout, set lockoutOnFailure: true
             

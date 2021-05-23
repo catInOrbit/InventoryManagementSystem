@@ -2,9 +2,9 @@
 
 namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 {
-    public class UserInfo
+    public class UserInfoAuth
     {
-        public static readonly UserInfo Anonymous = new UserInfo();
+        public static readonly UserInfoAuth Anonymous = new UserInfoAuth();
         public bool IsAuthenticated { get; set; }
         public string NameClaimType { get; set; }
         public string RoleClaimType { get; set; }

@@ -79,24 +79,65 @@ namespace Infrastructure.Services
             return result;
         }
 
-        public async Task<IdentityResult> ClaimCreatingHelper(string role, Claim authorizationOperation)
+        public async Task<IdentityResult> RoleDeletingHelper(string role)
         {
-            var newRole = await RoleManager.FindByNameAsync(role);
-            IdentityResult result = new IdentityResult();
-            if (newRole == null)
+            IdentityResult result = null;
+            // var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+
+            if (RoleManager == null)
             {
-                newRole = new IdentityRole(role);
-                await RoleManager.CreateAsync(newRole);
+                throw new Exception("roleManager null");
             }
-            
-            result = await RoleManager.AddClaimAsync(newRole, authorizationOperation);
+
+            if (!await RoleManager.RoleExistsAsync(role))
+            {
+                result = await RoleManager.DeleteAsync(new IdentityRole(role));
+            }
 
             return result;
         }
 
+        public async Task<IdentityResult> RemoveAllClaimHelper(string role)
+        {
+            IdentityResult result = new IdentityResult();
+            // var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
 
+            if (RoleManager == null)
+                throw new Exception("roleManager null");
 
+            var getRole = await RoleManager.FindByNameAsync(role);
+            var roleClaims = await RoleManager.GetClaimsAsync(getRole);
 
+            foreach (var roleClaim in roleClaims)
+                result = await RoleManager.RemoveClaimAsync(getRole, roleClaim);
+            return result;
+        }
+
+        public async Task<IdentityResult> ClaimCreatingHelper(string roleRequest, Claim authorizationOperation)
+        {
+            var getRole = await RoleManager.FindByNameAsync(roleRequest);
+            IdentityResult result = new IdentityResult();
+
+            //Done deleting
+
+                //Create new role if role is new
+            if (getRole == null)
+            {
+                var newRole = new IdentityRole(roleRequest);
+                await RoleManager.CreateAsync(newRole);
+                //Add claim to this role
+                result = await RoleManager.AddClaimAsync(newRole, authorizationOperation);
+            }
+
+            else
+            {
+                //Add claim to this role (already exists)
+                var getRoleAddNew = await RoleManager.FindByNameAsync(roleRequest);
+                result = await RoleManager.AddClaimAsync(getRoleAddNew, authorizationOperation);
+            }
+           
+            return result;
+        }
 
     }
 }

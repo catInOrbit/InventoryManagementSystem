@@ -1,4 +1,5 @@
-﻿using System;
+﻿using InventoryManagementSystem.ApplicationCore.Entities;
+using System;
 
 namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 {
@@ -20,6 +21,8 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
         public bool IsNotAllowed { get; set; } = false;
         public bool RequiresTwoFactor { get; set; } = false;
         public string UserRole { get; set; }
+
+        public UserInfo UserInfo { get; set; }
 
     }
 }

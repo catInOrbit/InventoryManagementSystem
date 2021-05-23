@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using UserInfo = InventoryManagementSystem.ApplicationCore.Entities.UserInfo;
 
 namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
 {

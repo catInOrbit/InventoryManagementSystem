@@ -33,7 +33,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             _userRoleModificationService = new UserRoleModificationService(_roleManager, _userManager);
         }
 
-        [HttpPost("api/roleedit")]
+        [HttpPut("api/roleedit")]
         [SwaggerOperation(
             Summary = "Edit a role with permission (claim)",
             Description = "Edit a role with permission (claim)",
@@ -41,7 +41,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             Tags = new[] { "ManagerEndpoints" })
         ]
         public override async Task<ActionResult<RolePermissionResponse>> HandleAsync(RolePermissionRequest request, CancellationToken cancellationToken = new CancellationToken())
-        {
+        { 
             var response = new RolePermissionResponse();
             var user = await _userRoleModificationService.UserManager.GetUserAsync(HttpContext.User);
 
@@ -49,16 +49,19 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             // requires using ContactManager.Authorization;
             var isAuthorized = await _authorizationService.AuthorizeAsync(
                 HttpContext.User, "RolePermissionUpdate",
-                UserOperations.Check);
+                UserOperations.Update);
 
             if (isAuthorized.Succeeded)
             {
-                foreach (var permissionClaimValue in request.PermissionClaimValues)
+                await _userRoleModificationService.RemoveAllClaimHelper(request.Role);
+
+                // page -- list<action>
+                foreach (var pageClaimKeyValuePair in request.PageClaimDictionary)
                 {
-                    foreach (var claimValue in permissionClaimValue.Value)
+                    foreach (var pageClaim in pageClaimKeyValuePair.Value)
                     {
-                        var result =  
-                            await _userRoleModificationService.ClaimCreatingHelper(request.Role, new Claim(permissionClaimValue.Key, claimValue));
+                        var result =
+                           await _userRoleModificationService.ClaimCreatingHelper(request.Role, new Claim(pageClaimKeyValuePair.Key, pageClaim));
 
                         if (!result.Succeeded)
                         {

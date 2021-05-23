@@ -28,21 +28,37 @@ namespace InventoryManagementSystem.PublicApi.AuthorizationEndpoints
             var userRoles = await _userManager.GetRolesAsync(user);
             foreach (var role in userRoles)
             {
-                var roleGet = _roleManager.Roles.Single(x => x.Name ==  role);
-                var roleClaims = await _roleManager.GetClaimsAsync(roleGet); // A claim: exp: Create -- true, Update --false, Approve -- true
-        
-                var pageClaims = roleClaims.Where(x => x.Type == page ); // Page claim: exp: Product -- Create
-
-                if (!pageClaims.Any())
+                if (role == "Manager")
                 {
-                    return Task.CompletedTask; //This user has unauthorized role for this page
+                    context.Succeed(requirement);
                 }
 
-                List<Claim> duplicateClaimCheck = pageClaims.ToList().Intersect(roleClaims).ToList();
-                
-                if(duplicateClaimCheck.Count > 0)
-                    context.Succeed(requirement);
-                else return Task.CompletedTask; //This user does not have permission for this page
+                else
+                {
+                    var roleGet = _roleManager.Roles.Single(x => x.Name == role);
+
+                    var roleClaims = await _roleManager.GetClaimsAsync(roleGet); // A claim: exp: Page -- Action
+
+                    var pageClaims = roleClaims.Where(x => x.Type == page); // List all claim for a page
+
+                    if (!pageClaims.Any())
+                    {
+                        return Task.CompletedTask; //This user has unauthorized role for this page
+                    }
+
+                    //Check if user action is authorized
+
+                    bool isActionAuthorized = false;
+                    roleClaims.ToList().ForEach(e =>
+                    {
+                        if (e.Value.ToString() == requirement.Name)
+                            isActionAuthorized = true;
+                    });
+
+                    if (isActionAuthorized)
+                        context.Succeed(requirement);
+                    else return Task.CompletedTask; //This user does not have permission for this page
+                }
             }
             
             return Task.CompletedTask;

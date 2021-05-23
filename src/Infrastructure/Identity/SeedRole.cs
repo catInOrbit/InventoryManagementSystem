@@ -32,12 +32,12 @@ namespace Infrastructure.Identity
                                                    string testUserPw)
         {
             var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
-            var user = await userManager.FindByNameAsync("testManager");
+            var user = await userManager.FindByNameAsync("Jake A");
             if (user == null)
             {
                 user = new ApplicationUser
                 {
-                    UserName = "testManager",
+                    UserName = "Jake A",
                     EmailConfirmed = true,
                     Email = "tmh1799@gmail.com"
                 };

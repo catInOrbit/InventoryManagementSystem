@@ -114,12 +114,10 @@ namespace InventoryManagementSystem.PublicApi
 
             services.AddCors(options =>
             {
-                options.AddPolicy(name: CORS_POLICY,
+                options.AddDefaultPolicy(
                                   builder =>
                                   {
-                                      builder.WithOrigins(baseUrlConfig.WebBase.Replace("host.docker.internal", "localhost").TrimEnd('/'));
-                                      builder.AllowAnyMethod();
-                                      builder.AllowAnyHeader();
+                                      builder.WithOrigins("https://imspublicapi.conveyor.cloud");
                                   });
             });
 
@@ -240,8 +238,6 @@ namespace InventoryManagementSystem.PublicApi
             app.UseAuthentication();
             app.UseRouting();
             app.UseHttpsRedirection();
-            app.UseCors(CORS_POLICY);
-            app.UseAuthorization();
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
@@ -258,6 +254,8 @@ namespace InventoryManagementSystem.PublicApi
             };
             
             app.UseCookiePolicy(cookiePolicyOptions);
+            app.UseCors();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -54,7 +54,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                 // requires using ContactManager.Authorization;
                 var isAuthorized = await _authorizationService.AuthorizeAsync(
                     HttpContext.User, "Registration",
-                    UserOperations.Check);
+                    UserOperations.Create);
 
                 if (isAuthorized.Succeeded)
                 {
