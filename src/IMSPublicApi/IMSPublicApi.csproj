@@ -8,12 +8,6 @@
     <DockerfileContext>..\..</DockerfileContext>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="AccountantEndpoints\**" />
-    <Content Remove="AccountantEndpoints\**" />
-    <EmbeddedResource Remove="AccountantEndpoints\**" />
-    <None Remove="AccountantEndpoints\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Ardalis.ApiEndpoints" Version="3.1.0" />
@@ -51,6 +45,5 @@
     <Folder Include="Migrations" />
     <Folder Include="Migrations\" />
   </ItemGroup>
-
 
 </Project>
