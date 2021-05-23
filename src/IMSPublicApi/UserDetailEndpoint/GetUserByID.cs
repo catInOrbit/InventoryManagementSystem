@@ -3,14 +3,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Identity;
+using Infrastructure.Identity.Models;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthenticationEndpoints;
-using InventoryManagementSystem.PublicApi.Authorization;
+using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using UserInfo = InventoryManagementSystem.ApplicationCore.Entities.UserInfo;
 
 namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
 {
@@ -19,12 +21,12 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
         .WithRequest<UsersRequest>
         .WithResponse<UsersResponse>
     {
-        private readonly IAsyncRepository<IMSUser> _userRepository;
+        private readonly IAsyncRepository<UserInfo> _userRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAuthorizationService _authorizationService;
 
-        public IMSUser IMSUser { get; set; } = new IMSUser();
-        public GetUserByID(IAsyncRepository<IMSUser> itemRepository, UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService)
+        public UserInfo UserInfo { get; set; } = new UserInfo();
+        public GetUserByID(IAsyncRepository<UserInfo> itemRepository, UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService)
         {
             _userRepository = itemRepository;
             _userManager = userManager;
@@ -44,10 +46,10 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
 
             var user = await _userManager.GetUserAsync(HttpContext.User);
             
-            IMSUser.OwnerID = user.Id.ToString();
+            UserInfo.OwnerID = user.Id.ToString();
             // requires using ContactManager.Authorization;
             var isAuthorized = await _authorizationService.AuthorizeAsync(
-                HttpContext.User, IMSUser,
+                HttpContext.User, UserInfo,
                 UserOperations.Read);
 
             if (isAuthorized.Succeeded)
@@ -55,9 +57,9 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
                 var userGet = await _userRepository.GetByIdAsync(request.UserID, cancellationToken);
                 if (userGet is null) return NotFound();
 
-                response.ImsUser = new List<IMSUser>
+                response.ImsUser = new List<UserInfo>
                 {
-                    new IMSUser
+                    new UserInfo
                     {
                         Id = userGet.Id,
                         OwnerID = userGet.OwnerID,

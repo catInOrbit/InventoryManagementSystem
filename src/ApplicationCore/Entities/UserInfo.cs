@@ -3,10 +3,9 @@ using System.Collections.Generic;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities
 {
-    public class IMSUser : BaseEntity
+    public class UserInfo : BaseEntity
     {
         public string OwnerID { get; set; }
-        
         public string Id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
@@ -19,6 +18,5 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public DateTime DateOfBirth { get; set; }
 
         public bool IsActive { get; set; }
-        
     }
 }

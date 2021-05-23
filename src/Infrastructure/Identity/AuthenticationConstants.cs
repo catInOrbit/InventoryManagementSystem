@@ -8,6 +8,7 @@ namespace Infrastructure.Data
         public static readonly string DeleteOperationName = "Delete";
         public static readonly string ApproveOperationName = "Approve";
         public static readonly string RejectOperationName = "Reject";
+        public static readonly string CheckOperationName = "Check";
 
         public static readonly string IMSAccountantRole = 
             "Accountant";

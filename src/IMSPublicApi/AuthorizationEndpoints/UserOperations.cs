@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 
-namespace InventoryManagementSystem.PublicApi.Authorization
+namespace InventoryManagementSystem.PublicApi.AuthorizationEndpoints
 {
     public static class UserOperations
     {
@@ -16,6 +16,8 @@ namespace InventoryManagementSystem.PublicApi.Authorization
         public static OperationAuthorizationRequirement Approve = 
           new OperationAuthorizationRequirement {Name=AuthenticationConstants.ApproveOperationName};
         public static OperationAuthorizationRequirement Reject = 
+          new OperationAuthorizationRequirement {Name=AuthenticationConstants.RejectOperationName};
+        public static OperationAuthorizationRequirement Check = 
           new OperationAuthorizationRequirement {Name=AuthenticationConstants.RejectOperationName};
     }
 

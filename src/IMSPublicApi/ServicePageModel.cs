@@ -1,4 +1,6 @@
 using Infrastructure.Identity;
+using Infrastructure.Identity.DbContexts;
+using Infrastructure.Identity.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -7,12 +9,12 @@ namespace InventoryManagementSystem.PublicApi
 {
     public class ServicePageModel : PageModel
     {
-        protected ApplicationIdentityDbContext Context { get; }
+        protected IdentityAndProductDbContext Context { get; }
         protected IAuthorizationService AuthorizationService { get; }
         protected UserManager<ApplicationUser> UserManager { get; }
 
         public ServicePageModel(
-            ApplicationIdentityDbContext context,
+            IdentityAndProductDbContext context,
             IAuthorizationService authorizationService,
             UserManager<ApplicationUser> userManager) : base()
         {

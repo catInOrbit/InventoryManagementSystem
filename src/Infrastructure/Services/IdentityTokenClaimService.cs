@@ -4,12 +4,13 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Infrastructure.Identity.Models;
 using InventoryManagementSystem.ApplicationCore.Constants;
-using Microsoft.AspNetCore.Identity;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Infrastructure.Identity
+namespace Infrastructure.Services
 {
     public class IdentityTokenClaimService : ITokenClaimsService
     {

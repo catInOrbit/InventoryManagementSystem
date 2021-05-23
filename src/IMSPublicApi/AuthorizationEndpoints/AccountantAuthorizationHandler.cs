@@ -1,28 +1,22 @@
 ﻿using System.Threading.Tasks;
 using Infrastructure.Data;
-using Infrastructure.Identity;
+using Infrastructure.Identity.Models;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 
-namespace InventoryManagementSystem.PublicApi.Authorization
+namespace InventoryManagementSystem.PublicApi.AuthorizationEndpoints
 {
     public class AccountantAuthorizationHandler
-                    : AuthorizationHandler<OperationAuthorizationRequirement, IMSUser>
+                    : AuthorizationHandler<OperationAuthorizationRequirement, UserInfo>
     {
-        UserManager<ApplicationUser> _userManager;
 
-        public AccountantAuthorizationHandler(UserManager<ApplicationUser> 
-            userManager)
-        {
-            _userManager = userManager;
-        }
-        
         protected override Task
-            HandleRequirementAsync(AuthorizationHandlerContext context,
+            HandleRequirementAsync(AuthorizationHandlerContext context, 
                 OperationAuthorizationRequirement requirement,
-                IMSUser resource)
+                UserInfo resource)
         {
             if (context.User == null || resource == null)
             {
@@ -30,7 +24,7 @@ namespace InventoryManagementSystem.PublicApi.Authorization
             }
 
             // If not asking for CRUD permission, return.
-
+         
             if (requirement.Name != AuthenticationConstants.ApproveOperationName &&
                 requirement.Name != AuthenticationConstants.RejectOperationName)
             {

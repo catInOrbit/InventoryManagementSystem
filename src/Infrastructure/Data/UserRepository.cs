@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Specification;
 using Infrastructure.Identity;
+using Infrastructure.Identity.DbContexts;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -12,22 +13,22 @@ namespace Infrastructure.Data
 {
     public class UserRepository<T> : IAsyncRepository<T> where T : BaseEntity
     {
-        private readonly ApplicationIdentityDbContext _applicationIdentityDbContext;
+        private readonly IdentityAndProductDbContext _identityAndProductDbContext;
 
-        public UserRepository(ApplicationIdentityDbContext applicationIdentityDbContext)
+        public UserRepository(IdentityAndProductDbContext identityAndProductDbContext)
         {
-            _applicationIdentityDbContext = applicationIdentityDbContext;
+            _identityAndProductDbContext = identityAndProductDbContext;
         }
 
         public async Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default)
         {
             var keyValues = new object[] { id };
-            return await _applicationIdentityDbContext.Set<T>().FindAsync(keyValues, cancellationToken);
+            return await _identityAndProductDbContext.Set<T>().FindAsync(keyValues, cancellationToken);
         }
 
         public async Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default)
         {
-            return await _applicationIdentityDbContext.Set<T>().ToListAsync(cancellationToken);
+            return await _identityAndProductDbContext.Set<T>().ToListAsync(cancellationToken);
         }
 
         public Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec, CancellationToken cancellationToken = default)
@@ -37,8 +38,8 @@ namespace Infrastructure.Data
 
         public async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
         {
-            await _applicationIdentityDbContext.Set<T>().AddAsync(entity);
-            await _applicationIdentityDbContext.SaveChangesAsync(cancellationToken);
+            await _identityAndProductDbContext.Set<T>().AddAsync(entity);
+            await _identityAndProductDbContext.SaveChangesAsync(cancellationToken);
 
             return entity;
         }

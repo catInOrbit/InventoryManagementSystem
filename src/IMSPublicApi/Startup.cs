@@ -5,6 +5,8 @@ using AutoMapper;
 using BlazorShared;
 using Infrastructure.Data;
 using Infrastructure.Identity;
+using Infrastructure.Identity.DbContexts;
+using Infrastructure.Identity.Models;
 using Infrastructure.Logging;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Constants;
@@ -17,12 +19,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using InventoryManagementSystem;
-using InventoryManagementSystem.ApplicationCore.Entities;
-using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.ApplicationCore.Services;
-using InventoryManagementSystem.PublicApi.Authorization;
+using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -46,9 +45,8 @@ namespace InventoryManagementSystem.PublicApi
 
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationIdentityDbContext>(options =>
+            services.AddDbContext<IdentityAndProductDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"),  b => b.MigrationsAssembly("IMSPublicApi")));
-
             ConfigureServices(services);
         }
 
@@ -70,7 +68,7 @@ namespace InventoryManagementSystem.PublicApi
                         options.Lockout = lockoutOptions;
                     }
                 )
-                    .AddEntityFrameworkStores<ApplicationIdentityDbContext>()
+                    .AddEntityFrameworkStores<IdentityAndProductDbContext>()
                     .AddRoles<IdentityRole>()
                     .AddDefaultTokenProviders();
             
@@ -234,6 +232,10 @@ namespace InventoryManagementSystem.PublicApi
             
             services.AddScoped<IAuthorizationHandler,
                 AccountantAuthorizationHandler>();
+            
+            services.AddScoped<IAuthorizationHandler,
+                AccountAuthorizationHandler>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,20 +1,18 @@
 ﻿using System.Threading.Tasks;
 using Infrastructure.Data;
-using Infrastructure.Identity;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
-using Microsoft.AspNetCore.Identity;
 
-namespace InventoryManagementSystem.PublicApi.Authorization
+namespace InventoryManagementSystem.PublicApi.AuthorizationEndpoints
 {
     public class ManagerAuthorizationHandler
-                : AuthorizationHandler<OperationAuthorizationRequirement, IMSUser>
+                : AuthorizationHandler<OperationAuthorizationRequirement, UserInfo>
     {
         protected override Task HandleRequirementAsync(
             AuthorizationHandlerContext context,
             OperationAuthorizationRequirement requirement, 
-            IMSUser resource)
+            UserInfo resource)
         {
             if (context.User == null)
             {

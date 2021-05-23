@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Identity;
+using Infrastructure.Identity.Models;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.PublicApi.AuthenticationEndpoints;
 using Microsoft.AspNetCore.Identity;

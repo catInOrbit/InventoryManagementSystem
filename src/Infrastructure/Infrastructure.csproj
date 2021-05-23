@@ -25,4 +25,8 @@
       <ProjectReference Include="..\ApplicationCore\ApplicationCore.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Data\Config" />
+    </ItemGroup>
+
 </Project>

@@ -3,9 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Identity;
+using Infrastructure.Identity.Models;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
-using InventoryManagementSystem.PublicApi.Authorization;
+using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,13 +18,13 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
     [Authorize]
     public class GetAllUsers : BaseAsyncEndpoint.WithoutRequest.WithResponse<UsersResponse>
     {
-        private readonly IAsyncRepository<IMSUser> _userRepository;
+        private readonly IAsyncRepository<UserInfo> _userRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAuthorizationService _authorizationService;
 
-        public IMSUser IMSUser { get; set; } = new IMSUser();
+        public UserInfo UserInfo { get; set; } = new UserInfo();
 
-        public GetAllUsers(IAsyncRepository<IMSUser> userRepository, UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService)
+        public GetAllUsers(IAsyncRepository<UserInfo> userRepository, UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService)
         {
             _userRepository = userRepository;
             _userManager = userManager;
@@ -43,16 +44,16 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
             
             var user = await _userManager.GetUserAsync(HttpContext.User);
             
-            IMSUser.OwnerID = user.Id.ToString();
+            UserInfo.OwnerID = user.Id.ToString();
             // requires using ContactManager.Authorization;
             var isAuthorized = await _authorizationService.AuthorizeAsync(
-                HttpContext.User, IMSUser,
+                HttpContext.User, UserInfo,
                 UserOperations.Read);
 
             if (isAuthorized.Succeeded)
             {
                 var users = await _userRepository.ListAllAsync();
-                response.ImsUser = (List<IMSUser>) users;
+                response.ImsUser = (List<UserInfo>) users;
                 return Ok(response);
                 
             }

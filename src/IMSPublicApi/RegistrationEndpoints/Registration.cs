@@ -4,11 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Identity;
+using Infrastructure.Identity.Models;
+using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
-using InventoryManagementSystem.PublicApi.Authorization;
+using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Annotations;
@@ -19,22 +21,20 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
     public class Registration : BaseAsyncEndpoint.WithRequest<RegistrationRequest>.WithResponse<RegistrationResponse>
     {
         private readonly ITokenClaimsService _tokenClaimsService;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        // private readonly UserManager<ApplicationUser> _userManager;
+        // private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IServiceProvider _serviceProvider;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IAsyncRepository<IMSUser> _userRepository;
-        
-        public IMSUser IMSUser { get; set; } = new IMSUser();
+        private readonly IAsyncRepository<UserInfo> _userRepository;
+        private UserRoleModificationService _userRoleModificationService;
+        public UserInfo UserInfo { get; set; } = new UserInfo();
         public Registration(UserManager<ApplicationUser> userManager, ITokenClaimsService tokenClaimsService,
-            RoleManager<IdentityRole> roleManager, IServiceProvider serviceProvider, IAuthorizationService authorizationService, IAsyncRepository<IMSUser> userRepository)
+            RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, IAsyncRepository<UserInfo> userRepository)
         {
-            _userManager = userManager;
             _tokenClaimsService = tokenClaimsService;
-            _roleManager = roleManager;
-            _serviceProvider = serviceProvider;
             _authorizationService = authorizationService;
             _userRepository = userRepository;
+            _userRoleModificationService = new UserRoleModificationService(roleManager, userManager);
         }
         
         [HttpPost("api/registration")]
@@ -47,23 +47,23 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
         public override async Task<ActionResult<RegistrationResponse>> HandleAsync(RegistrationRequest request, CancellationToken cancellationToken)
         {
             var response = new RegistrationResponse(request.CorrelationId());
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var user = await _userRoleModificationService.UserManager.GetUserAsync(HttpContext.User);
             if (user != null)
             {
-                IMSUser.OwnerID = user.Id.ToString();
+                UserInfo.OwnerID = user.Id.ToString();
                 // requires using ContactManager.Authorization;
                 var isAuthorized = await _authorizationService.AuthorizeAsync(
-                    HttpContext.User, IMSUser,
-                    UserOperations.Create);
+                    HttpContext.User, UserInfo,
+                    UserOperations.Check);
 
                 if (isAuthorized.Succeeded)
                 {
-                    var newUserID = await UserCreatingHelper(_serviceProvider, request.Password, request.Username, request.Email);
+                    var newUserID = await _userRoleModificationService.UserCreatingHelper(request.Password, request.Username, request.Email);
                     if (newUserID != null)
                     {
-                        var result = await RoleCreatingHelper(_serviceProvider, newUserID, request.RoleName);
+                        var result = await _userRoleModificationService.RoleCreatingHelper(newUserID, request.RoleName);
                     
-                        var newIMSUser = new IMSUser
+                        var newIMSUser = new UserInfo
                         {
                             Id = newUserID,
                             Fullname =  request.FullName,
@@ -103,57 +103,6 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
             return Ok(response);
         }
 
-        private async Task<string> UserCreatingHelper(IServiceProvider serviceProvider, string password, string username, string email)
-        {
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user == null)
-            {
-                user = new ApplicationUser
-                {
-                    UserName = username,
-                    Email = email,
-                    EmailConfirmed = true
-                };
-                
-                await _userManager.CreateAsync(user, password);
-            }
 
-            else
-            {
-                user.Id = null;
-            }
-            //TODO: Throw Error saying authentication fail
-            return user.Id;
-        }
-
-        private async Task<IdentityResult> RoleCreatingHelper(IServiceProvider serviceProvider,
-            string uid, string role)
-        {
-            IdentityResult result = null;
-            // var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
-
-            if (_roleManager == null)
-            {
-                throw new Exception("roleManager null");
-            }
-
-            if (!await _roleManager.RoleExistsAsync(role))
-            {
-                result = await _roleManager.CreateAsync(new IdentityRole(role));
-            }
-            
-            var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
-
-            var user = await userManager.FindByIdAsync(uid);
-
-            if(user == null)
-            {
-                throw new Exception("The testUserPw password was probably not strong enough!");
-            }
-            
-            result = await userManager.AddToRoleAsync(user, role);
-
-            return result;
-        }
     }
 }

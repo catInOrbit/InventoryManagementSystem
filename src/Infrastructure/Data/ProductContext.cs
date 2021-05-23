@@ -6,16 +6,16 @@ using InventoryManagementSystem.ApplicationCore.Entities;
 namespace Infrastructure.Data
 {
 
-    public class CatalogContext : DbContext
+    public class ProductContext : DbContext
     {
-        public CatalogContext(DbContextOptions<CatalogContext> options) : base(options)
+        public ProductContext(DbContextOptions<ProductContext> options) : base(options)
         {
         }
 
         // public DbSet<Basket> Baskets { get; set; }
-        public DbSet<Product> CatalogItems { get; set; }
-        public DbSet<ProductBrand> CatalogBrands { get; set; }
-        public DbSet<CatalogType> CatalogTypes { get; set; }
+        public DbSet<Product> Product { get; set; }
+        public DbSet<Brand> Brand { get; set; }
+        public DbSet<Category> Category { get; set; }
         // public DbSet<Order> Orders { get; set; }
         // public DbSet<OrderItem> OrderItems { get; set; }
         // public DbSet<BasketItem> BasketItems { get; set; }

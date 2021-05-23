@@ -2,6 +2,8 @@ using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Infrastructure.Data;
+using Infrastructure.Identity.DbContexts;
+using Infrastructure.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,8 +14,8 @@ namespace Infrastructure.Identity
     {
         public static async Task Initialize(IServiceProvider serviceProvider, string testUserPw)
         {
-            using (var context = new ApplicationIdentityDbContext(
-                serviceProvider.GetRequiredService<DbContextOptions<ApplicationIdentityDbContext>>()))
+            using (var context = new IdentityAndProductDbContext(
+                serviceProvider.GetRequiredService<DbContextOptions<IdentityAndProductDbContext>>()))
             {
                 // For sample purposes seed both with the same password.
                 // Password is set with the following:
