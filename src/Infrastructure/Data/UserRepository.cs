@@ -44,9 +44,10 @@ namespace Infrastructure.Data
             return entity;
         }
 
-        public Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
+        public async Task UpdateAsync(T entity, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            _identityAndProductDbContext.Entry(entity).State = EntityState.Modified;
+            await _identityAndProductDbContext.SaveChangesAsync(cancellationToken);
         }
 
         public Task DeleteAsync(T entity, CancellationToken cancellationToken = default)

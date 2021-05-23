@@ -1,9 +1,12 @@
 using System;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure.Data;
 using Infrastructure.Identity.DbContexts;
 using Infrastructure.Identity.Models;
+using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,6 +15,7 @@ namespace Infrastructure.Identity
 {
     public class SeedRole
     {
+
         public static async Task Initialize(IServiceProvider serviceProvider, string testUserPw)
         {
             using (var context = new IdentityAndProductDbContext(
@@ -32,22 +36,38 @@ namespace Infrastructure.Identity
                                                    string testUserPw)
         {
             var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
-            var user = await userManager.FindByNameAsync("Jake A");
+            var user = await userManager.FindByNameAsync("JakeA");
             if (user == null)
             {
                 user = new ApplicationUser
                 {
-                    UserName = "Jake A",
+                    UserName = "JakeA",
                     EmailConfirmed = true,
-                    Email = "tmh1799@gmail.com"
+                    Email = "tmh1799@gmail.com",
                 };
                 await userManager.CreateAsync(user, testUserPw);
+                
+                
+                var _userRepository = serviceProvider.GetRequiredService<IAsyncRepository<UserInfo>>();
+                var newIMSUser = new UserInfo
+                {
+                    Id = user.Id,
+                    Fullname =  "Huy Nguyen",
+                    PhoneNumber =  "12345677",
+                    Email = user.Email,
+                    Username = user.UserName,
+                    Address =  "aDDRESS",
+                    IsActive =  true,
+                    DateOfBirth = DateTime.Now
+                };
+                await _userRepository.AddAsync(newIMSUser, new CancellationToken());
             }
 
             if (user == null)
             {
                 throw new Exception("The password is probably not strong enough!");
             }
+
 
             return user.Id;
         }

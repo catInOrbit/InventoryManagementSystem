@@ -86,7 +86,8 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                     response.IsLockedOut = result.IsLockedOut;
                     response.IsNotAllowed = result.IsNotAllowed;
                     response.RequiresTwoFactor = result.RequiresTwoFactor;
-                    response.Username = user.UserName;
+                    if(userGet != null)
+                        response.Username = userGet.Fullname;
                     response.UserRole = roles[0];
                     response.UserInfo = userGet;
                 }

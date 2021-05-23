@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
-    public partial class TableCreation : Migration
+    public partial class DatabaseRestore : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

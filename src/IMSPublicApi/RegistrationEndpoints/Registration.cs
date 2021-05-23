@@ -69,7 +69,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                             Fullname =  request.FullName,
                             PhoneNumber =  request.PhoneNumber,
                             Email = user.Email,
-                            Username = user.UserName,
+                            Username = request.FullName.Trim(),
                             Address =  request.Address,
                             IsActive =  true,
                             DateOfBirth = request.DateOfBirth
@@ -78,7 +78,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                         await _userRepository.AddAsync(newIMSUser, cancellationToken);
                     
                         response.Result = result.Succeeded;
-                        response.Username = request.Username;
+                        response.Username = request.FullName;
                         if (result.Succeeded)
                         {
                             response.Token = await _tokenClaimsService.GetTokenAsync(request.Email);
