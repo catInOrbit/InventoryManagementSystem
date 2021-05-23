@@ -87,8 +87,9 @@ namespace Infrastructure.Services
             {
                 newRole = new IdentityRole(role);
                 await RoleManager.CreateAsync(newRole);
-                result = await RoleManager.AddClaimAsync(newRole, authorizationOperation);
             }
+            
+            result = await RoleManager.AddClaimAsync(newRole, authorizationOperation);
 
             return result;
         }

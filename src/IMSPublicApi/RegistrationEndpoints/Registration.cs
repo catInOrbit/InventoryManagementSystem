@@ -53,7 +53,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                 UserInfo.OwnerID = user.Id.ToString();
                 // requires using ContactManager.Authorization;
                 var isAuthorized = await _authorizationService.AuthorizeAsync(
-                    HttpContext.User, UserInfo,
+                    HttpContext.User, "Registration",
                     UserOperations.Check);
 
                 if (isAuthorized.Succeeded)

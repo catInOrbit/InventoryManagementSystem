@@ -226,16 +226,8 @@ namespace InventoryManagementSystem.PublicApi
                 });
             });
             
-            
-            services.AddScoped<IAuthorizationHandler,
-                ManagerAuthorizationHandler>();
-            
-            services.AddScoped<IAuthorizationHandler,
-                AccountantAuthorizationHandler>();
-            
             services.AddScoped<IAuthorizationHandler,
                 AccountAuthorizationHandler>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

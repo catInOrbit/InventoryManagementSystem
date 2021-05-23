@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
-    public partial class TableUpdateAll : Migration
+    public partial class TableUserInfo : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -138,7 +138,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "IMSUser",
+                name: "UserInfo",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -154,9 +154,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_IMSUser", x => x.Id);
+                    table.PrimaryKey("PK_UserInfo", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_IMSUser_Product_ProductId",
+                        name: "FK_UserInfo_Product_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Product",
                         principalColumn: "Id",
@@ -169,7 +169,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PageName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -281,11 +280,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 column: "ProductsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_IMSUser_ProductId",
-                table: "IMSUser",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "Role",
                 column: "NormalizedName",
@@ -315,6 +309,11 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserInfo_ProductId",
+                table: "UserInfo",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserLogin_UserId",
                 table: "UserLogin",
                 column: "UserId");
@@ -334,13 +333,13 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "CategoryProduct");
 
             migrationBuilder.DropTable(
-                name: "IMSUser");
-
-            migrationBuilder.DropTable(
                 name: "RoleClaim");
 
             migrationBuilder.DropTable(
                 name: "UserClaim");
+
+            migrationBuilder.DropTable(
+                name: "UserInfo");
 
             migrationBuilder.DropTable(
                 name: "UserLogin");

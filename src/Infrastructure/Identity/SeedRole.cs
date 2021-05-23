@@ -65,7 +65,20 @@ namespace Infrastructure.Identity
 
             if (!await roleManager.RoleExistsAsync(role))
             {
-                IR = await roleManager.CreateAsync(new IdentityRole(role));
+                var identityRole = new IdentityRole(role);
+
+                IR = await roleManager.CreateAsync(identityRole);
+                await roleManager.AddClaimAsync(identityRole, new Claim(AuthenticationConstants.CreateOperationName, true.ToString()));
+                await roleManager.AddClaimAsync(identityRole, new Claim(AuthenticationConstants.UpdateOperationName, true.ToString()));
+                await roleManager.AddClaimAsync(identityRole, new Claim(AuthenticationConstants.DeleteOperationName, true.ToString()));
+                await roleManager.AddClaimAsync(identityRole, new Claim(AuthenticationConstants.ReadOperationName, true.ToString()));
+                await roleManager.AddClaimAsync(identityRole, new Claim(AuthenticationConstants.ApproveOperationName, true.ToString()));
+                await roleManager.AddClaimAsync(identityRole, new Claim(AuthenticationConstants.RejectOperationName, true.ToString()));
+                await roleManager.AddClaimAsync(identityRole, new Claim("RolePermissionUpdate", AuthenticationConstants.CreateOperationName));
+                await roleManager.AddClaimAsync(identityRole, new Claim("RolePermissionUpdate", AuthenticationConstants.UpdateOperationName));
+                await roleManager.AddClaimAsync(identityRole, new Claim("RolePermissionUpdate", AuthenticationConstants.DeleteOperationName));
+                await roleManager.AddClaimAsync(identityRole, new Claim("RolePermissionUpdate", AuthenticationConstants.ApproveOperationName));
+                await roleManager.AddClaimAsync(identityRole, new Claim("RolePermissionUpdate", AuthenticationConstants.RejectOperationName));
             }
 
             var userManager = serviceProvider.GetService<UserManager<ApplicationUser>>();
@@ -79,7 +92,24 @@ namespace Infrastructure.Identity
 
             IR = await userManager.AddToRoleAsync(user, role);
 
+          
+
             return IR;
+        }
+        
+        public async Task<IdentityResult> ClaimCreatingHelper(IServiceProvider serviceProvider, string role, Claim authorizationOperation)
+        {
+            var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+            var newRole = await roleManager.FindByNameAsync(role);
+            IdentityResult result = new IdentityResult();
+            if (newRole == null)
+            {
+                newRole = new IdentityRole(role);
+                await roleManager.CreateAsync(newRole);
+                result = await roleManager.AddClaimAsync(newRole, authorizationOperation);
+            }
+
+            return result;
         }
     }
 }

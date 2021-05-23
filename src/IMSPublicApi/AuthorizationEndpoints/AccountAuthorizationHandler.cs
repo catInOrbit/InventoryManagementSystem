@@ -10,37 +10,35 @@ using Microsoft.AspNetCore.Identity;
 
 namespace InventoryManagementSystem.PublicApi.AuthorizationEndpoints
 {
-    public class AccountAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, UserInfo>
+    public class AccountAuthorizationHandler : AuthorizationHandler<OperationAuthorizationRequirement, string>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly string _page;
 
-        public AccountAuthorizationHandler(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, string page) 
+        public AccountAuthorizationHandler(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager) 
         {
             _userManager = userManager;
             _roleManager = roleManager;
-            _page = page;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement,
-            UserInfo resource)
+        protected override async Task<Task> HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement,
+            string page)
         {
-            var user = _userManager.GetUserAsync(context.User);
-            var userRoles = _userManager.GetRolesAsync(user.Result);
-            foreach (var role in userRoles.Result)
+            var user = await _userManager.GetUserAsync(context.User);
+            var userRoles = await _userManager.GetRolesAsync(user);
+            foreach (var role in userRoles)
             {
-                IdentityRole roleGet = new IdentityRole(role);
-                var roleClaims = _roleManager.GetClaimsAsync(roleGet); // A claim: exp: Create -- true, Update --false, Approve -- true
-
-                var pageClaims = roleClaims.Result.Where(x => x.Type == _page ); // Page claim: exp: Product -- Create
+                var roleGet = _roleManager.Roles.Single(x => x.Name ==  role);
+                var roleClaims = await _roleManager.GetClaimsAsync(roleGet); // A claim: exp: Create -- true, Update --false, Approve -- true
+        
+                var pageClaims = roleClaims.Where(x => x.Type == page ); // Page claim: exp: Product -- Create
 
                 if (!pageClaims.Any())
                 {
                     return Task.CompletedTask; //This user has unauthorized role for this page
                 }
 
-                List<Claim> duplicateClaimCheck = pageClaims.ToList().Intersect(roleClaims.Result).ToList();
+                List<Claim> duplicateClaimCheck = pageClaims.ToList().Intersect(roleClaims).ToList();
                 
                 if(duplicateClaimCheck.Count > 0)
                     context.Succeed(requirement);

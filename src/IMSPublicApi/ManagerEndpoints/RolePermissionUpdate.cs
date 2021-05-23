@@ -6,22 +6,31 @@ using Infrastructure.Identity.Models;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
+    [Authorize]
     public class RolePermissionUpdate : BaseAsyncEndpoint.WithRequest<RolePermissionRequest>.WithResponse<RolePermissionResponse>
     {
         private readonly RoleManager<IdentityRole> _roleManager;
-        private UserRoleModificationService _userRoleModificationService;
-        
-       
-        public RolePermissionUpdate(RoleManager<IdentityRole> roleManager)
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        private readonly UserRoleModificationService _userRoleModificationService;
+        private readonly IAuthorizationService _authorizationService;
+
+        public UserInfo UserInfo { get; set; } = new UserInfo();
+
+        public RolePermissionUpdate(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, UserManager<ApplicationUser> userManager)
         {
             _roleManager = roleManager;
-            _userRoleModificationService = new UserRoleModificationService(_roleManager);
+            _authorizationService = authorizationService;
+            _userManager = userManager;
+            _userRoleModificationService = new UserRoleModificationService(_roleManager, _userManager);
         }
 
         [HttpPost("api/roleedit")]
@@ -34,23 +43,38 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         public override async Task<ActionResult<RolePermissionResponse>> HandleAsync(RolePermissionRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var response = new RolePermissionResponse();
-            
-            foreach (var permissionClaimValue in request.PermissionClaimValues)
-            {
-                var result =  
-                    await _userRoleModificationService.ClaimCreatingHelper(request.Role, new Claim(permissionClaimValue.Key, permissionClaimValue.Value));
+            var user = await _userRoleModificationService.UserManager.GetUserAsync(HttpContext.User);
 
-                if (!result.Succeeded)
+            UserInfo.OwnerID = user.Id.ToString();
+            // requires using ContactManager.Authorization;
+            var isAuthorized = await _authorizationService.AuthorizeAsync(
+                HttpContext.User, "RolePermissionUpdate",
+                UserOperations.Check);
+
+            if (isAuthorized.Succeeded)
+            {
+                foreach (var permissionClaimValue in request.PermissionClaimValues)
                 {
-                    response.Result = false;
-                    response.Verbose = "Error editing role, please try again";
+                    foreach (var claimValue in permissionClaimValue.Value)
+                    {
+                        var result =  
+                            await _userRoleModificationService.ClaimCreatingHelper(request.Role, new Claim(permissionClaimValue.Key, claimValue));
+
+                        if (!result.Succeeded)
+                        {
+                            response.Result = false;
+                            response.Verbose = "Error editing role, please try again";
+                        }
+                    }
                 }
-            }
-            
-            response.Result = true;
-            response.Verbose = "Success";
-            response.RoleChanged = request.Role;
-            return response;
+                
+                response.Result = true;
+                response.Verbose = "Success";
+                response.RoleChanged = request.Role;
+                return Ok(response);
+            } 
+
+            return Unauthorized();
         }
     }
 }
