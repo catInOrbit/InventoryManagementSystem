@@ -82,6 +82,7 @@ namespace Infrastructure.Services
         public async Task<IdentityResult> RoleDeletingHelper(string role)
         {
             IdentityResult result = null;
+            await RemoveAllClaimHelper(role);
             // var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
 
             if (RoleManager == null)
