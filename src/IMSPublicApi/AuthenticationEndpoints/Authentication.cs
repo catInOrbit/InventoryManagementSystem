@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Identity;
 using Infrastructure.Identity.Models;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
@@ -19,7 +21,7 @@ using Microsoft.AspNetCore.Cors;
 
 namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 {
-    [EnableCors("CorsPolicy")]
+    // [EnableCors("CorsPolicy")]
     [AllowAnonymous]
     public class Authentication : BaseAsyncEndpoint
         .WithRequest<AuthenticateRequest>
@@ -27,21 +29,19 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
     {
 
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenClaimsService _tokenClaimsService;
 
         private readonly IAsyncRepository<UserInfo> _userRepository;
-
+        private readonly UserRoleModificationService _userRoleModificationService;
         public UserInfoAuth UserInfo { get; set; } = new UserInfoAuth();
 
         public Authentication(IAsyncRepository<UserInfo> userRepository, SignInManager<ApplicationUser> signInManager,
-            ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager)
+            ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _signInManager = signInManager;
             _tokenClaimsService = tokenClaimsService;
-            _userManager = userManager;
             _userRepository = userRepository;
-
+            _userRoleModificationService = new UserRoleModificationService(roleManager, userManager);
         }
 
         [HttpPost("api/authentication")]
@@ -55,7 +55,7 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
         {
             var response = new AuthenticateResponse(request.CorrelationId());
             
-            var user = await _userManager.FindByEmailAsync(request.Email);
+            var user = await _userRoleModificationService.UserManager.FindByEmailAsync(request.Email);
 
             if (user == null)
             {
@@ -65,7 +65,7 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 
             else
             {
-                var roles = await _userManager.GetRolesAsync(user);
+                var roles = await _userRoleModificationService.UserManager.GetRolesAsync(user);
                 var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, true, true);
                     
                 if (result.Succeeded)
@@ -85,6 +85,11 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                     response.Verbose = "Success";
                     var userGet = await _userRepository.GetByIdAsync(user.Id, cancellationToken);
 
+                    var claims = await _userRoleModificationService.ClaimGettingHelper();
+
+                    var claimListDistince = claims.Select(x => x.Type).Distinct();
+
+                    response.PageAuthorized = claimListDistince.ToList();
                     response.Result = result.Succeeded;
                     response.IsLockedOut = result.IsLockedOut;
                     response.IsNotAllowed = result.IsNotAllowed;

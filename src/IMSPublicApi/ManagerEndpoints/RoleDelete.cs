@@ -31,12 +31,11 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             _authorizationService = authorizationService;
         }
 
-
-        [HttpDelete("api/roledelete")]
+        [HttpPost("api/rolerm")]
         [SwaggerOperation(
-           Summary = "Edit a role with permission (claim)",
-           Description = "Edit a role with permission (claim)",
-           OperationId = "manager.roleedit",
+           Summary = "Delete a role with all its permission (claim)",
+           Description = "Delete a role with all its permission (claim)",
+           OperationId = "manager.roledelete",
            Tags = new[] { "ManagerEndpoints" })
        ]
         public override async Task<ActionResult<RoleDeleteResponse>> HandleAsync(RoleDeleteRequest request, CancellationToken cancellationToken = default)

@@ -49,11 +49,12 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
             
             UserInfo.OwnerID = user.Id.ToString();
             // requires using ContactManager.Authorization;
-            var isAuthorized = await _authorizationService.AuthorizeAsync(
-                HttpContext.User, UserInfo,
-                UserOperations.Read);
+            // var isAuthorized = await _authorizationService.AuthorizeAsync(
+            //     HttpContext.User, UserInfo,
+            //     UserOperations.Read);
 
-            if (isAuthorized.Succeeded)
+            
+            if (await _userManager.IsInRoleAsync(user, "Manager"))
             {
                 var userGet = await _userRepository.GetByIdAsync(request.UserID, cancellationToken);
                 if (userGet is null) return NotFound();
@@ -73,7 +74,8 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
                         DateOfBirth = userGet.DateOfBirth
                     }
                 };
-                return Ok(response); 
+                
+                return Ok(response);
             }
             return Unauthorized();
         }

@@ -53,13 +53,15 @@ namespace InventoryManagementSystem.PublicApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
             services.AddCors(options =>
             {
-                options.AddPolicy(CORS_POLICY,
-                    builder => builder.AllowAnyOrigin().AllowAnyMethod()
-                        .WithHeaders("authorization", "accept", "content-type", "origin").AllowCredentials());
+                options.AddPolicy(name: CORS_POLICY,
+                    builder =>
+                    {
+                        builder.WithOrigins("https://imspublicapi.conveyor.cloud", "https://localhost:5099").AllowCredentials().AllowAnyHeader().AllowAnyMethod();
+                    });
             });
+
             
             var lockoutOptions = new LockoutOptions()
             {

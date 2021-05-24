@@ -38,7 +38,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 
         [HttpPut("api/roleedit")]
         [SwaggerOperation(
-            Summary = "Edit a role with permission (claim)",
+            Summary = "Edit a role with permission (claim), creating new one if there's none",
             Description = "Edit a role with permission (claim)",
             OperationId = "manager.roleedit",
             Tags = new[] { "ManagerEndpoints" })

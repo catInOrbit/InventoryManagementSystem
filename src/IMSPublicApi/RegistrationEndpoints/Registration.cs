@@ -18,7 +18,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
 {
-    [EnableCors("CorsPolicy")]
     [Authorize]
     public class Registration : BaseAsyncEndpoint.WithRequest<RegistrationRequest>.WithResponse<RegistrationResponse>
     {
@@ -63,38 +62,46 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                     var newUserID = await _userRoleModificationService.UserCreatingHelper(request.Password, request.Username, request.Email);
                     if (newUserID != null)
                     {
-                        var result = await _userRoleModificationService.RoleCreatingHelper(newUserID, request.RoleName);
-                    
-                        var newIMSUser = new UserInfo
+
+                        if (await _userRoleModificationService.CheckRoleNameExistsHelper(request.RoleName))
                         {
-                            Id = newUserID,
-                            Fullname =  request.FullName,
-                            PhoneNumber =  request.PhoneNumber,
-                            Email = user.Email,
-                            Username = request.FullName.Trim(),
-                            Address =  request.Address,
-                            IsActive =  true,
-                            DateOfBirth = request.DateOfBirth
-                        };
+                            var result = await _userRoleModificationService.RoleCreatingHelper(newUserID, request.RoleName);
                     
-                        await _userRepository.AddAsync(newIMSUser, cancellationToken);
+                            var newIMSUser = new UserInfo
+                            {
+                                Id = newUserID,
+                                Fullname =  request.FullName,
+                                PhoneNumber =  request.PhoneNumber,
+                                Email = user.Email,
+                                Username = request.FullName.Trim(),
+                                Address =  request.Address,
+                                IsActive =  true,
+                                DateOfBirth = request.DateOfBirth
+                            };
                     
-                        response.Result = result.Succeeded;
-                        response.Username = request.FullName;
-                        if (result.Succeeded)
+                            await _userRepository.AddAsync(newIMSUser, cancellationToken);
+                    
+                            response.Result = result.Succeeded;
+                            response.Username = request.FullName;
+                            if (result.Succeeded)
+                            {
+                                response.Token = await _tokenClaimsService.GetTokenAsync(request.Email);
+                                response.Verbose = "Authorized";
+                            }
+                        }
+
+                        else
                         {
-                            response.Token = await _tokenClaimsService.GetTokenAsync(request.Email);
-                            response.Verbose = "Authorized";
+                            response.Result = false;
+                            response.Verbose = "Role does not exist in DB";
                         }
                     }
                     else
                         response.Verbose = "Duplicated Email or Incorrect Request";
                 }
-
                 else
                     response.Verbose = "Not Authorized as Privileged User";
             }
-            
             else
             {
 

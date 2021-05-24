@@ -47,18 +47,25 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
             var user = await _userManager.GetUserAsync(HttpContext.User);
             
             UserInfo.OwnerID = user.Id.ToString();
-            // requires using ContactManager.Authorization;
-            var isAuthorized = await _authorizationService.AuthorizeAsync(
-                HttpContext.User, UserInfo,
-                UserOperations.Read);
 
-            if (isAuthorized.Succeeded)
+            if (await _userManager.IsInRoleAsync(user, "Manager"))
             {
                 var users = await _userRepository.ListAllAsync();
                 response.ImsUser = (List<UserInfo>) users;
                 return Ok(response);
-                
             }
+
+            // requires using ContactManager.Authorization;
+            // var isAuthorized = await _authorizationService.AuthorizeAsync(
+            //     HttpContext.User, UserInfo,
+            //     UserOperations.Read);
+            
+            // if (isAuthorized.Succeeded)
+            // {
+            //     var users = await _userRepository.ListAllAsync();
+            //     response.ImsUser = (List<UserInfo>) users;
+            //     return Ok(response);
+            // }
             return Unauthorized();
         }
     }

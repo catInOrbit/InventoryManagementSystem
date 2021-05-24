@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -79,6 +80,44 @@ namespace Infrastructure.Services
 
             return result;
         }
+        
+        public async Task<bool> CheckRoleNameExistsHelper(string roleName)
+        {
+            IdentityResult result = null;
+            // var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+
+            if (RoleManager == null)
+            {
+                throw new Exception("roleManager null");
+            }
+
+            foreach (var role in RoleManager.Roles)
+            {
+                if (role.Name == roleName)
+                    return true;
+            }
+            return false;
+            }
+        
+        public async Task<IdentityResult> RoleUpdatingHelper(string userID, string role)
+        {
+            IdentityResult result = new IdentityResult();
+            // var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+
+            if (RoleManager == null)
+            {
+                throw new Exception("roleManager null");
+            }
+
+            var user = await UserManager.FindByIdAsync(userID);
+
+            if (await RoleManager.RoleExistsAsync(role) && user != null)
+            {
+                result = await UserManager.AddToRoleAsync(user, role);
+            }
+
+            return result;
+        }
 
         public async Task<IdentityResult> RoleDeletingHelper(string role)
         {
@@ -147,6 +186,13 @@ namespace Infrastructure.Services
             }
            
             return result;
+        }
+
+        public async Task<IList<Claim>> ClaimGettingHelper()
+        {
+            var claims = await RoleManager.GetClaimsAsync(RoleManager.Roles.FirstOrDefault());
+            
+            return claims;
         }
 
     }

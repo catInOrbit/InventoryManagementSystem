@@ -39,15 +39,14 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
             
             var userGet = await _asyncRepository.GetByIdAsync(userID, cancellationToken);
 
-
             userGet.Address = request.Address;
-            userGet.Email = request.Email;
+            // userGet.Email = request.Email;
             userGet.Fullname = request.Fullname;
             userGet.Username = request.Username;
             userGet.IsActive = request.IsActive;
             userGet.PhoneNumber = request.PhoneNumber;
             userGet.DateOfBirth = request.DateOfBirth;
-        
+            
             await _asyncRepository.UpdateAsync(userGet, cancellationToken);
 
             response.Result = true;
