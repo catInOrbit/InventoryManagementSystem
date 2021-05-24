@@ -53,16 +53,14 @@ namespace InventoryManagementSystem.PublicApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
+
+            services.AddCors(c =>
             {
-                options.AddPolicy(name: CORS_POLICY,
-                    builder =>
-                    {
-                        builder.WithOrigins("https://imspublicapi.conveyor.cloud", "https://localhost:5099").AllowCredentials().AllowAnyHeader().AllowAnyMethod();
-                    });
+                c.AddPolicy(CORS_POLICY, options => options.AllowAnyOrigin());
             });
 
-            
+
+
             var lockoutOptions = new LockoutOptions()
             {
                 AllowedForNewUsers = true,
@@ -120,8 +118,6 @@ namespace InventoryManagementSystem.PublicApi
                     ValidateAudience = false
                 };
             });
-
-          
 
 
             services.AddControllers();
@@ -253,9 +249,12 @@ namespace InventoryManagementSystem.PublicApi
             };
             
             app.UseCookiePolicy(cookiePolicyOptions);
-            
-            app.UseCors(CORS_POLICY);
-           
+
+
+
+            app.UseCors(options => options.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials());
+
+
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
