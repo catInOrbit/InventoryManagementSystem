@@ -9,12 +9,14 @@ using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthenticationEndpoints;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
 {
+    [EnableCors("CorsPolicy")]
     [Authorize]
     public class GetUserByID : BaseAsyncEndpoint
         .WithRequest<UsersRequest>

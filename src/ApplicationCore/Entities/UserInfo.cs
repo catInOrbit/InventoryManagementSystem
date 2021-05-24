@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities
 {
     public class UserInfo : BaseEntity
     {
+        [JsonIgnore]
         public string OwnerID { get; set; }
         public string Id { get; set; }
         public string Username { get; set; }

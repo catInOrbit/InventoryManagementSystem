@@ -12,9 +12,11 @@ using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 
 namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
 {
+    [EnableCors("CorsPolicy")]
     [Authorize]
     public class ResetPasswordLead : BaseAsyncEndpoint
         .WithRequest<ResetPasswordLeadRequest>

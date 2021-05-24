@@ -15,8 +15,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using Microsoft.AspNetCore.Cors;
+
 namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 {
+    [EnableCors("CorsPolicy")]
     [AllowAnonymous]
     public class Authentication : BaseAsyncEndpoint
         .WithRequest<AuthenticateRequest>

@@ -4,12 +4,14 @@ using Ardalis.ApiEndpoints;
 using Infrastructure.Identity;
 using Infrastructure.Identity.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
 {
+    [EnableCors("CorsPolicy")]
     [Authorize]
     public class ResetPasswordSubmit : BaseAsyncEndpoint
         .WithRequest<ResetPasswordSubmitRequest>.WithResponse<ResetPasswordSubmitResponse>

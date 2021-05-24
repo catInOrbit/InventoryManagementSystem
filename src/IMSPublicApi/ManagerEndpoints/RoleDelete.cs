@@ -10,29 +10,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Infrastructure.Identity.Models;
+using Microsoft.AspNetCore.Cors;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
+    [EnableCors("CorsPolicy")]
     [Authorize]
     public class RoleDelete : BaseAsyncEndpoint.WithRequest<RoleDeleteRequest>.WithResponse<RoleDeleteResponse>
     {
         private readonly UserRoleModificationService _userRoleModificationService;
         public readonly RoleManager<IdentityRole> _roleManager;
+
         private readonly IAuthorizationService _authorizationService;
 
-        public RoleDelete(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService)
+        public RoleDelete(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, SignInManager<ApplicationUser> signInManager)
         {
             _roleManager = roleManager;
             _userRoleModificationService = new UserRoleModificationService(_roleManager);
             _authorizationService = authorizationService;
-
         }
 
-        public RoleDelete()
-        {
-
-
-        }
 
         [HttpDelete("api/roledelete")]
         [SwaggerOperation(

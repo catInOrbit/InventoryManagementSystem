@@ -12,11 +12,13 @@ using Microsoft.AspNetCore.Mvc;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
 {
+    [EnableCors("CorsPolicy")]
     [Authorize]
     public class Registration : BaseAsyncEndpoint.WithRequest<RegistrationRequest>.WithResponse<RegistrationResponse>
     {

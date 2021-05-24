@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,12 +9,14 @@ using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
+    [EnableCors("CorsPolicy")]
     [Authorize]
     public class RolePermissionUpdate : BaseAsyncEndpoint.WithRequest<RolePermissionRequest>.WithResponse<RolePermissionResponse>
     {
@@ -44,7 +47,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         { 
             var response = new RolePermissionResponse();
             var user = await _userRoleModificationService.UserManager.GetUserAsync(HttpContext.User);
-
+            var allRoles = _userRoleModificationService.RoleManager.Roles.ToList();
             UserInfo.OwnerID = user.Id.ToString();
             // requires using ContactManager.Authorization;
             var isAuthorized = await _authorizationService.AuthorizeAsync(
@@ -53,7 +56,8 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 
             if (isAuthorized.Succeeded)
             {
-                await _userRoleModificationService.RemoveAllClaimHelper(request.Role);
+                if(allRoles.Contains( new IdentityRole(request.Role.ToString())))
+                    await _userRoleModificationService.RemoveAllClaimHelper(request.Role);
 
                 // page -- list<action>
                 foreach (var pageClaimKeyValuePair in request.PageClaimDictionary)

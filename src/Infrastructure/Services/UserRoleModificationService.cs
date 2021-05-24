@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Infrastructure.Data;
@@ -82,7 +83,6 @@ namespace Infrastructure.Services
         public async Task<IdentityResult> RoleDeletingHelper(string role)
         {
             IdentityResult result = null;
-            await RemoveAllClaimHelper(role);
             // var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
 
             if (RoleManager == null)
@@ -90,9 +90,18 @@ namespace Infrastructure.Services
                 throw new Exception("roleManager null");
             }
 
-            if (!await RoleManager.RoleExistsAsync(role))
+            if (await RoleManager.RoleExistsAsync(role))
             {
-                result = await RoleManager.DeleteAsync(new IdentityRole(role));
+                await RemoveAllClaimHelper(role);
+                var allRoles =  RoleManager.Roles.ToList();
+
+                foreach (var roleToDelete in allRoles)
+                {
+                    if (roleToDelete.Name == role)
+                    {
+                        result = await RoleManager.DeleteAsync(roleToDelete);
+                    }
+                }
             }
 
             return result;

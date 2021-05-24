@@ -54,6 +54,13 @@ namespace InventoryManagementSystem.PublicApi
         public void ConfigureServices(IServiceCollection services)
         {
             
+            services.AddCors(options =>
+            {
+                options.AddPolicy(CORS_POLICY,
+                    builder => builder.AllowAnyOrigin().AllowAnyMethod()
+                        .WithHeaders("authorization", "accept", "content-type", "origin").AllowCredentials());
+            });
+            
             var lockoutOptions = new LockoutOptions()
             {
                 AllowedForNewUsers = true,
@@ -112,7 +119,8 @@ namespace InventoryManagementSystem.PublicApi
                 };
             });
 
-            services.AddCors();
+          
+
 
             services.AddControllers();
             services.AddMediatR(typeof(Product).Assembly);
@@ -217,6 +225,9 @@ namespace InventoryManagementSystem.PublicApi
                 });
             });
             
+           
+            services.AddControllers();
+            
             services.AddScoped<IAuthorizationHandler,
                 AccountAuthorizationHandler>();
         }
@@ -231,7 +242,18 @@ namespace InventoryManagementSystem.PublicApi
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
             app.UseRouting();
+            
+            var cookiePolicyOptions = new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Strict,
+            };
+            
+            app.UseCookiePolicy(cookiePolicyOptions);
+            
+            app.UseCors(CORS_POLICY);
+           
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
@@ -242,20 +264,13 @@ namespace InventoryManagementSystem.PublicApi
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
             
-            var cookiePolicyOptions = new CookiePolicyOptions
-            {
-                MinimumSameSitePolicy = SameSiteMode.Strict,
-            };
-            
-            app.UseCookiePolicy(cookiePolicyOptions);
-            app.UseCors(builder =>
-                builder.WithOrigins("https://imspublicapi.conveyor.cloud"));
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }
