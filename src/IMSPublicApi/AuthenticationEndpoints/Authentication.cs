@@ -21,7 +21,6 @@ using Microsoft.AspNetCore.Cors;
 
 namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 {
-    // [EnableCors("CorsPolicy")]
     [AllowAnonymous]
     public class Authentication : BaseAsyncEndpoint
         .WithRequest<AuthenticateRequest>
@@ -61,26 +60,27 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
             {
                 response.Result = false;
                 response.Verbose = "Can not find user with username" + request.Email;
+                return Unauthorized(response);
             }
 
             else
             {
                 var roles = await _userRoleModificationService.UserManager.GetRolesAsync(user);
                 var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, true, true);
-                    
+
                 if (result.Succeeded)
                 {
                     // await HttpContext.AuthenticateAsync("Cookie", userPrincipal);
                     var jwttoken = await _tokenClaimsService.GetTokenAsync(user.Email);
                     // Write the login id in the login claim, so we identify the login context
                     // Claim[] customClaims = { new Claim("UserLoginSessionId", token) };
-                    
+
                     // await _userManager.AddClaimsAsync(user,  customClaims);
                     // Signin User
                     // CookieSignInAndStore(user.Email, user.UserName, roles[0]);
-                    
+
                     // await _signInManager.SignInWithClaimsAsync(user, true, customClaims);
-                    
+
                     response.Token = jwttoken;
                     response.Verbose = "Success";
                     var userGet = await _userRepository.GetByIdAsync(user.Id, cancellationToken);
@@ -94,15 +94,17 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                     response.IsLockedOut = result.IsLockedOut;
                     response.IsNotAllowed = result.IsNotAllowed;
                     response.RequiresTwoFactor = result.RequiresTwoFactor;
-                    if(userGet != null)
+                    if (userGet != null)
                         response.Username = userGet.Fullname;
                     response.UserRole = roles[0];
                     response.UserInfo = userGet;
+                    return Ok(response);
+
                 }
+
             }
-            // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-            
-            return response;
+                    return Unauthorized(response);
+
         }
 
         private async void CookieSignInAndStore(string email, string fullname, string role)

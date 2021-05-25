@@ -11,7 +11,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
 {
-    [EnableCors("CorsPolicy")]
     [Authorize]
     public class ResetPasswordSubmit : BaseAsyncEndpoint
         .WithRequest<ResetPasswordSubmitRequest>.WithResponse<ResetPasswordSubmitResponse>

@@ -16,7 +16,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
 {
-    [EnableCors("CorsPolicy")]
     [Authorize]
     public class GetUserByID : BaseAsyncEndpoint
         .WithRequest<UsersRequest>

@@ -14,7 +14,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
-    [EnableCors("CorsPolicy")]
     [Authorize]
     public class RoleUserAssign : BaseAsyncEndpoint.WithRequest<RoleUserAssignRequest>.WithResponse<RoleUserAssignResponse>
     {

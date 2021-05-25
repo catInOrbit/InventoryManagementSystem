@@ -15,7 +15,6 @@ using Microsoft.AspNetCore.Cors;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
-    [EnableCors("CorsPolicy")]
     [Authorize]
     public class RoleDelete : BaseAsyncEndpoint.WithRequest<RoleDeleteRequest>.WithResponse<RoleDeleteResponse>
     {
