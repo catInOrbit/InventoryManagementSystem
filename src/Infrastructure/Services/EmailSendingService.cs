@@ -41,7 +41,7 @@ namespace Infrastructure.Services
                     await client.ConnectAsync(_emailConfiguration.SmtpServer, _emailConfiguration.Port, SecureSocketOptions.StartTls);
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
                     await client.AuthenticateAsync(_emailConfiguration.UserName, _emailConfiguration.Password);
-
+                    
                     await client.SendAsync(mailMessage);
                 }
                 catch

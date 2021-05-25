@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Specification.EntityFrameworkCore;
+using Infrastructure.Identity.DbContexts;
 using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace Infrastructure.Data
@@ -18,9 +19,9 @@ namespace Infrastructure.Data
     /// <typeparam name="T"></typeparam>
     public class EfRepository<T> : IAsyncRepository<T> where T : BaseEntity
     {
-        protected readonly ProductContext _dbContext;
+        protected readonly IdentityAndProductDbContext _dbContext;
 
-        public EfRepository(ProductContext dbContext)
+        public EfRepository(IdentityAndProductDbContext dbContext)
         {
             _dbContext = dbContext;
         }

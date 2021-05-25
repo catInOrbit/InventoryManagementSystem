@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Identity.Models;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,9 @@ namespace Infrastructure.Identity.DbContexts
         public DbSet<Product> Product { get; set; }
         public DbSet<Brand> Brand { get; set; }
         public DbSet<Category> Category { get; set; }
-
+        public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
