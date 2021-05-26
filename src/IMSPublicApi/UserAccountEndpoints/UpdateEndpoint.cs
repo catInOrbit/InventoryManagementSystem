@@ -36,17 +36,27 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
             var response = new UpdateResponse();
             var userID = _userManager.GetUserId(HttpContext.User);
             
-            var userGet = await _asyncRepository.GetByIdAsync(userID, cancellationToken);
+            var userInfoGet = await _asyncRepository.GetByIdAsync(userID, cancellationToken);
+            var userSystem = await _userManager.GetUserAsync(HttpContext.User);
 
-            userGet.Address = request.Address;
+            if(request.Address != userInfoGet.Address ) userInfoGet.Address = request.Address;
             // userGet.Email = request.Email;
-            userGet.Fullname = request.Fullname;
-            userGet.Username = request.Username;
-            userGet.IsActive = request.IsActive;
-            userGet.PhoneNumber = request.PhoneNumber;
-            userGet.DateOfBirth = request.DateOfBirth;
-            
-            await _asyncRepository.UpdateAsync(userGet, cancellationToken);
+            if(request.Fullname != userInfoGet.Fullname ) userInfoGet.Fullname = request.Fullname;
+            if(request.PhoneNumber != userInfoGet.PhoneNumber ) userInfoGet.PhoneNumber = request.PhoneNumber;
+            if(request.DateOfBirth != userInfoGet.DateOfBirth ) userInfoGet.DateOfBirth = request.DateOfBirth;
+
+            if (request.NewPassword != null)
+            {
+                var result = await _userManager.ChangePasswordAsync(userSystem, request.OldPassword, request.NewPassword);
+                if(!result.Succeeded)
+                {
+                    response.Result = false;
+                    response.Verbose = "Wrong password";
+                    return Ok(response);
+                }
+            }
+
+            await _asyncRepository.UpdateAsync(userInfoGet, cancellationToken);
 
             response.Result = true;
             response.Verbose = "Done updating";
