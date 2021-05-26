@@ -11,6 +11,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
+    [Authorize]
     public class GetRoles : BaseAsyncEndpoint.WithoutRequest.WithResponse<GetRoleResponse>
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -22,7 +23,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             _authorizationService = authorizationService;
         }
 
-        [HttpPost("api/gerroles")]
+        [HttpGet("api/getroles")]
         [SwaggerOperation(
             Summary = "Get all roles of system",
             Description = "Get all roles of system",
