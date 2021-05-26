@@ -16,6 +16,8 @@ namespace Infrastructure.Identity
     public class SeedRole
     {
         private const string GETUSERSPAGE = "GetUsers";
+        private const string REGISTRATION = "Registration";
+
         public static async Task Initialize(IServiceProvider serviceProvider, string testUserPw)
         {
             using (var context = new IdentityAndProductDbContext(
@@ -49,16 +51,18 @@ namespace Infrastructure.Identity
                 
                 
                 var _userRepository = serviceProvider.GetRequiredService<IAsyncRepository<UserInfo>>();
+                var dob = DateTime.Now;
                 var newIMSUser = new UserInfo
                 {
                     Id = user.Id,
-                    Fullname =  "Huy Nguyen",
-                    PhoneNumber =  "12345677",
+                    Fullname = "Huy Nguyen",
+                    PhoneNumber = "12345677",
                     Email = user.Email,
                     Username = user.UserName,
-                    Address =  "aDDRESS",
-                    IsActive =  true,
-                    DateOfBirth = DateTime.Now
+                    Address = "aDDRESS",
+                    IsActive = true,
+                    DateOfBirth = dob,
+                    DateOfBirthNormalizedString = dob.ToString("dd/MM/yyyy")
                 };
                 await _userRepository.AddAsync(newIMSUser, new CancellationToken());
             }
@@ -93,6 +97,7 @@ namespace Infrastructure.Identity
                 await roleManager.AddClaimAsync(identityRole, new Claim("RolePermissionUpdate", AuthenticationConstants.DeleteOperationName));
                 await roleManager.AddClaimAsync(identityRole, new Claim("RolePermissionUpdate", AuthenticationConstants.ApproveOperationName));
                 await roleManager.AddClaimAsync(identityRole, new Claim("RolePermissionUpdate", AuthenticationConstants.RejectOperationName));
+                await roleManager.AddClaimAsync(identityRole, new Claim(REGISTRATION, AuthenticationConstants.CreateOperationName));
                 await roleManager.AddClaimAsync(identityRole, new Claim(GETUSERSPAGE, AuthenticationConstants.CreateOperationName));
                 await roleManager.AddClaimAsync(identityRole, new Claim(GETUSERSPAGE, AuthenticationConstants.UpdateOperationName));
                 await roleManager.AddClaimAsync(identityRole, new Claim(GETUSERSPAGE, AuthenticationConstants.DeleteOperationName));

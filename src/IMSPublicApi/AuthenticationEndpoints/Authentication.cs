@@ -84,7 +84,6 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                     response.Token = jwttoken;
                     response.Verbose = "Success";
                     var userGet = await _userRepository.GetByIdAsync(user.Id, cancellationToken);
-
                     var claims = await _userRoleModificationService.ClaimGettingHelper();
 
                     var claimListDistince = claims.Select(x => x.Type).Distinct();

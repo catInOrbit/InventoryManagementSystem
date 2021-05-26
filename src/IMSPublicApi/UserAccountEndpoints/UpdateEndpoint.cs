@@ -43,7 +43,7 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
             // userGet.Email = request.Email;
             if(request.Fullname != userInfoGet.Fullname ) userInfoGet.Fullname = request.Fullname;
             if(request.PhoneNumber != userInfoGet.PhoneNumber ) userInfoGet.PhoneNumber = request.PhoneNumber;
-            if(request.DateOfBirth != userInfoGet.DateOfBirth ) userInfoGet.DateOfBirth = request.DateOfBirth;
+            if(request.DateOfBirth != userInfoGet.DateOfBirth ) userInfoGet.DateOfBirth = request.DateOfBirth.Date;
 
             if (request.NewPassword != null)
             {

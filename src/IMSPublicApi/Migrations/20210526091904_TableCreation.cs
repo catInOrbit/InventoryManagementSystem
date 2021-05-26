@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
-    public partial class UpdatePurchase : Migration
+    public partial class TableCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -107,23 +107,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TransactionCommons",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ValidUntil = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConfirmedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TransactionCommons", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BrandProduct",
                 columns: table => new
                 {
@@ -183,6 +166,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateOfBirthNormalizedString = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     ProductId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
@@ -216,6 +200,32 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Transactions",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ValidUntil = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConfirmedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SupplierId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    DeliveryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TrackingNumber = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Transactions_Suppliers_SupplierId",
+                        column: x => x.SupplierId,
+                        principalTable: "Suppliers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -303,33 +313,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "PurchaseRequestTransactions",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    SupplierId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    TransactionCommonId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    DeliveryTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TrackingNumber = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PurchaseRequestTransactions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PurchaseRequestTransactions_Suppliers_SupplierId",
-                        column: x => x.SupplierId,
-                        principalTable: "Suppliers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_PurchaseRequestTransactions_TransactionCommons_TransactionCommonId",
-                        column: x => x.TransactionCommonId,
-                        principalTable: "TransactionCommons",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_BrandProduct_ProductId",
                 table: "BrandProduct",
@@ -339,18 +322,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "IX_CategoryProduct_ProductsId",
                 table: "CategoryProduct",
                 column: "ProductsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PurchaseRequestTransactions_SupplierId",
-                table: "PurchaseRequestTransactions",
-                column: "SupplierId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PurchaseRequestTransactions_TransactionCommonId",
-                table: "PurchaseRequestTransactions",
-                column: "TransactionCommonId",
-                unique: true,
-                filter: "[TransactionCommonId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
@@ -375,6 +346,11 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_SupplierId",
+                table: "Transactions",
+                column: "SupplierId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserClaim_UserId",
@@ -406,10 +382,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "CategoryProduct");
 
             migrationBuilder.DropTable(
-                name: "PurchaseRequestTransactions");
+                name: "RoleClaim");
 
             migrationBuilder.DropTable(
-                name: "RoleClaim");
+                name: "Transactions");
 
             migrationBuilder.DropTable(
                 name: "UserClaim");
@@ -434,9 +410,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Suppliers");
-
-            migrationBuilder.DropTable(
-                name: "TransactionCommons");
 
             migrationBuilder.DropTable(
                 name: "Product");
