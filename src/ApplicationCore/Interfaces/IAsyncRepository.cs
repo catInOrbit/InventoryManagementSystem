@@ -18,5 +18,9 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         Task<int> CountAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);
         Task<T> FirstAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);
         Task<T> FirstOrDefaultAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);
+        
+        Task ElasticSaveSingleAsync(T product);
+        Task ElasticSaveManyAsync(T[] products);
+        Task ElasticSaveBulkAsync(T[] products);
     }
 }

@@ -20,7 +20,9 @@ namespace Infrastructure.Identity.DbContexts
         public DbSet<Category> Category { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
-        
+        public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
+        public DbSet<PurchaseOrderItemInfo> PurchaseOrderItemInfo { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

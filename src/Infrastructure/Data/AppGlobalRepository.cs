@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Specification;
@@ -8,16 +10,22 @@ using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Nest;
 
 namespace Infrastructure.Data
 {
     public class AppGlobalRepository<T> : IAsyncRepository<T> where T : BaseEntity
     {
         private readonly IdentityAndProductDbContext _identityAndProductDbContext;
+        private readonly IElasticClient _elasticClient;
 
-        public AppGlobalRepository(IdentityAndProductDbContext identityAndProductDbContext)
+        private List<T> _elasticCache = new List<T>();
+
+
+        public AppGlobalRepository(IdentityAndProductDbContext identityAndProductDbContext, IElasticClient elasticClient)
         {
             _identityAndProductDbContext = identityAndProductDbContext;
+            _elasticClient = elasticClient;
         }
 
         public async Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default)
@@ -68,6 +76,47 @@ namespace Infrastructure.Data
         public Task<T> FirstOrDefaultAsync(ISpecification<T> spec, CancellationToken cancellationToken = default)
         {
             throw new System.NotImplementedException();
+        }
+        
+        public async Task ElasticSaveSingleAsync(T type)
+        {
+            if (_elasticCache.Any(p => p.Id == type.Id))
+            {
+                await _elasticClient.UpdateAsync<T>(type, u => u.Doc(type));
+            }
+            else
+            {
+                _elasticCache.Add(type);
+                await _elasticClient.IndexDocumentAsync<T>(type);
+            }
+        }
+
+        public async Task ElasticSaveManyAsync(T[] types)
+        {
+            _elasticCache.AddRange(types);
+            var result = await _elasticClient.IndexManyAsync(types);
+            if (result.Errors)
+            {
+                // the response can be inspected for errors
+                foreach (var itemWithError in result.ItemsWithErrors)
+                {
+                    throw new Exception();
+                }
+            }
+        }
+
+        public async Task ElasticSaveBulkAsync(T[] types)
+        {
+            _elasticCache.AddRange(types);
+            var result = await _elasticClient.BulkAsync(b => b.Index("products").IndexMany(types));
+            if (result.Errors)
+            {
+                // the response can be inspected for errors
+                foreach (var itemWithError in result.ItemsWithErrors)
+                {
+                    throw new Exception();
+                }
+            }
         }
     }
 }

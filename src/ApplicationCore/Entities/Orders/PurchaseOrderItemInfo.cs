@@ -2,9 +2,8 @@
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
-    public class PurchaseOrderProduct : BaseEntity
+    public class PurchaseOrderItemInfo : BaseEntity
     {
-        [StringLength(38)]
         public string PurchaseOrderId { get; set; }
 
         public PurchaseOrder PurchaseOrder { get; set; }

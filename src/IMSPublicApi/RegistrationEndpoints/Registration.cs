@@ -72,11 +72,12 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                                 Id = newUserID,
                                 Fullname =  request.FullName,
                                 PhoneNumber =  request.PhoneNumber,
-                                Email = user.Email,
+                                Email = request.Email,
                                 Username = request.FullName.Trim(),
                                 Address =  request.Address,
                                 IsActive =  true,
-                                DateOfBirth = request.DateOfBirth
+                                DateOfBirth = request.DateOfBirth,
+                                DateOfBirthNormalizedString = string.Format("{0}/{1}/{2}", request.DateOfBirth.Month, request.DateOfBirth.Day, request.DateOfBirth.Year)
                             };
                     
                             await _userRepository.AddAsync(newIMSUser, cancellationToken);
