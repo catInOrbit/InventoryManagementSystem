@@ -1,4 +1,5 @@
 ﻿using System;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm
 {

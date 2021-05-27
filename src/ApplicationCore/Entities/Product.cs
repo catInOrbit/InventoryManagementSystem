@@ -18,6 +18,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public string CategoryId { get; set; }
         public float ProductPrice { get; set; }
         public string Unit { get; set; }
+        public int Quanity { get; set; }
         
         public ICollection<UserInfo> ImsUsers { get; set; }
         public ICollection<Category> Category { get; set; }

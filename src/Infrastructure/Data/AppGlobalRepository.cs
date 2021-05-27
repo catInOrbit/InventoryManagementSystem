@@ -11,11 +11,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
-    public class UserRepository<T> : IAsyncRepository<T> where T : BaseEntity
+    public class AppGlobalRepository<T> : IAsyncRepository<T> where T : BaseEntity
     {
         private readonly IdentityAndProductDbContext _identityAndProductDbContext;
 
-        public UserRepository(IdentityAndProductDbContext identityAndProductDbContext)
+        public AppGlobalRepository(IdentityAndProductDbContext identityAndProductDbContext)
         {
             _identityAndProductDbContext = identityAndProductDbContext;
         }

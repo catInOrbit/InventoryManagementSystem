@@ -19,14 +19,11 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+      <PackageReference Include="NEST" Version="7.13.0" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\ApplicationCore\ApplicationCore.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Data\Config" />
     </ItemGroup>
 
 </Project>

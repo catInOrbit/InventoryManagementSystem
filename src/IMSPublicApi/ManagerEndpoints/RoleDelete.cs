@@ -29,7 +29,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             _userRoleModificationService = new UserRoleModificationService(_roleManager);
             _authorizationService = authorizationService;
         }
-
+        
         [HttpPost("api/rolerm")]
         [SwaggerOperation(
            Summary = "Delete a role with all its permission (claim)",
