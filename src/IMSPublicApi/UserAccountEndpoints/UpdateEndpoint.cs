@@ -14,6 +14,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
 {
+    [Authorize]
     public class UpdateEndpoint : BaseAsyncEndpoint.WithRequest<UpdateRequest>.WithResponse<UpdateResponse>
     {
         private IAsyncRepository<UserInfo> _asyncRepository;
@@ -39,13 +40,14 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
             var response = new UpdateResponse();
 
             var userGet = _userAuthentication.GetCurrentSessionUser();
+            if(userGet == null)
+                return Unauthorized();
+                
             var userInfoGet = await _asyncRepository.GetByIdAsync(userGet.Id, cancellationToken);
             var userSystem = await _userManager.GetUserAsync(HttpContext.User);
 
             if (userInfoGet == null)
-            {
                 return Unauthorized();
-            }
 
             if(request.Address != userInfoGet.Address ) userInfoGet.Address = request.Address;
             // userGet.Email = request.Email;
