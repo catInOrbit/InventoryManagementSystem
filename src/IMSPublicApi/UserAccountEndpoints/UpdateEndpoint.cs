@@ -2,8 +2,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Identity.Models;
+using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
@@ -12,16 +14,17 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
 {
-    [Authorize]
     public class UpdateEndpoint : BaseAsyncEndpoint.WithRequest<UpdateRequest>.WithResponse<UpdateResponse>
     {
         private IAsyncRepository<UserInfo> _asyncRepository;
         private UserManager<ApplicationUser> _userManager;
+        private IUserAuthentication _userAuthentication;
 
-        public UpdateEndpoint(IAsyncRepository<UserInfo> asyncRepository, UserManager<ApplicationUser> userManager)
+        public UpdateEndpoint(IAsyncRepository<UserInfo> asyncRepository, UserManager<ApplicationUser> userManager, IUserAuthentication userAuthentication)
         {
             _asyncRepository = asyncRepository;
             _userManager = userManager;
+            _userAuthentication = userAuthentication;
         }
 
         [HttpPut("api/accountedit")]
@@ -34,10 +37,15 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
         public override async Task<ActionResult<UpdateResponse>> HandleAsync(UpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var response = new UpdateResponse();
-            var userID = _userManager.GetUserId(HttpContext.User);
-            
-            var userInfoGet = await _asyncRepository.GetByIdAsync(userID, cancellationToken);
+
+            var userGet = _userAuthentication.GetCurrentSessionUser();
+            var userInfoGet = await _asyncRepository.GetByIdAsync(userGet.Id, cancellationToken);
             var userSystem = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (userInfoGet == null)
+            {
+                return Unauthorized();
+            }
 
             if(request.Address != userInfoGet.Address ) userInfoGet.Address = request.Address;
             // userGet.Email = request.Email;

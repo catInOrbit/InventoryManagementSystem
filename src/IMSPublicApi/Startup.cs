@@ -29,6 +29,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using WebApi.Helpers;
 
 namespace InventoryManagementSystem.PublicApi
 {
@@ -102,23 +103,23 @@ namespace InventoryManagementSystem.PublicApi
             services.AddMemoryCache();
 
             var key = Encoding.ASCII.GetBytes(AuthorizationConstants.JWT_SECRET_KEY);
-            services.AddAuthentication(config =>
-            {
-                config.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(config =>
-            {
-                config.RequireHttpsMetadata = false;
-                config.SaveToken = true;
-                config.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = true,
-                    ValidateAudience = false
-                };
-            });
+            // services.AddAuthentication(config =>
+            // {
+            //     config.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            //     config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            // });
+            // .AddJwtBearer(config =>
+            // {
+            //     config.RequireHttpsMetadata = false;
+            //     config.SaveToken = true;
+            //     config.TokenValidationParameters = new TokenValidationParameters
+            //     {
+            //         ValidateIssuerSigningKey = true,
+            //         IssuerSigningKey = new SymmetricSecurityKey(key),
+            //         ValidateIssuer = true,
+            //         ValidateAudience = false
+            //     };
+            // });
 
 
             services.AddControllers();
@@ -231,6 +232,9 @@ namespace InventoryManagementSystem.PublicApi
             
             services.AddScoped<IAuthorizationHandler,
                 AccountAuthorizationHandler>();
+            
+            services.AddScoped<IUserAuthentication, JwtUserSessionService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -240,11 +244,13 @@ namespace InventoryManagementSystem.PublicApi
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseAuthentication();
+            // app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseMiddleware<JwtMiddleware>();
+
             
             var cookiePolicyOptions = new CookiePolicyOptions
             {
@@ -256,6 +262,7 @@ namespace InventoryManagementSystem.PublicApi
 
 
             app.UseCors(options => options.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials());
+
 
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
