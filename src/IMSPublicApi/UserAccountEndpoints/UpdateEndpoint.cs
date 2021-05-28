@@ -38,43 +38,44 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
         {
             var response = new UpdateResponse();
 
-            var userGet = _userAuthentication.GetCurrentSessionUser();
-            if(userGet == null)
-                return Unauthorized();
-                
-            var userInfoGet = await _asyncRepository.GetByIdAsync(userGet.Id, cancellationToken);
-            var userSystem = await _userManager.GetUserAsync(HttpContext.User);
+            var userGet =  _userAuthentication.GetCurrentSessionUser();
+            if(userGet.Id == null)
+                return Unauthorized(response);  
 
-            if (userInfoGet == null)
-                return Unauthorized();
-
-            if(request.Address != userInfoGet.Address ) userInfoGet.Address = request.Address;
-            // userGet.Email = request.Email;
-            if(request.Fullname != userInfoGet.Fullname ) userInfoGet.Fullname = request.Fullname;
-            if(request.PhoneNumber != userInfoGet.PhoneNumber ) userInfoGet.PhoneNumber = request.PhoneNumber;
-            if (request.DateOfBirth != userInfoGet.DateOfBirth)
+            else
             {
-                userInfoGet.DateOfBirth = request.DateOfBirth.Date;
-                userInfoGet.DateOfBirthNormalizedString = string.Format("{0}/{1}/{2}", request.DateOfBirth.Month, request.DateOfBirth.Day, request.DateOfBirth.Year);
-            }
-
-            if (request.NewPassword != null)
-            {
-                var result = await _userManager.ChangePasswordAsync(userSystem, request.OldPassword, request.NewPassword);
-                if(!result.Succeeded)
+                var userInfoGet = await _asyncRepository.GetByIdAsync(userGet.Id, cancellationToken);
+                if (userInfoGet == null)
+                    return Unauthorized(response);
+                var userSystem = await _userManager.GetUserAsync(HttpContext.User);
+                if(request.Address != userInfoGet.Address ) userInfoGet.Address = request.Address;
+                // userGet.Email = request.Email;
+                if(request.Fullname != userInfoGet.Fullname ) userInfoGet.Fullname = request.Fullname;
+                if(request.PhoneNumber != userInfoGet.PhoneNumber ) userInfoGet.PhoneNumber = request.PhoneNumber;
+                if (request.DateOfBirth != userInfoGet.DateOfBirth)
                 {
-                    response.Result = false;
-                    response.Verbose = "Wrong password";
-                    return Ok(response);
+                    userInfoGet.DateOfBirth = request.DateOfBirth.Date;
+                    userInfoGet.DateOfBirthNormalizedString = string.Format("{0}/{1}/{2}", request.DateOfBirth.Month, request.DateOfBirth.Day, request.DateOfBirth.Year);
                 }
+
+                if (request.NewPassword != null)
+                {
+                    var result = await _userManager.ChangePasswordAsync(userSystem, request.OldPassword, request.NewPassword);
+                    if(!result.Succeeded)
+                    {
+                        response.Result = false;
+                        response.Verbose = "Wrong password";
+                        return Ok(response);
+                    }
+                }
+
+                await _asyncRepository.UpdateAsync(userInfoGet, cancellationToken);
+
+                response.Result = true;
+                response.Verbose = "Done updating";
+
+                return Ok(response);
             }
-
-            await _asyncRepository.UpdateAsync(userInfoGet, cancellationToken);
-
-            response.Result = true;
-            response.Verbose = "Done updating";
-
-            return Ok(response);
         }
     }
 }

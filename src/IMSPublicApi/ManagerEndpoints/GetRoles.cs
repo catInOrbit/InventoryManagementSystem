@@ -39,7 +39,6 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             if(userGet == null)
                 return Unauthorized();
             
-            
             var isAuthorized = await _authorizationService.AuthorizeAsync(
                 HttpContext.User, "Registration",
                 UserOperations.Read);

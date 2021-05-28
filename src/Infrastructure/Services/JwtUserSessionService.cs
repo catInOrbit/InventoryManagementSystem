@@ -35,6 +35,7 @@ namespace Infrastructure.Services
 
         public void SaveUserAsync(ApplicationUser userGet)
         {
+          
             currentLoggedIn = userGet;
         }
     }
