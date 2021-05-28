@@ -11,28 +11,25 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         {
             PurchaseOrderNumber = DateTime.UtcNow.Date.ToString("yyyyMMdd") +
                                   Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
+            purchaseOrderStatus = PurchaseOrderStatus.Draft;
+            DateCreated = DateTime.Now;
         }
         
         [Required]
-        [Display(Name = "Purchase Order Number")]
         public string PurchaseOrderNumber { get; set; }
         
         public DateTime DateCreated { get; set; }
 
         public DateTime DeliveryDate { get; set; }
 
-        [Display(Name = "Delivery Address")]
         public string DeliveryAddress { get; set; }
 
-        [Display(Name = "Description")]
         public string Description { get; set; }
 
         [Required]
-        [Display(Name = "Branch Id")]
         public string WarehouseLocation { get; set; }
 
         [Required]
-        [Display(Name = "Vendor Id")]
         public string SupplierId { get; set; }
         
         [Required]
@@ -40,19 +37,14 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 
         public string CreatedByName { get; set; }
 
-        [Display(Name = "Supplier")]
         public Supplier Supplier { get; set; }
 
-        [Display(Name = "PO Status")]
         public PurchaseOrderStatus purchaseOrderStatus { get; set; }
 
-        [Display(Name = "Total Discount")]
         public decimal totalDiscountAmount { get; set; }
 
-        [Display(Name = "Total Order")]
         public decimal totalOrderAmount { get; set; }
 
-        [Display(Name = "Purchase Receive Number")]
         public string purchaseReceiveNumber { get; set; }
         
         public List<PurchaseOrderItemInfo> PurchaseOrderProduct { get; set; } = new List<PurchaseOrderItemInfo>();

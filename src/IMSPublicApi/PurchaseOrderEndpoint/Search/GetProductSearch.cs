@@ -33,6 +33,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search
             var pageSize = 5;
             var response = await _elasticClient.SearchAsync<Product>(
                 s => s.Query(q => q.QueryString(d => d.Query('*' + request.Query + '*'))));
+            
+            
  
 
             if (!response.IsValid)

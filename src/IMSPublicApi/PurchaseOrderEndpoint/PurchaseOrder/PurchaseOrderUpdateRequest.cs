@@ -4,7 +4,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder
 {
-    public class PurchaseOrderCreateRequest : BaseRequest
+    public class PurchaseOrderUpdateRequest : BaseRequest
     {
         public ApplicationCore.Entities.Orders.PurchaseOrder PurchaseOrder { get; set; }
     }

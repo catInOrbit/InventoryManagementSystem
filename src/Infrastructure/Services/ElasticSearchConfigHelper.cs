@@ -15,7 +15,7 @@ namespace Infrastructure.Services
             var defaultIndex = configuration["elasticsearch:index"];
 
             var settings = new ConnectionSettings(new Uri(url))
-                .DefaultIndex(defaultIndex);
+                .DefaultIndex(defaultIndex).BasicAuthentication("elastic", "LDBFEOTonZjDL1jueHMlKXcC");;
 
             AddDefaultMappings(settings);
 
