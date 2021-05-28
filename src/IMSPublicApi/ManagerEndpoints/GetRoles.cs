@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -11,16 +12,18 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
-    [Authorize]
     public class GetRoles : BaseAsyncEndpoint.WithoutRequest.WithResponse<GetRoleResponse>
-    {
+    {        
+        private IUserAuthentication _userAuthentication;
+
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IAuthorizationService _authorizationService;
 
-        public GetRoles(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService)
+        public GetRoles(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, IUserAuthentication userAuthentication)
         {
             _roleManager = roleManager;
             _authorizationService = authorizationService;
+            _userAuthentication = userAuthentication;
         }
 
         [HttpGet("api/getroles")]
@@ -32,6 +35,11 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         ]
         public override async Task<ActionResult<GetRoleResponse>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
         {
+            var userGet = _userAuthentication.GetCurrentSessionUser();
+            if(userGet == null)
+                return Unauthorized();
+            
+            
             var isAuthorized = await _authorizationService.AuthorizeAsync(
                 HttpContext.User, "Registration",
                 UserOperations.Read);

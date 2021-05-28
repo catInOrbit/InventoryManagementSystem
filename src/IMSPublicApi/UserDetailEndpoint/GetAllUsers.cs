@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Identity;
 using Infrastructure.Identity.Models;
+using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
@@ -16,20 +17,21 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
 {
-    [Authorize]
     public class GetAllUsers : BaseAsyncEndpoint.WithoutRequest.WithResponse<UsersResponse>
     {
         private readonly IAsyncRepository<UserInfo> _userRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAuthorizationService _authorizationService;
+        private IUserAuthentication _userAuthentication;
 
         public UserInfo UserInfo { get; set; } = new UserInfo();
 
-        public GetAllUsers(IAsyncRepository<UserInfo> userRepository, UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService)
+        public GetAllUsers(IAsyncRepository<UserInfo> userRepository, UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService, IUserAuthentication userAuthentication)
         {
             _userRepository = userRepository;
             _userManager = userManager;
             _authorizationService = authorizationService;
+            _userAuthentication = userAuthentication;
         }
 
         [HttpGet("api/users")]
@@ -43,7 +45,9 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
         {
             var response = new UsersResponse();
             
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var user = _userAuthentication.GetCurrentSessionUser();
+            if(user == null)
+                return Unauthorized();
             
             UserInfo.OwnerID = user.Id.ToString();
 

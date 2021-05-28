@@ -18,7 +18,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
 {
-    [Authorize]
     public class Registration : BaseAsyncEndpoint.WithRequest<RegistrationRequest>.WithResponse<RegistrationResponse>
     {
         private readonly ITokenClaimsService _tokenClaimsService;
@@ -27,14 +26,17 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
         private readonly IServiceProvider _serviceProvider;
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<UserInfo> _userRepository;
+        private IUserAuthentication _userAuthentication;
+
         private UserRoleModificationService _userRoleModificationService;
         public UserInfo UserInfo { get; set; } = new UserInfo();
         public Registration(UserManager<ApplicationUser> userManager, ITokenClaimsService tokenClaimsService,
-            RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, IAsyncRepository<UserInfo> userRepository)
+            RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, IAsyncRepository<UserInfo> userRepository, IUserAuthentication userAuthentication)
         {
             _tokenClaimsService = tokenClaimsService;
             _authorizationService = authorizationService;
             _userRepository = userRepository;
+            _userAuthentication = userAuthentication;
             _userRoleModificationService = new UserRoleModificationService(roleManager, userManager);
         }
         
@@ -48,7 +50,12 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
         public override async Task<ActionResult<RegistrationResponse>> HandleAsync(RegistrationRequest request, CancellationToken cancellationToken)
         {
             var response = new RegistrationResponse(request.CorrelationId());
-            var user = await _userRoleModificationService.UserManager.GetUserAsync(HttpContext.User);
+            var userGet = _userAuthentication.GetCurrentSessionUser();
+            if(userGet == null)
+                return Unauthorized();
+            
+            
+            var user = userGet;
             if (user != null)
             {
                 UserInfo.OwnerID = user.Id.ToString();

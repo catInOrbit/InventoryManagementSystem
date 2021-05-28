@@ -14,16 +14,18 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
-    [Authorize]
+     
     public class RoleUserAssign : BaseAsyncEndpoint.WithRequest<RoleUserAssignRequest>.WithResponse<RoleUserAssignResponse>
     {
         private UserRoleModificationService _userRoleModificationService;
         private readonly IAuthorizationService _authorizationService;
+        private IUserAuthentication _userAuthentication;
 
         public RoleUserAssign(UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService)
+            RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, IUserAuthentication userAuthentication)
         {
             _authorizationService = authorizationService;
+            _userAuthentication = userAuthentication;
             _userRoleModificationService = new UserRoleModificationService(roleManager, userManager);
         }
         
@@ -38,6 +40,11 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         public override async Task<ActionResult<RoleUserAssignResponse>> HandleAsync(RoleUserAssignRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var response = new RoleUserAssignResponse();
+            
+            var userGet = _userAuthentication.GetCurrentSessionUser();
+            if(userGet == null)
+                return Unauthorized();
+            
             var isAuthorized = await _authorizationService.AuthorizeAsync(
                 HttpContext.User, "RoleUserAssign",
                 UserOperations.Update);

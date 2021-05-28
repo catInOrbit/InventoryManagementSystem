@@ -9,7 +9,7 @@
 //
 // namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder
 // {
-//     [Authorize]
+//      
 //     public class PurchaseOrderGet : BaseAsyncEndpoint.WithoutRequest.WithResponse<PurchaseOrderGetResponse>
 //     {
 //         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _purchaseAsyncRepository;

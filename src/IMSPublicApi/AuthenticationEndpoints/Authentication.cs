@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
@@ -85,6 +86,8 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                     response.Verbose = "Success";
                     var userGet = await _userRepository.GetByIdAsync(user.Id, cancellationToken);
                     var claims = await _userRoleModificationService.ClaimGettingHelper();
+                    var userPrinciple = new GenericPrincipal(new ClaimsIdentity(userGet.Username), roles.ToArray());
+                    HttpContext.User = userPrinciple;
 
                     var claimListDistince = claims.Select(x => x.Type).Distinct();
 

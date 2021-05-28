@@ -8,7 +8,7 @@
 //
 // namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder
 // {
-//     [Authorize]
+//      
 //     public class PurchaseOrderCreate : BaseAsyncEndpoint.WithoutRequest.WithResponse<PurchaseOrderCreateResponse>
 //     {
 //         private readonly IAuthorizationService _authorizationService;

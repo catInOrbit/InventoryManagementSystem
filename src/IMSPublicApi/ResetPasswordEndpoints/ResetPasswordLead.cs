@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Identity;
 using Infrastructure.Identity.Models;
+using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.PublicApi.AuthenticationEndpoints;
 using Microsoft.AspNetCore.Identity;
@@ -16,7 +17,6 @@ using Microsoft.AspNetCore.Cors;
 
 namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
 {
-    [Authorize]
     public class ResetPasswordLead : BaseAsyncEndpoint
         .WithRequest<ResetPasswordLeadRequest>
         .WithResponse<ResetPasswordLeadResponse>
@@ -24,12 +24,14 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenClaimsService _tokenClaimsService;
         private readonly IEmailSender _emailSender;
+        private IUserAuthentication _userAuthentication;
 
-        public ResetPasswordLead(ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager, IEmailSender emailSender)
+        public ResetPasswordLead(ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager, IEmailSender emailSender, IUserAuthentication userAuthentication)
         {
             _tokenClaimsService = tokenClaimsService;
             _userManager = userManager;
             _emailSender = emailSender;
+            _userAuthentication = userAuthentication;
         }
 
 
@@ -43,6 +45,7 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
         public override async Task<ActionResult<ResetPasswordLeadResponse>> HandleAsync(ResetPasswordLeadRequest request, CancellationToken cancellationToken)
         {
             var response = new ResetPasswordLeadResponse(request.CorrelationId());
+            
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user != null && await _userManager.IsEmailConfirmedAsync(user))
             {

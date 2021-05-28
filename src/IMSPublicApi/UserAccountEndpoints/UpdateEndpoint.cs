@@ -14,7 +14,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
 {
-    [Authorize]
     public class UpdateEndpoint : BaseAsyncEndpoint.WithRequest<UpdateRequest>.WithResponse<UpdateResponse>
     {
         private IAsyncRepository<UserInfo> _asyncRepository;

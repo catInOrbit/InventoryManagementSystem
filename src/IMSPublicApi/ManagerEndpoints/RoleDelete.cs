@@ -15,19 +15,21 @@ using Microsoft.AspNetCore.Cors;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
-    [Authorize]
+     
     public class RoleDelete : BaseAsyncEndpoint.WithRequest<RoleDeleteRequest>.WithResponse<RoleDeleteResponse>
     {
         private readonly UserRoleModificationService _userRoleModificationService;
         public readonly RoleManager<IdentityRole> _roleManager;
+        private IUserAuthentication _userAuthentication;
 
         private readonly IAuthorizationService _authorizationService;
 
-        public RoleDelete(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, SignInManager<ApplicationUser> signInManager)
+        public RoleDelete(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, SignInManager<ApplicationUser> signInManager, IUserAuthentication userAuthentication)
         {
             _roleManager = roleManager;
             _userRoleModificationService = new UserRoleModificationService(_roleManager);
             _authorizationService = authorizationService;
+            _userAuthentication = userAuthentication;
         }
         
         [HttpPost("api/rolerm")]
@@ -40,6 +42,10 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         public override async Task<ActionResult<RoleDeleteResponse>> HandleAsync(RoleDeleteRequest request, CancellationToken cancellationToken = default)
         {
             var response = new RoleDeleteResponse();
+            
+            var userGet = _userAuthentication.GetCurrentSessionUser();
+            if(userGet == null)
+                return Unauthorized();
 
             var isAuthorized = await _authorizationService.AuthorizeAsync(
               HttpContext.User, "RolePermissionUpdate",

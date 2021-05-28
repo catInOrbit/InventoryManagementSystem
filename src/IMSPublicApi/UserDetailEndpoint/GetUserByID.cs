@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Identity;
 using Infrastructure.Identity.Models;
+using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthenticationEndpoints;
@@ -16,7 +17,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
 {
-    [Authorize]
+     
     public class GetUserByID : BaseAsyncEndpoint
         .WithRequest<UsersRequest>
         .WithResponse<UsersResponse>
@@ -24,13 +25,15 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
         private readonly IAsyncRepository<UserInfo> _userRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAuthorizationService _authorizationService;
+        private IUserAuthentication _userAuthentication;
 
         public UserInfo UserInfo { get; set; } = new UserInfo();
-        public GetUserByID(IAsyncRepository<UserInfo> itemRepository, UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService)
+        public GetUserByID(IAsyncRepository<UserInfo> itemRepository, UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService, IUserAuthentication userAuthentication)
         {
             _userRepository = itemRepository;
             _userManager = userManager;
             _authorizationService = authorizationService;
+            _userAuthentication = userAuthentication;
         }
         
         [SwaggerOperation(
@@ -44,7 +47,9 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
         {
             var response = new UsersResponse(request.CorrelationId());
 
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var user = _userAuthentication.GetCurrentSessionUser();
+            if(user == null)
+                return Unauthorized();
             
             UserInfo.OwnerID = user.Id.ToString();
             // requires using ContactManager.Authorization;

@@ -16,7 +16,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
-    [Authorize]
+     
     public class RolePermissionUpdate : BaseAsyncEndpoint.WithRequest<RolePermissionRequest>.WithResponse<RolePermissionResponse>
     {
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -24,14 +24,16 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 
         private readonly UserRoleModificationService _userRoleModificationService;
         private readonly IAuthorizationService _authorizationService;
+        private IUserAuthentication _userAuthentication;
 
         public UserInfo UserInfo { get; set; } = new UserInfo();
 
-        public RolePermissionUpdate(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, UserManager<ApplicationUser> userManager)
+        public RolePermissionUpdate(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, UserManager<ApplicationUser> userManager, IUserAuthentication userAuthentication)
         {
             _roleManager = roleManager;
             _authorizationService = authorizationService;
             _userManager = userManager;
+            _userAuthentication = userAuthentication;
             _userRoleModificationService = new UserRoleModificationService(_roleManager, _userManager);
         }
 
@@ -44,10 +46,13 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         ]
         public override async Task<ActionResult<RolePermissionResponse>> HandleAsync(RolePermissionRequest request, CancellationToken cancellationToken = new CancellationToken())
         { 
+            var userGet = _userAuthentication.GetCurrentSessionUser();
+            if(userGet == null)
+                return Unauthorized();
+            
             var response = new RolePermissionResponse();
-            var user = await _userRoleModificationService.UserManager.GetUserAsync(HttpContext.User);
             var allRoles = _userRoleModificationService.RoleManager.Roles.ToList();
-            UserInfo.OwnerID = user.Id.ToString();
+            UserInfo.OwnerID = userGet.Id.ToString();
             // requires using ContactManager.Authorization;
             var isAuthorized = await _authorizationService.AuthorizeAsync(
                 HttpContext.User, "RolePermissionUpdate",

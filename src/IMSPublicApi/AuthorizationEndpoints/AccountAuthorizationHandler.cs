@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Infrastructure.Identity.Models;
+using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
@@ -14,17 +15,20 @@ namespace InventoryManagementSystem.PublicApi.AuthorizationEndpoints
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private IUserAuthentication _userAuthentication;
 
-        public AccountAuthorizationHandler(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager) 
+        public AccountAuthorizationHandler(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IUserAuthentication userAuthentication) 
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _userAuthentication = userAuthentication;
         }
 
         protected override async Task<Task> HandleRequirementAsync(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement,
             string page)
         {
-            var user = await _userManager.GetUserAsync(context.User);
+            // var user = await _userManager.GetUserAsync(context.User);
+            var user = _userAuthentication.GetCurrentSessionUser();
             var userRoles = await _userManager.GetRolesAsync(user);
             foreach (var role in userRoles)
             {

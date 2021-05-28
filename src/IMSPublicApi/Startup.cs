@@ -60,8 +60,6 @@ namespace InventoryManagementSystem.PublicApi
                 c.AddPolicy(CORS_POLICY, options => options.AllowAnyOrigin());
             });
 
-
-
             var lockoutOptions = new LockoutOptions()
             {
                 AllowedForNewUsers = true,

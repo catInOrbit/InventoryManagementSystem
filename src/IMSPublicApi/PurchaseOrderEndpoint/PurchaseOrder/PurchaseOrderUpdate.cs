@@ -18,7 +18,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder
 {
-    [Authorize]
+     
     public class PurchaseOrderUpdate : BaseAsyncEndpoint.WithRequest<PurchaseOrderUpdateRequest>.WithResponse<PurchaseOrderUpdateResponse>
     {
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _purchaseOrderRepos;

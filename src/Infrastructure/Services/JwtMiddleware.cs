@@ -53,7 +53,6 @@ namespace WebApi.Helpers
 
                 // attach user to context on successful jwt validation
                 userAuthentication.SaveUserAsync(await userAuthentication.GetById(userId));
-                Console.WriteLine("Pass");
             }
             catch
             {
@@ -61,7 +60,6 @@ namespace WebApi.Helpers
                 // userAuthentication.InvalidateSession();
                 // do nothing if jwt validation fails
                 // user is not attached to context so request won't have access to secure routes
-                Console.WriteLine("Fail");
 
             }
         }
