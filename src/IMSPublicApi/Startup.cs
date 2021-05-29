@@ -121,7 +121,6 @@ namespace InventoryManagementSystem.PublicApi
             // });
 
 
-            services.AddControllers();
             services.AddMediatR(typeof(Product).Assembly);
 
             services.AddAutoMapper(typeof(Startup).Assembly);
@@ -225,8 +224,10 @@ namespace InventoryManagementSystem.PublicApi
             });
             
            
-            services.AddControllers();
-            
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
             services.AddElasticsearch(Configuration);
             
             services.AddScoped<IAuthorizationHandler,

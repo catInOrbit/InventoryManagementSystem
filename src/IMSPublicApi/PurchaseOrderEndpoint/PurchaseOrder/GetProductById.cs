@@ -25,7 +25,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
         public override async Task<ActionResult> HandleAsync([FromRoute] GetProductRequest request, CancellationToken cancellationToken = new CancellationToken())
-        {
+        {   
             var response = new GetProductResponse();
             response.Product = await _asyncRepository.GetByIdAsync(request.ProductId, cancellationToken);
 
