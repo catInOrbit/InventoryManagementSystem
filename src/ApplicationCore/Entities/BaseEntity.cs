@@ -4,6 +4,7 @@
     // Using non-generic integer types for simplicity and to ease caching logic
     public abstract class BaseEntity
     {
+        [Nest.PropertyName("id")]
         public virtual string Id { get; protected set; }
     }
 }

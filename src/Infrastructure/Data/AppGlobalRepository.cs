@@ -104,7 +104,7 @@ namespace Infrastructure.Data
             }
         }
 
-        public async Task ElasticSaveManyAsync(List<T> types)
+        public async Task ElasticSaveManyAsync(T[] types)
         {
             _elasticCacheProduct.AddRange(types);
             var result = await _elasticClient.IndexManyAsync(types);

@@ -7,7 +7,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
     public class Product : BaseEntity
     {
         public string Name { get; set; }
-        [JsonIgnore]
         public string BrandId { get; set; }
         public string CategoryId { get; set; }
 

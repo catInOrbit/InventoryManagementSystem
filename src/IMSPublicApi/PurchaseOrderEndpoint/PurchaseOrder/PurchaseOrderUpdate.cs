@@ -60,13 +60,12 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             }
 
             var productList = await _productRepos.ListAllAsync();
-            var supplierList = await _supplierRepos.ListAllAsync();
-            Console.WriteLine(productList[0].ToString());
+            // var supplierList = await _supplierRepos.ListAllAsync();
             
-            await _productRepos.ElasticSaveManyAsync(productList.ToList());
+            await _productRepos.ElasticSaveManyAsync(productList.ToArray());
             // await _supplierRepos.ElasticSaveManyAsync(supplierList.ToArray());
 
-            // await _purchaseOrderRepos.AddAsync(request.PurchaseOrder);  
+            await _purchaseOrderRepos.AddAsync(request.PurchaseOrder);  
             return Ok(response);
         }
     }

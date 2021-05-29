@@ -22,7 +22,7 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         Task<T> FirstOrDefaultAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);
         
         Task ElasticSaveSingleAsync(T product);
-        Task ElasticSaveManyAsync(List<T> products);
+        Task ElasticSaveManyAsync(T[] products);
         Task ElasticSaveBulkAsync(T[] products);
     }
 }

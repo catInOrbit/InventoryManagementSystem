@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210529064908_TableUpdate2")]
-    partial class TableUpdate2
+    [Migration("20210529152232_TableCreation")]
+    partial class TableCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -411,15 +411,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("UserInfo");
                 });
@@ -638,13 +633,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("Supplier");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", null)
-                        .WithMany("ImsUsers")
-                        .HasForeignKey("ProductId");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -703,8 +691,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
                 {
-                    b.Navigation("ImsUsers");
-
                     b.Navigation("ProductVariants");
                 });
 #pragma warning restore 612, 618

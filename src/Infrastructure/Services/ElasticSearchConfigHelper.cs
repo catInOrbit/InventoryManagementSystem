@@ -35,7 +35,9 @@ namespace Infrastructure.Services
                     .Ignore(p => p.CategoryId)
                     .Ignore(p => p.CreatedDate)
                     .Ignore(p => p.ModifiedDate)
-                    .Ignore(p => p.ProductVariants).IdProperty(p => p.Id)
+                    .Ignore(p => p.ProductVariants)
+                    .Ignore(p => p.CreatedBy)
+                    .IdProperty(p => p.Id)
                 );
         }
 
