@@ -65,7 +65,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             await _productRepos.ElasticSaveManyAsync(productList.ToArray());
             // await _supplierRepos.ElasticSaveManyAsync(supplierList.ToArray());
 
-            await _purchaseOrderRepos.AddAsync(request.PurchaseOrder);  
+            // await _purchaseOrderRepos.AddAsync(request.PurchaseOrder);  
             return Ok(response);
         }
     }

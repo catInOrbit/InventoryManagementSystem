@@ -9,6 +9,7 @@ using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder
 {
@@ -23,6 +24,13 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             _authorizationService = authorizationService;
         }
         
+        [HttpPost("api/posubmit")]
+        [SwaggerOperation(
+            Summary = "Submit",
+            Description = "Submit new purchase order",
+            OperationId = "catalog-items.create",
+            Tags = new[] { "PurchaseOrderEndpoints" })
+        ]
         public override async Task<ActionResult> HandleAsync(PurchaseOrderSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var subject = "Purchase Order " + DateTime.Now;
