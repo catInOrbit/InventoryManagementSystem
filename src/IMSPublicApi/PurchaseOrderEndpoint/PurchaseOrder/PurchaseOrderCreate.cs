@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,12 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
     public class PurchaseOrderCreate : BaseAsyncEndpoint.WithoutRequest.WithResponse<PurchaseOrderCreateResponse>
     {
         private readonly IAuthorizationService _authorizationService;
+        private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _purchaseOrderRepos;
 
-        public PurchaseOrderCreate(IAuthorizationService authorizationService)
+        public PurchaseOrderCreate(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos)
         {
             _authorizationService = authorizationService;
+            _purchaseOrderRepos = purchaseOrderRepos;
         }
 
         [HttpPost("api/createpo")]
@@ -34,7 +37,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 HttpContext.User, "PurchaseOrder",
                 UserOperations.Create);
 
-            response.PurchaseOrder = new ApplicationCore.Entities.Orders.PurchaseOrder();
+            var purchaseOrder = new ApplicationCore.Entities.Orders.PurchaseOrder();
+            response.PurchaseOrder = purchaseOrder();
+            await _purchaseOrderRepos.AddAsync(purchaseOrder);
 
             return Ok(response);
         }
