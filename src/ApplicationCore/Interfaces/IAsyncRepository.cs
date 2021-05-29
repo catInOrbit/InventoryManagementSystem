@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
 
 namespace InventoryManagementSystem.ApplicationCore.Interfaces
 {
@@ -11,6 +12,7 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
     {
         Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default);
         Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default);
+        Task<IEnumerable<Product>> ListAllProductAsync(CancellationToken cancellationToken = default);
         Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);
         Task<T> AddAsync(T entity, CancellationToken cancellationToken = default);
         Task UpdateAsync(T entity, CancellationToken cancellationToken = default);
@@ -20,7 +22,7 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         Task<T> FirstOrDefaultAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);
         
         Task ElasticSaveSingleAsync(T product);
-        Task ElasticSaveManyAsync(T[] products);
+        Task ElasticSaveManyAsync(List<T> products);
         Task ElasticSaveBulkAsync(T[] products);
     }
 }

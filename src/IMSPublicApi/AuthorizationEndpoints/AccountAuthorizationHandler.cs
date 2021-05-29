@@ -35,6 +35,7 @@ namespace InventoryManagementSystem.PublicApi.AuthorizationEndpoints
                 if (role == "Manager")
                 {
                     context.Succeed(requirement);
+                    return Task.CompletedTask;
                 }
 
                 else

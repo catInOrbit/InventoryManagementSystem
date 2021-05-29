@@ -4,14 +4,16 @@ using Infrastructure.Identity.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    partial class IdentityAndProductDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210529063211_TableUpdate")]
+    partial class TableUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,12 +41,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("CategoryId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProductId")
+                    b.Property<string>("ProductsId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("CategoryId", "ProductId");
+                    b.HasKey("CategoryId", "ProductsId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductsId");
 
                     b.ToTable("CategoryProduct");
                 });
@@ -292,21 +294,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("CategoryId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
 
                     b.ToTable("Product");
                 });
@@ -409,10 +400,15 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ProductId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("UserInfo");
                 });
@@ -573,7 +569,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", null)
                         .WithMany()
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -604,15 +600,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("PurchaseOrder");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.Navigation("CreatedBy");
-                });
-
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", b =>
                 {
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", "Product")
@@ -629,6 +616,13 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasForeignKey("SupplierId");
 
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", null)
+                        .WithMany("ImsUsers")
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -689,6 +683,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
                 {
+                    b.Navigation("ImsUsers");
+
                     b.Navigation("ProductVariants");
                 });
 #pragma warning restore 612, 618

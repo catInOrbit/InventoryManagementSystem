@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
@@ -6,11 +7,11 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
     {
         public string PurchaseOrderId { get; set; }
 
-        public PurchaseOrder PurchaseOrder { get; set; }
+        public virtual PurchaseOrder PurchaseOrder { get; set; }
 
         public string ProductId { get; set; }
 
-        public Product Product { get; set; }
+        public virtual Product Product { get; set; }
 
         public float Quantity { get; set; }
 

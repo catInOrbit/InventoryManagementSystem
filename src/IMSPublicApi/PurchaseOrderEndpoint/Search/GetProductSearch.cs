@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nest;
@@ -33,9 +34,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search
             var pageSize = 5;
             var response = await _elasticClient.SearchAsync<Product>(
                 s => s.Query(q => q.QueryString(d => d.Query('*' + request.Query + '*'))));
-            
-            
- 
+            // var response = await _elasticClient.SearchAsync<Product>(
+            //     s => s.Query(q =>  q.Match(m => m.Field(f => f.Name).Query(request.Query))));
 
             if (!response.IsValid)
             {

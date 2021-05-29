@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Identity.Models;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -16,10 +17,11 @@ namespace Infrastructure.Identity.DbContexts
         }
         public DbSet<UserInfo> UserInfo { get; set; }
         public DbSet<Product> Product { get; set; }
+        public DbSet<ProductVariant> ProductVariant { get; set; }
         public DbSet<Brand> Brand { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<Supplier> Supplier { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
         public DbSet<PurchaseOrderItemInfo> PurchaseOrderItemInfo { get; set; }
 
@@ -33,6 +35,11 @@ namespace Infrastructure.Identity.DbContexts
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin");
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaim");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserToken");
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies();
         }
     }
 }

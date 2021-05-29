@@ -9,6 +9,7 @@ using Infrastructure.Identity.Models;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -34,11 +35,11 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             _authorizationService = authorizationService;
         }
         
-        [HttpPost("api/createpo")]
+        [HttpPut("api/updatepo")]
         [SwaggerOperation(
-            Summary = "Create purchase order",
-            Description = "Create purchase order",
-            OperationId = "auth.authenticate",
+            Summary = "Update purchase order",
+            Description = "Update purchase order",
+            OperationId = "po.update",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
 
@@ -60,12 +61,12 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
 
             var productList = await _productRepos.ListAllAsync();
             var supplierList = await _supplierRepos.ListAllAsync();
-            Console.WriteLine(productList.Count);
+            Console.WriteLine(productList[0].ToString());
             
-            await _productRepos.ElasticSaveManyAsync(productList.ToArray());
-            await _supplierRepos.ElasticSaveManyAsync(supplierList.ToArray());
+            await _productRepos.ElasticSaveManyAsync(productList.ToList());
+            // await _supplierRepos.ElasticSaveManyAsync(supplierList.ToArray());
 
-            await _purchaseOrderRepos.AddAsync(request.PurchaseOrder);  
+            // await _purchaseOrderRepos.AddAsync(request.PurchaseOrder);  
             return Ok(response);
         }
     }

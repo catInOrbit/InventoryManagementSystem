@@ -37,7 +37,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 
         public string CreatedByName { get; set; }
 
-        public Supplier Supplier { get; set; }
+        public virtual Supplier Supplier { get; set; }
 
         public PurchaseOrderStatus purchaseOrderStatus { get; set; }
 
@@ -47,7 +47,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 
         public string purchaseReceiveNumber { get; set; }
         
-        public List<PurchaseOrderItemInfo> PurchaseOrderProduct { get; set; } = new List<PurchaseOrderItemInfo>();
+        public virtual List<PurchaseOrderItemInfo> PurchaseOrderProduct { get; set; } = new List<PurchaseOrderItemInfo>();
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nest;
@@ -30,9 +31,11 @@ namespace Infrastructure.Services
         {
             settings
                 .DefaultMappingFor<Product>(m => m
-                    .Ignore(p => p.ProductPrice)
-                    .Ignore(p => p.Unit)
-                    .Ignore(p => p.Quanity)
+                    .Ignore(p => p.BrandId)
+                    .Ignore(p => p.CategoryId)
+                    .Ignore(p => p.CreatedDate)
+                    .Ignore(p => p.ModifiedDate)
+                    .Ignore(p => p.ProductVariants).IdProperty(p => p.Id)
                 );
         }
 

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace InventoryManagementSystem.ApplicationCore.Entities
+namespace InventoryManagementSystem.ApplicationCore.Entities.Products
 {
     public class Brand : BaseEntity
     {
@@ -8,7 +8,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public string BrandName { get; set; }
         public string BrandDescription { get; set; }
         
-        public ICollection<Product> Product { get; set; }
+        public virtual ICollection<Products.Product> Product { get; set; }
 
     }
 }
