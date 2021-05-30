@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
-    public partial class TableCreation : Migration
+    public partial class dbUpdate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -143,7 +143,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeliveryAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    WarehouseLocation = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WarehouseLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SupplierId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedById = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedByName = table.Column<string>(type: "nvarchar(max)", nullable: true),

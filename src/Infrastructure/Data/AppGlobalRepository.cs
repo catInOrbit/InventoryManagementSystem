@@ -7,6 +7,7 @@ using Ardalis.Specification;
 using Infrastructure.Identity;
 using Infrastructure.Identity.DbContexts;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -88,9 +89,20 @@ namespace Infrastructure.Data
             await _identityAndProductDbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public Task DeleteAsync(T entity, CancellationToken cancellationToken = default)
+        public async Task DeleteAsync(T entity, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            _identityAndProductDbContext.Set<T>().Remove(entity);
+            await _identityAndProductDbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task DeletePurchaseOrderAsync(PurchaseOrder entity, CancellationToken cancellationToken = default)
+        {
+            var po = _identityAndProductDbContext.PurchaseOrder.Where(po => po.Id == entity.Id);
+            var poItems = _identityAndProductDbContext.PurchaseOrderItemInfo.Where(poItem => poItem.PurchaseOrderId == entity.Id);
+
+            _identityAndProductDbContext.RemoveRange(poItems);
+            _identityAndProductDbContext.Remove(po);
+            await _identityAndProductDbContext.SaveChangesAsync(cancellationToken);
         }
 
         public Task<int> CountAsync(ISpecification<T> spec, CancellationToken cancellationToken = default)

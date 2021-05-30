@@ -6,6 +6,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
     public class PurchaseOrder : BaseEntity
     {
+
         public PurchaseOrder()
         {
             Id = DateTime.UtcNow + "-"+Guid.NewGuid().ToString();

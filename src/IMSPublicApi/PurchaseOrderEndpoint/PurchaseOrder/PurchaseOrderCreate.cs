@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -15,6 +16,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _purchaseOrderRepos;
+        private readonly IUserAuthentication _userAuthentication;
 
         public PurchaseOrderCreate(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos)
         {
@@ -38,7 +40,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 UserOperations.Create);
 
             var purchaseOrder = new ApplicationCore.Entities.Orders.PurchaseOrder();
-            // purchaseOrder.CreatedById = 
+            purchaseOrder.CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            purchaseOrder.SupplierId = null;
+
             response.PurchaseOrder = purchaseOrder;
             await _purchaseOrderRepos.AddAsync(purchaseOrder);
 

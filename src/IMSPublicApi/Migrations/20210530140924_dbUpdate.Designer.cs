@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210529152232_TableCreation")]
-    partial class TableCreation
+    [Migration("20210530140924_dbUpdate")]
+    partial class dbUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -149,7 +149,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("WarehouseLocation")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("purchaseOrderStatus")

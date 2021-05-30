@@ -147,7 +147,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("WarehouseLocation")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("purchaseOrderStatus")

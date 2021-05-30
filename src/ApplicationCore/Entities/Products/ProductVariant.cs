@@ -1,4 +1,6 @@
-﻿namespace InventoryManagementSystem.ApplicationCore.Entities.Products
+﻿using System;
+
+namespace InventoryManagementSystem.ApplicationCore.Entities.Products
 {
     public class ProductVariant : BaseEntity
     {
@@ -7,7 +9,11 @@
         public decimal Price { get; set; }
         public string Sku { get; set; }
         public string Unit { get; set; }
+        public float Quantity { get; set; }
         public string StorageLocation { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
+
         
         public virtual Product Product { get; set; }
     }
