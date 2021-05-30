@@ -23,9 +23,9 @@ namespace Infrastructure.Services
             return returnUser;
         }
         
-        public ApplicationUser GetCurrentSessionUser()
+        public async Task<ApplicationUser> GetCurrentSessionUser()
         {
-            return currentLoggedIn;
+            return await Task.FromResult(currentLoggedIn);
         }
         
         public void InvalidateSession()
@@ -33,10 +33,9 @@ namespace Infrastructure.Services
             _signInManager.SignOutAsync();
         }
 
-        public void SaveUserAsync(ApplicationUser userGet)
+        public Task SaveUserAsync(ApplicationUser userGet)
         {
-          
-            currentLoggedIn = userGet;
+            return Task.FromResult(currentLoggedIn = userGet);
         }
     }
 }

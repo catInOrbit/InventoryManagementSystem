@@ -35,7 +35,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         ]
         public override async Task<ActionResult<GetRoleResponse>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            var userGet = _userAuthentication.GetCurrentSessionUser();
+            var userGet = await _userAuthentication.GetCurrentSessionUser();
             if(userGet == null)
                 return Unauthorized();
             

@@ -43,7 +43,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         {
             var response = new RoleDeleteResponse();
             
-            var userGet = _userAuthentication.GetCurrentSessionUser();
+            var userGet = await _userAuthentication.GetCurrentSessionUser();
             if(userGet == null)
                 return Unauthorized();
 

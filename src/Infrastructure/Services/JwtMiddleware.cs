@@ -27,7 +27,7 @@ namespace WebApi.Helpers
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
-                attachUserToContext(context, authentication,token);
+                await attachUserToContext(context, authentication,token);
 
             await _next(context);
         }
@@ -52,7 +52,7 @@ namespace WebApi.Helpers
                 var userId = jwtToken.Claims.First(x => x.Type == "id").Value;
 
                 // attach user to context on successful jwt validation
-                userAuthentication.SaveUserAsync(await userAuthentication.GetById(userId));
+                await userAuthentication.SaveUserAsync(await userAuthentication.GetById(userId));
             }
             catch
             {

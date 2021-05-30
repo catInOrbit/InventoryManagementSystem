@@ -7,8 +7,8 @@ namespace Infrastructure.Services
     {
         Task<ApplicationUser> GetById(string id);
         void InvalidateSession();
-        void SaveUserAsync(ApplicationUser userGet);
-        ApplicationUser GetCurrentSessionUser();
+        Task SaveUserAsync(ApplicationUser userGet);
+        Task<ApplicationUser> GetCurrentSessionUser();
 
 
     }

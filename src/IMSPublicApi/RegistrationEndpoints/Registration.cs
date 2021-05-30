@@ -50,7 +50,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
         public override async Task<ActionResult<RegistrationResponse>> HandleAsync(RegistrationRequest request, CancellationToken cancellationToken)
         {
             var response = new RegistrationResponse(request.CorrelationId());
-            var userGet = _userAuthentication.GetCurrentSessionUser();
+            var userGet = await _userAuthentication.GetCurrentSessionUser();
             if(userGet == null)
                 return Unauthorized();
             
