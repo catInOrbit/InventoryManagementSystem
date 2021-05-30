@@ -6,9 +6,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
     public class PurchaseOrder : BaseEntity
     {
-
         public PurchaseOrder()
         {
+            Id = DateTime.UtcNow + "-"+Guid.NewGuid().ToString();
             PurchaseOrderNumber = DateTime.UtcNow.Date.ToString("yyyyMMdd") +
                                   Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
             purchaseOrderStatus = PurchaseOrderStatus.Draft;

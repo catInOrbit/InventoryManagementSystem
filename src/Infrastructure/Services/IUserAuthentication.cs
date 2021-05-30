@@ -9,7 +9,5 @@ namespace Infrastructure.Services
         void InvalidateSession();
         Task SaveUserAsync(ApplicationUser userGet);
         Task<ApplicationUser> GetCurrentSessionUser();
-
-
     }
 }

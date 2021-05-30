@@ -38,16 +38,15 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
         {
             var response = new UpdateResponse();
 
-            var userGet = await _userAuthentication.GetCurrentSessionUser();
-            if(userGet.Id == null)
+            var userSystemGet = await _userAuthentication.GetCurrentSessionUser();
+            if(userSystemGet.Id == null)
                 return Unauthorized(response);  
 
             else
             {
-                var userInfoGet = await _asyncRepository.GetByIdAsync(userGet.Id, cancellationToken);
+                var userInfoGet = await _asyncRepository.GetByIdAsync(userSystemGet.Id, cancellationToken);
                 if (userInfoGet == null)
                     return Unauthorized(response);
-                var userSystem = await _userManager.GetUserAsync(HttpContext.User);
                 if(request.Address != userInfoGet.Address ) userInfoGet.Address = request.Address;
                 // userGet.Email = request.Email;
                 if(request.Fullname != userInfoGet.Fullname ) userInfoGet.Fullname = request.Fullname;
@@ -60,7 +59,7 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
 
                 if (request.NewPassword != null)
                 {
-                    var result = await _userManager.ChangePasswordAsync(userSystem, request.OldPassword, request.NewPassword);
+                    var result = await _userManager.ChangePasswordAsync(userSystemGet, request.OldPassword, request.NewPassword);
                     if(!result.Succeeded)
                     {
                         response.Result = false;
