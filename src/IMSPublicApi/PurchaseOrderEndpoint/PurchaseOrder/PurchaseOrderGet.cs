@@ -45,7 +45,10 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 response.Verbose = "Not authorized as privileged user";
                 return Unauthorized(response);
             }
+
             response.PurchaseOrders = purchaseOrders.ToList();
+            response.Result = true;
+            response.Verbose = "Done";
 
             return Ok(response);
         }

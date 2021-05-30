@@ -35,6 +35,23 @@ namespace Infrastructure.Data
             return await _identityAndProductDbContext.Set<T>().FindAsync(keyValues, cancellationToken);
         }
 
+        public async Task<IReadOnlyList<ProductIndex>> GetProductForELIndexAsync(CancellationToken cancellationToken = default)
+        {
+            var products= await _identityAndProductDbContext.Set<Product>().Select(p=> new {p.Id, p.Name}).ToListAsync(cancellationToken);
+            var prodcuctIndices = new List<ProductIndex>();
+            foreach (var product in products)
+            {
+                ProductIndex productIndex = new ProductIndex
+                {
+                    Id = product.Id,
+                    Name = product.Name
+                };
+                prodcuctIndices.Add(productIndex);
+            }
+
+            return prodcuctIndices;
+        }
+
         public async Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default)
         {
             return await _identityAndProductDbContext.Set<T>().ToListAsync(cancellationToken);

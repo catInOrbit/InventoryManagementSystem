@@ -30,13 +30,7 @@ namespace Infrastructure.Services
         private static void AddDefaultMappings(ConnectionSettings settings)
         {
             settings
-                .DefaultMappingFor<Product>(m => m
-                    .Ignore(p => p.BrandId)
-                    .Ignore(p => p.CategoryId)
-                    .Ignore(p => p.CreatedDate)
-                    .Ignore(p => p.ModifiedDate)
-                    .Ignore(p => p.ProductVariants)
-                    .Ignore(p => p.CreatedBy)
+                .DefaultMappingFor<ProductIndex>(m => m
                     .IdProperty(p => p.Id)
                 );
         }
@@ -44,7 +38,7 @@ namespace Infrastructure.Services
         private static void CreateIndex(IElasticClient client, string indexName)
         {
             var createIndexResponse = client.Indices.Create(indexName,
-                index => index.Map<Product>(x => x.AutoMap())
+                index => index.Map<ProductIndex>(x => x.AutoMap())
             );
         }
     }

@@ -24,15 +24,18 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
     {
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _purchaseOrderRepos;
         private readonly IAsyncRepository<Product> _productRepos;
+        private readonly IAsyncRepository<ProductIndex> _elasticRepos;
+
         private readonly IAsyncRepository<Supplier> _supplierRepos;
         private readonly IAuthorizationService _authorizationService;
 
-        public PurchaseOrderUpdate(IAsyncRepository<Product> productRepos, IAsyncRepository<Supplier> supplierRepos, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService)
+        public PurchaseOrderUpdate(IAsyncRepository<Product> productRepos, IAsyncRepository<Supplier> supplierRepos, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService, IAsyncRepository<ProductIndex> elasticRepos)
         {
             _productRepos = productRepos;
             _supplierRepos = supplierRepos;
             _purchaseOrderRepos = purchaseOrderRepos;
             _authorizationService = authorizationService;
+            _elasticRepos = elasticRepos;
         }
         
         [HttpPut("api/updatepo")]
@@ -59,13 +62,15 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 return Unauthorized(response);
             }
 
-            var productList = await _productRepos.ListAllAsync();
-            // var supplierList = await _supplierRepos.ListAllAsync();
+            var productIndexList = await _productRepos.GetProductForELIndexAsync();
             
-            await _productRepos.ElasticSaveManyAsync(productList.ToArray());
+            // var supplierList = await _supplierRepos.ListAllAsync();
+            // var indexList = productList.Select(p => new {p.Id, p.Name});
+            
+            await _elasticRepos.ElasticSaveManyAsync(productIndexList.ToArray());
             // await _supplierRepos.ElasticSaveManyAsync(supplierList.ToArray());
 
-            // await _purchaseOrderRepos.AddAsync(request.PurchaseOrder);  
+            await _purchaseOrderRepos.UpdateAsync(request.PurchaseOrder);  
             return Ok(response);
         }
     }

@@ -5,6 +5,6 @@
     public abstract class BaseEntity
     {
         [Nest.PropertyName("id")]
-        public virtual string Id { get; protected set; }
+        public virtual string Id { get; set; }
     }
 }

@@ -38,7 +38,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 UserOperations.Create);
 
             var purchaseOrder = new ApplicationCore.Entities.Orders.PurchaseOrder();
-            response.PurchaseOrder = purchaseOrder();
+            response.PurchaseOrder = purchaseOrder;
             await _purchaseOrderRepos.AddAsync(purchaseOrder);
 
             return Ok(response);
