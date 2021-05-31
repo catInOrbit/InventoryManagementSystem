@@ -55,7 +55,8 @@ namespace InventoryManagementSystem.PublicApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddDbContext<IdentityAndProductDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"),  b => b.MigrationsAssembly("IMSPublicApi")));
             services.AddCors(c =>
             {
                 c.AddPolicy(CORS_POLICY, options => options.AllowAnyOrigin());

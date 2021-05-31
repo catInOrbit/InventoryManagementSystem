@@ -7,6 +7,7 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
+COPY *.sln .
 COPY ["src/IMSPublicApi/IMSPublicApi.csproj", "src/IMSPublicApi/"]
 COPY ["src/ApplicationCore/ApplicationCore.csproj", "src/ApplicationCore/"]
 COPY ["src/Infrastructure/Infrastructure.csproj", "src/Infrastructure/"]
@@ -22,3 +23,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "IMSPublicApi.dll"]
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet IMSPublicApi.dll
