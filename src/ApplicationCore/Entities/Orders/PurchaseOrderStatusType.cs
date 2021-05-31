@@ -1,10 +1,12 @@
 ﻿namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
-    public enum PurchaseOrderStatus
+    public enum PurchaseOrderStatusType
     {
         Draft = -1,
         Progressing = 1,
-        Completed = 2,
-        Canceled = 3
+        Sent = 2,
+        Confirmed = 3,
+        Completed = 4,
+        Canceled = 5
     }
 }

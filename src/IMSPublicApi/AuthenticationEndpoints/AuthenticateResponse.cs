@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using Infrastructure.Identity.Models;
 
 namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 {
@@ -25,7 +26,6 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
         public string UserRole { get; set; }
 
         public UserInfo UserInfo { get; set; }
-
         public List<string> PageAuthorized { get; set; } = new List<string>();
 
     }

@@ -1,0 +1,47 @@
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Ardalis.ApiEndpoints;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
+using InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+
+namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search
+{
+    public class GetProductById : BaseAsyncEndpoint.WithRequest<GetProductRequest>.WithResponse<GetProductResponse>
+    {
+        private IAsyncRepository<Product> _asyncRepository;
+        private readonly IAuthorizationService _authorizationService;
+
+        public GetProductById(IAsyncRepository<Product> asyncRepository, IAuthorizationService authorizationService)
+        {
+            _asyncRepository = asyncRepository;
+            _authorizationService = authorizationService;
+        }
+
+        [HttpGet("api/product/{ProductId}")]
+        [SwaggerOperation(
+            Summary = "Search Product by id",
+            Description = "Search Product by id",
+            OperationId = "po.update",
+            Tags = new[] { "PurchaseOrderEndpoints" })
+        ]
+        public override async Task<ActionResult<GetProductResponse>> HandleAsync(GetProductRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            var isAuthorized = await _authorizationService.AuthorizeAsync(
+                HttpContext.User, "Product",
+                UserOperations.Read);
+            
+            if (!isAuthorized.Succeeded)
+                return Unauthorized();
+            
+            var response = new GetProductResponse();
+            response.Product = await _asyncRepository.GetByIdAsync(request.ProductId, cancellationToken);
+            
+            return Ok(response);
+        }
+    }
+}

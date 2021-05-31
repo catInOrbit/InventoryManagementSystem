@@ -23,7 +23,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         }
 
         
-        [HttpGet("api/getpos")]
+        [HttpGet("api/purchaseorder/get")]
         [SwaggerOperation(
             Summary = "Create purchase order",
             Description = "Create purchase order",

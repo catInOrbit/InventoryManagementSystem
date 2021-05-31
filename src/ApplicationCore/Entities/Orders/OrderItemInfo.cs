@@ -3,7 +3,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Products;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
-    public class PurchaseOrderItemInfo : BaseEntity
+    public class OrderItemInfo : BaseEntity
     {
         public string PurchaseOrderId { get; set; }
 

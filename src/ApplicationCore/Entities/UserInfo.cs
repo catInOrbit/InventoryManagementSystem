@@ -22,5 +22,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public string DateOfBirthNormalizedString { get; set; }
 
         public bool IsActive { get; set; }
+
     }
 }

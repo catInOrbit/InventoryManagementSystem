@@ -24,7 +24,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             _purchaseOrderRepos = purchaseOrderRepos;
         }
 
-        [HttpPost("api/createpo")]
+        [HttpPost("api/purchaseorder/create")]
         [SwaggerOperation(
             Summary = "Create purchase order",
             Description = "Create purchase order",

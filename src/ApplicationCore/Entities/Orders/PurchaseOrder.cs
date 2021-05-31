@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
@@ -10,45 +11,49 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public PurchaseOrder()
         {
             Id = DateTime.UtcNow + "-"+Guid.NewGuid().ToString();
-            PurchaseOrderNumber = DateTime.UtcNow.Date.ToString("yyyyMMdd") +
-                                  Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
-            purchaseOrderStatus = PurchaseOrderStatus.Draft;
-            DateCreated = DateTime.Now;
+            PurchaseOrderNumber = (PriceQuoteOrderId == null) ?  DateTime.UtcNow.Date.ToString("yyyyMMdd") +
+                                  Guid.NewGuid().ToString().Substring(0, 5).ToUpper() : PriceQuoteOrderId;
+            PurchaseOrderStatus = PurchaseOrderStatusType.Draft;
+            CreatedDate = DateTime.Now;
+            Type = TransactionType.Purchase;
         }
+        
+        public DateTime CreatedDate { get; set; }
         
         [Required]
         public string PurchaseOrderNumber { get; set; }
         
-        public DateTime DateCreated { get; set; }
-
         public DateTime DeliveryDate { get; set; }
 
         public string DeliveryAddress { get; set; }
 
         public string Description { get; set; }
+        
+        [Required]
+        public string SupplierId { get; set; }
+        public virtual Supplier Supplier { get; set; }
 
         [Required]
         public string WarehouseLocation { get; set; }
-
-        [Required]
-        public string SupplierId { get; set; }
         
         [Required]
         public string CreatedById { get; set; }
 
         public string CreatedByName { get; set; }
+        public string PriceQuoteOrderId { get; set; }
 
-        public virtual Supplier Supplier { get; set; }
+        public PurchaseOrderStatusType PurchaseOrderStatus { get; set; }
+        public TransactionType Type { get; set; }
 
-        public PurchaseOrderStatus purchaseOrderStatus { get; set; }
+        public decimal TotalDiscountAmount { get; set; }
 
-        public decimal totalDiscountAmount { get; set; }
+        public decimal TotalOrderAmount { get; set; }
 
-        public decimal totalOrderAmount { get; set; }
-
-        public string purchaseReceiveNumber { get; set; }
+        public string PurchaseReceiveNumber { get; set; }
         
-        public virtual List<PurchaseOrderItemInfo> PurchaseOrderProduct { get; set; } = new List<PurchaseOrderItemInfo>();
+        public virtual ICollection<OrderItemInfo> PurchaseOrderProduct { get; set; } = new List<OrderItemInfo>();
+        public virtual PriceQuoteOrder PriceQuoteOrder { get; set; }
+        public virtual UserInfo CreatedBy { get; set; }
 
     }
 }

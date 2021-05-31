@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -17,21 +18,24 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
     {
         private readonly IEmailSender _emailSender;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
 
-        public PurchaseOrderSubmit(IEmailSender emailSender, IAuthorizationService authorizationService)
+
+        public PurchaseOrderSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository)
         {
             _emailSender = emailSender;
             _authorizationService = authorizationService;
+            _asyncRepository = asyncRepository;
         }
         
-        [HttpPost("api/posubmit")]
+        [HttpPost("api/purchaseorder/submit")]
         [SwaggerOperation(
             Summary = "Submit",
             Description = "Submit new purchase order",
             OperationId = "catalog-items.create",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync(PurchaseOrderSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult> HandleAsync([FromForm] PurchaseOrderSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var subject = "Purchase Order " + DateTime.Now;
 
@@ -44,8 +48,12 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             
             try
             {
+                request.PurchaseOrder.PurchaseOrderStatus = PurchaseOrderStatusType.Sent;
+
+                await _asyncRepository.UpdateAsync(request.PurchaseOrder);
+                
                 var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
-                var message = new EmailMessage(request.SupplierEmail, subject, "", files);
+                var message = new EmailMessage(request.To, request.Subject, request.Content, files);
                 await _emailSender.SendEmailAsync(message);
                 
                 return Ok();

@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.6.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2703C780-C3CF-44E8-8D21-AC9C374CB7F6}"
+ProjectSection(SolutionItems) = preProject
+	src\Web.config = src\Web.config
+EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationCore", "src\ApplicationCore\ApplicationCore.csproj", "{319ABA81-9988-4122-BC7A-6D8D24FBE0EB}"
 EndProject

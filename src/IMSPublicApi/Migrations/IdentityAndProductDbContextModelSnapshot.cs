@@ -97,6 +97,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
+                    b.Property<string>("UserInfoId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -111,64 +114,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("UserInfoId");
+
                     b.ToTable("SystemUser");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CreatedByName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeliveryAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DeliveryDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PurchaseOrderNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SupplierId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("WarehouseLocation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("purchaseOrderStatus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("purchaseReceiveNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("totalDiscountAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("totalOrderAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SupplierId");
-
-                    b.ToTable("PurchaseOrder");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrderItemInfo", b =>
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.OrderItemInfo", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -178,6 +129,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PriceQuoteOrderId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProductId")
                         .HasColumnType("nvarchar(450)");
@@ -193,11 +147,132 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PriceQuoteOrderId");
+
                     b.HasIndex("ProductId");
 
                     b.HasIndex("PurchaseOrderId");
 
                     b.ToTable("PurchaseOrderItemInfo");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedById")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PriceQuoteOrderNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PriceQuoteStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SupplierId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WarehouseLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("SupplierId");
+
+                    b.HasIndex("TransactionId");
+
+                    b.ToTable("PriceQuote");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedByName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeliveryAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DeliveryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PriceQuoteOrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PurchaseOrderNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PurchaseOrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PurchaseReceiveNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupplierId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("TotalDiscountAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalOrderAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("WarehouseLocation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("PriceQuoteOrderId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.HasIndex("TransactionId");
+
+                    b.ToTable("PurchaseOrder");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", b =>
@@ -315,6 +390,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -323,6 +404,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.Property<string>("ProductId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<float>("Quantity")
+                        .HasColumnType("real");
 
                     b.Property<string>("Sku")
                         .HasColumnType("nvarchar(max)");
@@ -348,13 +432,13 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("ConfirmedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CreatedBy")
+                    b.Property<string>("CreatedById")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DeliveryTime")
+                    b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -363,20 +447,21 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.Property<string>("SupplierId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("TrackingNumber")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ValidUntil")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SupplierId");
-
-                    b.ToTable("Transactions");
+                    b.ToTable("Transaction");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", b =>
@@ -577,19 +662,21 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", b =>
+            modelBuilder.Entity("Infrastructure.Identity.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", "Supplier")
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", "UserInfo")
                         .WithMany()
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserInfoId");
 
-                    b.Navigation("Supplier");
+                    b.Navigation("UserInfo");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrderItemInfo", b =>
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.OrderItemInfo", b =>
                 {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", null)
+                        .WithMany("PurchaseOrderProduct")
+                        .HasForeignKey("PriceQuoteOrderId");
+
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId");
@@ -601,6 +688,54 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("PurchaseOrder");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm.Transaction", null)
+                        .WithMany("PriceQuoteOrders")
+                        .HasForeignKey("TransactionId");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", "PriceQuoteOrder")
+                        .WithMany()
+                        .HasForeignKey("PriceQuoteOrderId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm.Transaction", null)
+                        .WithMany("PurchaseOrders")
+                        .HasForeignKey("TransactionId");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("PriceQuoteOrder");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
@@ -619,15 +754,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasForeignKey("ProductId");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm.Transaction", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", "Supplier")
-                        .WithMany()
-                        .HasForeignKey("SupplierId");
-
-                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -681,6 +807,11 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", b =>
+                {
+                    b.Navigation("PurchaseOrderProduct");
+                });
+
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", b =>
                 {
                     b.Navigation("PurchaseOrderProduct");
@@ -689,6 +820,13 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
                 {
                     b.Navigation("ProductVariants");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm.Transaction", b =>
+                {
+                    b.Navigation("PriceQuoteOrders");
+
+                    b.Navigation("PurchaseOrders");
                 });
 #pragma warning restore 612, 618
         }

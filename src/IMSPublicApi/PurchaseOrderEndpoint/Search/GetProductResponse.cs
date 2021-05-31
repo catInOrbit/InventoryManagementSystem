@@ -1,6 +1,6 @@
 ﻿using InventoryManagementSystem.ApplicationCore.Entities.Products;
 
-namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder
+namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search
 {
     public class GetProductResponse : BaseResponse
     {

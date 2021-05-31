@@ -38,7 +38,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             _elasticRepos = elasticRepos;
         }
         
-        [HttpPut("api/updatepo")]
+        [HttpPut("api/purchaseorder/update")]
         [SwaggerOperation(
             Summary = "Update purchase order",
             Description = "Update purchase order",

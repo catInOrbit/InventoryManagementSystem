@@ -19,8 +19,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
         }
-
-        [HttpDelete("api/deletepo/{Id}")]
+        
+        [HttpDelete("api/purchaseorder/delete/{Id}")]
         [SwaggerOperation(
             Summary = "Create purchase order",
             Description = "Create purchase order",
@@ -32,7 +32,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             //TODO: IMPORTANT: Database relationship for child table must have cascade in insert and delete option
             var isAuthorized = await _authorizationService.AuthorizeAsync(
                 HttpContext.User, "PurchaseOrder",
-                UserOperations.Update);
+                UserOperations.Delete);
             
             if (!isAuthorized.Succeeded)
                 return Unauthorized();
