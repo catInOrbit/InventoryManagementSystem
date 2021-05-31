@@ -29,7 +29,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
             Summary = "Get all price quote",
             Description = "Get all price quote",
             OperationId = "po.update",
-            Tags = new[] { "PurchaseOrderEndpoints" })
+            Tags = new[] { "PriceQuoteOrderEndpoints" })
         ]
         public override async Task<ActionResult<GetPriceQuoteResponse>> HandleAsync([FromRoute] GetPriceQuoteRequest request, CancellationToken cancellationToken = new CancellationToken())
         {

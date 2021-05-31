@@ -25,7 +25,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Produ
             Summary = "Search Product by id",
             Description = "Search Product by id",
             OperationId = "po.update",
-            Tags = new[] { "PurchaseOrderEndpoints" })
+            Tags = new[] { "ProductEndpoints" })
         ]
         public override async Task<ActionResult<GetProductResponse>> HandleAsync(GetProductRequest request, CancellationToken cancellationToken = new CancellationToken())
         {

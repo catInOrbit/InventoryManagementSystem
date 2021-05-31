@@ -36,7 +36,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             Summary = "Submit price quote request",
             Description = "Submit price quote request",
             OperationId = "po.update",
-            Tags = new[] { "PurchaseOrderEndpoints" })
+            Tags = new[] { "PriceQuoteOrderEndpoints" })
         ]
         public override async Task<ActionResult> HandleAsync([FromForm] PQSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
         {

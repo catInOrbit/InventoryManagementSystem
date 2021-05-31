@@ -23,18 +23,18 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Produ
             _authorizationService = authorizationService;
         }
 
-        [HttpPost("api/product/search/{Query}")]
+        [HttpGet("api/product/search/{Query}")]
         [SwaggerOperation(
             Summary = "Search Product by Name",
             Description = "Search Product by Id",
             OperationId = "catalog-items.create",
-            Tags = new[] { "PurchaseOrderEndpoints" })
+            Tags = new[] { "ProductEndpoints" })
         ]
         public override async Task<ActionResult> HandleAsync([FromRoute] GetProductSearchRequest request,
             CancellationToken cancellationToken = new CancellationToken())
         {
             
-            var isAuthorized = await _authorizationService.AuthorizeAsync(
+              var isAuthorized = await _authorizationService.AuthorizeAsync(
                 HttpContext.User, "Product",
                 UserOperations.Read);
             
