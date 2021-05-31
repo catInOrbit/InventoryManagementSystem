@@ -22,7 +22,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             _authorizationService = authorizationService;
         }
 
-        [HttpGet("api/purchaseorder/{Id}")]
+        [HttpGet("api/purchaseorder/{number}")]
         [SwaggerOperation(
             Summary = "Get all purchase Order",
             Description = "Get all purchase Order",
@@ -42,7 +42,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
                 return Unauthorized();
 
-            if (request.Id == "all")
+            if (request.number == "all")
             {
                 var pos = await _asyncRepository.ListAllAsync(cancellationToken);
                 response.PurchaseOrders = pos.ToList();
@@ -50,7 +50,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
 
             else
             {
-                var po = await _asyncRepository.GetByIdAsync(request.Id, cancellationToken);
+                var po = _asyncRepository.GetPurchaseOrderByNumber(request.number, cancellationToken);
                 response.PurchaseOrders.Add(po);
             }
             return Ok(response);

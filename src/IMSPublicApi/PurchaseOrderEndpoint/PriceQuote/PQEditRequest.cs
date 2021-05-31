@@ -13,6 +13,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
         public string PriceQuoteNumberGet { get; set; }
         public string SupplierId { get; set; }
         public DateTime Deadline { get; set; }
-        public ICollection<OrderItemInfo> OrderItemInfos  { get; set; }
+        public ICollection<OrderItem> OrderItemInfos  { get; set; }
     }
 }

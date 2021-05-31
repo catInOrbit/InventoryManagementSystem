@@ -20,13 +20,16 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _purchaseOrderRepos;
+        private readonly IAsyncRepository<PriceQuoteOrder> _priceQuoteRepos;
+
         private readonly IUserAuthentication _userAuthentication;
 
-        public PurchaseOrderCreate(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IUserAuthentication userAuthentication)
+        public PurchaseOrderCreate(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IUserAuthentication userAuthentication, IAsyncRepository<PriceQuoteOrder> priceQuoteRepos)
         {
             _authorizationService = authorizationService;
             _purchaseOrderRepos = purchaseOrderRepos;
             _userAuthentication = userAuthentication;
+            _priceQuoteRepos = priceQuoteRepos;
         }
 
         [HttpPost("api/purchaseorder/create")]
@@ -45,7 +48,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
 
             var purchaseOrder = new ApplicationCore.Entities.Orders.PurchaseOrder();
 
-            var pqData = _purchaseOrderRepos.GetPriceQuoteByNumber(request.PriceQuoteNumber);
+            var pqData = _priceQuoteRepos.GetPriceQuoteByNumber(request.PriceQuoteNumber);
             purchaseOrder.CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             purchaseOrder.PurchaseOrderStatus = PurchaseOrderStatusType.Created;
             if (pqData != null)

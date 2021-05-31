@@ -110,7 +110,7 @@ namespace Infrastructure.Data
         public async Task DeletePurchaseOrderAsync(PurchaseOrder entity, CancellationToken cancellationToken = default)
         {
             var po = _identityAndProductDbContext.PurchaseOrder.Where(po => po.Id == entity.Id);
-            var poItems = _identityAndProductDbContext.PurchaseOrderItemInfo.Where(poItem => poItem.PurchaseOrderId == entity.Id);
+            var poItems = _identityAndProductDbContext.OrderItem.Where(poItem => poItem.OrderNumber == entity.Id);
 
             _identityAndProductDbContext.RemoveRange(poItems);
             _identityAndProductDbContext.Remove(po);

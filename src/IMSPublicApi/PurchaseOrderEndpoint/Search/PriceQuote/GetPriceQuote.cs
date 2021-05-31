@@ -24,7 +24,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
             _authorizationService = authorizationService;
         }
         
-        [HttpGet("api/pricequote/{Id}")]
+        [HttpGet("api/pricequote/{number}")]
         [SwaggerOperation(
             Summary = "Get all price quote",
             Description = "Get all price quote",
@@ -45,7 +45,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
             
             var response = new GetPriceQuoteResponse();
 
-            if (request.Id == "all")
+            if (request.number == "all")
             {
                 var pqrs = await _asyncRepository.ListAllAsync(cancellationToken);
                 response.PriceQuoteOrders = pqrs.ToList();    
@@ -53,7 +53,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
 
             else
             {
-                var pqr = await _asyncRepository.GetByIdAsync(request.Id, cancellationToken);
+                var pqr = _asyncRepository.GetPriceQuoteByNumber(request.number, cancellationToken);
                 response.PriceQuoteOrders.Add(pqr);    
             }
             

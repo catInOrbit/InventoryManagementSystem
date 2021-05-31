@@ -49,7 +49,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 
         public string PurchaseReceiveNumber { get; set; }
         
-        public virtual ICollection<OrderItemInfo> PurchaseOrderProduct { get; set; } = new List<OrderItemInfo>();
+        public virtual ICollection<OrderItem> PurchaseOrderProduct { get; set; } = new List<OrderItem>();
         public virtual PriceQuoteOrder PriceQuoteOrder { get; set; }
         public virtual UserInfo CreatedBy { get; set; }
 

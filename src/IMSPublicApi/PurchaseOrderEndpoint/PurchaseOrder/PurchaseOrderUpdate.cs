@@ -23,14 +23,17 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
     public class PurchaseOrderUpdate : BaseAsyncEndpoint.WithRequest<POUpdateRequest>.WithResponse<POUpdateResponse>
     {
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _purchaseOrderRepos;
+        private readonly IAsyncRepository<Product> _productRepos;
+
         private readonly IUserAuthentication _userAuthentication;
         private readonly IAuthorizationService _authorizationService;
 
-        public PurchaseOrderUpdate(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService,  IUserAuthentication userAuthentication)
+        public PurchaseOrderUpdate(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService,  IUserAuthentication userAuthentication, IAsyncRepository<Product> productRepos)
         {
             _purchaseOrderRepos = purchaseOrderRepos;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
+            _productRepos = productRepos;
         }
         
         [HttpPut("api/purchaseorder/update")]
@@ -54,7 +57,14 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             po.ModifiedDate = DateTime.Now;
             po.ModifiedBy = (await _userAuthentication.GetCurrentSessionUser()).Id;
             po.PurchaseOrderStatus = PurchaseOrderStatusType.WaitingConfirmation;
-            po.PurchaseOrderProduct = request.OrderItemInfos;
+            
+            foreach (var requestOrderItemInfo in request.OrderItemInfos)
+            {
+                requestOrderItemInfo.OrderNumber = po.PurchaseOrderNumber;
+                requestOrderItemInfo.Product = await _productRepos.GetByIdAsync(requestOrderItemInfo.ProductId);
+                requestOrderItemInfo.TotalAmount += requestOrderItemInfo.Price;  
+                po.PurchaseOrderProduct.Add(requestOrderItemInfo);
+            }
             // var supplierList = await _supplierRepos.ListAllAsync();
             // var indexList = productList.Select(p => new {p.Id, p.Name});
             // await _supplierRepos.ElasticSaveManyAsync(supplierList.ToArray());

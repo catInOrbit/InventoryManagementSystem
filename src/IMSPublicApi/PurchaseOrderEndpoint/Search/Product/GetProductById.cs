@@ -27,7 +27,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Produ
             OperationId = "po.update",
             Tags = new[] { "ProductEndpoints" })
         ]
-        public override async Task<ActionResult<GetProductResponse>> HandleAsync(GetProductRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<GetProductResponse>> HandleAsync([FromRoute] GetProductRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var isAuthorized = await _authorizationService.AuthorizeAsync(
                 HttpContext.User, "Product",

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -17,12 +18,14 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<PriceQuoteOrder> _asyncRepository;
         private readonly IUserAuthentication _userAuthentication;
+        private readonly IAsyncRepository<Product> _productRepos;
 
-        public PriceQuoteRequestEdit(IAuthorizationService authorizationService, IAsyncRepository<PriceQuoteOrder> asyncRepository, IUserAuthentication userAuthentication)
+        public PriceQuoteRequestEdit(IAuthorizationService authorizationService, IAsyncRepository<PriceQuoteOrder> asyncRepository, IUserAuthentication userAuthentication, IAsyncRepository<Product> productRepos)
         {
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
             _userAuthentication = userAuthentication;
+            _productRepos = productRepos;
         }
         
         
@@ -46,7 +49,12 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             pqr.ModifiedDate = DateTime.Now;
             pqr.ModifiedBy = (await _userAuthentication.GetCurrentSessionUser()).Id;
             foreach (var requestOrderItemInfo in request.OrderItemInfos)
+            {
+                requestOrderItemInfo.OrderNumber = pqr.PriceQuoteOrderNumber;
+                requestOrderItemInfo.Product = await _productRepos.GetByIdAsync(requestOrderItemInfo.ProductId);
+                requestOrderItemInfo.TotalAmount += requestOrderItemInfo.Price;  
                 pqr.PurchaseOrderProduct.Add(requestOrderItemInfo);
+            }
             pqr.SupplierId = request.SupplierId;
             pqr.Deadline = request.Deadline;
             

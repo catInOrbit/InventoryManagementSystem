@@ -2,6 +2,6 @@
 {
     public class GetPriceQuoteRequest : BaseRequest
     {
-        public string Id { get; set; }
+        public string number { get; set; }
     }
 }

@@ -24,8 +24,7 @@ namespace Infrastructure.Identity.DbContexts
         public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
         public DbSet<PriceQuoteOrder> PriceQuote { get; set; }
         public DbSet<Transaction> Transaction { get; set; }
-        public DbSet<OrderItemInfo> PurchaseOrderItemInfo { get; set; }
-
+        public DbSet<OrderItem> OrderItem { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
