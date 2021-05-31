@@ -10,17 +10,18 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 
         public PurchaseOrder()
         {
-            Id = DateTime.UtcNow + "-"+Guid.NewGuid().ToString();
-            PurchaseOrderNumber = (PriceQuoteOrderId == null) ?  DateTime.UtcNow.Date.ToString("yyyyMMdd") +
-                                  Guid.NewGuid().ToString().Substring(0, 5).ToUpper() : PriceQuoteOrderId;
-            PurchaseOrderStatus = PurchaseOrderStatusType.Draft;
+            Id = DateTime.Now.Date.ToString("ddMMyyyy") + "-"+Guid.NewGuid();
+            PurchaseOrderNumber =  DateTime.UtcNow.Date.ToString("ddMMyyyy") +
+                                  Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
+            PurchaseOrderStatus = PurchaseOrderStatusType.Created;
             CreatedDate = DateTime.Now;
             Type = TransactionType.Purchase;
         }
         
         public DateTime CreatedDate { get; set; }
-        
-        [Required]
+        public DateTime ModifiedDate { get; set; }
+        public string ModifiedBy { get; set; }
+
         public string PurchaseOrderNumber { get; set; }
         
         public DateTime DeliveryDate { get; set; }
@@ -29,14 +30,11 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 
         public string Description { get; set; }
         
-        [Required]
         public string SupplierId { get; set; }
         public virtual Supplier Supplier { get; set; }
 
-        [Required]
         public string WarehouseLocation { get; set; }
         
-        [Required]
         public string CreatedById { get; set; }
 
         public string CreatedByName { get; set; }

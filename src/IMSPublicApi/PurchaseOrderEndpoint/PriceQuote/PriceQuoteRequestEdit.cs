@@ -1,6 +1,8 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
@@ -10,15 +12,17 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
 {
-    public class PriceQuoteRequestEdit : BaseAsyncEndpoint.WithRequest<PriceQuoteRequestEditRequest>.WithoutResponse
+    public class PriceQuoteRequestEdit : BaseAsyncEndpoint.WithRequest<PQEditRequest>.WithResponse<PQEditResponse>
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<PriceQuoteOrder> _asyncRepository;
+        private readonly IUserAuthentication _userAuthentication;
 
-        public PriceQuoteRequestEdit(IAuthorizationService authorizationService, IAsyncRepository<PriceQuoteOrder> asyncRepository)
+        public PriceQuoteRequestEdit(IAuthorizationService authorizationService, IAsyncRepository<PriceQuoteOrder> asyncRepository, IUserAuthentication userAuthentication)
         {
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
+            _userAuthentication = userAuthentication;
         }
         
         
@@ -29,7 +33,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             OperationId = "po.update",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync(PriceQuoteRequestEditRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<PQEditResponse>> HandleAsync(PQEditRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var isAuthorized = await _authorizationService.AuthorizeAsync(
                 HttpContext.User, "PriceQuoteOrder",
@@ -37,9 +41,20 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             
             if (!isAuthorized.Succeeded)
                 return Unauthorized();
+
+            var pqr = _asyncRepository.GetPriceQuoteByNumber(request.PriceQuoteNumberGet);
+            pqr.ModifiedDate = DateTime.Now;
+            pqr.ModifiedBy = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            foreach (var requestOrderItemInfo in request.OrderItemInfos)
+                pqr.PurchaseOrderProduct.Add(requestOrderItemInfo);
+            pqr.SupplierId = request.SupplierId;
+            pqr.Deadline = request.Deadline;
             
-            await _asyncRepository.UpdateAsync(request.PriceQuoteOrder);
-            return Ok();
+            await _asyncRepository.UpdateAsync(pqr);
+
+            var response = new PQEditResponse();
+            response.PriceQuoteResponse = pqr;
+            return Ok(response);
         }
     }
 }

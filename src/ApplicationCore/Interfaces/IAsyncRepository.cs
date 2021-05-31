@@ -1,6 +1,7 @@
 ﻿using Ardalis.Specification;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Entities;
@@ -12,7 +13,10 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
     public interface IAsyncRepository<T> where T : BaseEntity
     {
         Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default);
+
         Task<IReadOnlyList<ProductIndex>> GetProductForELIndexAsync(CancellationToken cancellationToken = default);
+        PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber,  CancellationToken cancellationToken = default);
+        PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderNumber,  CancellationToken cancellationToken = default);
 
         Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default);
         Task<IEnumerable<Product>> ListAllProductAsync(CancellationToken cancellationToken = default);

@@ -1,22 +1,20 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
-using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
-using InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search
+namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Product
 {
     public class GetProductById : BaseAsyncEndpoint.WithRequest<GetProductRequest>.WithResponse<GetProductResponse>
     {
-        private IAsyncRepository<Product> _asyncRepository;
+        private IAsyncRepository<ApplicationCore.Entities.Products.Product> _asyncRepository;
         private readonly IAuthorizationService _authorizationService;
 
-        public GetProductById(IAsyncRepository<Product> asyncRepository, IAuthorizationService authorizationService)
+        public GetProductById(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;

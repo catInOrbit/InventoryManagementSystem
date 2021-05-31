@@ -53,6 +53,18 @@ namespace Infrastructure.Data
             return prodcuctIndices;
         }
 
+        public PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber, CancellationToken cancellationToken = default)
+        {
+            return _identityAndProductDbContext.PriceQuote.Where(pq => pq.PriceQuoteOrderNumber == priceQuoteNumber).
+                SingleOrDefault(pq => pq.PriceQuoteOrderNumber == priceQuoteNumber);
+        }
+
+        public PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderNumber, CancellationToken cancellationToken = default)
+        {
+            return _identityAndProductDbContext.PurchaseOrder.Where(po => po.PurchaseOrderNumber == purchaseOrderNumber).
+                SingleOrDefault(po => po.PurchaseOrderNumber == purchaseOrderNumber);   
+        }
+
         public async Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default)
         {
             return await _identityAndProductDbContext.Set<T>().ToListAsync(cancellationToken);

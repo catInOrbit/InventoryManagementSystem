@@ -39,7 +39,7 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
             var response = new UpdateResponse();
 
             var userSystemGet = await _userAuthentication.GetCurrentSessionUser();
-            if(userSystemGet.Id == null)
+            if(userSystemGet == null)
                 return Unauthorized(response);  
 
             else

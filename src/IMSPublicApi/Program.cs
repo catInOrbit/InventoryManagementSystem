@@ -1,7 +1,11 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Infrastructure.Data;
 using Infrastructure.Identity;
+using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,8 +25,12 @@ namespace InventoryManagementSystem.PublicApi
             {
                 var services = scope.ServiceProvider;
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+                var productRepos = services.GetRequiredService<IAsyncRepository<Product>>();
+                var elasticRepos = services.GetRequiredService<IAsyncRepository<ProductIndex>>();
                 try
                 {
+                    var productIndexList = await productRepos.GetProductForELIndexAsync();
+                    await elasticRepos.ElasticSaveManyAsync(productIndexList.ToArray());
                     // var catalogContext = services.GetRequiredService<CatalogContext>();
                     // await CatalogContextSeed.SeedAsync(catalogContext, loggerFactory);
 

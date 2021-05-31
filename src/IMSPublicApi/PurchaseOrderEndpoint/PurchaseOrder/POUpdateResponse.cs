@@ -5,15 +5,17 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder
 {
-    public class PurchaseOrderUpdateResponse : BaseResponse
+    public class POUpdateResponse : BaseResponse
     {
-        public PurchaseOrderUpdateResponse(Guid correlationId) : base(correlationId)
+        public POUpdateResponse(Guid correlationId) : base(correlationId)
         { }
 
-        public PurchaseOrderUpdateResponse()
+        public POUpdateResponse()
         { }
 
         public bool Result { get; set; }
         public string Verbose { get; set; }
+        public ApplicationCore.Entities.Orders.PurchaseOrder PurchaseOrder { get; set; }
+
     }
 }

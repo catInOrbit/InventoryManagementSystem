@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+
+namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder
+{
+    public class POUpdateRequest : BaseRequest
+    {
+        public string PurchaseOrderNumberGet { get; set; }
+        public string SupplierId { get; set; }
+        public ICollection<OrderItemInfo> OrderItemInfos  { get; set; }
+    }
+}

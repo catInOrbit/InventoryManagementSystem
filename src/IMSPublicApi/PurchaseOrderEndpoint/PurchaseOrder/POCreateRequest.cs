@@ -1,7 +1,7 @@
 ﻿namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder
 {
-    public class PurchaseOrderDeleteRequest : BaseRequest
+    public class POCreateRequest : BaseRequest
     {
-        public string Id { get; set; }
+        public string PriceQuoteNumber { get; set; }
     }
 }

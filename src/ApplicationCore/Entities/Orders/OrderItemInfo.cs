@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
@@ -6,7 +7,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
     public class OrderItemInfo : BaseEntity
     {
         public string PurchaseOrderId { get; set; }
-
+        [JsonIgnore]
         public virtual PurchaseOrder PurchaseOrder { get; set; }
 
         public string ProductId { get; set; }

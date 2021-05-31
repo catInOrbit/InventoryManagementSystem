@@ -6,6 +6,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
 {
     public class Product : BaseEntity
     {
+        
         public string Name { get; set; }
         public string BrandId { get; set; }
         public string CategoryId { get; set; }
@@ -13,6 +14,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public virtual UserInfo CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
+        public string SellingMethod { get; set; }
 
         public virtual ICollection<Category> Category { get; set; }
         public virtual ICollection<Brand> Brand { get; set; }

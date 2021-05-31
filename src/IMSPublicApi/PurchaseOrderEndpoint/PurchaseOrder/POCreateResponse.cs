@@ -2,14 +2,14 @@
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder
 {
-    public class PurchaseOrderCreateResponse : BaseResponse
+    public class POCreateResponse : BaseResponse
     {
-        public PurchaseOrderCreateResponse(Guid correlationId) : base(correlationId)
+        public POCreateResponse(Guid correlationId) : base(correlationId)
         {
             
         }
 
-        public PurchaseOrderCreateResponse()
+        public POCreateResponse()
         {
             
         }

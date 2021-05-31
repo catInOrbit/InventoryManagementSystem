@@ -2,7 +2,7 @@
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
 {
-    public class PriceQuoteResponse : BaseResponse
+    public class PQCreateResponse : BaseResponse
     {
         public PriceQuoteOrder PriceQuoteOrder { get; set; }
     }

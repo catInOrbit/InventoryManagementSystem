@@ -30,9 +30,7 @@ namespace Infrastructure.Services
         private static void AddDefaultMappings(ConnectionSettings settings)
         {
             settings
-                .DefaultMappingFor<ProductIndex>(m => m
-                    .IdProperty(p => p.Id)
-                );
+                .DefaultMappingFor<ProductIndex>(m => m.IndexName("products"));
         }
 
         private static void CreateIndex(IElasticClient client, string indexName)

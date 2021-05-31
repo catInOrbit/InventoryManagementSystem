@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
@@ -13,19 +15,20 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
 {
-    public class PriceQuoteRequestSubmit : BaseAsyncEndpoint.WithRequest<PriceQuoteRequestSubmitRequest>.WithoutResponse
+    public class PriceQuoteRequestSubmit : BaseAsyncEndpoint.WithRequest<PQSubmitRequest>.WithoutResponse
     {
         private readonly IEmailSender _emailSender;
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<PriceQuoteOrder> _asyncRepository;
-
+        private readonly IUserAuthentication _userAuthentication;
 
         
-        public PriceQuoteRequestSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<PriceQuoteOrder> asyncRepository)
+        public PriceQuoteRequestSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<PriceQuoteOrder> asyncRepository, IUserAuthentication userAuthentication)
         {
             _emailSender = emailSender;
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
+            _userAuthentication = userAuthentication;
         }
         
         [HttpPost("api/pricequote/submit")]
@@ -35,7 +38,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             OperationId = "po.update",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync([FromForm] PriceQuoteRequestSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult> HandleAsync([FromForm] PQSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
           
             var isAuthorized = await _authorizationService.AuthorizeAsync(
@@ -44,9 +47,12 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
 
             if (!isAuthorized.Succeeded)
                 return Unauthorized();
-            
-            request.PriceQuoteOrder.PriceQuoteStatus = PriceQuoteType.Sent;
-            await _asyncRepository.UpdateAsync(request.PriceQuoteOrder);
+
+            var pqr = _asyncRepository.GetPriceQuoteByNumber(request.PriceQuoteNumberGet);
+            pqr.PriceQuoteStatus = PriceQuoteType.Sent;
+            pqr.ModifiedBy = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            pqr.ModifiedDate = DateTime.Now;
+            await _asyncRepository.UpdateAsync(pqr);
             
             var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
             var message = new EmailMessage(request.To, request.Subject, request.Content, files);

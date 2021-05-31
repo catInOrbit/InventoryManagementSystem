@@ -173,6 +173,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
@@ -185,14 +188,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("SupplierId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<decimal>("TotalOrderAmount")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("TransactionId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
-
-                    b.Property<string>("WarehouseLocation")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -211,7 +214,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CreatedById")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CreatedByName")
@@ -229,11 +231,16 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("PriceQuoteOrderId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PurchaseOrderNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PurchaseOrderStatus")
@@ -243,7 +250,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SupplierId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("TotalDiscountAmount")
@@ -259,7 +265,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("WarehouseLocation")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -376,6 +381,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SellingMethod")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -713,9 +721,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 {
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatedById");
 
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", "PriceQuoteOrder")
                         .WithMany()
@@ -723,9 +729,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", "Supplier")
                         .WithMany()
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SupplierId");
 
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm.Transaction", null)
                         .WithMany("PurchaseOrders")

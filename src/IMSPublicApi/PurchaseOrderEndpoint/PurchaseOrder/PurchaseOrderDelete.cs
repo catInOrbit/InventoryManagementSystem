@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -9,7 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder
 {
-    public class PurchaseOrderDelete : BaseAsyncEndpoint.WithRequest<PurchaseOrderDeleteRequest>.WithoutResponse
+    public class PurchaseOrderDelete : BaseAsyncEndpoint.WithRequest<PODeleteRequest>.WithoutResponse
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
@@ -27,14 +28,10 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             OperationId = "po.create",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync([FromRoute] PurchaseOrderDeleteRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult> HandleAsync([FromRoute] PODeleteRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             //TODO: IMPORTANT: Database relationship for child table must have cascade in insert and delete option
-            var isAuthorized = await _authorizationService.AuthorizeAsync(
-                HttpContext.User, "PurchaseOrder",
-                UserOperations.Delete);
-            
-            if (!isAuthorized.Succeeded)
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Delete))
                 return Unauthorized();
 
             var po = await _asyncRepository.GetByIdAsync(request.Id);

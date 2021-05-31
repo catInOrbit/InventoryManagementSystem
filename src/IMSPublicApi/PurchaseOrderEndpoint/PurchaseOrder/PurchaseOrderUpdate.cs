@@ -20,22 +20,17 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder
 {
      
-    public class PurchaseOrderUpdate : BaseAsyncEndpoint.WithRequest<PurchaseOrderUpdateRequest>.WithResponse<PurchaseOrderUpdateResponse>
+    public class PurchaseOrderUpdate : BaseAsyncEndpoint.WithRequest<POUpdateRequest>.WithResponse<POUpdateResponse>
     {
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _purchaseOrderRepos;
-        private readonly IAsyncRepository<Product> _productRepos;
-        private readonly IAsyncRepository<ProductIndex> _elasticRepos;
-
-        private readonly IAsyncRepository<Supplier> _supplierRepos;
+        private readonly IUserAuthentication _userAuthentication;
         private readonly IAuthorizationService _authorizationService;
 
-        public PurchaseOrderUpdate(IAsyncRepository<Product> productRepos, IAsyncRepository<Supplier> supplierRepos, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService, IAsyncRepository<ProductIndex> elasticRepos)
+        public PurchaseOrderUpdate(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService,  IUserAuthentication userAuthentication)
         {
-            _productRepos = productRepos;
-            _supplierRepos = supplierRepos;
             _purchaseOrderRepos = purchaseOrderRepos;
             _authorizationService = authorizationService;
-            _elasticRepos = elasticRepos;
+            _userAuthentication = userAuthentication;
         }
         
         [HttpPut("api/purchaseorder/update")]
@@ -46,31 +41,26 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
 
-        public override async Task<ActionResult<PurchaseOrderUpdateResponse>> HandleAsync(PurchaseOrderUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<POUpdateResponse>> HandleAsync(POUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            var response = new PurchaseOrderUpdateResponse();
-
-            // requires using ContactManager.Authorization;
-            var isAuthorized = await _authorizationService.AuthorizeAsync(
-                HttpContext.User, "PurchaseOrder",
-                UserOperations.Update);
-
-            if (!isAuthorized.Succeeded)
-            {
-                response.Result = false;
-                response.Verbose = "Not authorized as privilege user";
-                return Unauthorized(response);
-            }
-
-            var productIndexList = await _productRepos.GetProductForELIndexAsync();
+            var response = new POUpdateResponse();
             
+            // requires using ContactManager.Authorization;
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Update))
+                return Unauthorized();
+
+
+            var po =  _purchaseOrderRepos.GetPurchaseOrderByNumber(request.PurchaseOrderNumberGet);
+            po.ModifiedDate = DateTime.Now;
+            po.ModifiedBy = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            po.PurchaseOrderStatus = PurchaseOrderStatusType.WaitingConfirmation;
+            po.PurchaseOrderProduct = request.OrderItemInfos;
             // var supplierList = await _supplierRepos.ListAllAsync();
             // var indexList = productList.Select(p => new {p.Id, p.Name});
-            
-            await _elasticRepos.ElasticSaveManyAsync(productIndexList.ToArray());
             // await _supplierRepos.ElasticSaveManyAsync(supplierList.ToArray());
 
-            await _purchaseOrderRepos.UpdateAsync(request.PurchaseOrder);  
+            await _purchaseOrderRepos.UpdateAsync(po);
+            response.PurchaseOrder = po;
             return Ok(response);
         }
     }

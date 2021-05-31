@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 
-namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search
+namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.PriceQuote
 {
     public class GetPriceQuoteResponse : BaseResponse
     {
@@ -16,6 +16,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search
                 
         }
 
-        public ICollection<PriceQuoteOrder> PriceQuoteOrders { get; set; }
+        public List<PriceQuoteOrder> PriceQuoteOrders { get; set; } = new List<PriceQuoteOrder>();
     }
 }

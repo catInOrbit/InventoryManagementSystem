@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
@@ -14,18 +15,20 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder
 {
-    public class PurchaseOrderSubmit : BaseAsyncEndpoint.WithRequest<PurchaseOrderSubmitRequest>.WithoutResponse
+    public class PurchaseOrderSubmit : BaseAsyncEndpoint.WithRequest<POSubmitRequest>.WithoutResponse
     {
         private readonly IEmailSender _emailSender;
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
+        private readonly IUserAuthentication _userAuthentication;
 
 
-        public PurchaseOrderSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository)
+        public PurchaseOrderSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserAuthentication userAuthentication)
         {
             _emailSender = emailSender;
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
+            _userAuthentication = userAuthentication;
         }
         
         [HttpPost("api/purchaseorder/submit")]
@@ -35,23 +38,21 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             OperationId = "catalog-items.create",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync([FromForm] PurchaseOrderSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult> HandleAsync([FromForm] POSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var subject = "Purchase Order " + DateTime.Now;
 
-            var isAuthorized = await _authorizationService.AuthorizeAsync(
-                HttpContext.User, "PurchaseOrder",
-                UserOperations.Update);
-
-            if (!isAuthorized.Succeeded)
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Update))
                 return Unauthorized();
-            
+
             try
             {
-                request.PurchaseOrder.PurchaseOrderStatus = PurchaseOrderStatusType.Sent;
 
-                await _asyncRepository.UpdateAsync(request.PurchaseOrder);
-                
+                var po = _asyncRepository.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
+                po.PurchaseOrderStatus = PurchaseOrderStatusType.Sent;
+                po.ModifiedDate = DateTime.Now;
+                po.ModifiedBy = (await _userAuthentication.GetCurrentSessionUser()).Id;
+                await _asyncRepository.UpdateAsync(po);
                 var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
                 var message = new EmailMessage(request.To, request.Subject, request.Content, files);
                 await _emailSender.SendEmailAsync(message);
