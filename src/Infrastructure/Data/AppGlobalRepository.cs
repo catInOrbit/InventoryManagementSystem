@@ -36,21 +36,39 @@ namespace Infrastructure.Data
             return await _identityAndProductDbContext.Set<T>().FindAsync(keyValues, cancellationToken);
         }
 
-        public async Task<IReadOnlyList<ProductIndex>> GetProductForELIndexAsync(CancellationToken cancellationToken = default)
+        public async Task<List<ProductSearchIndex>> GetProductForELIndexAsync(CancellationToken cancellationToken = default)
         {
-            var products= await _identityAndProductDbContext.Set<Product>().Select(p=> new {p.Id, p.Name}).ToListAsync(cancellationToken);
-            var prodcuctIndices = new List<ProductIndex>();
-            foreach (var product in products)
+            // var products= await _identityAndProductDbContext.Set<ProductVariant>().Select(p=> new {p.Id, p.Name}).ToListAsync(cancellationToken);
+            // var products= await _identityAndProductDbContext.Set<ProductVariant>().ToListAsync(cancellationToken);
+            var products= await _identityAndProductDbContext.Set<ProductVariant>().ToListAsync(cancellationToken);
+            
+            List<ProductSearchIndex> indices = new List<ProductSearchIndex>();
+            foreach (var productVariant in products)
             {
-                ProductIndex productIndex = new ProductIndex
+                var index = new ProductSearchIndex
                 {
-                    Id = product.Id,
-                    Name = product.Name
+                    Id = Guid.NewGuid().ToString(),
+                    ProductId = productVariant.ProductId,
+                    Name = productVariant.Name,
+                    Price = productVariant.Price,
+                    SerialNumbers = productVariant.SerialNumbers.ToList(),
+                    VariantValues = productVariant.VariantValues.ToList(),
                 };
-                prodcuctIndices.Add(productIndex);
+                indices.Add(index);
             }
-
-            return prodcuctIndices;
+            
+            // return indices;
+            // var prodcuctIndices = new List<ProductVariant>();
+            // foreach (var product in products)
+            // {
+            //     ProductIndex productIndex = new ProductIndex
+            //     {
+            //         Id = product.Id,
+            //         Name = product.Name
+            //     };
+            //     prodcuctIndices.Add(productIndex);
+            // }
+            return indices;
         }
 
         public PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber, CancellationToken cancellationToken = default)
@@ -162,7 +180,7 @@ namespace Infrastructure.Data
         public async Task ElasticSaveBulkAsync(T[] types)
         {
             _elasticCacheProduct.AddRange(types);
-            var result = await _elasticClient.BulkAsync(b => b.Index("products").IndexMany(types));
+            var result = await _elasticClient.BulkAsync(b => b.Index("productVariants").IndexMany(types));
             if (result.Errors)
             {
                 // the response can be inspected for errors

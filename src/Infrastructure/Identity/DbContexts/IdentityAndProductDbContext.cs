@@ -38,7 +38,7 @@ namespace Infrastructure.Identity.DbContexts
             builder.Entity<IdentityUserRole<string>>().ToTable("UserRole");
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin");
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaim");
-            builder.Entity<IdentityUserToken<string>>().ToTable("UserToken");
+            builder.Entity<IdentityUserToken<string>>().ToTable("UserToken"); 
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

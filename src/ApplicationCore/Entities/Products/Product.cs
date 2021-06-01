@@ -16,8 +16,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public DateTime ModifiedDate { get; set; }
         public string SellingStrategy { get; set; }
         
-        public virtual ICollection<Category> Category { get; set; }
-        public virtual ICollection<Brand> Brand { get; set; }
+        public virtual Category Category { get; set; }
+        public virtual Brand Brand { get; set; }
+        
         public virtual ICollection<ProductVariant> ProductVariants { get; set; }
     }
 }

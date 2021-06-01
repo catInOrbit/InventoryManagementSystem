@@ -5,8 +5,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
     public class VariantValue : BaseEntity
     {
         public string ProductVariantId { get; set; }
-        [JsonIgnore]
-        public virtual ProductVariant ProductVariant { get; set; }
+        // [JsonIgnore]
+        // public virtual ProductVariant ProductVariant { get; set; }
         public string Attribute { get; set; }
         public string Value { get; set; }
     }

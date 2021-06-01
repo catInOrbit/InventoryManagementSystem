@@ -26,15 +26,13 @@ namespace InventoryManagementSystem.PublicApi
             {
                 var services = scope.ServiceProvider;
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-                var productRepos = services.GetRequiredService<IAsyncRepository<Product>>();
-                var elasticRepos = services.GetRequiredService<IAsyncRepository<ProductIndex>>();
+                var productRepos = services.GetRequiredService<IAsyncRepository<ProductVariant>>();
+                var elasticRepos = services.GetRequiredService<IAsyncRepository<ProductSearchIndex>>();
                 try
                 {
-                    // var productIndexList = await productRepos.GetProductForELIndexAsync();
-                    // await elasticRepos.ElasticSaveManyAsync(productIndexList.ToArray());
-                    // var catalogContext = services.GetRequiredService<CatalogContext>();
-                    // await CatalogContextSeed.SeedAsync(catalogContext, loggerFactory);
-
+                    var productIndexList = await productRepos.GetProductForELIndexAsync();
+                    await elasticRepos.ElasticSaveManyAsync(productIndexList.ToArray());
+                    
                     //var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
                     // var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     // await AppIdentityDbContextSeed.SeedAsync(userManager, roleManager);

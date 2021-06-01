@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210601060656_TableCreation")]
-    partial class TableCreation
+    [Migration("20210601153037_AzureTbCreation")]
+    partial class AzureTbCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,36 +20,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.5");
-
-            modelBuilder.Entity("BrandProduct", b =>
-                {
-                    b.Property<string>("BrandId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("BrandId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("BrandProduct");
-                });
-
-            modelBuilder.Entity("CategoryProduct", b =>
-                {
-                    b.Property<string>("CategoryId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CategoryId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("CategoryProduct");
-                });
 
             modelBuilder.Entity("Infrastructure.Identity.Models.ApplicationUser", b =>
                 {
@@ -374,10 +344,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("BrandId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CategoryId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CreatedById")
                         .HasColumnType("nvarchar(450)");
@@ -395,6 +365,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("CreatedById");
 
@@ -690,36 +664,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.ToTable("UserToken");
                 });
 
-            modelBuilder.Entity("BrandProduct", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Brand", null)
-                        .WithMany()
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("CategoryProduct", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Infrastructure.Identity.Models.ApplicationUser", b =>
                 {
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", "UserInfo")
@@ -792,9 +736,21 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
                 {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Brand", "Brand")
+                        .WithMany("Product")
+                        .HasForeignKey("BrandId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Category", "Category")
+                        .WithMany("Product")
+                        .HasForeignKey("CategoryId");
+
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById");
+
+                    b.Navigation("Brand");
+
+                    b.Navigation("Category");
 
                     b.Navigation("CreatedBy");
                 });
@@ -883,6 +839,16 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", b =>
                 {
                     b.Navigation("PurchaseOrderProduct");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Brand", b =>
+                {
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Category", b =>
+                {
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
