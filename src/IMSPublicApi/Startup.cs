@@ -48,7 +48,7 @@ namespace InventoryManagementSystem.PublicApi
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
             services.AddDbContext<IdentityAndProductDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"),  b => b.MigrationsAssembly("IMSPublicApi")));
+                options.UseNpgsql(Configuration.GetConnectionString("Heroku"),  b => b.MigrationsAssembly("IMSPublicApi")));
             ConfigureServices(services);
         }
 
@@ -56,7 +56,7 @@ namespace InventoryManagementSystem.PublicApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<IdentityAndProductDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"),  b => b.MigrationsAssembly("IMSPublicApi")));
+                options.UseNpgsql(Configuration.GetConnectionString("Heroku"),  b => b.MigrationsAssembly("IMSPublicApi")));
             services.AddCors(c =>
             {
                 c.AddPolicy(CORS_POLICY, options => options.AllowAnyOrigin());

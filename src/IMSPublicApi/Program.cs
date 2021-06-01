@@ -30,8 +30,8 @@ namespace InventoryManagementSystem.PublicApi
                 var elasticRepos = services.GetRequiredService<IAsyncRepository<ProductIndex>>();
                 try
                 {
-                    var productIndexList = await productRepos.GetProductForELIndexAsync();
-                    await elasticRepos.ElasticSaveManyAsync(productIndexList.ToArray());
+                    // var productIndexList = await productRepos.GetProductForELIndexAsync();
+                    // await elasticRepos.ElasticSaveManyAsync(productIndexList.ToArray());
                     // var catalogContext = services.GetRequiredService<CatalogContext>();
                     // await CatalogContextSeed.SeedAsync(catalogContext, loggerFactory);
 
