@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Products
 {
@@ -13,8 +15,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public string StorageLocation { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
-
-        
         public virtual Product Product { get; set; }
+        public virtual ICollection<VariantValue> VariantValues { get; set; }
+        public virtual ICollection<ProductSerialNumber> SerialNumbers { get; set; }
     }
 }

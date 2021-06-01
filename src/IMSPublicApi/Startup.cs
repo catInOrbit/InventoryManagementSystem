@@ -45,18 +45,22 @@ namespace InventoryManagementSystem.PublicApi
         }
 
 
-        public void ConfigureDevelopmentServices(IServiceCollection services)
-        {
-            services.AddDbContext<IdentityAndProductDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("Heroku"),  b => b.MigrationsAssembly("IMSPublicApi")));
-            ConfigureServices(services);
-        }
+        // public void ConfigureDevelopmentServices(IServiceCollection services)
+        // {
+        //     services.AddDbContext<IdentityAndProductDbContext>(options =>
+        //         options.UseNpgsql(Configuration.GetConnectionString("Heroku"),  b => b.MigrationsAssembly("IMSPublicApi")));
+        //     ConfigureServices(services);
+        // }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // services.AddDbContext<IdentityAndProductDbContext>(options =>
+            //     options.UseNpgsql(Configuration.GetConnectionString("Heroku"),  b => b.MigrationsAssembly("IMSPublicApi")));
+            
             services.AddDbContext<IdentityAndProductDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("Heroku"),  b => b.MigrationsAssembly("IMSPublicApi")));
+                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"),  b => b.MigrationsAssembly("IMSPublicApi")));
+
             services.AddCors(c =>
             {
                 c.AddPolicy(CORS_POLICY, options => options.AllowAnyOrigin());

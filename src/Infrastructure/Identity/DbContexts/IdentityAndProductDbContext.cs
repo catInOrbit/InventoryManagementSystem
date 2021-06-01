@@ -16,14 +16,18 @@ namespace Infrastructure.Identity.DbContexts
         {
         }
         public DbSet<UserInfo> UserInfo { get; set; }
-        public DbSet<Product> Product { get; set; }
-        public DbSet<ProductVariant> ProductVariant { get; set; }
         public DbSet<Brand> Brand { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<Supplier> Supplier { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
+        
         public DbSet<PriceQuoteOrder> PriceQuote { get; set; }
         public DbSet<Transaction> Transaction { get; set; }
+        
+        public DbSet<Product> Product { get; set; }
+        public DbSet<ProductSerialNumber> ProductSerialNumber { get; set; }
+        public DbSet<ProductVariant> ProductVariant { get; set; }
+        public DbSet<VariantValue> VariantValue { get; set; }
         public DbSet<OrderItem> OrderItem { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {

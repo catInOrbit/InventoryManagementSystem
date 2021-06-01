@@ -14,8 +14,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public virtual UserInfo CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
-        public string SellingMethod { get; set; }
-
+        public string SellingStrategy { get; set; }
+        
         public virtual ICollection<Category> Category { get; set; }
         public virtual ICollection<Brand> Brand { get; set; }
         public virtual ICollection<ProductVariant> ProductVariants { get; set; }
