@@ -36,7 +36,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public TransactionType Type { get; set; }
 
         public decimal TotalOrderAmount { get; set; }
-        public virtual ICollection<OrderItem> PurchaseOrderProduct { get; set; } = new List<OrderItem>();
+        public virtual ICollection<PurchaseOrderItem> PurchaseOrderProduct { get; set; } = new List<PurchaseOrderItem>();
         public virtual UserInfo CreatedBy { get; set; }
     }
 }

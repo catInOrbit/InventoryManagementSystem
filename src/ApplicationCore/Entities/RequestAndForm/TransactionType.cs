@@ -4,5 +4,6 @@
     {
         PriceQuote = 1,
         Purchase = 2,
+        Receive,
     }
 }

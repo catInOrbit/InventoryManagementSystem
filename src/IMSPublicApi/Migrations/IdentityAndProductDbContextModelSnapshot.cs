@@ -89,49 +89,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.ToTable("SystemUser");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.OrderItem", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<decimal>("DiscountAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("OrderNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("PriceQuoteOrderId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("PurchaseOrderId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<float>("Quantity")
-                        .HasColumnType("real");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<float>("Unit")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PriceQuoteOrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("PurchaseOrderId");
-
-                    b.ToTable("OrderItem");
-                });
-
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", b =>
                 {
                     b.Property<string>("Id")
@@ -254,6 +211,133 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.HasIndex("TransactionId");
 
                     b.ToTable("PurchaseOrder");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrderItem", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("DiscountAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("OrderNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PriceQuoteOrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProductVariantId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PurchaseOrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<float>("Quantity")
+                        .HasColumnType("real");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Unit")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PriceQuoteOrderId");
+
+                    b.HasIndex("ProductVariantId");
+
+                    b.HasIndex("PurchaseOrderId");
+
+                    b.ToTable("OrderItem");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.ReceivedOrderItem", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProductVariantId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<float>("Quantity")
+                        .HasColumnType("real");
+
+                    b.Property<float>("QuantityInventory")
+                        .HasColumnType("real");
+
+                    b.Property<float>("QuantityReceived")
+                        .HasColumnType("real");
+
+                    b.Property<string>("ReceivedOrderId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReceivingOrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("StorageLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductVariantId");
+
+                    b.HasIndex("ReceivingOrderId");
+
+                    b.ToTable("ReceivedOrderItems");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.ReceivingOrder", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("BranchId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PurchaseOrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ReceiveOrderNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ReceivedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SupplierId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SupplierInvoice")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserInfoId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("WarehouseLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PurchaseOrderId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.HasIndex("UserInfoId");
+
+                    b.ToTable("ReceivingOrder");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", b =>
@@ -671,23 +755,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("UserInfo");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.OrderItem", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", null)
-                        .WithMany("PurchaseOrderProduct")
-                        .HasForeignKey("PriceQuoteOrderId");
-
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId");
-
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", null)
-                        .WithMany("PurchaseOrderProduct")
-                        .HasForeignKey("PurchaseOrderId");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", b =>
                 {
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", "CreatedBy")
@@ -732,6 +799,59 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("Supplier");
                 });
 
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrderItem", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", null)
+                        .WithMany("PurchaseOrderProduct")
+                        .HasForeignKey("PriceQuoteOrderId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", "ProductVariant")
+                        .WithMany()
+                        .HasForeignKey("ProductVariantId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", null)
+                        .WithMany("PurchaseOrderProduct")
+                        .HasForeignKey("PurchaseOrderId");
+
+                    b.Navigation("ProductVariant");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.ReceivedOrderItem", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", "ProductVariant")
+                        .WithMany()
+                        .HasForeignKey("ProductVariantId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.ReceivingOrder", "ReceivingOrder")
+                        .WithMany("ReceivedOrderItems")
+                        .HasForeignKey("ReceivingOrderId");
+
+                    b.Navigation("ProductVariant");
+
+                    b.Navigation("ReceivingOrder");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.ReceivingOrder", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", "PurchaseOrder")
+                        .WithMany()
+                        .HasForeignKey("PurchaseOrderId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", "UserInfo")
+                        .WithMany()
+                        .HasForeignKey("UserInfoId");
+
+                    b.Navigation("PurchaseOrder");
+
+                    b.Navigation("Supplier");
+
+                    b.Navigation("UserInfo");
+                });
+
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
                 {
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Brand", "Brand")
@@ -771,11 +891,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.VariantValue", b =>
                 {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", "ProductVariant")
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", null)
                         .WithMany("VariantValues")
                         .HasForeignKey("ProductVariantId");
-
-                    b.Navigation("ProductVariant");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -837,6 +955,11 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", b =>
                 {
                     b.Navigation("PurchaseOrderProduct");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.ReceivingOrder", b =>
+                {
+                    b.Navigation("ReceivedOrderItems");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Brand", b =>

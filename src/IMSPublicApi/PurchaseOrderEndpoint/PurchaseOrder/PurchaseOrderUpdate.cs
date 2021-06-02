@@ -23,17 +23,17 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
     public class PurchaseOrderUpdate : BaseAsyncEndpoint.WithRequest<POUpdateRequest>.WithResponse<POUpdateResponse>
     {
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _purchaseOrderRepos;
-        private readonly IAsyncRepository<Product> _productRepos;
+        private readonly IAsyncRepository<ProductVariant> _productVariantRepos;
 
         private readonly IUserAuthentication _userAuthentication;
         private readonly IAuthorizationService _authorizationService;
 
-        public PurchaseOrderUpdate(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService,  IUserAuthentication userAuthentication, IAsyncRepository<Product> productRepos)
+        public PurchaseOrderUpdate(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService,  IUserAuthentication userAuthentication, IAsyncRepository<ProductVariant> productVariantRepos)
         {
             _purchaseOrderRepos = purchaseOrderRepos;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
-            _productRepos = productRepos;
+            _productVariantRepos = productVariantRepos;
         }
         
         [HttpPut("api/purchaseorder/update")]
@@ -61,7 +61,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             foreach (var requestOrderItemInfo in request.OrderItemInfos)
             {
                 requestOrderItemInfo.OrderNumber = po.PurchaseOrderNumber;
-                requestOrderItemInfo.Product = await _productRepos.GetByIdAsync(requestOrderItemInfo.ProductId);
+                requestOrderItemInfo.ProductVariant = await _productVariantRepos.GetByIdAsync(requestOrderItemInfo.ProductVariantId);
                 requestOrderItemInfo.TotalAmount += requestOrderItemInfo.Price;  
                 po.PurchaseOrderProduct.Add(requestOrderItemInfo);
             }

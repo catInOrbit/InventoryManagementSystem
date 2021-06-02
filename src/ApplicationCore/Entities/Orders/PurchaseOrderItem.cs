@@ -5,19 +5,19 @@ using InventoryManagementSystem.ApplicationCore.Entities.Products;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
-    public class OrderItem : BaseEntity
+    public class PurchaseOrderItem : BaseEntity
     {
-        public OrderItem()
+        public PurchaseOrderItem()
         {
             Id = Guid.NewGuid().ToString();
         }
         [JsonIgnore]
         public string OrderNumber { get; set; }
-        public string ProductId { get; set; }
+        public string ProductVariantId { get; set; }
         [JsonIgnore]
-        public virtual Product Product { get; set; }
+        public virtual ProductVariant ProductVariant { get; set; }
         public float Quantity { get; set; }
-        public float Unit { get; set; }
+        public string Unit { get; set; }
         public decimal Price { get; set; }
         public decimal DiscountAmount { get; set; }
         

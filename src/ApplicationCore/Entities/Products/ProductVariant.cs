@@ -25,11 +25,12 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public DateTime CreatedDate { get; set; }
         [Nest.PropertyName("modifiedDate")]
         public DateTime ModifiedDate { get; set; }
-        [JsonIgnore]
+         [JsonIgnore]
         public virtual Product Product { get; set; }
         [Nest.PropertyName("variantValues")]
         [Nest.Nested]
         public virtual ICollection<VariantValue> VariantValues { get; set; }
+        [Nest.Nested]
         [Nest.PropertyName("serialNumbers")]
         public virtual ICollection<ProductSerialNumber> SerialNumbers { get; set; }
     }

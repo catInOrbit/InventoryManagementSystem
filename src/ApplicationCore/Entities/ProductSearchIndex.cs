@@ -13,7 +13,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         [Nest.PropertyName("price")]
         public decimal Price { get; set; }
         [Nest.PropertyName("variantValues")]
-        [Nest.Nested]
         public List<VariantValue> VariantValues { get; set; }
         [Nest.PropertyName("serialNumbers")]
         [Nest.Nested]

@@ -28,7 +28,10 @@ namespace Infrastructure.Identity.DbContexts
         public DbSet<ProductSerialNumber> ProductSerialNumber { get; set; }
         public DbSet<ProductVariant> ProductVariant { get; set; }
         public DbSet<VariantValue> VariantValue { get; set; }
-        public DbSet<OrderItem> OrderItem { get; set; }
+        public DbSet<PurchaseOrderItem> OrderItem { get; set; }
+        public DbSet<ReceivingOrder> ReceivingOrder { get; set; }
+        public DbSet<ReceivedOrderItem> ReceivedOrderItems { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

@@ -38,11 +38,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
         ]
         public override async Task<ActionResult<PQCreateResponse>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            var isAuthorized = await _authorizationService.AuthorizeAsync(
-                HttpContext.User, "PriceQuoteOrder",
-                UserOperations.Create);
-
-            if (!isAuthorized.Succeeded)
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PriceQuoteOrder", UserOperations.Create))
                 return Unauthorized();
             
             var response = new PQCreateResponse();

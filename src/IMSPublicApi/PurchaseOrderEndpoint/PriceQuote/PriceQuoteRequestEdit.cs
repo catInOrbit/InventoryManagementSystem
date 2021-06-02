@@ -18,14 +18,14 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<PriceQuoteOrder> _asyncRepository;
         private readonly IUserAuthentication _userAuthentication;
-        private readonly IAsyncRepository<Product> _productRepos;
+        private readonly IAsyncRepository<ProductVariant> _productVariantRepos;
 
-        public PriceQuoteRequestEdit(IAuthorizationService authorizationService, IAsyncRepository<PriceQuoteOrder> asyncRepository, IUserAuthentication userAuthentication, IAsyncRepository<Product> productRepos)
+        public PriceQuoteRequestEdit(IAuthorizationService authorizationService, IAsyncRepository<PriceQuoteOrder> asyncRepository, IUserAuthentication userAuthentication, IAsyncRepository<ProductVariant> productVariantRepos)
         {
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
             _userAuthentication = userAuthentication;
-            _productRepos = productRepos;
+            _productVariantRepos = productVariantRepos;
         }
         
         
@@ -51,7 +51,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             foreach (var requestOrderItemInfo in request.OrderItemInfos)
             {
                 requestOrderItemInfo.OrderNumber = pqr.PriceQuoteOrderNumber;
-                requestOrderItemInfo.Product = await _productRepos.GetByIdAsync(requestOrderItemInfo.ProductId);
+                requestOrderItemInfo.ProductVariant = await _productVariantRepos.GetByIdAsync(requestOrderItemInfo.ProductVariantId);
                 requestOrderItemInfo.TotalAmount += requestOrderItemInfo.Price;  
                 pqr.PurchaseOrderProduct.Add(requestOrderItemInfo);
             }

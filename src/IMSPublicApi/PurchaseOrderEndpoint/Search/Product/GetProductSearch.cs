@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
@@ -34,12 +35,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Produ
             CancellationToken cancellationToken = new CancellationToken())
         {
             
-            //   var isAuthorized = await _authorizationService.AuthorizeAsync(
-            //     HttpContext.User, "Product",
-            //     UserOperations.Read);
-            //
-            // if (!isAuthorized.Succeeded)
-            //     return Unauthorized();
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Read))
+                return Unauthorized();
             var page = 1;
             var pageSize = 5;
             var response = await _elasticClient.SearchAsync<ProductSearchIndex>(
