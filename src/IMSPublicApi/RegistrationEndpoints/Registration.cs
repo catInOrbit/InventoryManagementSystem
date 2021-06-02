@@ -69,7 +69,6 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                     var newUserID = await _userRoleModificationService.UserCreatingHelper(request.Password, request.Username, request.Email);
                     if (newUserID != null)
                     {
-
                         if (await _userRoleModificationService.CheckRoleNameExistsHelper(request.RoleName))
                         {
                             var result = await _userRoleModificationService.RoleCreatingHelper(newUserID, request.RoleName);
