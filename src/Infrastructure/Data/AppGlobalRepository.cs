@@ -36,26 +36,25 @@ namespace Infrastructure.Data
             return await _identityAndProductDbContext.Set<T>().FindAsync(keyValues, cancellationToken);
         }
 
-        public async Task<List<ProductSearchIndex>> GetProductForELIndexAsync(CancellationToken cancellationToken = default)
+        public async Task<List<ProductVariant>> GetProductForELIndexAsync(CancellationToken cancellationToken = default)
         {
             // var products= await _identityAndProductDbContext.Set<ProductVariant>().Select(p=> new {p.Id, p.Name}).ToListAsync(cancellationToken);
             // var products= await _identityAndProductDbContext.Set<ProductVariant>().ToListAsync(cancellationToken);
-            var products= await _identityAndProductDbContext.Set<ProductVariant>().ToListAsync(cancellationToken);
+            var productVariants= await _identityAndProductDbContext.Set<ProductVariant>().ToListAsync(cancellationToken);
             
-            List<ProductSearchIndex> indices = new List<ProductSearchIndex>();
-            foreach (var productVariant in products)
-            {
-                var index = new ProductSearchIndex
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    ProductId = productVariant.ProductId,
-                    Name = productVariant.Name,
-                    Price = productVariant.Price,
-                    SerialNumbers = productVariant.SerialNumbers.ToList(),
-                    VariantValues = productVariant.VariantValues.ToList(),
-                };
-                indices.Add(index);
-            }
+            // List<ProductSearchIndex> indices = new List<ProductSearchIndex>();
+            // foreach (var productVariant in products)
+            // {
+            //     var index = new ProductSearchIndex
+            //     {
+            //         Id = Guid.NewGuid().ToString(),
+            //         ProductId = productVariant.ProductId,
+            //         Name = productVariant.Name,
+            //         Price = productVariant.Price,
+            //         ProductVariants = products
+            //     };
+            //     indices.Add(index);
+            // }
             
             // return indices;
             // var prodcuctIndices = new List<ProductVariant>();
@@ -68,7 +67,7 @@ namespace Infrastructure.Data
             //     };
             //     prodcuctIndices.Add(productIndex);
             // }
-            return indices;
+            return productVariants;
         }
 
         public PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber, CancellationToken cancellationToken = default)

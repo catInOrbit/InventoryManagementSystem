@@ -27,7 +27,7 @@ namespace InventoryManagementSystem.PublicApi
                 var services = scope.ServiceProvider;
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 var productRepos = services.GetRequiredService<IAsyncRepository<ProductVariant>>();
-                var elasticRepos = services.GetRequiredService<IAsyncRepository<ProductSearchIndex>>();
+                var elasticRepos = services.GetRequiredService<IAsyncRepository<ProductVariant>>();
                 try
                 {
                     var productIndexList = await productRepos.GetProductForELIndexAsync();

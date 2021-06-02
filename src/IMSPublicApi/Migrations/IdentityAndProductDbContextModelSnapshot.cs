@@ -882,11 +882,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", b =>
                 {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", "Product")
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", null)
                         .WithMany("ProductVariants")
                         .HasForeignKey("ProductId");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.VariantValue", b =>

@@ -13,11 +13,11 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public string Name { get; set; }
         [Nest.PropertyName("price")]
         public decimal Price { get; set; }
-        [Nest.PropertyName("sku")]
+        [Nest.PropertyName("skuString")]
         public string Sku { get; set; }
-        [Nest.PropertyName("unit")]
+        [Nest.PropertyName("unitType")]
         public string Unit { get; set; }
-        [Nest.PropertyName("quantity")]
+        [Nest.PropertyName("quantityNumber")]
         public float Quantity { get; set; }
         [Nest.PropertyName("storageLocation")]
         public string StorageLocation { get; set; }
@@ -25,8 +25,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public DateTime CreatedDate { get; set; }
         [Nest.PropertyName("modifiedDate")]
         public DateTime ModifiedDate { get; set; }
-         [JsonIgnore]
-        public virtual Product Product { get; set; }
+        //  [JsonIgnore]
+        // public virtual Product Product { get; set; }
         [Nest.PropertyName("variantValues")]
         [Nest.Nested]
         public virtual ICollection<VariantValue> VariantValues { get; set; }

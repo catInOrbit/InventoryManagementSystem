@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210602085405_TableCreation")]
+    [Migration("20210602172201_TableCreation")]
     partial class TableCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -884,11 +884,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", b =>
                 {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", "Product")
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", null)
                         .WithMany("ProductVariants")
                         .HasForeignKey("ProductId");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.VariantValue", b =>

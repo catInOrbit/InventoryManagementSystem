@@ -17,13 +17,12 @@ namespace Infrastructure.Services
 
             var settings = new ConnectionSettings(new Uri(url))
                 .DefaultIndex(defaultIndex).BasicAuthentication("elastic", "LDBFEOTonZjDL1jueHMlKXcC");;
-
             AddDefaultMappings(defaultIndex, settings);
 
             var client = new ElasticClient(settings);
 
             services.AddSingleton<IElasticClient>(client);
-
+            
             try
             {
                 CreateIndex(client, defaultIndex);
@@ -38,13 +37,13 @@ namespace Infrastructure.Services
         private static void AddDefaultMappings(string indexName, ConnectionSettings settings)
         {
             settings
-                .DefaultMappingFor<ProductSearchIndex>(m => m.IndexName(indexName));
+                .DefaultMappingFor<ProductVariant>(m => m.IndexName(indexName));
         }
 
         private static void CreateIndex(IElasticClient client, string indexName)
         {
             client.Indices.Create(indexName,
-                index => index.Map<ProductSearchIndex>(x => x.AutoMap())
+                index => index.Map<ProductVariant>(x => x.AutoMap())
             );
 
             // client.Indices.Create(indexName, i => i
