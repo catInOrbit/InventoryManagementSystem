@@ -48,7 +48,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             {
                 requestOrderItemInfo.OrderNumber = pqr.PriceQuoteOrderNumber;
                 requestOrderItemInfo.ProductVariant = await _productVariantRepos.GetByIdAsync(requestOrderItemInfo.ProductVariantId);
-                requestOrderItemInfo.TotalAmount += requestOrderItemInfo.Price;  
+                requestOrderItemInfo.TotalAmount += requestOrderItemInfo.Price;
+                pqr.TotalOrderAmount += requestOrderItemInfo.Price;
                 pqr.PurchaseOrderProduct.Add(requestOrderItemInfo);
             }
 

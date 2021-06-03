@@ -62,7 +62,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             {
                 requestOrderItemInfo.OrderNumber = po.PurchaseOrderNumber;
                 requestOrderItemInfo.ProductVariant = await _productVariantRepos.GetByIdAsync(requestOrderItemInfo.ProductVariantId);
-                requestOrderItemInfo.TotalAmount += requestOrderItemInfo.Price;  
+                po.TotalOrderAmount += requestOrderItemInfo.Price;
+                po.TotalDiscountAmount += requestOrderItemInfo.DiscountAmount;
                 po.PurchaseOrderProduct.Add(requestOrderItemInfo);
             }
             // var supplierList = await _supplierRepos.ListAllAsync();
