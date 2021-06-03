@@ -83,7 +83,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                                 Address =  request.Address,
                                 IsActive =  true,
                                 DateOfBirth = request.DateOfBirth,
-                                DateOfBirthNormalizedString = string.Format("{0}/{1}/{2}", request.DateOfBirth.Month, request.DateOfBirth.Day, request.DateOfBirth.Year)
+                                DateOfBirthNormalizedString = string.Format("{0}-{1}-{2}", request.DateOfBirth.Month, request.DateOfBirth.Day, request.DateOfBirth.Year)
                             };
                     
                             await _userRepository.AddAsync(newIMSUser, cancellationToken);

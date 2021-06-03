@@ -38,11 +38,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
         ]
         public override async Task<ActionResult<PQEditResponse>> HandleAsync(PQEditRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            var isAuthorized = await _authorizationService.AuthorizeAsync(
-                HttpContext.User, "PriceQuoteOrder",
-                UserOperations.Create);
-            
-            if (!isAuthorized.Succeeded)
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PriceQuoteOrder", UserOperations.Create))
                 return Unauthorized();
 
             var pqr = _asyncRepository.GetPriceQuoteByNumber(request.PriceQuoteNumberGet);
@@ -55,6 +51,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 requestOrderItemInfo.TotalAmount += requestOrderItemInfo.Price;  
                 pqr.PurchaseOrderProduct.Add(requestOrderItemInfo);
             }
+
+            pqr.Description = request.Description;
             pqr.SupplierId = request.SupplierId;
             pqr.Deadline = request.Deadline;
             

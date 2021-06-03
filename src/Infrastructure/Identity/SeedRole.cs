@@ -62,7 +62,7 @@ namespace Infrastructure.Identity
                     Address = "aDDRESS",
                     IsActive = true,
                     DateOfBirth = dob,
-                    DateOfBirthNormalizedString = dob.ToString("yyyy/MM/dd")
+                    DateOfBirthNormalizedString = dob.ToString("yyyy-MM-dd")
                 };
                 await _userRepository.AddAsync(newIMSUser, new CancellationToken());
             }

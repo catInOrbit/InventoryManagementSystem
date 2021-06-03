@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm;
 
@@ -17,6 +18,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
             PriceQuoteStatus = PriceQuoteType.Pending;
             Type = TransactionType.PriceQuote;
         }
+
 
         public string PriceQuoteOrderNumber { get; set; }
         public string SupplierId { get; set; }

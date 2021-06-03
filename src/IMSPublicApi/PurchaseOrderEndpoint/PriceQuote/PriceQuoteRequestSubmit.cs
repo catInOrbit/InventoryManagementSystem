@@ -41,13 +41,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
         public override async Task<ActionResult> HandleAsync([FromForm] PQSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
           
-            var isAuthorized = await _authorizationService.AuthorizeAsync(
-                HttpContext.User, "PriceQuoteOrder",
-                UserOperations.Update);
-
-            if (!isAuthorized.Succeeded)
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PriceQuoteOrder", UserOperations.Update))
                 return Unauthorized();
-
+            
             var pqr = _asyncRepository.GetPriceQuoteByNumber(request.PriceQuoteNumberGet);
             pqr.PriceQuoteStatus = PriceQuoteType.Sent;
             pqr.ModifiedBy = (await _userAuthentication.GetCurrentSessionUser()).Id;

@@ -17,7 +17,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
         private IAsyncRepository<PriceQuoteOrder> _asyncRepository;
         private readonly IAuthorizationService _authorizationService;
 
-
         public GetPriceQuote(IAsyncRepository<PriceQuoteOrder> asyncRepository, IAuthorizationService authorizationService)
         {
             _asyncRepository = asyncRepository;
@@ -47,8 +46,23 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
 
             if (request.number == "all")
             {
+                response.IsForDisplay = true;
                 var pqrs = await _asyncRepository.ListAllAsync(cancellationToken);
-                response.PriceQuoteOrders = pqrs.ToList();    
+                foreach (var priceQuoteOrder in pqrs)
+                {
+                    if (priceQuoteOrder.PriceQuoteStatus == PriceQuoteType.Pending)
+                    {
+                        var pq = new PQDisplay
+                        {
+                            Id = priceQuoteOrder.Id,
+                            Deadline = priceQuoteOrder.Deadline,
+                            CreatedDate = priceQuoteOrder.CreatedDate,
+                            CreatedByName = priceQuoteOrder.CreatedBy.Fullname,
+                            PriceQuoteOrderNumber = priceQuoteOrder.PriceQuoteOrderNumber
+                        };
+                        response.PriceQuoteOs.Add(pq);     
+                    }
+                }
             }
 
             else

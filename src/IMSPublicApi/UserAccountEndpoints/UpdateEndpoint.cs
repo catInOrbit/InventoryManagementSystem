@@ -54,7 +54,7 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
                 if (request.DateOfBirth != userInfoGet.DateOfBirth)
                 {
                     userInfoGet.DateOfBirth = request.DateOfBirth.Date;
-                    userInfoGet.DateOfBirthNormalizedString = string.Format("{0}/{1}/{2}", request.DateOfBirth.Year, request.DateOfBirth.Month, request.DateOfBirth.Day);
+                    userInfoGet.DateOfBirthNormalizedString = string.Format("{0}-{1}-{2}", request.DateOfBirth.Year, request.DateOfBirth.Month, request.DateOfBirth.Day);
                 }
 
                 if (request.NewPassword != null)

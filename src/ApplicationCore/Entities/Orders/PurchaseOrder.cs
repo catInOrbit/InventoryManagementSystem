@@ -17,6 +17,11 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
             CreatedDate = DateTime.Now;
             Type = TransactionType.Purchase;
         }
+        public virtual bool ShouldSerializePurchaseOrderProduct()
+        {
+            return true;
+        }
+        
         
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
@@ -52,6 +57,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public virtual ICollection<PurchaseOrderItem> PurchaseOrderProduct { get; set; } = new List<PurchaseOrderItem>();
         public virtual PriceQuoteOrder PriceQuoteOrder { get; set; }
         public virtual UserInfo CreatedBy { get; set; }
-
+        
     }
 }
