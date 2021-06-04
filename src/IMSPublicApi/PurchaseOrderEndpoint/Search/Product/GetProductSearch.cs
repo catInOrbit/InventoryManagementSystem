@@ -6,6 +6,7 @@ using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -36,11 +37,11 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Produ
             CancellationToken cancellationToken = new CancellationToken())
         {
             
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Read))
-                return Unauthorized();
+            // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Read))
+            //     return Unauthorized();
             var page = 1;
             var pageSize = 5;
-            var response = await _elasticClient.SearchAsync<ProductVariant>(
+            var response = await _elasticClient.SearchAsync<ProductSearchIndex>(
                 s => s.Query(q => q.QueryString(d => d.Query('*' + request.Query + '*'))));
             // var response = await _elasticClient.SearchAsync<ProductIndex>(
             //     s => s.Query(q =>  q.Match(m => m.Field(f => f.Name).Query(request.Query))));

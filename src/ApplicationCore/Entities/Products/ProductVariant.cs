@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Nest;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Products
 {
@@ -13,17 +14,17 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public string Name { get; set; }
         [Nest.PropertyName("price")]
         public decimal Price { get; set; }
-        [Nest.PropertyName("skuString")]
+        [Nest.Text( Name = "sku")]
         public string Sku { get; set; }
-        [Nest.PropertyName("unitType")]
+        [Nest.Text( Name = "unit")]
         public string Unit { get; set; }
-        [Nest.PropertyName("quantityNumber")]
+        [Nest.Number(NumberType.Float, Name = "quantity", IgnoreMalformed = true)]
         public float Quantity { get; set; }
-        [Nest.PropertyName("storageLocation")]
+        [Nest.PropertyName("storageLocation")]  
         public string StorageLocation { get; set; }
-        [Nest.PropertyName("createdDate")]
+        [Date(Format = "yyyy-MM-dd")]
         public DateTime CreatedDate { get; set; }
-        [Nest.PropertyName("modifiedDate")]
+        [Date(Format = "yyyy-MM-dd")]
         public DateTime ModifiedDate { get; set; }
         //  [JsonIgnore]
         // public virtual Product Product { get; set; }

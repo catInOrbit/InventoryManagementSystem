@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -27,12 +29,21 @@ namespace InventoryManagementSystem.PublicApi
                 var services = scope.ServiceProvider;
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 var productRepos = services.GetRequiredService<IAsyncRepository<ProductVariant>>();
-                var elasticRepos = services.GetRequiredService<IAsyncRepository<ProductVariant>>();
+                var purchaseOrderRepos = services.GetRequiredService<IAsyncRepository<PurchaseOrder>>();
+                var elasticProductRepos = services.GetRequiredService<IAsyncRepository<ProductSearchIndex>>();
+                var elasticPoRepos = services.GetRequiredService<IAsyncRepository<PurchaseOrderSearchIndex>>();
                 try
                 {
                     var productIndexList = await productRepos.GetProductForELIndexAsync();
-                    await elasticRepos.ElasticSaveManyAsync(productIndexList.ToArray());
-                    
+                    var pos = await purchaseOrderRepos.ListAllAsync();
+
+                    await elasticProductRepos.ElasticSaveManyAsync(productIndexList.ToArray());
+                    await elasticPoRepos.ElasticSaveManyAsync((await purchaseOrderRepos.GetPOForELIndexAsync()).ToArray());
+
+                    // foreach (var productSearchIndex in productIndexList)
+                    // {
+                    //     await elasticRepos.ElasticSaveSingleAsync(productSearchIndex);
+                    // }
                     //var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
                     // var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                     // await AppIdentityDbContextSeed.SeedAsync(userManager, roleManager);

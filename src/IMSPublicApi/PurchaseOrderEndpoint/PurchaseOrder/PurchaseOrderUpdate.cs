@@ -71,6 +71,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             // await _supplierRepos.ElasticSaveManyAsync(supplierList.ToArray());
 
             await _purchaseOrderRepos.UpdateAsync(po);
+            await _purchaseOrderRepos.ElasticSaveSingleAsync(po);
             response.PurchaseOrder = po;
             return Ok(response);
         }

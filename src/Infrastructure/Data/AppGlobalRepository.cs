@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Specification;
+using Elasticsearch.Net;
 using Infrastructure.Identity;
 using Infrastructure.Identity.DbContexts;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +24,7 @@ namespace Infrastructure.Data
         private readonly IElasticClient _elasticClient;
 
         private List<T> _elasticCacheProduct = new List<T>();
-
+        private List<ProductSearchIndex> _elasticCacheProductSearchIndex = new List<ProductSearchIndex>();
 
         public AppGlobalRepository(IdentityAndProductDbContext identityAndProductDbContext, IElasticClient elasticClient)
         {
@@ -36,12 +38,29 @@ namespace Infrastructure.Data
             return await _identityAndProductDbContext.Set<T>().FindAsync(keyValues, cancellationToken);
         }
 
-        public async Task<List<ProductVariant>> GetProductForELIndexAsync(CancellationToken cancellationToken = default)
+        public async Task<List<ProductSearchIndex>> GetProductForELIndexAsync(CancellationToken cancellationToken = default)
         {
             // var products= await _identityAndProductDbContext.Set<ProductVariant>().Select(p=> new {p.Id, p.Name}).ToListAsync(cancellationToken);
             // var products= await _identityAndProductDbContext.Set<ProductVariant>().ToListAsync(cancellationToken);
             var productVariants= await _identityAndProductDbContext.Set<ProductVariant>().ToListAsync(cancellationToken);
-            
+            List<ProductSearchIndex> psis = new List<ProductSearchIndex>();
+            foreach (var productVariant in productVariants)
+            {
+                string nameConcat = productVariant.Name;
+                foreach (var productVariantVariantValue in productVariant.VariantValues)
+                {
+                    nameConcat += "-" + productVariantVariantValue.Value.Trim();
+                }
+                
+                var index = new ProductSearchIndex
+                {
+                    name = nameConcat,
+                    productId = productVariant.ProductId,
+                    variantId = productVariant.Id
+                };
+                
+                psis.Add(index);
+            }            
             // List<ProductSearchIndex> indices = new List<ProductSearchIndex>();
             // foreach (var productVariant in products)
             // {
@@ -67,7 +86,32 @@ namespace Infrastructure.Data
             //     };
             //     prodcuctIndices.Add(productIndex);
             // }
-            return productVariants;
+            // return productVariants;
+            return psis;
+        }
+
+        public async Task<List<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(CancellationToken cancellationToken = default)
+        {
+            var pos= await _identityAndProductDbContext.Set<PurchaseOrder>().ToListAsync(cancellationToken);
+            List<PurchaseOrderSearchIndex> posi = new List<PurchaseOrderSearchIndex>();
+            foreach (var po in pos)
+            {
+                var index = new PurchaseOrderSearchIndex
+                {
+                    Id = po.Id,
+                    SupplierName = po.Supplier.SupplierName,
+                    PurchaseOrderNumber = po.PurchaseOrderNumber,
+                    Status = po.PurchaseOrderStatus.GetStringValue(),
+                    CreatedDate = po.CreatedDate,
+                    DeliveryDate = po.DeliveryDate,
+                    TotalPrice = po.TotalOrderAmount,
+                    ConfirmedByName = po.CreatedBy.Fullname
+                };
+                
+                posi.Add(index);
+            }
+
+            return posi;
         }
 
         public PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber, CancellationToken cancellationToken = default)
@@ -162,10 +206,12 @@ namespace Infrastructure.Data
             }
         }
 
-        public async Task ElasticSaveManyAsync(T[] types)
+        public async Task ElasticSaveManyAsync(T[] products)
         {
-            _elasticCacheProduct.AddRange(types);
-            var result = await _elasticClient.IndexManyAsync(types);
+            await _elasticClient.DeleteByQueryAsync<ProductSearchIndex>(q => q.MatchAll());
+
+            _elasticCacheProduct.AddRange(products);
+            var result = await _elasticClient.IndexManyAsync(products);
             if (result.Errors)
             {
                 // the response can be inspected for errors
@@ -176,10 +222,25 @@ namespace Infrastructure.Data
             }
         }
 
+
+        // public async Task ElasticSaveManyAsync(T[] types)
+        // {
+        //     _elasticCacheProduct.AddRange(types);
+        //     var result = await _elasticClient.IndexManyAsync(types);
+        //     if (result.Errors)
+        //     {
+        //         // the response can be inspected for errors
+        //         foreach (var itemWithError in result.ItemsWithErrors)
+        //         {
+        //             throw new Exception();
+        //         }
+        //     }
+        // }
+
         public async Task ElasticSaveBulkAsync(T[] types)
         {
             _elasticCacheProduct.AddRange(types);
-            var result = await _elasticClient.BulkAsync(b => b.Index("productVariants").IndexMany(types));
+            var result = await _elasticClient.BulkAsync(b => b.Index("productsearchindex").IndexMany(types));
             if (result.Errors)
             {
                 // the response can be inspected for errors

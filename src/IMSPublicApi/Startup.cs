@@ -91,6 +91,7 @@ namespace InventoryManagementSystem.PublicApi
             
             //The AddScoped method registers the service with a scoped lifetime, the lifetime of a single request.
             // services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
+            services.AddElasticsearch(Configuration);
             services.AddScoped(typeof(IAsyncRepository<>), typeof(AppGlobalRepository<>));
 
 
@@ -124,7 +125,6 @@ namespace InventoryManagementSystem.PublicApi
             //         ValidateAudience = false
             //     };
             // });
-
 
             services.AddMediatR(typeof(Product).Assembly);
 
@@ -233,7 +233,6 @@ namespace InventoryManagementSystem.PublicApi
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
-            services.AddElasticsearch(Configuration);
             
             services.AddScoped<IAuthorizationHandler,
                 AccountAuthorizationHandler>();

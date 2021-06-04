@@ -6,7 +6,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
     // Using non-generic integer types for simplicity and to ease caching logic
     public abstract class BaseEntity
     {
-        [JsonIgnore]
         [Nest.PropertyName("id")]
         public virtual string Id { get; set; }
     }

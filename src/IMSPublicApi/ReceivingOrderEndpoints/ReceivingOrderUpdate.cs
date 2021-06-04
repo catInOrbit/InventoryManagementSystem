@@ -31,10 +31,10 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
 
         [HttpPost("api/receiving/update")]
         [SwaggerOperation(
-            Summary = "Create G",
-            Description = "Authenticates a user",
-            OperationId = "auth.authenticate",
-            Tags = new[] { "IMSAuthenticationEndpoints" })
+            Summary = "Create Receiving Order",
+            Description = "Create Receiving Order",
+            OperationId = "ro.create",
+            Tags = new[] { "ReceivingOrderEndpoints" })
         ]
         public override async Task<ActionResult> HandleAsync(ROEditRequest request, CancellationToken cancellationToken = new CancellationToken())
         {

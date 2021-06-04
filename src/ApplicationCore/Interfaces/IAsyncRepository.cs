@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 
 namespace InventoryManagementSystem.ApplicationCore.Interfaces
 {
@@ -14,7 +15,9 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
     {
         Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default);
 
-        Task<List<ProductVariant>> GetProductForELIndexAsync(CancellationToken cancellationToken = default);
+        Task<List<ProductSearchIndex>> GetProductForELIndexAsync(CancellationToken cancellationToken = default);
+        Task<List<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(CancellationToken cancellationToken = default);
+
         PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber,  CancellationToken cancellationToken = default);
         PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderNumber,  CancellationToken cancellationToken = default);
 

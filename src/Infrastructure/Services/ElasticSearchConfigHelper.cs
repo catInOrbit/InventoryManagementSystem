@@ -1,6 +1,8 @@
 ﻿using System;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nest;
@@ -14,10 +16,11 @@ namespace Infrastructure.Services
         {
             var url = configuration["elasticsearch:url"];
             var defaultIndex = configuration["elasticsearch:index"];
+            var priceQuoteIndex = configuration["elasticsearch:priceQuoteIndex"];
 
             var settings = new ConnectionSettings(new Uri(url))
                 .DefaultIndex(defaultIndex).BasicAuthentication("elastic", "LDBFEOTonZjDL1jueHMlKXcC");;
-            AddDefaultMappings(defaultIndex, settings);
+            // AddDefaultMappings(defaultIndex, settings);
 
             var client = new ElasticClient(settings);
 
@@ -37,13 +40,17 @@ namespace Infrastructure.Services
         private static void AddDefaultMappings(string indexName, ConnectionSettings settings)
         {
             settings
-                .DefaultMappingFor<ProductVariant>(m => m.IndexName(indexName));
+                .DefaultMappingFor<ProductSearchIndex>(m => m.IndexName(indexName));
         }
 
-        private static void CreateIndex(IElasticClient client, string indexName)
+        private static void CreateIndex(IElasticClient client, string defaultIndexName)
         {
-            client.Indices.Create(indexName,
-                index => index.Map<ProductVariant>(x => x.AutoMap())
+            client.Indices.Create(defaultIndexName,
+                index => index.Map<ProductSearchIndex>(x => x.AutoMap())
+            );
+            
+            client.Indices.Create("purchaseOrders",
+                index => index.Map<PurchaseOrder>(x => x.AutoMap())
             );
 
             // client.Indices.Create(indexName, i => i

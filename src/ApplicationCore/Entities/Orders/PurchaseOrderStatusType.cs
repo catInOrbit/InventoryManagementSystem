@@ -2,11 +2,12 @@
 {
     public enum PurchaseOrderStatusType
     {
-        Created = -1,
-        WaitingConfirmation = 1,
-        Sent = 2,
-        Confirmed = 3,
-        GoodsReceiptPhase = 4,
-        Canceled = 5
+        Created = 1,
+        WaitingConfirmation = 2,
+        Sent = 3,
+        Confirmed = 4,
+        GoodsReceiptPhase = 5,
+        Done = 6,
+        Canceled = -1
     }
 }

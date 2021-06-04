@@ -26,10 +26,10 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
               
         [HttpPost("api/receiving/create")]
         [SwaggerOperation(
-            Summary = "Create G",
-            Description = "Authenticates a user",
-            OperationId = "auth.authenticate",
-            Tags = new[] { "IMSAuthenticationEndpoints" })
+            Summary = "Update Receiving Order",
+            Description = "Update Receiving Order",
+            OperationId = "ro.update",
+            Tags = new[] { "ReceivingOrderEndpoints" })
         ]
         public override async Task<ActionResult<ROCreateResponse>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
         {
