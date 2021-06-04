@@ -46,9 +46,9 @@ namespace Infrastructure.Services
 
         private static void CreateIndex(IElasticClient client, string defaultIndexName)
         {
-            // client.Indices.Create("productindices",
-            //     index => index.Map<ProductSearchIndex>(x => x.AutoMap())
-            // );
+            client.Indices.Create("productindices",
+                index => index.Map<ProductSearchIndex>(x => x.AutoMap())
+            );
             
             client.Indices.Create(defaultIndexName,
                 index => index.Map<PurchaseOrderSearchIndex>(x => x.AutoMap())

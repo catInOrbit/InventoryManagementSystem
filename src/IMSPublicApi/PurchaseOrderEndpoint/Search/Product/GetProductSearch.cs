@@ -41,11 +41,14 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Produ
             //     return Unauthorized();
             var page = 1;
             var pageSize = 5;
-            var response = await _elasticClient.SearchAsync<ProductSearchIndex>(
-                s => s.Query(q => q.QueryString(d => d.Query('*' + request.Query + '*'))));
+            // var response = await _elasticClient.SearchAsync<ProductSearchIndex>(
+            //     s => s.Query(q => q.QueryString(d => d.Query('*' + request.Query + '*'))));
             // var response = await _elasticClient.SearchAsync<ProductIndex>(
             //     s => s.Query(q =>  q.Match(m => m.Field(f => f.Name).Query(request.Query))));
             //
+            
+            var response = await _elasticClient.SearchAsync<ProductSearchIndex>(
+                s => s.Index("productindices").Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
             if (!response.IsValid)
             {
                 Console.WriteLine("Invalid Response");

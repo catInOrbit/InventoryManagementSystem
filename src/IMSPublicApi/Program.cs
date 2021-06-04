@@ -36,7 +36,7 @@ namespace InventoryManagementSystem.PublicApi
                 {
                     var productIndexList = await productRepos.GetProductForELIndexAsync();
 
-                    // await elasticProductRepos.ElasticSaveManyAsync(productIndexList.ToArray());
+                    await elasticProductRepos.ElasticSaveManyAsync(productIndexList.ToArray());
                     await elasticPoRepos.ElasticSaveManyAsync((await purchaseOrderRepos.GetPOForELIndexAsync()).ToArray());
 
                     // foreach (var productSearchIndex in productIndexList)
