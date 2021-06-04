@@ -96,18 +96,27 @@ namespace Infrastructure.Data
             List<PurchaseOrderSearchIndex> posi = new List<PurchaseOrderSearchIndex>();
             foreach (var po in pos)
             {
-                var index = new PurchaseOrderSearchIndex
+                PurchaseOrderSearchIndex index; 
+                try
                 {
-                    Id = po.Id,
-                    SupplierName = po.Supplier.SupplierName,
-                    PurchaseOrderNumber = po.PurchaseOrderNumber,
-                    Status = po.PurchaseOrderStatus.GetStringValue(),
-                    CreatedDate = po.CreatedDate,
-                    DeliveryDate = po.DeliveryDate,
-                    TotalPrice = po.TotalOrderAmount,
-                    ConfirmedByName = po.CreatedBy.Fullname
-                };
-                
+                    index = new PurchaseOrderSearchIndex
+                    {
+                        Id = po.Id,
+                        SupplierName = po.Supplier.SupplierName,
+                        PurchaseOrderNumber = po.PurchaseOrderNumber,
+                        Status = po.PurchaseOrderStatus.GetStringValue(),
+                        CreatedDate = po.CreatedDate,
+                        DeliveryDate = po.DeliveryDate,
+                        TotalPrice = po.TotalOrderAmount,
+                        ConfirmedByName = po.CreatedBy.Fullname
+                    };
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(po.Id);
+                    throw;
+                }
+               
                 posi.Add(index);
             }
 

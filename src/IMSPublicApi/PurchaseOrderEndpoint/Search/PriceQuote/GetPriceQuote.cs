@@ -67,6 +67,10 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
 
             else
             {
+                
+                // var pos = await _asyncRepository.ListAllAsync(cancellationToken);
+                // var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>(
+                //     s => s.Query(q => q.QueryString(d => d.Query('*' + request.number + '*'))));
                 var pqr = _asyncRepository.GetPriceQuoteByNumber(request.number, cancellationToken);
                 response.PriceQuoteOrders.Add(pqr);    
             }
