@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210602172201_TableCreation")]
+    [Migration("20210604142934_TableCreation")]
     partial class TableCreation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

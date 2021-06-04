@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -46,7 +47,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
 
             if (request.number == "all")
             {
-                response.IsForDisplay = true;
                 var pqrs = await _asyncRepository.ListAllAsync(cancellationToken);
                 foreach (var priceQuoteOrder in pqrs)
                 {
@@ -60,7 +60,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
                             CreatedByName = priceQuoteOrder.CreatedBy.Fullname,
                             PriceQuoteOrderNumber = priceQuoteOrder.PriceQuoteOrderNumber
                         };
-                        response.PriceQuoteOs.Add(pq);     
+                        response.PriceQuotes.Add(pq);     
                     }
                 }
             }

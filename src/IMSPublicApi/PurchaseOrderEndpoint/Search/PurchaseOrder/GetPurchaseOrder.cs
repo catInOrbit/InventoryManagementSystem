@@ -45,24 +45,24 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             //
             // if (!isAuthorized.Succeeded)
             //     return Unauthorized();
-            // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
-            //     return Unauthorized();
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
+                return Unauthorized();
 
             if (request.number == "all")
             {
                 var posi = await _asyncRepository.GetPOForELIndexAsync(cancellationToken);
                 response.PurchaseOrderSearchIndices = posi.ToList();
             }
-
             else
             {
-                // var pos = await _asyncRepository.ListAllAsync(cancellationToken);
-                // var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>(
-                //     s => s.Query(q => q.QueryString(d => d.Query('*' + request.number + '*'))));
+                var pos = await _asyncRepository.ListAllAsync(cancellationToken);
+                var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>(
+                    s => s.Query(q => q.QueryString(d => d.Query('*' + request.number + '*'))));
                 
-                var po = _asyncRepository.GetPurchaseOrderByNumber(request.number, cancellationToken);
-                response.PurchaseOrder = po;
-                return Ok(response);
+                // var po = _asyncRepository.GetPurchaseOrderByNumber(request.number, cancellationToken);
+                // response.PurchaseOrder = po;
+                // return Ok(response);
+                return Ok(responseElastic.Documents);
             }
             return Ok(response);
         }

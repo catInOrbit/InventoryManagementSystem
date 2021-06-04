@@ -48,5 +48,6 @@ namespace Infrastructure.Identity.DbContexts
         {
             optionsBuilder.UseLazyLoadingProxies();
         }
+     
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
@@ -20,7 +21,7 @@ namespace Infrastructure.Services
 
             var settings = new ConnectionSettings(new Uri(url))
                 .DefaultIndex(defaultIndex).BasicAuthentication("elastic", "LDBFEOTonZjDL1jueHMlKXcC");;
-            // AddDefaultMappings(defaultIndex, settings);
+            AddDefaultMappings(defaultIndex, settings);
 
             var client = new ElasticClient(settings);
 
@@ -40,18 +41,19 @@ namespace Infrastructure.Services
         private static void AddDefaultMappings(string indexName, ConnectionSettings settings)
         {
             settings
-                .DefaultMappingFor<ProductSearchIndex>(m => m.IndexName(indexName));
+                .DefaultMappingFor<PurchaseOrderSearchIndex>(m => m.IndexName(indexName));
         }
 
         private static void CreateIndex(IElasticClient client, string defaultIndexName)
         {
+            // client.Indices.Create("productindices",
+            //     index => index.Map<ProductSearchIndex>(x => x.AutoMap())
+            // );
+            
             client.Indices.Create(defaultIndexName,
-                index => index.Map<ProductSearchIndex>(x => x.AutoMap())
+                index => index.Map<PurchaseOrderSearchIndex>(x => x.AutoMap())
             );
             
-            client.Indices.Create("purchaseOrders",
-                index => index.Map<PurchaseOrder>(x => x.AutoMap())
-            );
 
             // client.Indices.Create(indexName, i => i
             //     .Settings(s => s

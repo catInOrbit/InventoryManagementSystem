@@ -17,7 +17,6 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
 
         Task<List<ProductSearchIndex>> GetProductForELIndexAsync(CancellationToken cancellationToken = default);
         Task<List<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(CancellationToken cancellationToken = default);
-
         PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber,  CancellationToken cancellationToken = default);
         PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderNumber,  CancellationToken cancellationToken = default);
 

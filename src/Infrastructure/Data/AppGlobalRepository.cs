@@ -54,9 +54,10 @@ namespace Infrastructure.Data
                 
                 var index = new ProductSearchIndex
                 {
-                    name = nameConcat,
-                    productId = productVariant.ProductId,
-                    variantId = productVariant.Id
+                    Id = productVariant.ProductId,
+                    Name = nameConcat,
+                    ProductId = productVariant.ProductId,
+                    VariantId = productVariant.Id
                 };
                 
                 psis.Add(index);
@@ -102,14 +103,15 @@ namespace Infrastructure.Data
                     index = new PurchaseOrderSearchIndex
                     {
                         Id = po.Id,
-                        SupplierName = po.Supplier.SupplierName,
-                        PurchaseOrderNumber = po.PurchaseOrderNumber,
-                        Status = po.PurchaseOrderStatus.GetStringValue(),
+                        SupplierName = (po.Supplier!=null) ? po.Supplier.SupplierName : "",
+                        PurchaseOrderNumber = (po.PurchaseOrderNumber!=null) ? po.PurchaseOrderNumber : "",
+                        Status = (po.PurchaseOrderStatus.GetStringValue()!=null) ? po.PurchaseOrderStatus.GetStringValue() : "",
                         CreatedDate = po.CreatedDate,
-                        DeliveryDate = po.DeliveryDate,
-                        TotalPrice = po.TotalOrderAmount,
-                        ConfirmedByName = po.CreatedBy.Fullname
+                        DeliveryDate = po.DeliveryDate ,
+                        TotalPrice = (po.TotalOrderAmount!=null) ? po.TotalOrderAmount : 0,
+                        ConfirmedByName = (po.CreatedBy.Fullname!=null) ? po.CreatedBy.Fullname : "" 
                     };
+                    posi.Add(index);
                 }
                 catch (Exception e)
                 {
@@ -117,7 +119,6 @@ namespace Infrastructure.Data
                     throw;
                 }
                
-                posi.Add(index);
             }
 
             return posi;
@@ -217,8 +218,7 @@ namespace Infrastructure.Data
 
         public async Task ElasticSaveManyAsync(T[] products)
         {
-            await _elasticClient.DeleteByQueryAsync<ProductSearchIndex>(q => q.MatchAll());
-
+            await _elasticClient.DeleteByQueryAsync<Product>(q => q.MatchAll());
             _elasticCacheProduct.AddRange(products);
             var result = await _elasticClient.IndexManyAsync(products);
             if (result.Errors)
@@ -226,11 +226,11 @@ namespace Infrastructure.Data
                 // the response can be inspected for errors
                 foreach (var itemWithError in result.ItemsWithErrors)
                 {
+                    Console.WriteLine(itemWithError.Error);
                     throw new Exception();
                 }
             }
         }
-
 
         // public async Task ElasticSaveManyAsync(T[] types)
         // {

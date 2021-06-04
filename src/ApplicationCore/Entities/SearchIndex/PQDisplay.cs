@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.PriceQuote
+namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
     public class PQDisplay
     {
@@ -16,6 +16,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
         public DateTime CreatedDate { get; set; }
         public DateTime Deadline { get; set; }
         public string CreatedByName { get; set; }
-
+        public string SupplierName { get; set; }
     }
 }
