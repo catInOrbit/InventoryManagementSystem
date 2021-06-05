@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
@@ -55,11 +56,17 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
                         var pq = new PQDisplay
                         {
                             Id = priceQuoteOrder.Id,
-                            Deadline = priceQuoteOrder.Deadline,
-                            CreatedDate = priceQuoteOrder.CreatedDate,
+                            Deadline = priceQuoteOrder.Deadline.ToString("MM/dd/yyyy"),
+                            CreatedDate = priceQuoteOrder.CreatedDate.ToString("MM/dd/yyyy"),
                             CreatedByName = priceQuoteOrder.CreatedBy.Fullname,
-                            PriceQuoteOrderNumber = priceQuoteOrder.PriceQuoteOrderNumber
+                            PriceQuoteOrderNumber = priceQuoteOrder.PriceQuoteOrderNumber,
+                            SupplierName = priceQuoteOrder.Supplier.SupplierName,
                         };
+                        
+                        foreach (var purchaseOrderItem in priceQuoteOrder.PurchaseOrderProduct)
+                        {
+                            pq.OrderQuantity += (float)Math.Round(purchaseOrderItem.Quantity);
+                        }
                         response.PriceQuotes.Add(pq);     
                     }
                 }

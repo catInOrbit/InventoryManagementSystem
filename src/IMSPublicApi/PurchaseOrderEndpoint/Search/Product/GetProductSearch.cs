@@ -37,8 +37,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Produ
             CancellationToken cancellationToken = new CancellationToken())
         {
             
-            // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Read))
-            //     return Unauthorized();
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Read))
+                return Unauthorized();
             var page = 1;
             var pageSize = 5;
             // var response = await _elasticClient.SearchAsync<ProductSearchIndex>(

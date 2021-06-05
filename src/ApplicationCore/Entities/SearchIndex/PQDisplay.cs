@@ -13,8 +13,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         
         public virtual string Id { get; set; }
         public string PriceQuoteOrderNumber { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public DateTime Deadline { get; set; }
+        public float OrderQuantity { get; set; }
+        public string CreatedDate { get; set; }
+        public string Deadline { get; set; }
         public string CreatedByName { get; set; }
         public string SupplierName { get; set; }
     }
