@@ -38,6 +38,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             
             var ro = new ReceivingOrder();
             await _receiveAsyncRepository.AddAsync(ro);
+            await _receiveAsyncRepository.ElasticSaveSingleAsync(ro);
+
             var response = new ROCreateResponse();
             response.ReceivingOrder = ro;
             return Ok(response);

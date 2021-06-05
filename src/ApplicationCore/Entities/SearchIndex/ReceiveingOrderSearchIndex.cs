@@ -1,11 +1,18 @@
-﻿namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
+﻿using System;
+
+namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
-    public class ReceiveingOrderSearchIndex
+    public class ReceivingOrderSearchIndex : BaseEntity
     {
-        public string ReceiptId { get; set; }
-        public string PurchaseOrderId { get; set; }
-        public string SupplierName { get; set; }
-        public string CreatedDate { get; set; }
-        public string CreatedBy { get; set; }
+
+        public ReceivingOrderSearchIndex()
+        {
+            Id = Guid.NewGuid().ToString() + "-ignore-id";
+        }
+        public string receiptId { get; set; }
+        public string purchaseOrderId { get; set; }
+        public string createdDate { get; set; }
+        public string supplierName { get; set; }
+        public string createdBy { get; set; }
     }
 }

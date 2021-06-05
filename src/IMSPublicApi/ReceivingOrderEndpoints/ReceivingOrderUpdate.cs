@@ -64,6 +64,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             }
 
             await _receivingOrderRepository.UpdateAsync(ro);
+            await _receivingOrderRepository.ElasticSaveSingleAsync(ro);
             return Ok();
         }
     }

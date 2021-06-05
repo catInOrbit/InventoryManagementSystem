@@ -15,7 +15,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.PurchaseOrder
 {
-    public class GetPurchaseOrderAll : BaseAsyncEndpoint.WithRequest<GetPurchaseOrderRequest>.WithResponse<GetAllPurchaseOrderResponse>
+    public class GetPurchaseOrderAll : BaseAsyncEndpoint.WithRequest<GetAllPurchaseOrderRequest>.WithResponse<GetAllPurchaseOrderResponse>
     {
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
         private readonly IAuthorizationService _authorizationService;
@@ -28,7 +28,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             _elasticClient = elasticClient;
         }
 
-        [HttpGet("api/purchaseorder/{number}")]
+        [HttpGet("api/purchaseorder/{SearchQuery}")]
         [SwaggerOperation(
             Summary = "Get all purchase Order",
             Description = "Get all purchase Order",
@@ -36,7 +36,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
 
-        public override async Task<ActionResult<GetAllPurchaseOrderResponse>> HandleAsync([FromRoute]GetPurchaseOrderRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<GetAllPurchaseOrderResponse>> HandleAsync([FromRoute]GetAllPurchaseOrderRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var response = new GetAllPurchaseOrderResponse();
             // var isAuthorized = await _authorizationService.AuthorizeAsync(
@@ -48,23 +48,24 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
                 return Unauthorized();
 
-            if (request.number == "all")
+            if (request.SearchQuery == "all")
             {
+                response.IsDisplayingAll = true;
                 var posi = await _asyncRepository.GetPOForELIndexAsync(cancellationToken);
                 response.PurchaseOrderSearchIndices = posi.ToList();
+                return Ok(response);
             }
             else
             {
                 var pos = await _asyncRepository.ListAllAsync(cancellationToken);
                 var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>(
-                    s => s.Query(q => q.QueryString(d => d.Query('*' + request.number + '*'))));
+                    s => s.Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
                 
                 // var po = _asyncRepository.GetPurchaseOrderByNumber(request.number, cancellationToken);
                 // response.PurchaseOrder = po;
                 // return Ok(response);
                 return Ok(responseElastic.Documents);
             }
-            return Ok(response);
         }
     }
 }

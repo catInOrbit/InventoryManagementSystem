@@ -21,8 +21,10 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public string ReceiveOrderNumber { get; set; }
         public DateTime ReceivedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
-        public string CreatedBy { get; set; }
-        public virtual UserInfo UserInfo { get; set; }
+        public DateTime CreatedDate { get; set; }
+
+        public string CreatedById { get; set; }
+        public virtual UserInfo CreatedBy { get; set; }
         public string SupplierId { get; set; }
         public virtual  Supplier Supplier { get; set; }
         public string SupplierInvoice { get; set; }

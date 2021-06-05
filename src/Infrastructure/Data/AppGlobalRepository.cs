@@ -23,7 +23,7 @@ namespace Infrastructure.Data
         private readonly IdentityAndProductDbContext _identityAndProductDbContext;
         private readonly IElasticClient _elasticClient;
 
-        private List<T> _elasticCacheProduct = new List<T>();
+        private List<T> _elasticCache = new List<T>();
         private List<ProductSearchIndex> _elasticCacheProductSearchIndex = new List<ProductSearchIndex>();
 
         public AppGlobalRepository(IdentityAndProductDbContext identityAndProductDbContext, IElasticClient elasticClient)
@@ -124,6 +124,37 @@ namespace Infrastructure.Data
             return posi;
         }
 
+        public async Task<List<ReceivingOrderSearchIndex>> GetROForELIndexAsync(CancellationToken cancellationToken = default)
+        {
+            var ros= await _identityAndProductDbContext.Set<ReceivingOrder>().ToListAsync(cancellationToken);
+            List<ReceivingOrderSearchIndex> rosi = new List<ReceivingOrderSearchIndex>();
+            foreach (var ro in ros)
+            {
+                ReceivingOrderSearchIndex index; 
+                try
+                {
+                    index = new ReceivingOrderSearchIndex
+                    {
+                        Id = ro.Id,
+                        purchaseOrderId = (ro.PurchaseOrderId!=null) ? ro.PurchaseOrderId : "",
+                        supplierName = (ro.Supplier!=null) ? ro.Supplier.SupplierName : "",
+                        createdBy = (ro.CreatedBy!=null) ? ro.CreatedBy.Fullname : "" ,
+                        receiptId = (ro.ReceiveOrderNumber!=null) ? ro.ReceiveOrderNumber : ""  ,
+                        createdDate = ro.CreatedDate.ToShortDateString()
+                    };
+                    rosi.Add(index);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(ro.Id);
+                    throw;
+                }
+               
+            }
+
+            return rosi;
+        }
+
         public PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber, CancellationToken cancellationToken = default)
         {
             return _identityAndProductDbContext.PriceQuote.Where(pq => pq.PriceQuoteOrderNumber == priceQuoteNumber).
@@ -134,6 +165,12 @@ namespace Infrastructure.Data
         {
             return _identityAndProductDbContext.PurchaseOrder.Where(po => po.PurchaseOrderNumber == purchaseOrderNumber).
                 SingleOrDefault(po => po.PurchaseOrderNumber == purchaseOrderNumber);   
+        }
+
+        public ReceivingOrder GetReceivingOrderByNumber(string receiveOrderNumber, CancellationToken cancellationToken = default)
+        {
+            return _identityAndProductDbContext.ReceivingOrder.Where(po => po.ReceiveOrderNumber == receiveOrderNumber).
+                SingleOrDefault(po => po.ReceiveOrderNumber == receiveOrderNumber);   
         }
 
         public async Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default)
@@ -203,24 +240,24 @@ namespace Infrastructure.Data
             throw new System.NotImplementedException();
         }
         
-        public async Task ElasticSaveSingleAsync(T type)
+        public async Task ElasticSaveSingleAsync(T types)
         {
-            if (_elasticCacheProduct.Any(p => p.Id == type.Id))
+            if (_elasticCache.Any(p => p.Id == types.Id))
             {
-                await _elasticClient.UpdateAsync<T>(type, u => u.Doc(type));
+                await _elasticClient.UpdateAsync<T>(types, u => u.Doc(types));
             }
             else
             {
-                _elasticCacheProduct.Add(type);
-                await _elasticClient.IndexDocumentAsync<T>(type);
+                _elasticCache.Add(types);
+                await _elasticClient.IndexDocumentAsync<T>(types);
             }
         }
 
-        public async Task ElasticSaveManyAsync(T[] products)
+        public async Task ElasticSaveManyAsync(T[] types)
         {
-            await _elasticClient.DeleteByQueryAsync<Product>(q => q.MatchAll());
-            _elasticCacheProduct.AddRange(products);
-            var result = await _elasticClient.IndexManyAsync(products);
+            // await _elasticClient.DeleteByQueryAsync<T>(q => q.MatchAll());
+            _elasticCache.AddRange(types);
+            var result = await _elasticClient.IndexManyAsync(types);
             if (result.Errors)
             {
                 // the response can be inspected for errors
@@ -246,10 +283,11 @@ namespace Infrastructure.Data
         //     }
         // }
 
-        public async Task ElasticSaveBulkAsync(T[] types)
+        public async Task ElasticSaveBulkAsync(T[] types, string index)
         {
-            _elasticCacheProduct.AddRange(types);
-            var result = await _elasticClient.BulkAsync(b => b.Index("productsearchindex").IndexMany(types));
+            await _elasticClient.DeleteByQueryAsync<T>(q => q.MatchAll());
+            _elasticCache.AddRange(types);
+            var result = await _elasticClient.BulkAsync(b => b.Index(index).IndexMany(types));
             if (result.Errors)
             {
                 // the response can be inspected for errors

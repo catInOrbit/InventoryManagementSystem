@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
+using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
 {
@@ -10,10 +12,22 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
         {
             base._correlationId = correlationId;
         }
+        
+        [JsonIgnore]
+        public bool IsDislayingAll { get; set; }
+
+        public bool ShouldSerializeReceiveingOrderSearchIndex()
+        {
+            if (IsDislayingAll) 
+                return true;
+            return false;
+        }
 
         public ROGetResponse()
         { }
 
-        public List<ReceiveingOrderSearchIndex> ReceiveingOrderSearchIndex { get; set; } = new List<ReceiveingOrderSearchIndex>();
+        public ReceivingOrder ReceiveingOrder { get; set; }
+
+        public List<ReceivingOrderSearchIndex> ReceiveingOrderSearchIndex { get; set; } = new List<ReceivingOrderSearchIndex>();
     }
 }

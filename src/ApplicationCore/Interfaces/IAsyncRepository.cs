@@ -17,8 +17,11 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
 
         Task<List<ProductSearchIndex>> GetProductForELIndexAsync(CancellationToken cancellationToken = default);
         Task<List<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(CancellationToken cancellationToken = default);
+        Task<List<ReceivingOrderSearchIndex>> GetROForELIndexAsync(CancellationToken cancellationToken = default);
+
         PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber,  CancellationToken cancellationToken = default);
         PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderNumber,  CancellationToken cancellationToken = default);
+        ReceivingOrder GetReceivingOrderByNumber(string receiveOrderNumber,  CancellationToken cancellationToken = default);
 
         Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default);
         Task<IEnumerable<Product>> ListAllProductAsync(CancellationToken cancellationToken = default);
@@ -33,8 +36,8 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         Task<T> FirstAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);
         Task<T> FirstOrDefaultAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);
         
-        Task ElasticSaveSingleAsync(T product);
-        Task ElasticSaveManyAsync(T[] products);
-        Task ElasticSaveBulkAsync(T[] products);
+        Task ElasticSaveSingleAsync(T types);
+        Task ElasticSaveManyAsync(T[] types);
+        Task ElasticSaveBulkAsync(T[] types, string index);
     }
 }

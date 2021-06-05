@@ -2,6 +2,6 @@
 {
     public class ROGetRequest : BaseRequest
     {
-        public string OrderNumber { get; set; }
+        public string Query { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.PurchaseOrder
 {
-    public class GetPurchaseOrderRequest : BaseRequest
+    public class GetAllPurchaseOrderRequest : BaseRequest
     {
-        public string number { get; set; }
+        public string SearchQuery { get; set; }
     }
 }

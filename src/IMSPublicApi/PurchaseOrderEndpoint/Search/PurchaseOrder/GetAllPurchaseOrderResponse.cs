@@ -6,6 +6,16 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
 {
     public class GetAllPurchaseOrderResponse : BaseResponse
     {
+
+        [JsonIgnore]
+        public bool IsDisplayingAll { get; set; }
+        
+        public bool ShouldSerializePurchaseOrderSearchIndices()
+        {
+            if (IsDisplayingAll)
+                return true;
+            return false;
+        }
         
         public List<PurchaseOrderSearchIndex> PurchaseOrderSearchIndices { get; set; } =
             new List<PurchaseOrderSearchIndex>();

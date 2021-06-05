@@ -29,16 +29,19 @@ namespace InventoryManagementSystem.PublicApi
                 var services = scope.ServiceProvider;
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 var productRepos = services.GetRequiredService<IAsyncRepository<ProductVariant>>();
-                var purchaseOrderRepos = services.GetRequiredService<IAsyncRepository<PurchaseOrder>>();
+
                 var elasticProductRepos = services.GetRequiredService<IAsyncRepository<ProductSearchIndex>>();
                 var elasticPoRepos = services.GetRequiredService<IAsyncRepository<PurchaseOrderSearchIndex>>();
+                var elasticRoRepos = services.GetRequiredService<IAsyncRepository<ReceivingOrderSearchIndex>>();
+
                 try
                 {
                     var productIndexList = await productRepos.GetProductForELIndexAsync();
 
-                    await elasticProductRepos.ElasticSaveManyAsync(productIndexList.ToArray());
-                    await elasticPoRepos.ElasticSaveManyAsync((await purchaseOrderRepos.GetPOForELIndexAsync()).ToArray());
-
+                    await elasticProductRepos.ElasticSaveBulkAsync(productIndexList.ToArray(), "productindices");
+                    await elasticPoRepos.ElasticSaveBulkAsync((await elasticPoRepos.GetPOForELIndexAsync()).ToArray(), "purchaseorders");
+                    await elasticRoRepos.ElasticSaveBulkAsync((await elasticRoRepos.GetROForELIndexAsync()).ToArray(), "receivingorders");
+                    
                     // foreach (var productSearchIndex in productIndexList)
                     // {
                     //     await elasticRepos.ElasticSaveSingleAsync(productSearchIndex);
