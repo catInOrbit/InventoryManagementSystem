@@ -42,18 +42,18 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 return Unauthorized();
 
             var pqr = _asyncRepository.GetPriceQuoteByNumber(request.PriceQuoteNumberGet);
-            pqr.ModifiedDate = DateTime.Now;
-            pqr.ModifiedBy = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            pqr.Transaction.ModifiedDate = DateTime.Now;
+            pqr.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             foreach (var requestOrderItemInfo in request.OrderItemInfos)
             {
-                requestOrderItemInfo.OrderNumber = pqr.PriceQuoteOrderNumber;
+                requestOrderItemInfo.OrderNumber = pqr.Transaction.TransactionNumber;
                 requestOrderItemInfo.ProductVariant = await _productVariantRepos.GetByIdAsync(requestOrderItemInfo.ProductVariantId);
                 requestOrderItemInfo.TotalAmount += requestOrderItemInfo.Price;
                 pqr.TotalOrderAmount += requestOrderItemInfo.Price;
                 pqr.PurchaseOrderProduct.Add(requestOrderItemInfo);
             }
 
-            pqr.Description = request.Description;
+            pqr.MailDescription = request.Description;
             pqr.SupplierId = request.SupplierId;
             pqr.Deadline = request.Deadline;
             

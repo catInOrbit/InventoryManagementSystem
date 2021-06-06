@@ -11,28 +11,26 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public ReceivingOrder()
         {
             Id = DateTime.Now.Date.ToString("ddMMyyyy") + "-"+Guid.NewGuid();
-            ReceiveOrderNumber =  DateTime.UtcNow.Date.ToString("ddMMyyyy") +
-                                  Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
+            Transaction.TransactionId = Id;
+            Transaction.TransactionNumber =  DateTime.UtcNow.Date.ToString("ddMMyyyy") +
+                           Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
             ReceivedDate = DateTime.Now;
-            Type = TransactionType.Receive;
+            Transaction.Type = TransactionType.Receive;
         }
         
         public string PurchaseOrderId { get; set; }
         public virtual PurchaseOrder PurchaseOrder { get; set; }
-        public string ReceiveOrderNumber { get; set; }
         public DateTime ReceivedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
-        public DateTime CreatedDate { get; set; }
-
-        public string CreatedById { get; set; }
-        public virtual UserInfo CreatedBy { get; set; }
+        
         public string SupplierId { get; set; }
         public virtual  Supplier Supplier { get; set; }
+        
         public string SupplierInvoice { get; set; }
-        public string BranchId { get; set; }
         public string WarehouseLocation { get; set; }
         public virtual List<ReceivedOrderItem> ReceivedOrderItems { get; set; } = new List<ReceivedOrderItem>();
-        public TransactionType Type { get; set; }
+        public string TransactionId { get; set; }
+        public Transaction Transaction { get; set; }
+        
     }
 
 }

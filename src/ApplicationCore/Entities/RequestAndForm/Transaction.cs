@@ -10,13 +10,19 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm
     {
         public string Name { get; set; }
         public string TransactionId { get; set; }
+        public string TransactionNumber { get; set; }
         public  DateTime ValidUntil { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
+        
         public string CreatedById { get; set; }
-        public string ConfirmedBy { get; set; }
-        public DateTime TrackingNumber { get; set; }
+        public virtual UserInfo CreatedBy { get; set; }
+        public string ConfirmedById { get; set; }
+        public virtual UserInfo ConfirmedBy { get; set; }
+        public string ModifiedById { get; set; }
+        public virtual UserInfo ModifiedBy { get; set; }
+
         public TransactionType Type { get; set; }
-        public bool Status { get; set; }
+        public bool TransactionStatus { get; set; }
     }
 }

@@ -13,33 +13,25 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public PriceQuoteOrder()
         {
             Id = DateTime.Now.Date.ToString("ddMMyyyy") + "-"+Guid.NewGuid();
-            PriceQuoteOrderNumber = DateTime.UtcNow.Date.ToString("ddMMyyyy") +
-                                    Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
-            CreatedDate = DateTime.Now;
+            Transaction.TransactionId = Id;
+            Transaction.TransactionNumber = DateTime.UtcNow.Date.ToString("ddMMyyyy") +
+                                               Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
+            Transaction.CreatedDate = DateTime.Now;
             PriceQuoteStatus = PriceQuoteType.Pending;
-            Type = TransactionType.PriceQuote;
+            Transaction.Type = TransactionType.PriceQuote;
         }
 
-
-        public string PriceQuoteOrderNumber { get; set; }
         public string SupplierId { get; set; }
         public virtual Supplier Supplier { get; set; }
         
-        public DateTime CreatedDate { get; set; }
-        public DateTime ModifiedDate { get; set; }
-        public string ModifiedBy { get; set; }
-
         public DateTime Deadline { get; set; }
 
-        public string Description { get; set; }
-
-        public string CreatedById { get; set; }
-
+        public string MailDescription { get; set; }
         public PriceQuoteType PriceQuoteStatus { get; set; }
-        public TransactionType Type { get; set; }
-
         public decimal TotalOrderAmount { get; set; }
         public virtual ICollection<PurchaseOrderItem> PurchaseOrderProduct { get; set; } = new List<PurchaseOrderItem>();
-        public virtual UserInfo CreatedBy { get; set; }
+        
+        public Transaction Transaction { get; set; }
+        
     }
 }

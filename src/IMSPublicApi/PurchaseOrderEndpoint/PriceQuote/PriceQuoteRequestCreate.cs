@@ -43,7 +43,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             
             var response = new PQCreateResponse();
             var pqr = new PriceQuoteOrder();
-            pqr.CreatedById =  (await _userAuthentication.GetCurrentSessionUser()).Id;
+            pqr.Transaction.CreatedById =  (await _userAuthentication.GetCurrentSessionUser()).Id;
             response.PriceQuoteOrder = pqr;
             await _asyncRepository.AddAsync(pqr);
             // pqr.CreatedBy
