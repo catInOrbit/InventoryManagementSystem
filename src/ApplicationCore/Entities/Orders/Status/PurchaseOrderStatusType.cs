@@ -1,4 +1,4 @@
-﻿namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
+﻿namespace InventoryManagementSystem.ApplicationCore.Entities.Orders.Status
 {
     public enum PurchaseOrderStatusType
     {

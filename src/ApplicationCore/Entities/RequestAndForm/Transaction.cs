@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm
 {
@@ -17,8 +18,5 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm
         public DateTime TrackingNumber { get; set; }
         public TransactionType Type { get; set; }
         public bool Status { get; set; }
-
-        public virtual ICollection<PriceQuoteOrder> PriceQuoteOrders { get; set; }
-        public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; }
     }
 }

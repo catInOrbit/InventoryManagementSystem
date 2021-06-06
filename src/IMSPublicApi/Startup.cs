@@ -108,23 +108,6 @@ namespace InventoryManagementSystem.PublicApi
             services.AddMemoryCache();
 
             var key = Encoding.ASCII.GetBytes(AuthorizationConstants.JWT_SECRET_KEY);
-            // services.AddAuthentication(config =>
-            // {
-            //     config.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            //     config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            // });
-            // .AddJwtBearer(config =>
-            // {
-            //     config.RequireHttpsMetadata = false;
-            //     config.SaveToken = true;
-            //     config.TokenValidationParameters = new TokenValidationParameters
-            //     {
-            //         ValidateIssuerSigningKey = true,
-            //         IssuerSigningKey = new SymmetricSecurityKey(key),
-            //         ValidateIssuer = true,
-            //         ValidateAudience = false
-            //     };
-            // });
 
             services.AddMediatR(typeof(Product).Assembly);
 
@@ -238,6 +221,9 @@ namespace InventoryManagementSystem.PublicApi
                 AccountAuthorizationHandler>();
             
             services.AddScoped<IUserAuthentication, JwtUserSessionService>();
+            services.AddSignalR();
+            
+            
 
         }
 
@@ -255,20 +241,13 @@ namespace InventoryManagementSystem.PublicApi
             app.UseRouting();
             app.UseMiddleware<JwtMiddleware>();
 
-            
             var cookiePolicyOptions = new CookiePolicyOptions
             {
                 MinimumSameSitePolicy = SameSiteMode.Strict,
             };
             
             app.UseCookiePolicy(cookiePolicyOptions);
-
-
-
             app.UseCors(options => options.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials());
-
-
-
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
@@ -284,6 +263,7 @@ namespace InventoryManagementSystem.PublicApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<NotificationHub>("/notiHub");
             });
 
         }
