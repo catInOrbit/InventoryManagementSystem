@@ -60,7 +60,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
                             CreatedDate = priceQuoteOrder.CreatedDate.ToString("MM/dd/yyyy"),
                             CreatedByName = priceQuoteOrder.CreatedBy.Fullname,
                             PriceQuoteOrderNumber = priceQuoteOrder.PriceQuoteOrderNumber,
-                            SupplierName = priceQuoteOrder.Supplier.SupplierName,
+                            SupplierName = (priceQuoteOrder.Supplier != null) ? priceQuoteOrder.Supplier.SupplierName : "",
                         };
                         
                         foreach (var purchaseOrderItem in priceQuoteOrder.PurchaseOrderProduct)
@@ -79,6 +79,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
                 // var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>(
                 //     s => s.Query(q => q.QueryString(d => d.Query('*' + request.number + '*'))));
                 var pqr = _asyncRepository.GetPriceQuoteByNumber(request.number, cancellationToken);
+                response.PriceQuoteOrders.Clear();
                 response.PriceQuoteOrders.Add(pqr);    
             }
             
