@@ -46,21 +46,31 @@ namespace Infrastructure.Data
             List<ProductSearchIndex> psis = new List<ProductSearchIndex>();
             foreach (var productVariant in productVariants)
             {
-                string nameConcat = productVariant.Name;
-                foreach (var productVariantVariantValue in productVariant.VariantValues)
+                try
                 {
-                    nameConcat += "-" + productVariantVariantValue.Value.Trim();
+                    string nameConcat = productVariant.Name;
+                    foreach (var productVariantVariantValue in productVariant.VariantValues)
+                    {
+                        nameConcat += "-" + productVariantVariantValue.Value.Trim();
+                    }
+                
+                    var index = new ProductSearchIndex
+                    {
+                        Id = productVariant.ProductId,
+                        Name = nameConcat,
+                        ProductId = productVariant.ProductId,
+                        VariantId = productVariant.Id
+                    };
+                
+                    psis.Add(index);
                 }
-                
-                var index = new ProductSearchIndex
+                catch (Exception e)
                 {
-                    Id = productVariant.ProductId,
-                    Name = nameConcat,
-                    ProductId = productVariant.ProductId,
-                    VariantId = productVariant.Id
-                };
-                
-                psis.Add(index);
+                    Console.WriteLine(productVariant.Id);
+                    Console.WriteLine(e);
+                    throw;
+                }
+               
             }            
             // List<ProductSearchIndex> indices = new List<ProductSearchIndex>();
             // foreach (var productVariant in products)
