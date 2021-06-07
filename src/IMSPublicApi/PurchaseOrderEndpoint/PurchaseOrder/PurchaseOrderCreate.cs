@@ -8,6 +8,7 @@ using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -49,8 +50,18 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
 
             var purchaseOrder = new ApplicationCore.Entities.Orders.PurchaseOrder();
 
+            var transaction = new Transaction
+            {
+                TransactionId = purchaseOrder .Id,
+                TransactionNumber = DateTime.UtcNow.Date.ToString("ddMMyyyy") + Guid.NewGuid().ToString().Substring(0, 5).ToUpper(),
+                CreatedDate = DateTime.Now,
+                Type = TransactionType.Purchase,
+                CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id
+            };
+
+            purchaseOrder.Transaction = transaction;
+            
             var pqData = _priceQuoteRepos.GetPriceQuoteByNumber(request.PriceQuoteNumber);
-            purchaseOrder.Transaction.CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             purchaseOrder.PurchaseOrderStatus = PurchaseOrderStatusType.Created;
             if (pqData != null)
             {

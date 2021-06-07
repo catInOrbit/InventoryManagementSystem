@@ -11,12 +11,12 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public PurchaseOrder()
         {
             Id = DateTime.Now.Date.ToString("ddMMyyyy") + "-"+Guid.NewGuid();
-            Transaction.TransactionId = Id;
-            Transaction.TransactionNumber =  DateTime.UtcNow.Date.ToString("ddMMyyyy") +
-                           Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
+            // Transaction.TransactionId = Id;
+            // Transaction.TransactionNumber =  DateTime.UtcNow.Date.ToString("ddMMyyyy") +
+            //                Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
             PurchaseOrderStatus = PurchaseOrderStatusType.Created;
-            Transaction.CreatedDate = DateTime.Now;
-            Transaction.Type = TransactionType.Purchase;
+            // Transaction.CreatedDate = DateTime.Now;
+            // Transaction.Type = TransactionType.Purchase;
         }
         public virtual bool ShouldSerializePurchaseOrderProduct()
         {

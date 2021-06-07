@@ -20,13 +20,15 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly IAsyncRepository<GoodsReceiptOrder> _receivingOrderRepository;
         private readonly IAsyncRepository<PurchaseOrder> _purchaseOrderRepository;
         private readonly IAsyncRepository<ProductVariant> _productVariantRepository;
-        
-        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> receivingOrderRepository, IAsyncRepository<PurchaseOrder> purchaseOrderRepository, IAsyncRepository<ProductVariant> productAsyncRepository)
+        private readonly IUserAuthentication _userAuthentication;
+
+        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> receivingOrderRepository, IAsyncRepository<PurchaseOrder> purchaseOrderRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IUserAuthentication userAuthentication)
         {
             _authorizationService = authorizationService;
             _receivingOrderRepository = receivingOrderRepository;
             _purchaseOrderRepository = purchaseOrderRepository;
             _productVariantRepository = productAsyncRepository;
+            _userAuthentication = userAuthentication;
         }
 
         [HttpPost("api/receiving/update")]
@@ -44,6 +46,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             var ro = await _receivingOrderRepository.GetByIdAsync(request.ReceiveOrderGet);
             ro.Transaction.ModifiedDate = DateTime.Now;
             ro.PurchaseOrderId = request.PurchaseOrderNumber;
+            ro.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             var po = _purchaseOrderRepository.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
             if (po != null)
             {

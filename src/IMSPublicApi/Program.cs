@@ -32,13 +32,13 @@ namespace InventoryManagementSystem.PublicApi
 
                 var elasticProductRepos = services.GetRequiredService<IAsyncRepository<ProductSearchIndex>>();
                 var elasticPoRepos = services.GetRequiredService<IAsyncRepository<PurchaseOrderSearchIndex>>();
-                var elasticRoRepos = services.GetRequiredService<IAsyncRepository<ReceivingOrderSearchIndex>>();
+                var elasticRoRepos = services.GetRequiredService<IAsyncRepository<GoodsReceiptOrderSearchIndex>>();
     
                 try
                 {
                     var productIndexList = await productRepos.GetProductForELIndexAsync();
 
-                    await elasticProductRepos.ElasticSaveBulkAsync(productIndexList.ToArray(), "productindices");
+                    // await elasticProductRepos.ElasticSaveBulkAsync(productIndexList.ToArray(), "productindices");
                     await elasticPoRepos.ElasticSaveBulkAsync((await elasticPoRepos.GetPOForELIndexAsync()).ToArray(), "purchaseorders");
                     await elasticRoRepos.ElasticSaveBulkAsync((await elasticRoRepos.GetROForELIndexAsync()).ToArray(), "receivingorders");
                     

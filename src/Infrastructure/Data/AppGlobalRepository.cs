@@ -42,7 +42,7 @@ namespace Infrastructure.Data
         {
             // var products= await _identityAndProductDbContext.Set<ProductVariant>().Select(p=> new {p.Id, p.Name}).ToListAsync(cancellationToken);
             // var products= await _identityAndProductDbContext.Set<ProductVariant>().ToListAsync(cancellationToken);
-            var productVariants= await _identityAndProductDbContext.Set<ProductVariant>().ToListAsync(cancellationToken);
+            var productVariants= await _identityAndProductDbContext.ProductVariant.ToListAsync(cancellationToken);
             List<ProductSearchIndex> psis = new List<ProductSearchIndex>();
             foreach (var productVariant in productVariants)
             {
@@ -103,7 +103,7 @@ namespace Infrastructure.Data
 
         public async Task<List<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(CancellationToken cancellationToken = default)
         {
-            var pos= await _identityAndProductDbContext.Set<PurchaseOrder>().ToListAsync(cancellationToken);
+            var pos= await _identityAndProductDbContext.Set<PurchaseOrder>().Include("Transaction").ToListAsync(cancellationToken);
             List<PurchaseOrderSearchIndex> posi = new List<PurchaseOrderSearchIndex>();
             foreach (var po in pos)
             {
@@ -134,16 +134,16 @@ namespace Infrastructure.Data
             return posi;
         }
 
-        public async Task<List<ReceivingOrderSearchIndex>> GetROForELIndexAsync(CancellationToken cancellationToken = default)
+        public async Task<List<GoodsReceiptOrderSearchIndex>> GetROForELIndexAsync(CancellationToken cancellationToken = default)
         {
             var ros= await _identityAndProductDbContext.Set<GoodsReceiptOrder>().ToListAsync(cancellationToken);
-            List<ReceivingOrderSearchIndex> rosi = new List<ReceivingOrderSearchIndex>();
+            List<GoodsReceiptOrderSearchIndex> rosi = new List<GoodsReceiptOrderSearchIndex>();
             foreach (var ro in ros)
             {
-                ReceivingOrderSearchIndex index; 
+                GoodsReceiptOrderSearchIndex index; 
                 try
                 {
-                    index = new ReceivingOrderSearchIndex
+                    index = new GoodsReceiptOrderSearchIndex
                     {
                         Id = ro.Id,
                         purchaseOrderId = (ro.PurchaseOrderId!=null) ? ro.PurchaseOrderId : "",

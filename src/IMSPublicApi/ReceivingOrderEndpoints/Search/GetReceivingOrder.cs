@@ -51,7 +51,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
             else
             {
                 var pos = await _asyncRepository.ListAllAsync(cancellationToken);
-                var responseElastic = await _elasticClient.SearchAsync<ReceivingOrderSearchIndex>(
+                var responseElastic = await _elasticClient.SearchAsync<GoodsReceiptOrderSearchIndex>(
                     s => s.Index("receivingorders").Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
                 return Ok(responseElastic.Documents);
             }

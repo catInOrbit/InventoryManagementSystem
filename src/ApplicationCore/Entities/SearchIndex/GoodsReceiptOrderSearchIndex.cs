@@ -2,10 +2,10 @@
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
-    public class ReceivingOrderSearchIndex : BaseEntity
+    public class GoodsReceiptOrderSearchIndex : BaseEntity
     {
 
-        public ReceivingOrderSearchIndex()
+        public GoodsReceiptOrderSearchIndex()
         {
             Id = Guid.NewGuid().ToString() + "-ignore-id";
         }

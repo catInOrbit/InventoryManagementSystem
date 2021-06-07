@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
@@ -17,12 +18,14 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<GoodsReceiptOrder> _recevingOrderRepository;
         private readonly IAsyncRepository<ProductVariant> _productRepository;
+        private readonly IUserAuthentication _userAuthentication;
 
-        public ReceivingOrderUpdateItem(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IAsyncRepository<ProductVariant> productRepository)
+        public ReceivingOrderUpdateItem(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IAsyncRepository<ProductVariant> productRepository, IUserAuthentication userAuthentication)
         {
             _authorizationService = authorizationService;
             _recevingOrderRepository = recevingOrderRepository;
             _productRepository = productRepository;
+            _userAuthentication = userAuthentication;
         }
 
         
@@ -40,6 +43,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
 
             var ro = await _recevingOrderRepository.GetByIdAsync(request.CurrentReceivingOrderId);
             var productVariant = await _productRepository.GetByIdAsync(request.ProductVariantId);
+            ro.Transaction.ModifiedDate = DateTime.Now;
+            ro.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
 
             foreach (var roReceivedOrderItem in ro.ReceivedOrderItems)
             {

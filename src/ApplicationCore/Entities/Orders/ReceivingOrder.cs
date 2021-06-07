@@ -11,11 +11,11 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public GoodsReceiptOrder()
         {
             Id = DateTime.Now.Date.ToString("ddMMyyyy") + "-"+Guid.NewGuid();
-            Transaction.TransactionId = Id;
-            Transaction.TransactionNumber =  DateTime.UtcNow.Date.ToString("ddMMyyyy") +
+            // Transaction.TransactionId = Id;
+            // Transaction.TransactionNumber =  DateTime.UtcNow.Date.ToString("ddMMyyyy") +
                            Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
             ReceivedDate = DateTime.Now;
-            Transaction.Type = TransactionType.Receive;
+            // Transaction.Type = TransactionType.Receive;
         }
         
         public string PurchaseOrderId { get; set; }

@@ -1,11 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -43,7 +46,16 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             
             var response = new PQCreateResponse();
             var pqr = new PriceQuoteOrder();
-            pqr.Transaction.CreatedById =  (await _userAuthentication.GetCurrentSessionUser()).Id;
+            var transaction = new Transaction
+            {
+                TransactionId = pqr.Id,
+                TransactionNumber = DateTime.UtcNow.Date.ToString("ddMMyyyy") + Guid.NewGuid().ToString().Substring(0, 5).ToUpper(),
+                CreatedDate = DateTime.Now,
+                Type = TransactionType.PriceQuote,
+                CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id
+            };
+
+            pqr.Transaction = transaction;
             response.PriceQuoteOrder = pqr;
             await _asyncRepository.AddAsync(pqr);
             // pqr.CreatedBy

@@ -13,12 +13,12 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public PriceQuoteOrder()
         {
             Id = DateTime.Now.Date.ToString("ddMMyyyy") + "-"+Guid.NewGuid();
-            Transaction.TransactionId = Id;
-            Transaction.TransactionNumber = DateTime.UtcNow.Date.ToString("ddMMyyyy") +
-                                               Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
-            Transaction.CreatedDate = DateTime.Now;
+            // Transaction.TransactionId = Id;
+            // Transaction.TransactionNumber = DateTime.UtcNow.Date.ToString("ddMMyyyy") +
+            //                                    Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
+            // Transaction.CreatedDate = DateTime.Now;
             PriceQuoteStatus = PriceQuoteType.Pending;
-            Transaction.Type = TransactionType.PriceQuote;
+            // Transaction.Type = TransactionType.PriceQuote;
         }
 
         public string SupplierId { get; set; }

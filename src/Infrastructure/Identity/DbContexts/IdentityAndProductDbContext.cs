@@ -6,6 +6,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Infrastructure.Identity.DbContexts
 {
@@ -47,6 +48,7 @@ namespace Infrastructure.Identity.DbContexts
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseLazyLoadingProxies();
+            optionsBuilder.ConfigureWarnings(warn => warn.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning));
         }
      
     }
