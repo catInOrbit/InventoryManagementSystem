@@ -29,7 +29,7 @@ namespace Infrastructure.Identity.DbContexts
         public DbSet<ProductSerialNumber> ProductSerialNumber { get; set; }
         public DbSet<ProductVariant> ProductVariant { get; set; }
         public DbSet<VariantValue> VariantValue { get; set; }
-        public DbSet<PurchaseOrderItem> OrderItem { get; set; }
+        public DbSet<PurchaseOrderItem> PurchaseOrderItem { get; set; }
         public DbSet<GoodsReceiptOrder> GoodsReceiptOrder { get; set; }
         public DbSet<GoodsReceiptOrderItem> GoodsReceiptOrderItems { get; set; }
 

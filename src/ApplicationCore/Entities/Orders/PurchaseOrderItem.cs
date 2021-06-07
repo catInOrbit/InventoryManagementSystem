@@ -16,7 +16,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public string ProductVariantId { get; set; }
         [JsonIgnore]
         public virtual ProductVariant ProductVariant { get; set; }
-        public float Quantity { get; set; }
+        public float OrderQuantity { get; set; }
         public string Unit { get; set; }
         public decimal Price { get; set; }
         public decimal DiscountAmount { get; set; }

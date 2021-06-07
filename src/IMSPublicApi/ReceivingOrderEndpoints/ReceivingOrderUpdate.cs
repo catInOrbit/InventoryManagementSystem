@@ -56,11 +56,11 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                     {
                         Id = Guid.NewGuid().ToString(),
                         ProductVariant = purchaseOrderItem.ProductVariant,
-                        Quantity =  purchaseOrderItem.Quantity,
+                        Quantity =  purchaseOrderItem.OrderQuantity,
                         ProductVariantId = purchaseOrderItem.ProductVariantId,
                         StorageLocation = request.StorageLocation,
                         ReceivedOrderId = ro.Id,
-                        QuantityInventory = (await _productVariantRepository.GetByIdAsync(purchaseOrderItem.ProductVariantId)).Quantity
+                        QuantityInventory = (await _productVariantRepository.GetByIdAsync(purchaseOrderItem.ProductVariantId)).StorageQuantity
                     };
                     ro.ReceivedOrderItems.Add(roi);
                 }

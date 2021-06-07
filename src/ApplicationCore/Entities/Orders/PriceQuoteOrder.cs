@@ -23,14 +23,11 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 
         public string SupplierId { get; set; }
         public virtual Supplier Supplier { get; set; }
-        
         public DateTime Deadline { get; set; }
-
         public string MailDescription { get; set; }
         public PriceQuoteType PriceQuoteStatus { get; set; }
         public decimal TotalOrderAmount { get; set; }
         public virtual ICollection<PurchaseOrderItem> PurchaseOrderProduct { get; set; } = new List<PurchaseOrderItem>();
-        
         public virtual Transaction Transaction { get; set; }
         
     }

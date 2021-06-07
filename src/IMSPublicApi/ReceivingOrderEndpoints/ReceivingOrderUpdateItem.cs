@@ -51,7 +51,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 if (roReceivedOrderItem.Id == request.ProductVariantId)
                 {
                     productVariant.Unit = request.UnitUpdate;
-                    productVariant.Quantity = request.QuantityUpdate;
+                    productVariant.StorageQuantity = request.QuantityUpdate;
                 }
             }
 

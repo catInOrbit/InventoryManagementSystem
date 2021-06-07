@@ -134,6 +134,17 @@ namespace Infrastructure.Data
             return posi;
         }
 
+        public string VariantNameConcat(List<string> productVariantValues)
+        {
+            string nameConcat = "";
+            foreach (var productVariantValue in productVariantValues)
+            {
+                nameConcat += productVariantValue;
+            }
+            
+            return nameConcat;
+        }
+
         public async Task<List<GoodsReceiptOrderSearchIndex>> GetROForELIndexAsync(CancellationToken cancellationToken = default)
         {
             var ros= await _identityAndProductDbContext.Set<GoodsReceiptOrder>().ToListAsync(cancellationToken);
