@@ -194,6 +194,13 @@ namespace Infrastructure.Data
                 SingleOrDefault(po => po.GoodsReceiptOrderNumber == receiveOrderNumber);   
         }
 
+        public GoodsIssueOrder GetGoodsIssueOrderByNumber(string goodsIssueOrderNumber, CancellationToken cancellationToken = default)
+        {
+            return _identityAndProductDbContext.Good.Where(go => go.Goo == receiveOrderNumber).
+                SingleOrDefault(po => po.GoodsReceiptOrderNumber == receiveOrderNumber);
+        }
+
+
         public async Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default)
         {
             return await _identityAndProductDbContext.Set<T>().ToListAsync(cancellationToken);

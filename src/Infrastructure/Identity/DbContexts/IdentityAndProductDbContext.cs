@@ -21,7 +21,6 @@ namespace Infrastructure.Identity.DbContexts
         public DbSet<Category> Category { get; set; }
         public DbSet<Supplier> Supplier { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
-        
         public DbSet<PriceQuoteOrder> PriceQuote { get; set; }
         public DbSet<Transaction> Transaction { get; set; }
         
@@ -32,6 +31,8 @@ namespace Infrastructure.Identity.DbContexts
         public DbSet<PurchaseOrderItem> PurchaseOrderItem { get; set; }
         public DbSet<GoodsReceiptOrder> GoodsReceiptOrder { get; set; }
         public DbSet<GoodsReceiptOrderItem> GoodsReceiptOrderItems { get; set; }
+        
+        public DbSet<GoodsIssueOrder> GoodsIssueOrders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

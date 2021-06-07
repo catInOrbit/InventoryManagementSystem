@@ -53,7 +53,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 pqr.PurchaseOrderProduct.Add(requestOrderItemInfo);
             }
             
-            pqr.MailDescription = request.Description;
+            pqr.MailDescription = request.MailDescription;
             pqr.SupplierId = request.SupplierId;
             pqr.Deadline = request.Deadline;
             

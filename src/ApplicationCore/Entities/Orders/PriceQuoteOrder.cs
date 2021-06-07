@@ -22,7 +22,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
             PriceQuoteNumber = DateTime.UtcNow.Date.ToString("ddMMyyyy") +
                                Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
         }
-
+        
         public string PriceQuoteNumber { get; set; }
         public string SupplierId { get; set; }
         public virtual Supplier Supplier { get; set; }

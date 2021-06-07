@@ -38,6 +38,8 @@ namespace InventoryManagementSystem.PublicApi.GoodsReceiptEndpoints.Create
         {
             var response = new GRCreateResponse();
             
+            var gio = _asyncRepository.get
+            
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PriceQuoteOrder", UserOperations.Create))
                 return Unauthorized();
             
@@ -48,7 +50,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsReceiptEndpoints.Create
                 Type = TransactionType.PriceQuote,
                 CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id
             };
-            
+            gio.GoodsIssueType = GoodsIssueType.Packing; 
             response.GoodsIssueOrder = gio;
             await _asyncRepository.AddAsync(gio);
             return Ok(response);
