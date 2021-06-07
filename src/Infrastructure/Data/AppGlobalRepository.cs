@@ -114,7 +114,7 @@ namespace Infrastructure.Data
                     {
                         Id = po.Id,
                         SupplierName = (po.Supplier!=null) ? po.Supplier.SupplierName : "",
-                        PurchaseOrderNumber = (po.Transaction !=null) ? po.Transaction.TransactionNumber : "",
+                        PurchaseOrderNumber = (po.PurchaseOrderNumber !=null) ? po.PurchaseOrderNumber : "",
                         Status = (po.PurchaseOrderStatus.GetStringValue()!=null) ? po.PurchaseOrderStatus.GetStringValue() : "",
                         CreatedDate = po.Transaction.CreatedDate,
                         DeliveryDate = po.DeliveryDate ,
@@ -160,7 +160,7 @@ namespace Infrastructure.Data
                         purchaseOrderId = (ro.PurchaseOrderId!=null) ? ro.PurchaseOrderId : "",
                         supplierName = (ro.Supplier!=null) ? ro.Supplier.SupplierName : "",
                         createdBy = (ro.Transaction.CreatedBy!=null) ? ro.Transaction.CreatedBy.Fullname : "" ,
-                        receiptId = (ro.Transaction.TransactionNumber !=null) ? ro.Transaction.TransactionNumber : ""  ,
+                        receiptId = (ro.GoodsReceiptOrderNumber !=null) ? ro.GoodsReceiptOrderNumber : ""  ,
                         createdDate = ro.Transaction.CreatedDate.ToShortDateString()
                     };
                     rosi.Add(index);
@@ -178,20 +178,20 @@ namespace Infrastructure.Data
 
         public PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber, CancellationToken cancellationToken = default)
         {
-            return _identityAndProductDbContext.PriceQuote.Where(pq => pq.Transaction.TransactionNumber == priceQuoteNumber).
-                SingleOrDefault(pq => pq.Transaction.TransactionNumber == priceQuoteNumber);
+            return _identityAndProductDbContext.PriceQuote.Where(pq => pq.PriceQuoteNumber == priceQuoteNumber).
+                SingleOrDefault(pq => pq.PriceQuoteNumber == priceQuoteNumber);
         }
 
         public PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderNumber, CancellationToken cancellationToken = default)
         {
-            return _identityAndProductDbContext.PurchaseOrder.Where(po => po.Transaction.TransactionNumber == purchaseOrderNumber).
-                SingleOrDefault(po => po.Transaction.TransactionNumber == purchaseOrderNumber);   
+            return _identityAndProductDbContext.PurchaseOrder.Where(po => po.PurchaseOrderNumber == purchaseOrderNumber).
+                SingleOrDefault(po => po.PurchaseOrderNumber == purchaseOrderNumber);   
         }
 
         public GoodsReceiptOrder GetReceivingOrderByNumber(string receiveOrderNumber, CancellationToken cancellationToken = default)
         {
-            return _identityAndProductDbContext.GoodsReceiptOrder.Where(po => po.Transaction.TransactionNumber == receiveOrderNumber).
-                SingleOrDefault(po => po.Transaction.TransactionNumber == receiveOrderNumber);   
+            return _identityAndProductDbContext.GoodsReceiptOrder.Where(go => go.GoodsReceiptOrderNumber == receiveOrderNumber).
+                SingleOrDefault(po => po.GoodsReceiptOrderNumber == receiveOrderNumber);   
         }
 
         public async Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default)
@@ -239,7 +239,7 @@ namespace Infrastructure.Data
         public async Task DeletePurchaseOrderAsync(PurchaseOrder entity, CancellationToken cancellationToken = default)
         {
             var po = _identityAndProductDbContext.PurchaseOrder.Where(po => po.Id == entity.Id);
-            var poItems = _identityAndProductDbContext.OrderItem.Where(poItem => poItem.OrderNumber == entity.Id);
+            var poItems = _identityAndProductDbContext.PurchaseOrderItem.Where(poItem => poItem.OrderNumber == entity.Id);
 
             _identityAndProductDbContext.RemoveRange(poItems);
             _identityAndProductDbContext.Remove(po);

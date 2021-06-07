@@ -60,7 +60,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
                             Deadline = priceQuoteOrder.Deadline.ToString("MM/dd/yyyy"),
                             CreatedDate = priceQuoteOrder.Transaction.CreatedDate.ToString("MM/dd/yyyy"),
                             CreatedByName = priceQuoteOrder.Transaction.CreatedBy.Fullname,
-                            PriceQuoteOrderNumber = priceQuoteOrder.Transaction.TransactionNumber,
+                            PriceQuoteOrderNumber = priceQuoteOrder.PriceQuoteNumber,
                             SupplierName = (priceQuoteOrder.Supplier != null) ? priceQuoteOrder.Supplier.SupplierName : "",
                         };
                         

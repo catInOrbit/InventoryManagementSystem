@@ -48,8 +48,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             var pqr = new PriceQuoteOrder();
             var transaction = new Transaction
             {
-                TransactionId = pqr.Id,
-                TransactionNumber = DateTime.UtcNow.Date.ToString("ddMMyyyy") + Guid.NewGuid().ToString().Substring(0, 5).ToUpper(),
                 CreatedDate = DateTime.Now,
                 Type = TransactionType.PriceQuote,
                 CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id

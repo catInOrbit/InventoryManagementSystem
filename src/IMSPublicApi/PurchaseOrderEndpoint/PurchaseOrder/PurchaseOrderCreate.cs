@@ -52,8 +52,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
 
             var transaction = new Transaction
             {
-                TransactionId = purchaseOrder .Id,
-                TransactionNumber = DateTime.UtcNow.Date.ToString("ddMMyyyy") + Guid.NewGuid().ToString().Substring(0, 5).ToUpper(),
                 CreatedDate = DateTime.Now,
                 Type = TransactionType.Purchase,
                 CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id
@@ -65,7 +63,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             purchaseOrder.PurchaseOrderStatus = PurchaseOrderStatusType.Created;
             if (pqData != null)
             {
-                purchaseOrder.Transaction.TransactionNumber = pqData.Transaction.TransactionNumber;
+                purchaseOrder.PurchaseOrderNumber = pqData.PriceQuoteNumber;
                 purchaseOrder.PurchaseOrderProduct = pqData.PurchaseOrderProduct;
                 purchaseOrder.SupplierId = pqData.SupplierId;
             }

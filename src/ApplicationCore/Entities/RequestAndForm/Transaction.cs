@@ -8,9 +8,12 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm
 {
     public class Transaction : BaseEntity
     {
+        public Transaction()
+        {
+            Id = DateTime.Now.Date.ToString("ddMMyyyy") + "-"+Guid.NewGuid();
+        }
+        
         public string Name { get; set; }
-        public string TransactionId { get; set; }
-        public string TransactionNumber { get; set; }
         public  DateTime ValidUntil { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }

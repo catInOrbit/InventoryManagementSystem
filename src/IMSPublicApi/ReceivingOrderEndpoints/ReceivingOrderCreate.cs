@@ -46,8 +46,6 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
 
             var transaction = new Transaction
             {
-                TransactionId = ro .Id,
-                TransactionNumber = DateTime.UtcNow.Date.ToString("ddMMyyyy") + Guid.NewGuid().ToString().Substring(0, 5).ToUpper(),
                 CreatedDate = DateTime.Now,
                 Type = TransactionType.Purchase,
                 CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id

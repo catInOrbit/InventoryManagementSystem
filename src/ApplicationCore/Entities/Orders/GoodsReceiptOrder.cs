@@ -16,8 +16,12 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
                            Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
             ReceivedDate = DateTime.Now;
             // Transaction.Type = TransactionType.Receive;
+            GoodsReceiptOrderNumber = DateTime.UtcNow.Date.ToString("ddMMyyyy") +
+                                      Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
         }
         
+        public string GoodsReceiptOrderNumber { get; set; }
+
         public string PurchaseOrderId { get; set; }
         public virtual PurchaseOrder PurchaseOrder { get; set; }
         public DateTime ReceivedDate { get; set; }

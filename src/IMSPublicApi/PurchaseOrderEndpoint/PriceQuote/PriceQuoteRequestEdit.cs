@@ -46,7 +46,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             pqr.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             foreach (var requestOrderItemInfo in request.OrderItemInfos)
             {
-                requestOrderItemInfo.OrderNumber = pqr.Transaction.TransactionNumber;
+                requestOrderItemInfo.OrderNumber = pqr.PriceQuoteNumber;
                 requestOrderItemInfo.ProductVariant = await _productVariantRepos.GetByIdAsync(requestOrderItemInfo.ProductVariantId);
                 requestOrderItemInfo.TotalAmount += requestOrderItemInfo.Price;
                 pqr.TotalOrderAmount += requestOrderItemInfo.Price;

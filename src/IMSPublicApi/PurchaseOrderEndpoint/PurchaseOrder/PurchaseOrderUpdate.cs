@@ -61,7 +61,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             
             foreach (var requestOrderItemInfo in request.OrderItemInfos)
             {
-                requestOrderItemInfo.OrderNumber = po.Transaction.TransactionNumber;
+                requestOrderItemInfo.OrderNumber = po.PurchaseOrderNumber;
                 requestOrderItemInfo.ProductVariant = await _productVariantRepos.GetByIdAsync(requestOrderItemInfo.ProductVariantId);
                 po.TotalOrderAmount += requestOrderItemInfo.Price;
                 po.TotalDiscountAmount += requestOrderItemInfo.DiscountAmount;

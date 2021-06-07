@@ -17,11 +17,15 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
             PurchaseOrderStatus = PurchaseOrderStatusType.Created;
             // Transaction.CreatedDate = DateTime.Now;
             // Transaction.Type = TransactionType.Purchase;
+            PurchaseOrderNumber = DateTime.UtcNow.Date.ToString("ddMMyyyy") +
+                                  Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
         }
         public virtual bool ShouldSerializePurchaseOrderProduct()
         {
             return true;
         }
+        
+        public string PurchaseOrderNumber { get; set; }
         public DateTime DeliveryDate { get; set; }
         public string DeliveryAddress { get; set; }
         public string MailDescription { get; set; }
