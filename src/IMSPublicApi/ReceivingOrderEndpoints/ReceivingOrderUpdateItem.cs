@@ -15,10 +15,10 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
     public class ReceivingOrderUpdateItem : BaseAsyncEndpoint.WithRequest<ROUpdateItemRequest>.WithoutResponse
     {
         private readonly IAuthorizationService _authorizationService;
-        private readonly IAsyncRepository<ReceivingOrder> _recevingOrderRepository;
+        private readonly IAsyncRepository<GoodsReceiptOrder> _recevingOrderRepository;
         private readonly IAsyncRepository<ProductVariant> _productRepository;
 
-        public ReceivingOrderUpdateItem(IAuthorizationService authorizationService, IAsyncRepository<ReceivingOrder> recevingOrderRepository, IAsyncRepository<ProductVariant> productRepository)
+        public ReceivingOrderUpdateItem(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IAsyncRepository<ProductVariant> productRepository)
         {
             _authorizationService = authorizationService;
             _recevingOrderRepository = recevingOrderRepository;

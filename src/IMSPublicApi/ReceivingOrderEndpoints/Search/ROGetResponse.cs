@@ -26,7 +26,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
         public ROGetResponse()
         { }
 
-        public ReceivingOrder ReceiveingOrder { get; set; }
+        public GoodsReceiptOrder ReceiveingOrder { get; set; }
 
         public List<ReceivingOrderSearchIndex> ReceiveingOrderSearchIndex { get; set; } = new List<ReceivingOrderSearchIndex>();
     }

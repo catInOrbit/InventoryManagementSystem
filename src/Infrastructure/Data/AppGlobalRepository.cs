@@ -114,12 +114,12 @@ namespace Infrastructure.Data
                     {
                         Id = po.Id,
                         SupplierName = (po.Supplier!=null) ? po.Supplier.SupplierName : "",
-                        PurchaseOrderNumber = (po.PurchaseOrderNumber!=null) ? po.PurchaseOrderNumber : "",
+                        PurchaseOrderNumber = (po.Transaction !=null) ? po.Transaction.TransactionNumber : "",
                         Status = (po.PurchaseOrderStatus.GetStringValue()!=null) ? po.PurchaseOrderStatus.GetStringValue() : "",
-                        CreatedDate = po.CreatedDate,
+                        CreatedDate = po.Transaction.CreatedDate,
                         DeliveryDate = po.DeliveryDate ,
                         TotalPrice = (po.TotalOrderAmount!=null) ? po.TotalOrderAmount : 0,
-                        ConfirmedByName = (po.CreatedBy.Fullname!=null) ? po.CreatedBy.Fullname : "" 
+                        ConfirmedByName = (po.Transaction.CreatedBy!=null) ? po.Transaction.CreatedBy.Fullname : "" 
                     };
                     posi.Add(index);
                 }
@@ -136,7 +136,7 @@ namespace Infrastructure.Data
 
         public async Task<List<ReceivingOrderSearchIndex>> GetROForELIndexAsync(CancellationToken cancellationToken = default)
         {
-            var ros= await _identityAndProductDbContext.Set<ReceivingOrder>().ToListAsync(cancellationToken);
+            var ros= await _identityAndProductDbContext.Set<GoodsReceiptOrder>().ToListAsync(cancellationToken);
             List<ReceivingOrderSearchIndex> rosi = new List<ReceivingOrderSearchIndex>();
             foreach (var ro in ros)
             {
@@ -148,9 +148,9 @@ namespace Infrastructure.Data
                         Id = ro.Id,
                         purchaseOrderId = (ro.PurchaseOrderId!=null) ? ro.PurchaseOrderId : "",
                         supplierName = (ro.Supplier!=null) ? ro.Supplier.SupplierName : "",
-                        createdBy = (ro.CreatedBy!=null) ? ro.CreatedBy.Fullname : "" ,
-                        receiptId = (ro.ReceiveOrderNumber!=null) ? ro.ReceiveOrderNumber : ""  ,
-                        createdDate = ro.CreatedDate.ToShortDateString()
+                        createdBy = (ro.Transaction.CreatedBy!=null) ? ro.Transaction.CreatedBy.Fullname : "" ,
+                        receiptId = (ro.Transaction.TransactionNumber !=null) ? ro.Transaction.TransactionNumber : ""  ,
+                        createdDate = ro.Transaction.CreatedDate.ToShortDateString()
                     };
                     rosi.Add(index);
                 }
@@ -167,20 +167,20 @@ namespace Infrastructure.Data
 
         public PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber, CancellationToken cancellationToken = default)
         {
-            return _identityAndProductDbContext.PriceQuote.Where(pq => pq.PriceQuoteOrderNumber == priceQuoteNumber).
-                SingleOrDefault(pq => pq.PriceQuoteOrderNumber == priceQuoteNumber);
+            return _identityAndProductDbContext.PriceQuote.Where(pq => pq.Transaction.TransactionNumber == priceQuoteNumber).
+                SingleOrDefault(pq => pq.Transaction.TransactionNumber == priceQuoteNumber);
         }
 
         public PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderNumber, CancellationToken cancellationToken = default)
         {
-            return _identityAndProductDbContext.PurchaseOrder.Where(po => po.PurchaseOrderNumber == purchaseOrderNumber).
-                SingleOrDefault(po => po.PurchaseOrderNumber == purchaseOrderNumber);   
+            return _identityAndProductDbContext.PurchaseOrder.Where(po => po.Transaction.TransactionNumber == purchaseOrderNumber).
+                SingleOrDefault(po => po.Transaction.TransactionNumber == purchaseOrderNumber);   
         }
 
-        public ReceivingOrder GetReceivingOrderByNumber(string receiveOrderNumber, CancellationToken cancellationToken = default)
+        public GoodsReceiptOrder GetReceivingOrderByNumber(string receiveOrderNumber, CancellationToken cancellationToken = default)
         {
-            return _identityAndProductDbContext.ReceivingOrder.Where(po => po.ReceiveOrderNumber == receiveOrderNumber).
-                SingleOrDefault(po => po.ReceiveOrderNumber == receiveOrderNumber);   
+            return _identityAndProductDbContext.GoodsReceiptOrder.Where(po => po.Transaction.TransactionNumber == receiveOrderNumber).
+                SingleOrDefault(po => po.Transaction.TransactionNumber == receiveOrderNumber);   
         }
 
         public async Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default)

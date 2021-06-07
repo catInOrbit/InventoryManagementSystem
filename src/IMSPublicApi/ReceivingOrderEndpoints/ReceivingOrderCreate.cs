@@ -14,10 +14,10 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
     public class ReceivingOrderCreate : BaseAsyncEndpoint.WithoutRequest.WithResponse<ROCreateResponse>
     {
         private readonly IAuthorizationService _authorizationService;
-        private readonly IAsyncRepository<ReceivingOrder> _receiveAsyncRepository;
+        private readonly IAsyncRepository<GoodsReceiptOrder> _receiveAsyncRepository;
 
   
-        public ReceivingOrderCreate(IAuthorizationService authorizationService, IAsyncRepository<ReceivingOrder> receiveAsyncRepository)
+        public ReceivingOrderCreate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> receiveAsyncRepository)
         {
             _authorizationService = authorizationService;
             _receiveAsyncRepository = receiveAsyncRepository;
@@ -36,7 +36,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Read))
                 return Unauthorized();
             
-            var ro = new ReceivingOrder();
+            var ro = new GoodsReceiptOrder();
             await _receiveAsyncRepository.AddAsync(ro);
             await _receiveAsyncRepository.ElasticSaveSingleAsync(ro);
 

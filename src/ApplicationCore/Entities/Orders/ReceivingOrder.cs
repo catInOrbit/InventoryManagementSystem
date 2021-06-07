@@ -5,10 +5,10 @@ using InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
-    public class ReceivingOrder : BaseEntity
+    public class GoodsReceiptOrder : BaseEntity
     {
 
-        public ReceivingOrder()
+        public GoodsReceiptOrder()
         {
             Id = DateTime.Now.Date.ToString("ddMMyyyy") + "-"+Guid.NewGuid();
             Transaction.TransactionId = Id;
@@ -27,9 +27,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         
         public string SupplierInvoice { get; set; }
         public string WarehouseLocation { get; set; }
-        public virtual List<ReceivedOrderItem> ReceivedOrderItems { get; set; } = new List<ReceivedOrderItem>();
+        public virtual List<GoodsReceiptOrderItem> ReceivedOrderItems { get; set; } = new List<GoodsReceiptOrderItem>();
         public string TransactionId { get; set; }
-        public Transaction Transaction { get; set; }
+        public virtual Transaction Transaction { get; set; }
         
     }
 

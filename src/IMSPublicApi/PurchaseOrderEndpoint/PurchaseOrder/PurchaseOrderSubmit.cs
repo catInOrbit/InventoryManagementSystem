@@ -51,8 +51,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
 
                 var po = _asyncRepository.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
                 po.PurchaseOrderStatus = PurchaseOrderStatusType.Sent;
-                po.ModifiedDate = DateTime.Now;
-                po.ModifiedBy = (await _userAuthentication.GetCurrentSessionUser()).Id;
+                po.Transaction.ModifiedDate = DateTime.Now;
+                po.Transaction.ConfirmedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
                 await _asyncRepository.UpdateAsync(po);
                 var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
                 var message = new EmailMessage(request.To, request.Subject, request.Content, files);

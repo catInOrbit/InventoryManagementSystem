@@ -58,9 +58,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
                         {
                             Id = priceQuoteOrder.Id,
                             Deadline = priceQuoteOrder.Deadline.ToString("MM/dd/yyyy"),
-                            CreatedDate = priceQuoteOrder.CreatedDate.ToString("MM/dd/yyyy"),
-                            CreatedByName = priceQuoteOrder.CreatedBy.Fullname,
-                            PriceQuoteOrderNumber = priceQuoteOrder.PriceQuoteOrderNumber,
+                            CreatedDate = priceQuoteOrder.Transaction.CreatedDate.ToString("MM/dd/yyyy"),
+                            CreatedByName = priceQuoteOrder.Transaction.CreatedBy.Fullname,
+                            PriceQuoteOrderNumber = priceQuoteOrder.Transaction.TransactionNumber,
                             SupplierName = (priceQuoteOrder.Supplier != null) ? priceQuoteOrder.Supplier.SupplierName : "",
                         };
                         
@@ -75,7 +75,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
 
             else
             {
-                
                 // var pos = await _asyncRepository.ListAllAsync(cancellationToken);
                 // var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>(
                 //     s => s.Query(q => q.QueryString(d => d.Query('*' + request.number + '*'))));

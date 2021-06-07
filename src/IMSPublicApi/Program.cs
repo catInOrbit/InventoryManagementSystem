@@ -33,7 +33,7 @@ namespace InventoryManagementSystem.PublicApi
                 var elasticProductRepos = services.GetRequiredService<IAsyncRepository<ProductSearchIndex>>();
                 var elasticPoRepos = services.GetRequiredService<IAsyncRepository<PurchaseOrderSearchIndex>>();
                 var elasticRoRepos = services.GetRequiredService<IAsyncRepository<ReceivingOrderSearchIndex>>();
-
+    
                 try
                 {
                     var productIndexList = await productRepos.GetProductForELIndexAsync();

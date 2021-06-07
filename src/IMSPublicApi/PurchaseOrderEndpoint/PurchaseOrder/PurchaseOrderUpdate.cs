@@ -55,13 +55,13 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
 
 
             var po =  _purchaseOrderRepos.GetPurchaseOrderByNumber(request.PurchaseOrderNumberGet);
-            po.ModifiedDate = DateTime.Now;
-            po.ModifiedBy = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            po.Transaction.ModifiedDate = DateTime.Now;
+            po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             po.PurchaseOrderStatus = PurchaseOrderStatusType.WaitingConfirmation;
             
             foreach (var requestOrderItemInfo in request.OrderItemInfos)
             {
-                requestOrderItemInfo.OrderNumber = po.PurchaseOrderNumber;
+                requestOrderItemInfo.OrderNumber = po.Transaction.TransactionNumber;
                 requestOrderItemInfo.ProductVariant = await _productVariantRepos.GetByIdAsync(requestOrderItemInfo.ProductVariantId);
                 po.TotalOrderAmount += requestOrderItemInfo.Price;
                 po.TotalDiscountAmount += requestOrderItemInfo.DiscountAmount;

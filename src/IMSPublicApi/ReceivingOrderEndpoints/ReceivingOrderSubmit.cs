@@ -12,10 +12,10 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
 {
     public class ReceivingOrderSubmit : BaseAsyncEndpoint.WithRequest<ROSubmitRequest>.WithoutResponse
     {
-        private IAsyncRepository<ReceivingOrder> _roAsyncRepository;
+        private IAsyncRepository<GoodsReceiptOrder> _roAsyncRepository;
         private IAsyncRepository<PurchaseOrder> _poAsyncRepository;
 
-        public ReceivingOrderSubmit(IAsyncRepository<ReceivingOrder> roAsyncRepository, IAsyncRepository<PurchaseOrder> poAsyncRepository)
+        public ReceivingOrderSubmit(IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<PurchaseOrder> poAsyncRepository)
         {
             _roAsyncRepository = roAsyncRepository;
             _poAsyncRepository = poAsyncRepository;
@@ -32,7 +32,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         {
             var ro = await _roAsyncRepository.GetByIdAsync(request.ReceivingOrderId);
             var po = await _poAsyncRepository.GetByIdAsync(ro.PurchaseOrderId);
-            ro.ModifiedDate = DateTime.Now;
+            ro.Transaction.ModifiedDate = DateTime.Now;
             po.PurchaseOrderStatus = PurchaseOrderStatusType.Done;
 
             await _poAsyncRepository.UpdateAsync(po);

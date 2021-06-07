@@ -13,10 +13,10 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
 {
     public class GetReceivingOrderById : BaseAsyncEndpoint.WithRequest<ROGetRequest>.WithResponse<ROGetResponse>
     {
-        private readonly IAsyncRepository<ReceivingOrder> _receivingOrderAsyncRepository;
+        private readonly IAsyncRepository<GoodsReceiptOrder> _receivingOrderAsyncRepository;
         private readonly IAuthorizationService _authorizationService;
 
-        public GetReceivingOrderById(IAuthorizationService authorizationService, IAsyncRepository<ReceivingOrder> receivingOrderAsyncRepository)
+        public GetReceivingOrderById(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> receivingOrderAsyncRepository)
         {
             _authorizationService = authorizationService;
             _receivingOrderAsyncRepository = receivingOrderAsyncRepository;

@@ -17,11 +17,11 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
     public class ReceivingOrderUpdate : BaseAsyncEndpoint.WithRequest<ROEditRequest>.WithoutResponse
     {
         private readonly IAuthorizationService _authorizationService;
-        private readonly IAsyncRepository<ReceivingOrder> _receivingOrderRepository;
+        private readonly IAsyncRepository<GoodsReceiptOrder> _receivingOrderRepository;
         private readonly IAsyncRepository<PurchaseOrder> _purchaseOrderRepository;
         private readonly IAsyncRepository<ProductVariant> _productVariantRepository;
         
-        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<ReceivingOrder> receivingOrderRepository, IAsyncRepository<PurchaseOrder> purchaseOrderRepository, IAsyncRepository<ProductVariant> productAsyncRepository)
+        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> receivingOrderRepository, IAsyncRepository<PurchaseOrder> purchaseOrderRepository, IAsyncRepository<ProductVariant> productAsyncRepository)
         {
             _authorizationService = authorizationService;
             _receivingOrderRepository = receivingOrderRepository;
@@ -42,14 +42,14 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 return Unauthorized();
             
             var ro = await _receivingOrderRepository.GetByIdAsync(request.ReceiveOrderGet);
-            ro.ModifiedDate = DateTime.Now;
+            ro.Transaction.ModifiedDate = DateTime.Now;
             ro.PurchaseOrderId = request.PurchaseOrderNumber;
             var po = _purchaseOrderRepository.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
             if (po != null)
             {
                 foreach (var purchaseOrderItem in po.PurchaseOrderProduct)
                 {
-                    var roi = new ReceivedOrderItem
+                    var roi = new GoodsReceiptOrderItem
                     {
                         Id = Guid.NewGuid().ToString(),
                         ProductVariant = purchaseOrderItem.ProductVariant,

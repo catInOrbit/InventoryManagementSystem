@@ -11,6 +11,6 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         public ROCreateResponse()
         { }
 
-        public ReceivingOrder ReceivingOrder { get; set; }
+        public GoodsReceiptOrder ReceivingOrder { get; set; }
     }
 }

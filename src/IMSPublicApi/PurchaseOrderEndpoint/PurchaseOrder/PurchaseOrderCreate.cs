@@ -50,11 +50,11 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             var purchaseOrder = new ApplicationCore.Entities.Orders.PurchaseOrder();
 
             var pqData = _priceQuoteRepos.GetPriceQuoteByNumber(request.PriceQuoteNumber);
-            purchaseOrder.CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            purchaseOrder.Transaction.CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             purchaseOrder.PurchaseOrderStatus = PurchaseOrderStatusType.Created;
             if (pqData != null)
             {
-                purchaseOrder.PurchaseOrderNumber = pqData.PriceQuoteOrderNumber;
+                purchaseOrder.Transaction.TransactionNumber = pqData.Transaction.TransactionNumber;
                 purchaseOrder.PurchaseOrderProduct = pqData.PurchaseOrderProduct;
                 purchaseOrder.SupplierId = pqData.SupplierId;
             }

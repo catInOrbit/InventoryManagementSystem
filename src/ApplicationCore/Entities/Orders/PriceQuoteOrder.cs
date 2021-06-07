@@ -31,7 +31,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public decimal TotalOrderAmount { get; set; }
         public virtual ICollection<PurchaseOrderItem> PurchaseOrderProduct { get; set; } = new List<PurchaseOrderItem>();
         
-        public Transaction Transaction { get; set; }
+        public virtual Transaction Transaction { get; set; }
         
     }
 }

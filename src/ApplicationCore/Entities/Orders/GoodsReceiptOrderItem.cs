@@ -2,10 +2,10 @@
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
-    public class ReceivedOrderItem : BaseEntity
+    public class GoodsReceiptOrderItem : BaseEntity
     {
         public string ReceivedOrderId { get; set; }
-        public virtual ReceivingOrder ReceivingOrder { get; set; }
+        public virtual GoodsReceiptOrder ReceivingOrder { get; set; }
         public string StorageLocation { get; set; }
         public string ProductVariantId { get; set; }
         public virtual ProductVariant ProductVariant { get; set; }

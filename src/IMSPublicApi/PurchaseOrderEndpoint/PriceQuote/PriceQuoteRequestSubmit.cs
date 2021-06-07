@@ -47,8 +47,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             
             var pqr = _asyncRepository.GetPriceQuoteByNumber(request.PriceQuoteNumberGet);
             pqr.PriceQuoteStatus = PriceQuoteType.Sent;
-            pqr.ModifiedBy = (await _userAuthentication.GetCurrentSessionUser()).Id;
-            pqr.ModifiedDate = DateTime.Now;
+            pqr.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            pqr.Transaction.ModifiedDate = DateTime.Now;
             await _asyncRepository.UpdateAsync(pqr);
             
             var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();

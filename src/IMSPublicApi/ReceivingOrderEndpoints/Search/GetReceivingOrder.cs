@@ -17,10 +17,10 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
     public class GetReceivingOrder : BaseAsyncEndpoint.WithRequest<ROGetRequest>.WithResponse<ROGetResponse>
     {
         private IAuthorizationService _authorizationService;
-        private IAsyncRepository<ReceivingOrder> _asyncRepository;
+        private IAsyncRepository<GoodsReceiptOrder> _asyncRepository;
         private readonly IElasticClient _elasticClient;
 
-        public GetReceivingOrder(IAuthorizationService authorizationService, IAsyncRepository<ReceivingOrder> asyncRepository, IElasticClient elasticClient)
+        public GetReceivingOrder(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> asyncRepository, IElasticClient elasticClient)
         {
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
