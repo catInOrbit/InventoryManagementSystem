@@ -66,7 +66,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
                         
                         foreach (var purchaseOrderItem in priceQuoteOrder.PurchaseOrderProduct)
                         {
-                            pq.OrderQuantity += (float)Math.Round(purchaseOrderItem.OrderQuantity);
+                            pq.NumberOfProduct = (float)Math.Round(pq.NumberOfProduct + 1) ;
                         }
                         response.PriceQuotes.Add(pq);     
                     }
