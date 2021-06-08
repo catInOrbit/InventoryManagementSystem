@@ -103,7 +103,7 @@ namespace Infrastructure.Data
 
         public async Task<List<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(CancellationToken cancellationToken = default)
         {
-            var pos= await _identityAndProductDbContext.Set<PurchaseOrder>().Include("Transaction").ToListAsync(cancellationToken);
+            var pos= await _identityAndProductDbContext.Set<PurchaseOrder>().Include("Transaction").Where(po => po.Transaction.TransactionStatus==true).ToListAsync(cancellationToken);
             List<PurchaseOrderSearchIndex> posi = new List<PurchaseOrderSearchIndex>();
             foreach (var po in pos)
             {
@@ -210,10 +210,10 @@ namespace Infrastructure.Data
             return _identityAndProductDbContext.PriceQuote.Where(pq => pq.PriceQuoteNumber == priceQuoteNumber).
                 SingleOrDefault(pq => pq.PriceQuoteNumber == priceQuoteNumber);
         }
-
+ 
         public PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderNumber, CancellationToken cancellationToken = default)
         {
-            return _identityAndProductDbContext.PurchaseOrder.Where(po => po.PurchaseOrderNumber == purchaseOrderNumber).
+            return _identityAndProductDbContext.PurchaseOrder.Where(po => po.PurchaseOrderNumber == purchaseOrderNumber && po.Transaction.TransactionStatus == true).
                 SingleOrDefault(po => po.PurchaseOrderNumber == purchaseOrderNumber);   
         }
 

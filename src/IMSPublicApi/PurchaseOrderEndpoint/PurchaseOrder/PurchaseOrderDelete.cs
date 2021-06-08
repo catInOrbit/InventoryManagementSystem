@@ -21,7 +21,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             _asyncRepository = asyncRepository;
         }
         
-        [HttpDelete("api/purchaseorder/delete/{Id}")]
+        [HttpPut("api/purchaseorder/delete/{Id}")]
         [SwaggerOperation(
             Summary = "Create purchase order",
             Description = "Create purchase order",
@@ -35,8 +35,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 return Unauthorized();
 
             var po = await _asyncRepository.GetByIdAsync(request.Id);
-           await _asyncRepository.DeleteAsync(po,
-               cancellationToken);
+            po.Transaction.TransactionStatus = false;
+           await _asyncRepository.UpdateAsync(po,cancellationToken);
            return Ok();
         }
     }

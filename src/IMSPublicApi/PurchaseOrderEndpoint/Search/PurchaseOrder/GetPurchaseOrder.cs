@@ -39,12 +39,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
         public override async Task<ActionResult<GetAllPurchaseOrderResponse>> HandleAsync([FromRoute] GetAllPurchaseOrderRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var response = new GetAllPurchaseOrderResponse();
-            // var isAuthorized = await _authorizationService.AuthorizeAsync(
-            //     HttpContext.User, "PurchaseOrder",
-            //     UserOperations.Read);
-            //
-            // if (!isAuthorized.Succeeded)
-            //     return Unauthorized();
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
                 return Unauthorized();
 
@@ -61,9 +55,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
                 var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>(
                     s => s.Index("purchaseorders").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
                 
-                // var po = _asyncRepository.GetPurchaseOrderByNumber(request.number, cancellationToken);
-                // response.PurchaseOrder = po;
-                // return Ok(response);
                 return Ok(responseElastic.Documents);
             }
         }
