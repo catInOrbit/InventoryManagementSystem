@@ -58,6 +58,10 @@ namespace Infrastructure.Services
                 index => index.Map<GoodsReceiptOrderSearchIndex>(x => x.AutoMap())
             );
             
+            client.Indices.CreateAsync("goodsissueorders",
+                index => index.Map<GoodsReceiptOrderSearchIndex>(x => x.AutoMap())
+            );
+            
 
             // client.Indices.Create(indexName, i => i
             //     .Settings(s => s

@@ -50,7 +50,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Create
             };
             gio.GoodsIssueType = GoodsIssueType.Packing; 
             response.GoodsIssueOrder = gio;
-            await _asyncRepository.AddAsync(gio);
+            await _asyncRepository.UpdateAsync(gio);
             return Ok(response);
         }
     }

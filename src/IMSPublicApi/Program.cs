@@ -33,6 +33,7 @@ namespace InventoryManagementSystem.PublicApi
                 var elasticProductRepos = services.GetRequiredService<IAsyncRepository<ProductSearchIndex>>();
                 var elasticPoRepos = services.GetRequiredService<IAsyncRepository<PurchaseOrderSearchIndex>>();
                 var elasticRoRepos = services.GetRequiredService<IAsyncRepository<GoodsReceiptOrderSearchIndex>>();
+                var elasticGiRepos = services.GetRequiredService<IAsyncRepository<GoodsIssueSearchIndex>>();
     
                 try
                 {
@@ -41,16 +42,8 @@ namespace InventoryManagementSystem.PublicApi
                     await elasticProductRepos.ElasticSaveBulkAsync(productIndexList.ToArray(), "productindices");
                     await elasticPoRepos.ElasticSaveBulkAsync((await elasticPoRepos.GetPOForELIndexAsync()).ToArray(), "purchaseorders");
                     await elasticRoRepos.ElasticSaveBulkAsync((await elasticRoRepos.GetROForELIndexAsync()).ToArray(), "receivingorders");
-                    
-                    // foreach (var productSearchIndex in productIndexList)
-                    // {
-                    //     await elasticRepos.ElasticSaveSingleAsync(productSearchIndex);
-                    // }
-                    //var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-                    // var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                    // await AppIdentityDbContextSeed.SeedAsync(userManager, roleManager);
-
-                    // SeedRole.Initialize(roleManager);
+                    await elasticGiRepos.ElasticSaveBulkAsync((await elasticGiRepos.GetGIForELIndexAsync()).ToArray(), "goodsissueorders");
+          
                     await SeedRole.Initialize(services, "test@12345Aha");
                 }
                 catch (Exception ex)

@@ -1,8 +1,8 @@
 using System;
 
-namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
+namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
-    public class GIDisplay : BaseResponse
+    public class GIDisplay
     {
         public string Id { get; set; }
         public string GoodsIssueNumber { get; set; }

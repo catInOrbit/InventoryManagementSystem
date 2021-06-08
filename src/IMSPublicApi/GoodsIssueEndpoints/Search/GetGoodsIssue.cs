@@ -65,9 +65,8 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
 
             else
             {
-                var gis = await _asyncRepository.ListAllAsync(cancellationToken);
-                var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>(
-                    s => s.Index("goodsissueorder").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+                var responseElastic = await _elasticClient.SearchAsync<GoodsIssueSearchIndex>(
+                    s => s.Index("goodsissueorders").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
                 return Ok(responseElastic.Documents);
             }
         }

@@ -176,6 +176,35 @@ namespace Infrastructure.Data
             return rosi;
         }
 
+        public async Task<List<GoodsIssueSearchIndex>> GetGIForELIndexAsync(CancellationToken cancellationToken = default)
+        {
+            var gis= await _identityAndProductDbContext.Set<GoodsIssueOrder>().ToListAsync(cancellationToken);
+            List<GoodsIssueSearchIndex> gisi = new List<GoodsIssueSearchIndex>();
+            foreach (var gi in gis)
+            {
+                GoodsIssueSearchIndex index; 
+                try
+                {
+                    index = new GoodsIssueSearchIndex
+                    {
+                        Id = gi.Id,
+                        GoodsIssueNumber = gi.GoodsIssueNumber, 
+                        GoodsIssueRequestNumber = gi.RequestId,
+                        Status = gi.GoodsIssueType.ToString(),
+                        DeliveryDate = gi.DeliveryDate,
+                        CreatedByName = (gi.Transaction!=null) ? gi.Transaction.CreatedBy.Fullname : "",
+                    };
+                    gisi.Add(index);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(gi.Id);
+                    throw;
+                }
+            }
+            return gisi;
+        }
+
         public PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber, CancellationToken cancellationToken = default)
         {
             return _identityAndProductDbContext.PriceQuote.Where(pq => pq.PriceQuoteNumber == priceQuoteNumber).
