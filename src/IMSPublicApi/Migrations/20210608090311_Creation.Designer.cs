@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210607022921_Recreation")]
-    partial class Recreation
+    [Migration("20210608090311_Creation")]
+    partial class Creation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -91,10 +91,51 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.ToTable("SystemUser");
                 });
 
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsIssueOrder", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CustomerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DeliveryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeliveryMethod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GoodsIssueNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GoodsIssueType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RequestId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SupplierId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SupplierId");
+
+                    b.HasIndex("TransactionId");
+
+                    b.ToTable("GoodsIssueOrders");
+                });
+
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsReceiptOrder", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("GoodsReceiptOrderNumber")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PurchaseOrderId")
                         .HasColumnType("nvarchar(450)");
@@ -160,6 +201,54 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.ToTable("GoodsReceiptOrderItems");
                 });
 
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.OrderItem", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("DiscountAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("GoodsIssueOrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OrderNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("OrderQuantity")
+                        .HasColumnType("real");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("PriceQuoteOrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProductVariantId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PurchaseOrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Unit")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GoodsIssueOrderId");
+
+                    b.HasIndex("PriceQuoteOrderId");
+
+                    b.HasIndex("ProductVariantId");
+
+                    b.HasIndex("PurchaseOrderId");
+
+                    b.ToTable("OrderItem");
+                });
+
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", b =>
                 {
                     b.Property<string>("Id")
@@ -169,6 +258,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("MailDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PriceQuoteNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PriceQuoteStatus")
@@ -209,6 +301,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("PriceQuoteOrderId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("PurchaseOrderNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("PurchaseOrderStatus")
                         .HasColumnType("int");
 
@@ -236,49 +331,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.HasIndex("TransactionId");
 
                     b.ToTable("PurchaseOrder");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrderItem", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<decimal>("DiscountAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("OrderNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("PriceQuoteOrderId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProductVariantId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("PurchaseOrderId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<float>("Quantity")
-                        .HasColumnType("real");
-
-                    b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Unit")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PriceQuoteOrderId");
-
-                    b.HasIndex("ProductVariantId");
-
-                    b.HasIndex("PurchaseOrderId");
-
-                    b.ToTable("OrderItem");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", b =>
@@ -442,14 +494,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("ProductId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<float>("Quantity")
-                        .HasColumnType("real");
-
                     b.Property<string>("Sku")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StorageLocation")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("StorageQuantity")
+                        .HasColumnType("real");
 
                     b.Property<string>("Unit")
                         .HasColumnType("nvarchar(max)");
@@ -503,12 +555,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TransactionNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TransactionStatus")
@@ -708,6 +754,21 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("UserInfo");
                 });
 
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsIssueOrder", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm.Transaction", "Transaction")
+                        .WithMany()
+                        .HasForeignKey("TransactionId");
+
+                    b.Navigation("Supplier");
+
+                    b.Navigation("Transaction");
+                });
+
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsReceiptOrder", b =>
                 {
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", "PurchaseOrder")
@@ -744,6 +805,27 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("ReceivingOrder");
                 });
 
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.OrderItem", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsIssueOrder", null)
+                        .WithMany("GoodsIssueProducts")
+                        .HasForeignKey("GoodsIssueOrderId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", null)
+                        .WithMany("PurchaseOrderProduct")
+                        .HasForeignKey("PriceQuoteOrderId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", "ProductVariant")
+                        .WithMany()
+                        .HasForeignKey("ProductVariantId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", null)
+                        .WithMany("PurchaseOrderProduct")
+                        .HasForeignKey("PurchaseOrderId");
+
+                    b.Navigation("ProductVariant");
+                });
+
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", b =>
                 {
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", "Supplier")
@@ -778,23 +860,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("Supplier");
 
                     b.Navigation("Transaction");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrderItem", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", null)
-                        .WithMany("PurchaseOrderProduct")
-                        .HasForeignKey("PriceQuoteOrderId");
-
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", "ProductVariant")
-                        .WithMany()
-                        .HasForeignKey("ProductVariantId");
-
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", null)
-                        .WithMany("PurchaseOrderProduct")
-                        .HasForeignKey("PurchaseOrderId");
-
-                    b.Navigation("ProductVariant");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
@@ -909,6 +974,11 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsIssueOrder", b =>
+                {
+                    b.Navigation("GoodsIssueProducts");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsReceiptOrder", b =>

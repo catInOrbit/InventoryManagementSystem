@@ -5,9 +5,9 @@ using InventoryManagementSystem.ApplicationCore.Entities.Products;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
-    public class PurchaseOrderItem : BaseEntity
+    public class OrderItem : BaseEntity
     {
-        public PurchaseOrderItem()
+        public OrderItem()
         {
             Id = Guid.NewGuid().ToString();
         }

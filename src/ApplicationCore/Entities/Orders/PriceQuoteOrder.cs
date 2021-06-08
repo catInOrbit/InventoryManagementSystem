@@ -30,7 +30,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public string MailDescription { get; set; }
         public PriceQuoteType PriceQuoteStatus { get; set; }
         public decimal TotalOrderAmount { get; set; }
-        public virtual ICollection<PurchaseOrderItem> PurchaseOrderProduct { get; set; } = new List<PurchaseOrderItem>();
+        public virtual ICollection<OrderItem> PurchaseOrderProduct { get; set; } = new List<OrderItem>();
         public virtual Transaction Transaction { get; set; }
         
     }

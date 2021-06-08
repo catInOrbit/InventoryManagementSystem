@@ -82,7 +82,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
                 response.PriceQuoteOrders.Clear();
                 response.PriceQuoteOrders.Add(pqr);    
             }
-            
             return Ok(response);
         }
     }

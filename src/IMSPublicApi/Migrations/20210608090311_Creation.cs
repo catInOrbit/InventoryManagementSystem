@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
-    public partial class Recreation : Migration
+    public partial class Creation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -182,8 +182,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TransactionNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ValidUntil = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -226,7 +224,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Sku = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Quantity = table.Column<float>(type: "real", nullable: false),
+                    StorageQuantity = table.Column<float>(type: "real", nullable: false),
                     StorageLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -329,10 +327,42 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GoodsIssueOrders",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    GoodsIssueNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RequestId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeliveryMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SupplierId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    GoodsIssueType = table.Column<int>(type: "int", nullable: false),
+                    DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GoodsIssueOrders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GoodsIssueOrders_Supplier_SupplierId",
+                        column: x => x.SupplierId,
+                        principalTable: "Supplier",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_GoodsIssueOrders_Transaction_TransactionId",
+                        column: x => x.TransactionId,
+                        principalTable: "Transaction",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PriceQuote",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PriceQuoteNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SupplierId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
                     MailDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -402,6 +432,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PurchaseOrderNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeliveryAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MailDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -441,6 +472,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    GoodsReceiptOrderNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PurchaseOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ReceivedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SupplierId = table.Column<string>(type: "nvarchar(450)", nullable: true),
@@ -478,17 +510,24 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     OrderNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProductVariantId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Quantity = table.Column<float>(type: "real", nullable: false),
+                    OrderQuantity = table.Column<float>(type: "real", nullable: false),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DiscountAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    GoodsIssueOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     PriceQuoteOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     PurchaseOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrderItem", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OrderItem_GoodsIssueOrders_GoodsIssueOrderId",
+                        column: x => x.GoodsIssueOrderId,
+                        principalTable: "GoodsIssueOrders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_OrderItem_PriceQuote_PriceQuoteOrderId",
                         column: x => x.PriceQuoteOrderId,
@@ -540,6 +579,16 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_GoodsIssueOrders_SupplierId",
+                table: "GoodsIssueOrders",
+                column: "SupplierId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GoodsIssueOrders_TransactionId",
+                table: "GoodsIssueOrders",
+                column: "TransactionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GoodsReceiptOrder_PurchaseOrderId",
                 table: "GoodsReceiptOrder",
                 column: "PurchaseOrderId");
@@ -563,6 +612,11 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "IX_GoodsReceiptOrderItems_ReceivingOrderId",
                 table: "GoodsReceiptOrderItems",
                 column: "ReceivingOrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItem_GoodsIssueOrderId",
+                table: "OrderItem",
+                column: "GoodsIssueOrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItem_PriceQuoteOrderId",
@@ -725,6 +779,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "GoodsReceiptOrder");
+
+            migrationBuilder.DropTable(
+                name: "GoodsIssueOrders");
 
             migrationBuilder.DropTable(
                 name: "Role");

@@ -29,7 +29,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public virtual Transaction Transaction { get; set; }
         public GoodsIssueType GoodsIssueType { get; set; }
         
-        public virtual ICollection<ProductVariant> ProductVariants { get; set; }
+        public virtual ICollection<OrderItem> GoodsIssueProducts { get; set; }
         
         public DateTime DeliveryDate { get; set; }
     }
