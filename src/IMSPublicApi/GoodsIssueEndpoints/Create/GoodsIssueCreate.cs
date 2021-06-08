@@ -12,9 +12,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace InventoryManagementSystem.PublicApi.GoodsReceiptEndpoints.Create
+namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Create
 {
-    public class GoodsIssueCreate : BaseAsyncEndpoint.WithRequest<GRCreateRequest>.WithResponse<GRCreateResponse>
+    public class GoodsIssueCreate : BaseAsyncEndpoint.WithRequest<GiRequest>.WithResponse<GiResponse>
     {
         private readonly IUserAuthentication _userAuthentication;
         private readonly IAsyncRepository<GoodsIssueOrder> _asyncRepository;
@@ -34,16 +34,14 @@ namespace InventoryManagementSystem.PublicApi.GoodsReceiptEndpoints.Create
             OperationId = "gio.create",
             Tags = new[] { "GoodsIssueEndpoints" })
         ]
-        public override async Task<ActionResult<GRCreateResponse>> HandleAsync(GRCreateRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<GiResponse>> HandleAsync(GiRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            var response = new GRCreateResponse();
-            
-            var gio = _asyncRepository.get
-            
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PriceQuoteOrder", UserOperations.Create))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "GoodsIssue", UserOperations.Create))
                 return Unauthorized();
             
-            var gio = new GoodsIssueOrder();
+            var response = new GiResponse();
+
+            var gio = _asyncRepository.GetGoodsIssueOrderByNumber(request.IssueNumber);
             gio.Transaction = new Transaction
             {
                 CreatedDate = DateTime.Now,

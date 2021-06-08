@@ -23,7 +23,6 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber,  CancellationToken cancellationToken = default);
         PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderNumber,  CancellationToken cancellationToken = default);
         GoodsReceiptOrder GetReceivingOrderByNumber(string receiveOrderNumber,  CancellationToken cancellationToken = default);
-        
         GoodsIssueOrder GetGoodsIssueOrderByNumber(string goodsIssueOrderNumber,  CancellationToken cancellationToken = default);
 
         Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default);

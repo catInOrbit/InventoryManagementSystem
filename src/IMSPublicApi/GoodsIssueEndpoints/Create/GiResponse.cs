@@ -1,9 +1,10 @@
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 
-namespace InventoryManagementSystem.PublicApi.GoodsReceiptEndpoints.Create
+namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Create
 {
-    public class GRCreateResponse : BaseResponse
+    public class GiResponse : BaseResponse
     {
         public GoodsIssueOrder GoodsIssueOrder { get; set; }
+                
     }
 }

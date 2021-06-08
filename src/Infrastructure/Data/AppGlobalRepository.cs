@@ -196,8 +196,8 @@ namespace Infrastructure.Data
 
         public GoodsIssueOrder GetGoodsIssueOrderByNumber(string goodsIssueOrderNumber, CancellationToken cancellationToken = default)
         {
-            return _identityAndProductDbContext.Good.Where(go => go.Goo == receiveOrderNumber).
-                SingleOrDefault(po => po.GoodsReceiptOrderNumber == receiveOrderNumber);
+            return _identityAndProductDbContext.GoodsIssueOrders.Where(go => go.GoodsIssueNumber == goodsIssueOrderNumber).
+                SingleOrDefault(po => po.GoodsIssueNumber == goodsIssueOrderNumber);
         }
 
 
