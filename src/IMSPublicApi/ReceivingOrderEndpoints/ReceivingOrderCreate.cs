@@ -20,7 +20,6 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly IAsyncRepository<GoodsReceiptOrder> _receiveAsyncRepository;
         private readonly IUserAuthentication _userAuthentication;
 
-  
         public ReceivingOrderCreate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> receiveAsyncRepository, IUserAuthentication userAuthentication)
         {
             _authorizationService = authorizationService;
@@ -28,13 +27,12 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             _userAuthentication = userAuthentication;
         }
         
-              
-        [HttpPost("api/receiving/create")]
+        [HttpPost("api/goodsreceipt/create")]
         [SwaggerOperation(
-            Summary = "Update Receiving Order",
-            Description = "Update Receiving Order",
-            OperationId = "ro.update",
-            Tags = new[] { "ReceivingOrderEndpoints" })
+            Summary = "Create Goods Receipt Order",
+            Description = "Create Goods Receipt Order",
+            OperationId = "gr.create",
+            Tags = new[] { "GoodsReceiptOrders" })
         ]
         public override async Task<ActionResult<ROCreateResponse>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
         {

@@ -21,12 +21,12 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             _poAsyncRepository = poAsyncRepository;
         }
 
-        [HttpPost("api/receiving/submit")]
+        [HttpPost("api/goodsreceipt/submit")]
         [SwaggerOperation(
-            Summary = "Finish Receiving Order",
-            Description = "Finish Receiving Order",
-            OperationId = "ro.submit",
-            Tags = new[] { "ReceivingOrderEndpoints" })
+            Summary = "Submit Goods Receipt Order",
+            Description = "Submit Goods Receipt Order",
+            OperationId = "gr.submit",
+            Tags = new[] { "GoodsReceiptOrders" })
         ]
         public override async Task<ActionResult> HandleAsync(ROSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
         {

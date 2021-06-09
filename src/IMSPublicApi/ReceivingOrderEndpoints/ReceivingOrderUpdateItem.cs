@@ -29,12 +29,12 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         }
 
         
-        [HttpPost("api/receiving/adjust")]
+        [HttpPost("api/goodsreceipt/adjust")]
         [SwaggerOperation(
             Summary = "Update Receiving Order",
             Description = "Update Receiving Order",
-            OperationId = "ro.update",
-            Tags = new[] { "ReceivingOrderEndpoints" })
+            OperationId = "gr.updateitem",
+            Tags = new[] { "GoodsReceiptOrders" })
         ]
         public override async Task<ActionResult> HandleAsync(ROUpdateItemRequest request, CancellationToken cancellationToken = new CancellationToken())
         {

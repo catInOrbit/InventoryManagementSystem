@@ -6,6 +6,11 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
 {
     public class ApplicationUser : IdentityUser
     {
+        public bool ShouldSerializePasswordHash()
+        {
+            return false;
+        }
+        
         [JsonIgnore]
         public string OwnerID { get; set; }
         public string Fullname { get; set; }

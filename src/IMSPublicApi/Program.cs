@@ -38,13 +38,11 @@ namespace InventoryManagementSystem.PublicApi
     
                 try
                 {
-                    // var productIndexList = await productRepos.GetProductForELIndexAsync();
-
-                    // await elasticProductRepos.ElasticSaveBulkAsync(productIndexList.ToArray(), "productindices");
-                    // await elasticPoRepos.ElasticSaveBulkAsync((await elasticPoRepos.GetPOForELIndexAsync()).ToArray(), "purchaseorders");
-                    // await elasticRoRepos.ElasticSaveBulkAsync((await elasticRoRepos.GetROForELIndexAsync()).ToArray(), "receivingorders");
-                    // await elasticGiRepos.ElasticSaveBulkAsync((await elasticGiRepos.GetGIForELIndexAsync()).ToArray(), "goodsissueorders");
-                    // await elasticStRepos.ElasticSaveBulkAsync((await elasticStRepos.GetSTForELIndexAsync()).ToArray(), "stocktakeorders");
+                    await elasticProductRepos.ElasticSaveBulkAsync((await elasticProductRepos.GetProductForELIndexAsync()).ToArray(), "productindices");
+                    await elasticPoRepos.ElasticSaveBulkAsync((await elasticPoRepos.GetPOForELIndexAsync()).ToArray(), "purchaseorders");
+                    await elasticRoRepos.ElasticSaveBulkAsync((await elasticRoRepos.GetROForELIndexAsync()).ToArray(), "receivingorders");
+                    await elasticGiRepos.ElasticSaveBulkAsync((await elasticGiRepos.GetGIForELIndexAsync()).ToArray(), "goodsissueorders");
+                    await elasticStRepos.ElasticSaveBulkAsync((await elasticStRepos.GetSTForELIndexAsync()).ToArray(), "stocktakeorders");
           
                     await SeedRole.Initialize(services, "test@12345Aha");
                 }

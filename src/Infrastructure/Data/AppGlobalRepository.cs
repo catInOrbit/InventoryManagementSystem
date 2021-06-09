@@ -54,7 +54,6 @@ namespace Infrastructure.Data
                 
                     var index = new ProductSearchIndex
                     {
-                        Id = productVariant.ProductId,
                         Name = nameConcat,
                         ProductId = productVariant.ProductId,
                         VariantId = productVariant.Id
@@ -367,7 +366,10 @@ namespace Infrastructure.Data
 
         public async Task ElasticSaveBulkAsync(T[] types, string index)
         {
-            await _elasticClient.DeleteByQueryAsync<T>(q => q.MatchAll());
+            // await _elasticClient.DeleteByQueryAsync<T>(del => del
+            //     .Query(q => q.QueryString(qs=>qs.Query("*")))
+            // );
+
             _elasticCache.AddRange(types);
             var result = await _elasticClient.BulkAsync(b => b.Index(index).IndexMany(types));
             if (result.Errors)

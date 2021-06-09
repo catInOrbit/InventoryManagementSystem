@@ -8,6 +8,12 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         {
             Id = Guid.NewGuid().ToString() + "-ignore-id";
         }
+
+        public bool ShouldSerializeId()
+        {
+            return false;
+        }
+        
         public string ProductId { get; set; }
         public string VariantId { get; set; }
         public string Name { get; set; }

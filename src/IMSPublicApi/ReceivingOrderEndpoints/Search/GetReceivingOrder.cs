@@ -28,12 +28,12 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
         }
         
         
-        [HttpGet("api/receive/{Query}")]
+        [HttpGet("api/goodsreceipt/{Query}")]
         [SwaggerOperation(
             Summary = "Get all receive Order",
             Description = "Get all Receive Order, api/receive/{Query} to get all ",
             OperationId = "po.update",
-            Tags = new[] { "ReceiveOrderEndpoints" })
+            Tags = new[] { "GoodsReceiptOrders" })
         ]
         public override async Task<ActionResult<ROGetResponse>> HandleAsync([FromRoute] ROGetRequest request, CancellationToken cancellationToken = new CancellationToken())
         {

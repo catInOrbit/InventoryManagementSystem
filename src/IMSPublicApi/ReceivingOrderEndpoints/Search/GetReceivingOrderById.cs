@@ -23,12 +23,12 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
         }
 
         
-        [HttpGet("api/receive/id/{Query}")]
+        [HttpGet("api/goodsreceipt/id/{Query}")]
         [SwaggerOperation(
             Summary = "Get specific receive Order",
             Description = "Get specific receive Order",
             OperationId = "po.update",
-            Tags = new[] { "ReceiveOrderEndpoints" })
+            Tags = new[] { "GoodsReceiptOrders" })
         ]
         public override async Task<ActionResult<ROGetResponse>> HandleAsync([FromRoute]ROGetRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
@@ -38,7 +38,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
             var response = new ROGetResponse();
             response.IsDislayingAll = false;
 
-            response.ReceiveingOrder = _receivingOrderAsyncRepository.GetReceivingOrderByNumber(request.Query);
+            response.ReceiveingOrder = await _receivingOrderAsyncRepository.GetByIdAsync(request.Query);
             return Ok(response);
         }
     }

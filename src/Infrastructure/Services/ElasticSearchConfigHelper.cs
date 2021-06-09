@@ -46,6 +46,11 @@ namespace Infrastructure.Services
 
         private static void CreateIndex(IElasticClient client, string defaultIndexName)
         {
+            client.Indices.DeleteAsync("productindices");
+            client.Indices.DeleteAsync(defaultIndexName);
+            client.Indices.DeleteAsync("receivingorders");
+            client.Indices.DeleteAsync("goodsissueorders");
+
             client.Indices.CreateAsync("productindices",
                 index => index.Map<ProductSearchIndex>(x => x.AutoMap())
             );
