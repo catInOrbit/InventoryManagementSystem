@@ -224,7 +224,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Sku = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StorageQuantity = table.Column<float>(type: "real", nullable: false),
+                    StorageQuantity = table.Column<int>(type: "int", nullable: false),
                     StorageLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -510,7 +510,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     OrderNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProductVariantId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    OrderQuantity = table.Column<float>(type: "real", nullable: false),
+                    OrderQuantity = table.Column<int>(type: "int", nullable: false),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DiscountAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -557,9 +557,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     ReceivingOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     StorageLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProductVariantId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Quantity = table.Column<float>(type: "real", nullable: false),
-                    QuantityReceived = table.Column<float>(type: "real", nullable: false),
-                    QuantityInventory = table.Column<float>(type: "real", nullable: false)
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    QuantityReceived = table.Column<int>(type: "int", nullable: false),
+                    QuantityInventory = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

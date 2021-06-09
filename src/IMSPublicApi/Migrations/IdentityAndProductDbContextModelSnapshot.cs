@@ -172,14 +172,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("ProductVariantId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<float>("Quantity")
-                        .HasColumnType("real");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
-                    b.Property<float>("QuantityInventory")
-                        .HasColumnType("real");
+                    b.Property<int>("QuantityInventory")
+                        .HasColumnType("int");
 
-                    b.Property<float>("QuantityReceived")
-                        .HasColumnType("real");
+                    b.Property<int>("QuantityReceived")
+                        .HasColumnType("int");
 
                     b.Property<string>("ReceivedOrderId")
                         .HasColumnType("nvarchar(max)");
@@ -213,8 +213,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("OrderNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("OrderQuantity")
-                        .HasColumnType("real");
+                    b.Property<int>("OrderQuantity")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -498,8 +498,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("StorageLocation")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("StorageQuantity")
-                        .HasColumnType("real");
+                    b.Property<int>("StorageQuantity")
+                        .HasColumnType("int");
 
                     b.Property<string>("Unit")
                         .HasColumnType("nvarchar(max)");

@@ -39,6 +39,9 @@ namespace InventoryManagementSystem.PublicApi
         private const string CORS_POLICY = "CorsPolicy";
         public IConfiguration Configuration { get; set; }
 
+        private const string LOCAL_IDENTITY = "IdentityConnection";
+        private const string HEROKUSQL = "MSSQLHeroku";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -59,7 +62,7 @@ namespace InventoryManagementSystem.PublicApi
             //     options.UseNpgsql(Configuration.GetConnectionString("Heroku"),  b => b.MigrationsAssembly("IMSPublicApi")));
             
             services.AddDbContext<IdentityAndProductDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MSSQLHeroku"),  b => b.MigrationsAssembly("IMSPublicApi")));
+                options.UseSqlServer(Configuration.GetConnectionString(LOCAL_IDENTITY),  b => b.MigrationsAssembly("IMSPublicApi")));
 
             services.AddCors(c =>
             {

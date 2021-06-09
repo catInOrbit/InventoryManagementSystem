@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Product
+namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
 {
     public class GetProductById : BaseAsyncEndpoint.WithRequest<GetProductRequest>.WithResponse<GetProductResponse>
     {

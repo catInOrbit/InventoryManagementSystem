@@ -50,6 +50,7 @@
 
   <ItemGroup>
     <Folder Include="Migrations" />
+    <Folder Include="PurchaseOrderEndpoint\Search\Product" />
   </ItemGroup>
 
 </Project>

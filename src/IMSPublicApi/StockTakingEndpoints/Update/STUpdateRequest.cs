@@ -1,4 +1,4 @@
-namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
+namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Update
 {
     public class STUpdateRequest : BaseRequest
     {

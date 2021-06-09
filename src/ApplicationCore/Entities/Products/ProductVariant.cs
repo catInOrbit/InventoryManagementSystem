@@ -19,7 +19,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         [Nest.Text( Name = "unit")]
         public string Unit { get; set; }
         [Nest.Number(NumberType.Float, Name = "quantity", IgnoreMalformed = true)]
-        public float StorageQuantity { get; set; }
+        public int StorageQuantity { get; set; }
         [Nest.PropertyName("storageLocation")]  
         public string StorageLocation { get; set; }
         [Date(Format = "yyyy-MM-dd")]

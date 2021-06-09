@@ -1,4 +1,4 @@
-﻿namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Product
+﻿namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
 {
     public class GetProductSearchRequest : BaseRequest
     {

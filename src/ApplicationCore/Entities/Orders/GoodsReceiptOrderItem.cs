@@ -9,8 +9,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public string StorageLocation { get; set; }
         public string ProductVariantId { get; set; }
         public virtual ProductVariant ProductVariant { get; set; }
-        public float Quantity { get; set; }
-        public float QuantityReceived { get; set; }
-        public float QuantityInventory { get; set; }
+        public int Quantity { get; set; }
+        public int QuantityReceived { get; set; }
+        public int QuantityInventory { get; set; }
     }
 }
