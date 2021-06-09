@@ -63,7 +63,7 @@ namespace Infrastructure.Services
             emailMessage.To.AddRange(message.To);
             emailMessage.Subject = message.Subject;
 
-            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("<h2>{0}</h2>", message.Content) };
+            var bodyBuilder = new BodyBuilder { HtmlBody = string.Format("{0}", message.Content) };
 
             if (message.Attachments != null && message.Attachments.Any())
             {

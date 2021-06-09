@@ -50,9 +50,11 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             pqr.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             pqr.Transaction.ModifiedDate = DateTime.Now;
             await _asyncRepository.UpdateAsync(pqr);
+
+            var subject = "REQUEST FOR QUOTATION-" + DateTime.Now.ToString("dd/MM//yyyy") + " FROM IMS Inventory";
             
             var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
-            var message = new EmailMessage(request.To, request.Subject, request.Content, files);
+            var message = new EmailMessage(request.To, subject, request.Content, files);
             await _emailSender.SendEmailAsync(message);
             return Ok();
         }

@@ -21,6 +21,8 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         
         Task<List<GoodsIssueSearchIndex>> GetGIForELIndexAsync(CancellationToken cancellationToken = default);
 
+        Task<List<StockTakeSearchIndex>> GetSTForELIndexAsync(CancellationToken cancellationToken = default);
+
         PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber,  CancellationToken cancellationToken = default);
         PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderNumber,  CancellationToken cancellationToken = default);
         GoodsReceiptOrder GetReceivingOrderByNumber(string receiveOrderNumber,  CancellationToken cancellationToken = default);

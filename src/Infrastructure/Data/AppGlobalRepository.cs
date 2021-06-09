@@ -5,14 +5,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Specification;
 using Elasticsearch.Net;
-using Infrastructure.Identity;
 using Infrastructure.Identity.DbContexts;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Nest;
 
@@ -205,6 +203,34 @@ namespace Infrastructure.Data
             return gisi;
         }
 
+        public async Task<List<StockTakeSearchIndex>> GetSTForELIndexAsync(CancellationToken cancellationToken = default)
+        {
+            var sts= await _identityAndProductDbContext.Set<StockTakeOrder>().ToListAsync(cancellationToken);
+            List<StockTakeSearchIndex> stsi = new List<StockTakeSearchIndex>();
+            foreach (var st in sts)
+            {
+                StockTakeSearchIndex index; 
+                try
+                {
+                    index = new StockTakeSearchIndex
+                    {
+                        CreatedByName = st.Transaction.CreatedBy.Fullname,
+                        Status = st.StockTakeOrderType.ToString(),
+                        CreatedDate = st.Transaction.CreatedDate,
+                        ModifiedDate = st.Transaction.ModifiedDate
+                    };
+                    stsi.Add(index);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(st.Id);
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }
+            return stsi;
+        }
+
         public PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber, CancellationToken cancellationToken = default)
         {
             return _identityAndProductDbContext.PriceQuote.Where(pq => pq.PriceQuoteNumber == priceQuoteNumber).
@@ -225,10 +251,9 @@ namespace Infrastructure.Data
 
         public GoodsIssueOrder GetGoodsIssueOrderByNumber(string goodsIssueOrderNumber, CancellationToken cancellationToken = default)
         {
-            return _identityAndProductDbContext.GoodsIssueOrders.Where(go => go.GoodsIssueNumber == goodsIssueOrderNumber).
+            return _identityAndProductDbContext.GoodsIssueOrder.Where(go => go.GoodsIssueNumber == goodsIssueOrderNumber).
                 SingleOrDefault(po => po.GoodsIssueNumber == goodsIssueOrderNumber);
         }
-
 
         public async Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default)
         {
