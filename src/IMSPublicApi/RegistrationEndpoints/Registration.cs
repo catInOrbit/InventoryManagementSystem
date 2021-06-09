@@ -74,7 +74,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                                 Fullname =  request.FullName,
                                 PhoneNumber =  request.PhoneNumber,
                                 Email = request.Email,
-                                Username = request.FullName.Trim(),
+                                UserName = request.FullName.Trim(),
                                 Address =  request.Address,
                                 IsActive =  true,
                                 DateOfBirth = request.DateOfBirth,

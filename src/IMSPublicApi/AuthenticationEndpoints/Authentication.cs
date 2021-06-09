@@ -83,7 +83,7 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                     response.Verbose = "Success";
                     var userGet = await _userRoleModificationService.UserManager.FindByIdAsync(user.Id);
                     var claims = await _userRoleModificationService.ClaimGettingHelper();
-                    var userPrinciple = new GenericPrincipal(new ClaimsIdentity(userGet.Username), roles.ToArray());
+                    var userPrinciple = new GenericPrincipal(new ClaimsIdentity(userGet.UserName), roles.ToArray());
                     HttpContext.User = userPrinciple;
 
                     var claimListDistince = claims.Select(x => x.Type).Distinct();

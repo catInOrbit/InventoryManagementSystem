@@ -68,23 +68,34 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserInfo",
+                name: "SystemUser",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     OwnerID = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Fullname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateOfBirthNormalizedString = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserInfo", x => x.Id);
+                    table.PrimaryKey("PK_SystemUser", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -137,41 +148,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Product_UserInfo_CreatedById",
+                        name: "FK_Product_SystemUser_CreatedById",
                         column: x => x.CreatedById,
-                        principalTable: "UserInfo",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SystemUser",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserInfoId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SystemUser", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SystemUser_UserInfo_UserInfoId",
-                        column: x => x.UserInfoId,
-                        principalTable: "UserInfo",
+                        principalTable: "SystemUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -195,48 +174,21 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 {
                     table.PrimaryKey("PK_Transaction", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Transaction_UserInfo_ConfirmedById",
+                        name: "FK_Transaction_SystemUser_ConfirmedById",
                         column: x => x.ConfirmedById,
-                        principalTable: "UserInfo",
+                        principalTable: "SystemUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Transaction_UserInfo_CreatedById",
+                        name: "FK_Transaction_SystemUser_CreatedById",
                         column: x => x.CreatedById,
-                        principalTable: "UserInfo",
+                        principalTable: "SystemUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Transaction_UserInfo_ModifiedById",
+                        name: "FK_Transaction_SystemUser_ModifiedById",
                         column: x => x.ModifiedById,
-                        principalTable: "UserInfo",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ProductVariant",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProductId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Sku = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StorageQuantity = table.Column<int>(type: "int", nullable: false),
-                    StorageLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsVariantType = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ProductVariant", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ProductVariant_Product_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Product",
+                        principalTable: "SystemUser",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -327,7 +279,34 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GoodsIssueOrders",
+                name: "ProductVariant",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProductId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Sku = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StorageQuantity = table.Column<int>(type: "int", nullable: false),
+                    StorageLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsVariantType = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductVariant", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductVariant_Product_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Product",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GoodsIssueOrder",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -342,15 +321,15 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GoodsIssueOrders", x => x.Id);
+                    table.PrimaryKey("PK_GoodsIssueOrder", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GoodsIssueOrders_Supplier_SupplierId",
+                        name: "FK_GoodsIssueOrder_Supplier_SupplierId",
                         column: x => x.SupplierId,
                         principalTable: "Supplier",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_GoodsIssueOrders_Transaction_TransactionId",
+                        name: "FK_GoodsIssueOrder_Transaction_TransactionId",
                         column: x => x.TransactionId,
                         principalTable: "Transaction",
                         principalColumn: "Id",
@@ -381,6 +360,29 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_PriceQuote_Transaction_TransactionId",
+                        column: x => x.TransactionId,
+                        principalTable: "Transaction",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StockTakeOrder",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProductVariantId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RecordedQuantity = table.Column<int>(type: "int", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    StockTakeOrderType = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StockTakeOrder", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StockTakeOrder_Transaction_TransactionId",
                         column: x => x.TransactionId,
                         principalTable: "Transaction",
                         principalColumn: "Id",
@@ -517,15 +519,16 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     GoodsIssueOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     PriceQuoteOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    PurchaseOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    PurchaseOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    StockTakeOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrderItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderItem_GoodsIssueOrders_GoodsIssueOrderId",
+                        name: "FK_OrderItem_GoodsIssueOrder_GoodsIssueOrderId",
                         column: x => x.GoodsIssueOrderId,
-                        principalTable: "GoodsIssueOrders",
+                        principalTable: "GoodsIssueOrder",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -544,6 +547,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         name: "FK_OrderItem_PurchaseOrder_PurchaseOrderId",
                         column: x => x.PurchaseOrderId,
                         principalTable: "PurchaseOrder",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_OrderItem_StockTakeOrder_StockTakeOrderId",
+                        column: x => x.StockTakeOrderId,
+                        principalTable: "StockTakeOrder",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -579,13 +588,13 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_GoodsIssueOrders_SupplierId",
-                table: "GoodsIssueOrders",
+                name: "IX_GoodsIssueOrder_SupplierId",
+                table: "GoodsIssueOrder",
                 column: "SupplierId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GoodsIssueOrders_TransactionId",
-                table: "GoodsIssueOrders",
+                name: "IX_GoodsIssueOrder_TransactionId",
+                table: "GoodsIssueOrder",
                 column: "TransactionId");
 
             migrationBuilder.CreateIndex(
@@ -632,6 +641,11 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "IX_OrderItem_PurchaseOrderId",
                 table: "OrderItem",
                 column: "PurchaseOrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItem_StockTakeOrderId",
+                table: "OrderItem",
+                column: "StockTakeOrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PriceQuote_SupplierId",
@@ -696,14 +710,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_StockTakeOrder_TransactionId",
+                table: "StockTakeOrder",
+                column: "TransactionId");
+
+            migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "SystemUser",
                 column: "NormalizedEmail");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SystemUser_UserInfoId",
-                table: "SystemUser",
-                column: "UserInfoId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -781,13 +795,13 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "GoodsReceiptOrder");
 
             migrationBuilder.DropTable(
-                name: "GoodsIssueOrders");
+                name: "GoodsIssueOrder");
+
+            migrationBuilder.DropTable(
+                name: "StockTakeOrder");
 
             migrationBuilder.DropTable(
                 name: "Role");
-
-            migrationBuilder.DropTable(
-                name: "SystemUser");
 
             migrationBuilder.DropTable(
                 name: "ProductVariant");
@@ -814,7 +828,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "Transaction");
 
             migrationBuilder.DropTable(
-                name: "UserInfo");
+                name: "SystemUser");
         }
     }
 }

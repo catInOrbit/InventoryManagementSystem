@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210609020711_Creation")]
+    [Migration("20210609094032_Creation")]
     partial class Creation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.5");
 
-            modelBuilder.Entity("Infrastructure.Identity.Models.ApplicationUser", b =>
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -29,8 +29,17 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DateOfBirthNormalizedString")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -38,6 +47,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Fullname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
@@ -54,6 +69,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("OwnerID")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -69,9 +87,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<string>("UserInfoId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -85,8 +100,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("UserInfoId");
 
                     b.ToTable("SystemUser");
                 });
@@ -126,7 +139,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.HasIndex("TransactionId");
 
-                    b.ToTable("GoodsIssueOrders");
+                    b.ToTable("GoodsIssueOrder");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsReceiptOrder", b =>
@@ -230,6 +243,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("PurchaseOrderId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("StockTakeOrderId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
 
@@ -245,6 +261,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.HasIndex("ProductVariantId");
 
                     b.HasIndex("PurchaseOrderId");
+
+                    b.HasIndex("StockTakeOrderId");
 
                     b.ToTable("OrderItem");
                 });
@@ -331,6 +349,36 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.HasIndex("TransactionId");
 
                     b.ToTable("PurchaseOrder");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductVariantId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RecordedQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StockTakeOrderType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TransactionId");
+
+                    b.ToTable("StockTakeOrder");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", b =>
@@ -577,43 +625,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.ToTable("Transaction");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DateOfBirthNormalizedString")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Fullname")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("OwnerID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserInfo");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -745,15 +756,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.ToTable("UserToken");
                 });
 
-            modelBuilder.Entity("Infrastructure.Identity.Models.ApplicationUser", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", "UserInfo")
-                        .WithMany()
-                        .HasForeignKey("UserInfoId");
-
-                    b.Navigation("UserInfo");
-                });
-
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsIssueOrder", b =>
                 {
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", "Supplier")
@@ -823,6 +825,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .WithMany("PurchaseOrderProduct")
                         .HasForeignKey("PurchaseOrderId");
 
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", null)
+                        .WithMany("Products")
+                        .HasForeignKey("StockTakeOrderId");
+
                     b.Navigation("ProductVariant");
                 });
 
@@ -862,6 +868,15 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("Transaction");
                 });
 
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm.Transaction", "Transaction")
+                        .WithMany()
+                        .HasForeignKey("TransactionId");
+
+                    b.Navigation("Transaction");
+                });
+
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
                 {
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Brand", "Brand")
@@ -872,7 +887,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .WithMany("Product")
                         .HasForeignKey("CategoryId");
 
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", "CreatedBy")
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.ApplicationUser", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById");
 
@@ -906,15 +921,15 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm.Transaction", b =>
                 {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", "ConfirmedBy")
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.ApplicationUser", "ConfirmedBy")
                         .WithMany()
                         .HasForeignKey("ConfirmedById");
 
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", "CreatedBy")
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.ApplicationUser", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById");
 
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.UserInfo", "ModifiedBy")
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.ApplicationUser", "ModifiedBy")
                         .WithMany()
                         .HasForeignKey("ModifiedById");
 
@@ -936,7 +951,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Infrastructure.Identity.Models.ApplicationUser", null)
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -945,7 +960,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Infrastructure.Identity.Models.ApplicationUser", null)
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -960,7 +975,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Infrastructure.Identity.Models.ApplicationUser", null)
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -969,7 +984,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Infrastructure.Identity.Models.ApplicationUser", null)
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -994,6 +1009,11 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", b =>
                 {
                     b.Navigation("PurchaseOrderProduct");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Brand", b =>

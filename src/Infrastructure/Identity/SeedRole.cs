@@ -43,17 +43,17 @@ namespace Infrastructure.Identity
                 var dob = DateTime.Now;
                 user = new ApplicationUser
                 {
-                    Id = user.Id,
+                    Id = Guid.NewGuid().ToString(),
                     Fullname = "Huy Nguyen",
                     PhoneNumber = "12345677",
-                    Email = user.Email,
-                    Username = user.UserName,
+                    Email = "tmh1799@gmail.com",
+                    UserName = "JakeA",
                     Address = "aDDRESS",
                     IsActive = true,
                     DateOfBirth = dob,
                     DateOfBirthNormalizedString = dob.ToString("yyyy-MM-dd")
                 };
-                await userManager.CreateAsync(user, testUserPw);
+               var result = await userManager.CreateAsync(user, testUserPw);
             }
 
             if (user == null)
