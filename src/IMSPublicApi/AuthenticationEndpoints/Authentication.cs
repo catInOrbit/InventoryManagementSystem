@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Identity;
-using Infrastructure.Identity.Models;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -31,16 +30,14 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ITokenClaimsService _tokenClaimsService;
 
-        private readonly IAsyncRepository<UserInfo> _userRepository;
         private readonly UserRoleModificationService _userRoleModificationService;
         public UserInfoAuth UserInfo { get; set; } = new UserInfoAuth();
 
-        public Authentication(IAsyncRepository<UserInfo> userRepository, SignInManager<ApplicationUser> signInManager,
+        public Authentication(SignInManager<ApplicationUser> signInManager,
             ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _signInManager = signInManager;
             _tokenClaimsService = tokenClaimsService;
-            _userRepository = userRepository;
             _userRoleModificationService = new UserRoleModificationService(roleManager, userManager);
         }
 
@@ -84,7 +81,7 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 
                     response.Token = jwttoken;
                     response.Verbose = "Success";
-                    var userGet = await _userRepository.GetByIdAsync(user.Id, cancellationToken);
+                    var userGet = await _userRoleModificationService.UserManager.FindByIdAsync(user.Id);
                     var claims = await _userRoleModificationService.ClaimGettingHelper();
                     var userPrinciple = new GenericPrincipal(new ClaimsIdentity(userGet.Username), roles.ToArray());
                     HttpContext.User = userPrinciple;
@@ -99,9 +96,8 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                     if (userGet != null)
                         response.Username = userGet.Fullname;
                     response.UserRole = roles[0];
-                    response.UserInfo = userGet;
+                    response.ApplicationUser = userGet;
                     return Ok(response);
-
                 }
 
             }

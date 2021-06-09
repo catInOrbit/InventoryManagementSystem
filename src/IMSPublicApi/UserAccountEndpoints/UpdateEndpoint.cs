@@ -1,7 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
-using Infrastructure.Identity.Models;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
@@ -16,13 +15,11 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
 {
     public class UpdateEndpoint : BaseAsyncEndpoint.WithRequest<UpdateRequest>.WithResponse<UpdateResponse>
     {
-        private IAsyncRepository<UserInfo> _asyncRepository;
         private UserManager<ApplicationUser> _userManager;
         private IUserAuthentication _userAuthentication;
 
-        public UpdateEndpoint(IAsyncRepository<UserInfo> asyncRepository, UserManager<ApplicationUser> userManager, IUserAuthentication userAuthentication)
+        public UpdateEndpoint(UserManager<ApplicationUser> userManager, IUserAuthentication userAuthentication)
         {
-            _asyncRepository = asyncRepository;
             _userManager = userManager;
             _userAuthentication = userAuthentication;
         }
@@ -44,7 +41,7 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
 
             else
             {
-                var userInfoGet = await _asyncRepository.GetByIdAsync(userSystemGet.Id, cancellationToken);
+                var userInfoGet = await _userManager.FindByIdAsync(userSystemGet.Id);
                 if (userInfoGet == null)
                     return Unauthorized(response);
                 if(request.Address != userInfoGet.Address ) userInfoGet.Address = request.Address;
@@ -68,7 +65,7 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
                     }
                 }
 
-                await _asyncRepository.UpdateAsync(userInfoGet, cancellationToken);
+                await _userManager.UpdateAsync(userInfoGet);
 
                 response.Result = true;
                 response.Verbose = "Done updating";

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Infrastructure.Data;
-using Infrastructure.Identity.Models;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -16,17 +15,6 @@ namespace Infrastructure.Services
     {
         public UserManager<ApplicationUser> UserManager { get; }
         public RoleManager<IdentityRole> RoleManager { get; }
-
-        private IAsyncRepository<UserInfo> _asyncRepository;
-
-
-        public UserRoleModificationService(IAsyncRepository<UserInfo> asyncRepository,
-            UserManager<ApplicationUser> userManager)
-        {
-            _asyncRepository = asyncRepository;
-            UserManager = userManager;
-        }
-
 
         public UserRoleModificationService(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userUserManager)
         {
@@ -42,11 +30,6 @@ namespace Infrastructure.Services
         public UserRoleModificationService(UserManager<ApplicationUser> userUserManager)
         {
             UserManager = userUserManager;
-        }
-
-        public async Task<UserInfo> GetUserInfo(string userID)
-        {
-            return await _asyncRepository.GetByIdAsync(userID);
         }
 
 

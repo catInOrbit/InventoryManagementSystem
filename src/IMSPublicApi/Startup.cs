@@ -6,7 +6,6 @@ using BlazorShared;
 using Infrastructure.Data;
 using Infrastructure.Identity;
 using Infrastructure.Identity.DbContexts;
-using Infrastructure.Identity.Models;
 using Infrastructure.Logging;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Constants;

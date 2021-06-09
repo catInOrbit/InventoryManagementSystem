@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Infrastructure.Identity.Models;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using Microsoft.AspNetCore.Authorization;

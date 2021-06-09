@@ -3,7 +3,6 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
-using Infrastructure.Identity.Models;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
@@ -26,7 +25,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         private readonly IAuthorizationService _authorizationService;
         private IUserAuthentication _userAuthentication;
 
-        public UserInfo UserInfo { get; set; } = new UserInfo();
+        public ApplicationUser UserInfo { get; set; } = new ApplicationUser();
 
         public RolePermissionUpdate(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, UserManager<ApplicationUser> userManager, IUserAuthentication userAuthentication)
         {

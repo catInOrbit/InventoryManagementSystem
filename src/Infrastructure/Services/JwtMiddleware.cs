@@ -6,7 +6,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Infrastructure.Identity.Models;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using Microsoft.AspNetCore.Identity;

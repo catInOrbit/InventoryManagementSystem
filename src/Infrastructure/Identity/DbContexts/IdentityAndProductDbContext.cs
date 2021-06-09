@@ -1,5 +1,4 @@
-﻿using Infrastructure.Identity.Models;
-using InventoryManagementSystem.ApplicationCore.Entities;
+﻿using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
@@ -17,7 +16,6 @@ namespace Infrastructure.Identity.DbContexts
             : base(options)
         {
         }
-        public DbSet<UserInfo> UserInfo { get; set; }
         public DbSet<Brand> Brand { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<Supplier> Supplier { get; set; }
@@ -35,7 +33,6 @@ namespace Infrastructure.Identity.DbContexts
         
         public DbSet<GoodsIssueOrder> GoodsIssueOrder { get; set; }
         public DbSet<StockTakeOrder> StockTakeOrder { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

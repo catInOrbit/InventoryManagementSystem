@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Identity;
-using Infrastructure.Identity.Models;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -21,21 +20,17 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
     public class Registration : BaseAsyncEndpoint.WithRequest<RegistrationRequest>.WithResponse<RegistrationResponse>
     {
         private readonly ITokenClaimsService _tokenClaimsService;
-        // private readonly UserManager<ApplicationUser> _userManager;
-        // private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IServiceProvider _serviceProvider;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IAsyncRepository<UserInfo> _userRepository;
         private IUserAuthentication _userAuthentication;
 
         private UserRoleModificationService _userRoleModificationService;
-        public UserInfo UserInfo { get; set; } = new UserInfo();
+        public ApplicationUser UserInfo { get; set; } = new ApplicationUser();
         public Registration(UserManager<ApplicationUser> userManager, ITokenClaimsService tokenClaimsService,
-            RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, IAsyncRepository<UserInfo> userRepository, IUserAuthentication userAuthentication)
+            RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService , IUserAuthentication userAuthentication)
         {
             _tokenClaimsService = tokenClaimsService;
             _authorizationService = authorizationService;
-            _userRepository = userRepository;
             _userAuthentication = userAuthentication;
             _userRoleModificationService = new UserRoleModificationService(roleManager, userManager);
         }
@@ -73,7 +68,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                         {
                             var result = await _userRoleModificationService.RoleCreatingHelper(newUserID, request.RoleName);
                     
-                            var newIMSUser = new UserInfo
+                            var newIMSUser = new ApplicationUser
                             {
                                 Id = newUserID,
                                 Fullname =  request.FullName,
@@ -86,7 +81,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                                 DateOfBirthNormalizedString = string.Format("{0}-{1}-{2}", request.DateOfBirth.Month, request.DateOfBirth.Day, request.DateOfBirth.Year)
                             };
                     
-                            await _userRepository.AddAsync(newIMSUser, cancellationToken);
+                            await _userRoleModificationService.UserManager.CreateAsync(newIMSUser, request.Password);
                     
                             response.Result = result.Succeeded;
                             response.Username = request.FullName;

@@ -19,11 +19,11 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm
         public DateTime ModifiedDate { get; set; }
         
         public string CreatedById { get; set; }
-        public virtual UserInfo CreatedBy { get; set; }
+        public virtual ApplicationUser CreatedBy { get; set; }
         public string ConfirmedById { get; set; }
-        public virtual UserInfo ConfirmedBy { get; set; }
+        public virtual ApplicationUser ConfirmedBy { get; set; }
         public string ModifiedById { get; set; }
-        public virtual UserInfo ModifiedBy { get; set; }
+        public virtual ApplicationUser ModifiedBy { get; set; }
 
         public TransactionType Type { get; set; }
         public bool TransactionStatus { get; set; }

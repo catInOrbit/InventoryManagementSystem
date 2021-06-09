@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure.Data;
 using Infrastructure.Identity.DbContexts;
-using Infrastructure.Identity.Models;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -41,18 +40,8 @@ namespace Infrastructure.Identity
             var user = await userManager.FindByNameAsync("JakeA");
             if (user == null)
             {
-                user = new ApplicationUser
-                {
-                    UserName = "JakeA",
-                    EmailConfirmed = true,
-                    Email = "tmh1799@gmail.com",
-                };
-                await userManager.CreateAsync(user, testUserPw);
-                
-                
-                var _userRepository = serviceProvider.GetRequiredService<IAsyncRepository<UserInfo>>();
                 var dob = DateTime.Now;
-                var newIMSUser = new UserInfo
+                user = new ApplicationUser
                 {
                     Id = user.Id,
                     Fullname = "Huy Nguyen",
@@ -64,7 +53,7 @@ namespace Infrastructure.Identity
                     DateOfBirth = dob,
                     DateOfBirthNormalizedString = dob.ToString("yyyy-MM-dd")
                 };
-                await _userRepository.AddAsync(newIMSUser, new CancellationToken());
+                await userManager.CreateAsync(user, testUserPw);
             }
 
             if (user == null)

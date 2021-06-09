@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities
 {
-    public class UserInfo : BaseEntity
+    public class ApplicationUser : IdentityUser
     {
         [JsonIgnore]
         public string OwnerID { get; set; }
@@ -20,8 +20,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public DateTime DateOfBirth { get; set; }
 
         public string DateOfBirthNormalizedString { get; set; }
-
         public bool IsActive { get; set; }
-
     }
 }

@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Identity;
-using Infrastructure.Identity.Models;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
@@ -19,16 +18,14 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
 {
     public class GetAllUsers : BaseAsyncEndpoint.WithoutRequest.WithResponse<UsersResponse>
     {
-        private readonly IAsyncRepository<UserInfo> _userRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAuthorizationService _authorizationService;
         private IUserAuthentication _userAuthentication;
 
-        public UserInfo UserInfo { get; set; } = new UserInfo();
+        public ApplicationUser UserInfo { get; set; } = new ApplicationUser();
 
-        public GetAllUsers(IAsyncRepository<UserInfo> userRepository, UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService, IUserAuthentication userAuthentication)
+        public GetAllUsers(UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService, IUserAuthentication userAuthentication)
         {
-            _userRepository = userRepository;
             _userManager = userManager;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
@@ -53,8 +50,8 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
 
             if (await _userManager.IsInRoleAsync(user, "Manager"))
             {
-                var users = await _userRepository.ListAllAsync();
-                response.ImsUser = (List<UserInfo>) users;
+                var users = _userManager.Users;
+                response.ImsUser = (List<ApplicationUser>) users;
                 return Ok(response);
             }
 

@@ -11,7 +11,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public string BrandId { get; set; }
         public string CategoryId { get; set; }
 
-        public virtual UserInfo CreatedBy { get; set; }
+        public virtual ApplicationUser CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public string SellingStrategy { get; set; }

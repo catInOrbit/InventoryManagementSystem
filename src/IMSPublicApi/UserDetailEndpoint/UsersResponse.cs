@@ -12,6 +12,6 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
         public UsersResponse()
         { }
 
-        public List<UserInfo> ImsUser { get; set; }
+        public List<ApplicationUser> ImsUser { get; set; }
     }
 }

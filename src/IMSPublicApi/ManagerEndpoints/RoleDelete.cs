@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Infrastructure.Identity.Models;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using Microsoft.AspNetCore.Cors;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints

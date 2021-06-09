@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Identity;
-using Infrastructure.Identity.Models;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
@@ -22,15 +21,13 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
         .WithRequest<UsersRequest>
         .WithResponse<UsersResponse>
     {
-        private readonly IAsyncRepository<UserInfo> _userRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAuthorizationService _authorizationService;
         private IUserAuthentication _userAuthentication;
 
-        public UserInfo UserInfo { get; set; } = new UserInfo();
-        public GetUserByID(IAsyncRepository<UserInfo> itemRepository, UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService, IUserAuthentication userAuthentication)
+        public ApplicationUser UserInfo { get; set; } = new ApplicationUser();
+        public GetUserByID( UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService, IUserAuthentication userAuthentication)
         {
-            _userRepository = itemRepository;
             _userManager = userManager;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
@@ -60,25 +57,11 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
             
             if (await _userManager.IsInRoleAsync(user, "Manager"))
             {
-                var userGet = await _userRepository.GetByIdAsync(request.UserID, cancellationToken);
+                var userGet = await _userManager.FindByIdAsync(request.UserID);
                 if (userGet is null) return NotFound();
 
-                response.ImsUser = new List<UserInfo>
-                {
-                    new UserInfo
-                    {
-                        Id = userGet.Id,
-                        OwnerID = userGet.OwnerID,
-                        Email = user.UserName,
-                        Username = user.UserName,
-                        Fullname = userGet.Fullname,
-                        Address = userGet.Address,
-                        IsActive = userGet.IsActive,
-                        PhoneNumber = userGet.PhoneNumber,
-                        DateOfBirth = userGet.DateOfBirth
-                    }
-                };
-                
+                response.ImsUser = new List<ApplicationUser>();
+                response.ImsUser.Add(userGet);
                 return Ok(response);
             }
             return Unauthorized();

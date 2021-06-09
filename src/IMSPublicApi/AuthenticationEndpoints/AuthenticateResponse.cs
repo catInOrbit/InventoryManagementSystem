@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using Infrastructure.Identity.Models;
 
 namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 {
@@ -25,7 +24,7 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
         public bool RequiresTwoFactor { get; set; } = false;
         public string UserRole { get; set; }
 
-        public UserInfo UserInfo { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
         public List<string> PageAuthorized { get; set; } = new List<string>();
 
     }

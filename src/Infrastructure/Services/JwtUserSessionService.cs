@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Infrastructure.Identity.Models;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Services

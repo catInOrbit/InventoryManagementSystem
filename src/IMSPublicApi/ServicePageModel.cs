@@ -1,6 +1,6 @@
 using Infrastructure.Identity;
 using Infrastructure.Identity.DbContexts;
-using Infrastructure.Identity.Models;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
