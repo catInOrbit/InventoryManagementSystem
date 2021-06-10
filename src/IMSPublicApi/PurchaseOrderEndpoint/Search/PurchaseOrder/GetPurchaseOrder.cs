@@ -54,8 +54,13 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
                 var pos = await _asyncRepository.ListAllAsync(cancellationToken);
                 var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>(
                     s => s.Index("purchaseorders").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+                response.PurchaseOrderSearchIndices.Clear();
                 
-                return Ok(responseElastic.Documents);
+                foreach (var purchaseOrderSearchIndex in responseElastic.Documents)
+                {
+                    response.PurchaseOrderSearchIndices.Add(purchaseOrderSearchIndex);
+                }
+                return Ok(response);
             }
         }
     }

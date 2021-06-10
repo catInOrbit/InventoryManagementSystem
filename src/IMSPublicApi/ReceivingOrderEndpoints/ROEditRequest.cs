@@ -2,8 +2,8 @@
 {
     public class ROEditRequest : BaseRequest
     {
-        public string ReceiveOrderId { get; set; }
-        public string PurchaseOrderId { get; set; }
+        public string ReceiveOrderNumber { get; set; }
+        public string PurchaseOrderNumber { get; set; }
         public string StorageLocation { get; set; }
     }
 }

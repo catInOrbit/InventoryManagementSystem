@@ -2,8 +2,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Elasticsearch.Net;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -14,11 +16,15 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
     {
         private IAsyncRepository<GoodsReceiptOrder> _roAsyncRepository;
         private IAsyncRepository<PurchaseOrder> _poAsyncRepository;
+        private IAsyncRepository<PurchaseOrderSearchIndex> _poSearchIndexAsyncRepository;
+        private IAsyncRepository<GoodsReceiptOrderSearchIndex> _roSearchIndexAsyncRepository;
 
-        public ReceivingOrderSubmit(IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<PurchaseOrder> poAsyncRepository)
+        public ReceivingOrderSubmit(IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<PurchaseOrder> poAsyncRepository, IAsyncRepository<PurchaseOrderSearchIndex> poSearchIndexAsyncRepository, IAsyncRepository<GoodsReceiptOrderSearchIndex> roSearchIndexAsyncRepository)
         {
             _roAsyncRepository = roAsyncRepository;
             _poAsyncRepository = poAsyncRepository;
+            _poSearchIndexAsyncRepository = poSearchIndexAsyncRepository;
+            _roSearchIndexAsyncRepository = roSearchIndexAsyncRepository;
         }
 
         [HttpPost("api/goodsreceipt/submit")]
@@ -34,9 +40,12 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             var po = await _poAsyncRepository.GetByIdAsync(ro.PurchaseOrderId);
             ro.Transaction.ModifiedDate = DateTime.Now;
             po.PurchaseOrderStatus = PurchaseOrderStatusType.Done;
-
+            
+            
             await _poAsyncRepository.UpdateAsync(po);
             await _roAsyncRepository.UpdateAsync(ro);
+            await _poSearchIndexAsyncRepository.ElasticSaveSingleAsync(IndexingHelper.PurchaseOrderSearchIndex(po));
+            await _roSearchIndexAsyncRepository.ElasticSaveSingleAsync(IndexingHelper.GoodsReceiptOrderSearchIndex(ro));
             return Ok();
         }
     }

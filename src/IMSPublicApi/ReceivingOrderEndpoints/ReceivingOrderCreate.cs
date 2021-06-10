@@ -39,7 +39,6 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Read))
                 return Unauthorized();
             
-            
             var ro = new GoodsReceiptOrder();
 
             var transaction = new Transaction

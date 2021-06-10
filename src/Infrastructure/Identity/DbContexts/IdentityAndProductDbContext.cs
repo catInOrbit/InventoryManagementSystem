@@ -16,7 +16,7 @@ namespace Infrastructure.Identity.DbContexts
             : base(options)
         {
         }
-        public DbSet<Brand> Brand { get; set; }
+        // public DbSet<Brand> Brand { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<Supplier> Supplier { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
@@ -24,7 +24,7 @@ namespace Infrastructure.Identity.DbContexts
         public DbSet<Transaction> Transaction { get; set; }
         
         public DbSet<Product> Product { get; set; }
-        public DbSet<ProductSerialNumber> ProductSerialNumber { get; set; }
+        // public DbSet<ProductSerialNumber> ProductSerialNumber { get; set; }
         public DbSet<ProductVariant> ProductVariant { get; set; }
         public DbSet<VariantValue> VariantValue { get; set; }
         public DbSet<OrderItem> OrderItem { get; set; }

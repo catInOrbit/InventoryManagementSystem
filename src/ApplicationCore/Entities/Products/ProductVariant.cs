@@ -31,9 +31,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         [Nest.PropertyName("variantValues")]
         [Nest.Nested]
         public virtual ICollection<VariantValue> VariantValues { get; set; }
-        [Nest.Nested]
-        [Nest.PropertyName("serialNumbers")]
-        public virtual ICollection<ProductSerialNumber> SerialNumbers { get; set; }
+        // [Nest.Nested]
+        // [Nest.PropertyName("serialNumbers")]
+        // public virtual ICollection<ProductSerialNumber> SerialNumbers { get; set; }
         [Nest.PropertyName("isVariantType")]
         public bool IsVariantType { get; set; }
     }

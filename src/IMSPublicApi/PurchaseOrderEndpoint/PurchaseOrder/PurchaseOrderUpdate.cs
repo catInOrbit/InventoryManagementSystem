@@ -10,6 +10,7 @@ using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -24,16 +25,18 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
     {
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _purchaseOrderRepos;
         private readonly IAsyncRepository<ProductVariant> _productVariantRepos;
+        private readonly IAsyncRepository<PurchaseOrderSearchIndex> _poIndexAsyncRepositoryRepos;
 
         private readonly IUserAuthentication _userAuthentication;
         private readonly IAuthorizationService _authorizationService;
 
-        public PurchaseOrderUpdate(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService,  IUserAuthentication userAuthentication, IAsyncRepository<ProductVariant> productVariantRepos)
+        public PurchaseOrderUpdate(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService,  IUserAuthentication userAuthentication, IAsyncRepository<ProductVariant> productVariantRepos, IAsyncRepository<PurchaseOrderSearchIndex> poIndexAsyncRepositoryRepos)
         {
             _purchaseOrderRepos = purchaseOrderRepos;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
             _productVariantRepos = productVariantRepos;
+            _poIndexAsyncRepositoryRepos = poIndexAsyncRepositoryRepos;
         }
         
         [HttpPut("api/purchaseorder/update")]
@@ -51,7 +54,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             // requires using ContactManager.Authorization;
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Update))
                 return Unauthorized();
-
 
             var po =  _purchaseOrderRepos.GetPurchaseOrderByNumber(request.PurchaseOrderNumberGet);
             po.Transaction.ModifiedDate = DateTime.Now;
@@ -71,7 +73,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             // await _supplierRepos.ElasticSaveManyAsync(supplierList.ToArray());
 
             await _purchaseOrderRepos.UpdateAsync(po);
-            await _purchaseOrderRepos.ElasticSaveSingleAsync(po);
+            await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(IndexingHelper.PurchaseOrderSearchIndex(po));
             response.PurchaseOrder = po;
             return Ok(response);
         }

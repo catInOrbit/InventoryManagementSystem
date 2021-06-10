@@ -54,9 +54,13 @@ namespace Infrastructure.Data
                 
                     var index = new ProductSearchIndex
                     {
+                        Id = productVariant.Id,
                         Name = nameConcat,
                         ProductId = productVariant.ProductId,
-                        VariantId = productVariant.Id
+                        VariantId = productVariant.Id,
+                        Catagory = _identityAndProductDbContext.Product.Where(pro => pro.Id == productVariant.ProductId).FirstOrDefault()?.Category.CategoryName,
+                        Quantity = productVariant.StorageQuantity,
+                        ModifiedDate = productVariant.ModifiedDate
                     };
                 
                     psis.Add(index);
@@ -213,6 +217,7 @@ namespace Infrastructure.Data
                 {
                     index = new StockTakeSearchIndex
                     {
+                        Id = st.Id,
                         CreatedByName = st.Transaction.CreatedBy.Fullname,
                         Status = st.StockTakeOrderType.ToString(),
                         CreatedDate = st.Transaction.CreatedDate,

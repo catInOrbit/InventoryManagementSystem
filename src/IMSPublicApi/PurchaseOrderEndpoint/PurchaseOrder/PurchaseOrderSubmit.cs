@@ -7,6 +7,7 @@ using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -22,14 +23,16 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
         private readonly IUserAuthentication _userAuthentication;
+        private readonly IAsyncRepository<PurchaseOrderSearchIndex> _poIndexAsyncRepositoryRepos;
 
 
-        public PurchaseOrderSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserAuthentication userAuthentication)
+        public PurchaseOrderSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserAuthentication userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> poIndexAsyncRepositoryRepos)
         {
             _emailSender = emailSender;
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
             _userAuthentication = userAuthentication;
+            _poIndexAsyncRepositoryRepos = poIndexAsyncRepositoryRepos;
         }
         
         [HttpPost("api/purchaseorder/submit")]
@@ -48,7 +51,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
 
             try
             {
-
                 var po = _asyncRepository.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
                 po.PurchaseOrderStatus = PurchaseOrderStatusType.Sent;
                 po.Transaction.ModifiedDate = DateTime.Now;
@@ -58,6 +60,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 var message = new EmailMessage(request.To, request.Subject, request.Content, files);
                 await _emailSender.SendEmailAsync(message);
                 
+                await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(IndexingHelper.PurchaseOrderSearchIndex(po));
+
                 return Ok();
             }
             catch (Exception e)

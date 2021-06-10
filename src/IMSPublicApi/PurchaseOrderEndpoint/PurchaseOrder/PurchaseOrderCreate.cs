@@ -34,6 +34,13 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             _priceQuoteRepos = priceQuoteRepos;
         }
 
+        public PurchaseOrderCreate(
+            IAsyncRepository<PriceQuoteOrder> priceQuoteRepos)
+        {
+            _priceQuoteRepos = priceQuoteRepos;
+        }
+
+
         [HttpPost("api/purchaseorder/create")]
         [SwaggerOperation(
             Summary = "Create purchase order",
@@ -71,6 +78,33 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             response.PurchaseOrder = purchaseOrder;
             await _purchaseOrderRepos.AddAsync(purchaseOrder);
             await _purchaseOrderRepos.ElasticSaveSingleAsync(purchaseOrder);
+            return Ok(response);
+        }
+        
+        public async Task<ActionResult<POCreateResponse>> HandleAsyncTest(POCreateRequest request, PriceQuoteOrder pqData)
+        {
+            var response = new POCreateResponse();
+
+            var purchaseOrder = new ApplicationCore.Entities.Orders.PurchaseOrder();
+
+            var transaction = new Transaction
+            {
+                CreatedDate = DateTime.Now,
+                Type = TransactionType.Purchase,
+                CreatedById =  "Test"
+            };
+
+            purchaseOrder.Transaction = transaction;
+            
+            purchaseOrder.PurchaseOrderStatus = PurchaseOrderStatusType.Created;
+            if (pqData != null)
+            {
+                purchaseOrder.PurchaseOrderNumber = pqData.PriceQuoteNumber;
+                purchaseOrder.PurchaseOrderProduct = pqData.PurchaseOrderProduct;
+                purchaseOrder.SupplierId = pqData.SupplierId;
+            }
+
+            response.PurchaseOrder = purchaseOrder;
             return Ok(response);
         }
     }

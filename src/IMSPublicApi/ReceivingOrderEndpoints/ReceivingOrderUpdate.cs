@@ -49,11 +49,11 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 return Unauthorized();
 
              var response = new ROCreateResponse();
-            var ro = await _receivingOrderRepository.GetByIdAsync(request.ReceiveOrderId);
+            var ro =  _receivingOrderRepository.GetReceivingOrderByNumber(request.ReceiveOrderNumber);
             ro.Transaction.ModifiedDate = DateTime.Now;
-            ro.PurchaseOrderId = request.PurchaseOrderId;
+            ro.PurchaseOrderId = request.PurchaseOrderNumber;
             ro.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
-            var po = await _purchaseOrderRepository.GetByIdAsync(request.PurchaseOrderId);
+            var po = _purchaseOrderRepository.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
             if (po != null)
             {
                 foreach (var purchaseOrderItem in po.PurchaseOrderProduct)
@@ -74,17 +74,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             ro.SupplierId = po.SupplierId;
             ro.WarehouseLocation = request.StorageLocation;
             await _receivingOrderRepository.UpdateAsync(ro);
-            
-            var index = new GoodsReceiptOrderSearchIndex
-            {
-                Id = ro.Id,
-                purchaseOrderId = (ro.PurchaseOrderId!=null) ? ro.PurchaseOrderId : "",
-                supplierName = (ro.Supplier!=null) ? ro.Supplier.SupplierName : "",
-                createdBy = (ro.Transaction.CreatedBy!=null) ? ro.Transaction.CreatedBy.Fullname : "" ,
-                receiptId = (ro.GoodsReceiptOrderNumber !=null) ? ro.GoodsReceiptOrderNumber : ""  ,
-                createdDate = ro.Transaction.CreatedDate.ToShortDateString()
-            };
-            await _receivingOrderSearchRepository.ElasticSaveSingleAsync(index);
+            await _receivingOrderSearchRepository.ElasticSaveSingleAsync(IndexingHelper.GoodsReceiptOrderSearchIndex(ro));
             response.ReceivingOrder = ro;
             return Ok(response);
         }
