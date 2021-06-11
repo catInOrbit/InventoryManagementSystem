@@ -49,7 +49,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
             {
                 response.IsForDisplay = true;
                 var gis = await _asyncRepository.ListAllAsync(pagingOption, cancellationToken);
-                foreach (var goodsIssueOrder in gis.Results)
+                foreach (var goodsIssueOrder in gis.ResultList)
                 {
                     if (goodsIssueOrder.GoodsIssueType == GoodsIssueType.Pending)
                     {
@@ -71,7 +71,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
             else
             {
                 var responseElastic = await _elasticClient.SearchAsync<GoodsIssueSearchIndex>(
-                    s => s.Index("goodsissueorders").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+                    s => s.From(request.CurrentPage).Size(request.SizePerPage).Index("goodsissueorders").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
                 return Ok(responseElastic.Documents);
             }
         }

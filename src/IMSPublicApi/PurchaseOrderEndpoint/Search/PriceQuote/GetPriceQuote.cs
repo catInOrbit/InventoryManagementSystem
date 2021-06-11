@@ -57,8 +57,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
             if (request.Number == "all")
             {
                 var pqrs = await _asyncRepository.ListAllAsync(pagingOption, cancellationToken);
-                pagingOption.RowCountTotal = pqrs.Results.Count;
-                foreach (var priceQuoteOrder in pqrs.Results)
+                pagingOption.RowCountTotal = pqrs.ResultList.Count;
+                foreach (var priceQuoteOrder in pqrs.ResultList)
                 {
                     if (priceQuoteOrder.PriceQuoteStatus == PriceQuoteType.Pending)
                     {

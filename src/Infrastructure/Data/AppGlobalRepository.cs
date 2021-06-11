@@ -36,17 +36,13 @@ namespace Infrastructure.Data
             return await _identityAndProductDbContext.Set<T>().FindAsync(keyValues, cancellationToken);
         }
 
-        public async Task<List<ProductSearchIndex>> GetProductForELIndexAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default)
+        public async Task<PagingOption<ProductSearchIndex>> GetProductForELIndexAsync(CancellationToken cancellationToken = default)
         {
             // var products= await _identityAndProductDbContext.Set<ProductVariant>().Select(p=> new {p.Id, p.Name}).ToListAsync(cancellationToken);
             // var products= await _identityAndProductDbContext.Set<ProductVariant>().ToListAsync(cancellationToken);
-            List<ProductVariant> variants;
-            if(!pagingOption.NoPaging)
-                variants =  await _identityAndProductDbContext.ProductVariant
-                    .Take(pagingOption.SizePerPage).ToListAsync(cancellationToken);
-            variants =  await _identityAndProductDbContext.ProductVariant.ToListAsync(cancellationToken);
+            var variants =  await _identityAndProductDbContext.ProductVariant.ToListAsync(cancellationToken);
+            PagingOption<ProductSearchIndex> pagingOption = new PagingOption<ProductSearchIndex>(0, 0);
             
-            List<ProductSearchIndex> psis = new List<ProductSearchIndex>();
             foreach (var productVariant in variants)
             {
                 try
@@ -68,7 +64,8 @@ namespace Infrastructure.Data
                         ModifiedDate = productVariant.ModifiedDate
                     };
                 
-                    psis.Add(index);
+                    
+                    pagingOption.ResultList.Add(index);
                 }
                 catch (Exception e)
                 {
@@ -76,46 +73,17 @@ namespace Infrastructure.Data
                     Console.WriteLine(e);
                     throw;
                 }
-               
             }            
-            // List<ProductSearchIndex> indices = new List<ProductSearchIndex>();
-            // foreach (var productVariant in products)
-            // {
-            //     var index = new ProductSearchIndex
-            //     {
-            //         Id = Guid.NewGuid().ToString(),
-            //         ProductId = productVariant.ProductId,
-            //         Name = productVariant.Name,
-            //         Price = productVariant.Price,
-            //         ProductVariants = products
-            //     };
-            //     indices.Add(index);
-            // }
-            
-            // return indices;
-            // var prodcuctIndices = new List<ProductVariant>();
-            // foreach (var product in products)
-            // {
-            //     ProductIndex productIndex = new ProductIndex
-            //     {
-            //         Id = product.Id,
-            //         Name = product.Name
-            //     };
-            //     prodcuctIndices.Add(productIndex);
-            // }
-            // return productVariants;
-            return psis;
+            pagingOption.ExecuteResourcePaging();
+            return pagingOption;
         }
 
-        public async Task<List<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default)
+        public async Task<PagingOption<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(CancellationToken cancellationToken = default)
         {
-            List<PurchaseOrder> pos;
-            if(!pagingOption.NoPaging)
-                pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Skip(pagingOption.SkipValue)
-                    .Take(pagingOption.SizePerPage).Where(po => po.Transaction.TransactionStatus==true).ToListAsync(cancellationToken);
-            pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => po.Transaction.TransactionStatus==true).ToListAsync(cancellationToken);
+            var pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => po.Transaction.TransactionStatus==true).ToListAsync(cancellationToken);
             
-            List<PurchaseOrderSearchIndex> posi = new List<PurchaseOrderSearchIndex>();
+            PagingOption<PurchaseOrderSearchIndex> pagingOption = new PagingOption<PurchaseOrderSearchIndex>(0, 0);
+
             foreach (var po in pos)
             {
                 PurchaseOrderSearchIndex index; 
@@ -132,7 +100,7 @@ namespace Infrastructure.Data
                         TotalPrice = (po.TotalOrderAmount!=null) ? po.TotalOrderAmount : 0,
                         ConfirmedByName = (po.Transaction.CreatedBy!=null) ? po.Transaction.CreatedBy.Fullname : "" 
                     };
-                    posi.Add(index);
+                    pagingOption.ResultList.Add(index);
                 }
                 catch (Exception e)
                 {
@@ -141,8 +109,9 @@ namespace Infrastructure.Data
                 }
                
             }
-
-            return posi;
+            
+            pagingOption.ExecuteResourcePaging();
+            return pagingOption;
         }
 
         public string VariantNameConcat(List<string> productVariantValues)
@@ -156,17 +125,11 @@ namespace Infrastructure.Data
             return nameConcat;
         }
 
-        public async Task<List<GoodsReceiptOrderSearchIndex>> GetROForELIndexAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default)
+        public async Task<PagingOption<GoodsReceiptOrderSearchIndex>> GetROForELIndexAsync( CancellationToken cancellationToken = default)
         {
-            List<GoodsReceiptOrder> ros;
-            if (!pagingOption.NoPaging)
-            {
-                ros = await _identityAndProductDbContext.Set<GoodsReceiptOrder>().Skip(pagingOption.SkipValue)
-                    .Take(pagingOption.SizePerPage).ToListAsync(cancellationToken);
-            }
-            ros = await _identityAndProductDbContext.Set<GoodsReceiptOrder>().ToListAsync(cancellationToken);
-            
-            List<GoodsReceiptOrderSearchIndex> rosi = new List<GoodsReceiptOrderSearchIndex>();
+            var ros = await _identityAndProductDbContext.Set<GoodsReceiptOrder>().ToListAsync(cancellationToken);
+            PagingOption<GoodsReceiptOrderSearchIndex> pagingOption = new PagingOption<GoodsReceiptOrderSearchIndex>(0, 0);
+
             foreach (var ro in ros)
             {
                 GoodsReceiptOrderSearchIndex index; 
@@ -181,7 +144,7 @@ namespace Infrastructure.Data
                         receiptId = (ro.GoodsReceiptOrderNumber !=null) ? ro.GoodsReceiptOrderNumber : ""  ,
                         createdDate = ro.Transaction.CreatedDate.ToShortDateString()
                     };
-                    rosi.Add(index);
+                    pagingOption.ResultList.Add(index);
                 }
                 catch (Exception e)
                 {
@@ -191,17 +154,14 @@ namespace Infrastructure.Data
                
             }
 
-            return rosi;
+            pagingOption.ExecuteResourcePaging();
+            return pagingOption;
         }
 
-        public async Task<List<GoodsIssueSearchIndex>> GetGIForELIndexAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default)
+        public async Task<PagingOption<GoodsIssueSearchIndex>> GetGIForELIndexAsync(CancellationToken cancellationToken = default)
         {
-            List<GoodsIssueOrder> gis;
-            if(!pagingOption.NoPaging)
-                gis = await _identityAndProductDbContext.Set<GoodsIssueOrder>().Skip(pagingOption.SkipValue)
-                    .Take(pagingOption.SizePerPage).ToListAsync(cancellationToken);
-            gis = await _identityAndProductDbContext.Set<GoodsIssueOrder>().ToListAsync(cancellationToken);
-            List<GoodsIssueSearchIndex> gisi = new List<GoodsIssueSearchIndex>();
+            var gis = await _identityAndProductDbContext.Set<GoodsIssueOrder>().ToListAsync(cancellationToken);
+            PagingOption<GoodsIssueSearchIndex> pagingOption = new PagingOption<GoodsIssueSearchIndex>(0, 0);
             foreach (var gi in gis)
             {
                 GoodsIssueSearchIndex index; 
@@ -216,7 +176,7 @@ namespace Infrastructure.Data
                         DeliveryDate = gi.DeliveryDate,
                         CreatedByName = (gi.Transaction!=null) ? gi.Transaction.CreatedBy.Fullname : "",
                     };
-                    gisi.Add(index);
+                    pagingOption.ResultList.Add(index);
                 }
                 catch (Exception e)
                 {
@@ -224,19 +184,17 @@ namespace Infrastructure.Data
                     throw;
                 }
             }
-            return gisi;
+            pagingOption.ExecuteResourcePaging();
+            return pagingOption;
         }
 
-        public async Task<List<StockTakeSearchIndex>> GetSTForELIndexAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default)
+        public async Task<PagingOption<StockTakeSearchIndex>> GetSTForELIndexAsync( CancellationToken cancellationToken = default)
         {
             
-            List<StockTakeOrder> sts;
-            if(!pagingOption.NoPaging)
-                sts = await _identityAndProductDbContext.Set<StockTakeOrder>().Skip(pagingOption.SkipValue)
-                    .Take(pagingOption.SizePerPage).ToListAsync(cancellationToken);
-            sts = await _identityAndProductDbContext.Set<StockTakeOrder>().ToListAsync(cancellationToken);
+            var sts = await _identityAndProductDbContext.Set<StockTakeOrder>().ToListAsync(cancellationToken);
             
-            List<StockTakeSearchIndex> stsi = new List<StockTakeSearchIndex>();
+            PagingOption<StockTakeSearchIndex> pagingOption = new PagingOption<StockTakeSearchIndex>(0, 0);
+
             foreach (var st in sts)
             {
                 StockTakeSearchIndex index; 
@@ -250,7 +208,7 @@ namespace Infrastructure.Data
                         CreatedDate = st.Transaction.CreatedDate,
                         ModifiedDate = st.Transaction.ModifiedDate
                     };
-                    stsi.Add(index);
+                    pagingOption.ResultList.Add(index);
                 }
                 catch (Exception e)
                 {
@@ -259,7 +217,8 @@ namespace Infrastructure.Data
                     throw;
                 }
             }
-            return stsi;
+            pagingOption.ExecuteResourcePaging();
+            return pagingOption;
         }
 
         public PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber, CancellationToken cancellationToken = default)
@@ -288,9 +247,8 @@ namespace Infrastructure.Data
 
         public async Task<PagingOption<T>> ListAllAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default)
         {
-            if(pagingOption.NoPaging)
-                pagingOption.Results = await _identityAndProductDbContext.Set<T>().ToListAsync(cancellationToken);
-            pagingOption.Results = await _identityAndProductDbContext.Set<T>().Skip(pagingOption.SkipValue).Take(pagingOption.SizePerPage).ToListAsync(cancellationToken);
+            pagingOption.ResultList = await _identityAndProductDbContext.Set<T>().ToListAsync(cancellationToken);
+            pagingOption.ExecuteResourcePaging();
             return pagingOption;
         }
         

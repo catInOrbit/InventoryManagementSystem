@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,7 +43,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                 request.CurrentPage, request.SizePerPage);
             
             var list = (await _asyncRepository.ListAllAsync(pagingOption, cancellationToken));
-            response.Categories = list.Results.ToList();
+            response.Categories = list.ResultList.ToList();
             return Ok(response);
         }
     }

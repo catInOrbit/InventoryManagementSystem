@@ -49,7 +49,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
             if (request.SearchQuery == "all")
             {
                 response.IsDisplayingAll = true;
-                response.StockTakeSearchIndices = (await _asyncRepository.GetSTForELIndexAsync(pagingOption, cancellationToken)).ToList();
+                response.StockTakeSearchIndices = (await _asyncRepository.GetSTForELIndexAsync(cancellationToken)).ResultList.ToList();
                 return Ok(response);
             }
             else

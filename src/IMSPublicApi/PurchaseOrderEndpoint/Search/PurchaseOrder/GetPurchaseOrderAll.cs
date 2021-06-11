@@ -50,8 +50,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             if (request.SearchQuery == "all")
             {
                 response.IsDisplayingAll = true;
-                var posi = await _asyncRepository.GetPOForELIndexAsync(pagingOption, cancellationToken);
-                response.PurchaseOrderSearchIndices = posi.ToList();
+                var posi = await _asyncRepository.GetPOForELIndexAsync(cancellationToken);
+                response.PurchaseOrderSearchIndices = posi.ResultList.ToList();
                 
                 return Ok(response);
             }

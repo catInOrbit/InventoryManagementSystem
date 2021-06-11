@@ -49,8 +49,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
             response.IsDislayingAll = true;
             if (request.Query == "all")
             {
-                var posi = await _asyncRepository.GetROForELIndexAsync(pagingOption, cancellationToken);
-                response.ReceiveingOrderSearchIndex = posi.ToList();
+                var posi = await _asyncRepository.GetROForELIndexAsync(cancellationToken);
+                response.ReceiveingOrderSearchIndex = posi.ResultList.ToList();
             }
             else
             {
