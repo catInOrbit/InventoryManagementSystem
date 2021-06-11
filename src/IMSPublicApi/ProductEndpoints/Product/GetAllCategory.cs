@@ -32,7 +32,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
             OperationId = "product-category.getall",
             Tags = new[] { "ProductEndpoints" })
         ]
-        public override async Task<ActionResult<GetAllCategoryResponse>> HandleAsync(GetCategoryRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<GetAllCategoryResponse>> HandleAsync([FromRoute] GetCategoryRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Read))
                 return Unauthorized();

@@ -51,7 +51,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
             
             var response = new GetPriceQuoteResponse();
 
-
             PagingOption<PriceQuoteOrder> pagingOption = new PagingOption<PriceQuoteOrder>(
                 request.CurrentPage, request.SizePerPage);
             
