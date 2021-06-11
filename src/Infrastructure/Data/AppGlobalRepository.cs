@@ -138,11 +138,11 @@ namespace Infrastructure.Data
                     index = new GoodsReceiptOrderSearchIndex
                     {
                         Id = ro.Id,
-                        purchaseOrderId = (ro.PurchaseOrderId!=null) ? ro.PurchaseOrderId : "",
-                        supplierName = (ro.Supplier!=null) ? ro.Supplier.SupplierName : "",
-                        createdBy = (ro.Transaction.CreatedBy!=null) ? ro.Transaction.CreatedBy.Fullname : "" ,
-                        receiptId = (ro.GoodsReceiptOrderNumber !=null) ? ro.GoodsReceiptOrderNumber : ""  ,
-                        createdDate = ro.Transaction.CreatedDate.ToShortDateString()
+                        PurchaseOrderId = (ro.PurchaseOrderId!=null) ? ro.PurchaseOrderId : "",
+                        SupplierName = (ro.Supplier!=null) ? ro.Supplier.SupplierName : "",
+                        CreatedBy = (ro.Transaction.CreatedBy!=null) ? ro.Transaction.CreatedBy.Fullname : "" ,
+                        ReceiptNumber = (ro.GoodsReceiptOrderNumber !=null) ? ro.GoodsReceiptOrderNumber : ""  ,
+                        CreatedDate = ro.Transaction.CreatedDate.ToShortDateString()
                     };
                     pagingOption.ResultList.Add(index);
                 }
@@ -151,7 +151,6 @@ namespace Infrastructure.Data
                     Console.WriteLine(ro.Id);
                     throw;
                 }
-               
             }
 
             pagingOption.ExecuteResourcePaging();
