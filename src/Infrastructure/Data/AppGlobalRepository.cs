@@ -36,13 +36,17 @@ namespace Infrastructure.Data
             return await _identityAndProductDbContext.Set<T>().FindAsync(keyValues, cancellationToken);
         }
 
-        public async Task<List<ProductSearchIndex>> GetProductForELIndexAsync(CancellationToken cancellationToken = default)
+        public async Task<List<ProductSearchIndex>> GetProductForELIndexAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default)
         {
             // var products= await _identityAndProductDbContext.Set<ProductVariant>().Select(p=> new {p.Id, p.Name}).ToListAsync(cancellationToken);
             // var products= await _identityAndProductDbContext.Set<ProductVariant>().ToListAsync(cancellationToken);
-            var productVariants= await _identityAndProductDbContext.ProductVariant.ToListAsync(cancellationToken);
+            List<ProductVariant> variants;
+            if(pagingOption.NoPaging)
+                variants =  await _identityAndProductDbContext.ProductVariant.ToListAsync(cancellationToken);
+            variants =  await _identityAndProductDbContext.ProductVariant
+                .Take(pagingOption.SizePerPage).ToListAsync(cancellationToken);
             List<ProductSearchIndex> psis = new List<ProductSearchIndex>();
-            foreach (var productVariant in productVariants)
+            foreach (var productVariant in variants)
             {
                 try
                 {
@@ -102,9 +106,13 @@ namespace Infrastructure.Data
             return psis;
         }
 
-        public async Task<List<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(CancellationToken cancellationToken = default)
+        public async Task<List<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default)
         {
-            var pos= await _identityAndProductDbContext.Set<PurchaseOrder>().Include("Transaction").Where(po => po.Transaction.TransactionStatus==true).ToListAsync(cancellationToken);
+            List<PurchaseOrder> pos;
+            if(pagingOption.NoPaging)
+                pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => po.Transaction.TransactionStatus==true).ToListAsync(cancellationToken);
+            pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Skip(pagingOption.SkipValue)
+                .Take(pagingOption.SizePerPage).Where(po => po.Transaction.TransactionStatus==true).ToListAsync(cancellationToken);
             List<PurchaseOrderSearchIndex> posi = new List<PurchaseOrderSearchIndex>();
             foreach (var po in pos)
             {
@@ -146,9 +154,13 @@ namespace Infrastructure.Data
             return nameConcat;
         }
 
-        public async Task<List<GoodsReceiptOrderSearchIndex>> GetROForELIndexAsync(CancellationToken cancellationToken = default)
+        public async Task<List<GoodsReceiptOrderSearchIndex>> GetROForELIndexAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default)
         {
-            var ros= await _identityAndProductDbContext.Set<GoodsReceiptOrder>().ToListAsync(cancellationToken);
+            List<GoodsReceiptOrder> ros;
+            if(pagingOption.NoPaging)
+                ros = await _identityAndProductDbContext.Set<GoodsReceiptOrder>().ToListAsync(cancellationToken);
+            ros = await _identityAndProductDbContext.Set<GoodsReceiptOrder>().Skip(pagingOption.SkipValue)
+                .Take(pagingOption.SizePerPage).ToListAsync(cancellationToken);
             List<GoodsReceiptOrderSearchIndex> rosi = new List<GoodsReceiptOrderSearchIndex>();
             foreach (var ro in ros)
             {
@@ -177,9 +189,13 @@ namespace Infrastructure.Data
             return rosi;
         }
 
-        public async Task<List<GoodsIssueSearchIndex>> GetGIForELIndexAsync(CancellationToken cancellationToken = default)
+        public async Task<List<GoodsIssueSearchIndex>> GetGIForELIndexAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default)
         {
-            var gis= await _identityAndProductDbContext.Set<GoodsIssueOrder>().ToListAsync(cancellationToken);
+            List<GoodsIssueOrder> gis;
+            if(pagingOption.NoPaging)
+                gis = await _identityAndProductDbContext.Set<GoodsIssueOrder>().ToListAsync(cancellationToken);
+            gis = await _identityAndProductDbContext.Set<GoodsIssueOrder>().Skip(pagingOption.SkipValue)
+                .Take(pagingOption.SizePerPage).ToListAsync(cancellationToken);
             List<GoodsIssueSearchIndex> gisi = new List<GoodsIssueSearchIndex>();
             foreach (var gi in gis)
             {
@@ -206,9 +222,15 @@ namespace Infrastructure.Data
             return gisi;
         }
 
-        public async Task<List<StockTakeSearchIndex>> GetSTForELIndexAsync(CancellationToken cancellationToken = default)
+        public async Task<List<StockTakeSearchIndex>> GetSTForELIndexAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default)
         {
-            var sts= await _identityAndProductDbContext.Set<StockTakeOrder>().ToListAsync(cancellationToken);
+            
+            List<StockTakeOrder> sts;
+            if(pagingOption.NoPaging)
+                sts = await _identityAndProductDbContext.Set<StockTakeOrder>().ToListAsync(cancellationToken);
+            sts = await _identityAndProductDbContext.Set<StockTakeOrder>().Skip(pagingOption.SkipValue)
+                .Take(pagingOption.SizePerPage).ToListAsync(cancellationToken);
+            
             List<StockTakeSearchIndex> stsi = new List<StockTakeSearchIndex>();
             foreach (var st in sts)
             {
@@ -259,9 +281,12 @@ namespace Infrastructure.Data
                 SingleOrDefault(po => po.GoodsIssueNumber == goodsIssueOrderNumber);
         }
 
-        public async Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default)
+        public async Task<PagingOption<T>> ListAllAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default)
         {
-            return await _identityAndProductDbContext.Set<T>().ToListAsync(cancellationToken);
+            if(pagingOption.NoPaging)
+                pagingOption.Results = await _identityAndProductDbContext.Set<T>().ToListAsync(cancellationToken);
+            pagingOption.Results = await _identityAndProductDbContext.Set<T>().Skip(pagingOption.SkipValue).Take(pagingOption.SizePerPage).ToListAsync(cancellationToken);
+            return pagingOption;
         }
         
         public async Task<IEnumerable<Product>> ListAllProductAsync(CancellationToken cancellationToken = default)

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
@@ -27,7 +28,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
             _asyncRepository = asyncRepository;
         }
 
-        [HttpGet("api/stocktake/search/{SearchQuery}")]
+        [HttpGet("api/stocktake/search/{SearchQuery}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Get all stock take Order or specific with search query",
             Description = "Get all stock take Order or specific with search query",
@@ -39,19 +40,22 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "StockTakeOrder", UserOperations.Read))
                 return Unauthorized();
+            
+            PagingOption<StockTakeOrder> pagingOption = new PagingOption<StockTakeOrder>(
+                request.CurrentPage, request.SizePerPage);
+
 
             var response = new STSearchResponse();
             if (request.SearchQuery == "all")
             {
                 response.IsDisplayingAll = true;
-                response.StockTakeSearchIndices = (await _asyncRepository.GetSTForELIndexAsync(cancellationToken)).ToList();
+                response.StockTakeSearchIndices = (await _asyncRepository.GetSTForELIndexAsync(pagingOption, cancellationToken)).ToList();
                 return Ok(response);
             }
             else
             {
-                var pos = await _asyncRepository.ListAllAsync(cancellationToken);
                 var responseElastic = await _elasticClient.SearchAsync<StockTakeSearchIndex>(
-                    s => s.Index("stocktakeorders").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+                    s => s.From(request.CurrentPage).Size(request.SizePerPage).Index("stocktakeorders").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
                 
                 return Ok(responseElastic.Documents);
             }

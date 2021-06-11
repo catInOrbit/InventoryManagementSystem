@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
@@ -18,6 +20,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
     public class GetPriceQuote : BaseAsyncEndpoint.WithRequest<GetPriceQuoteRequest>.WithResponse<GetPriceQuoteResponse>
     {
         private IAsyncRepository<PriceQuoteOrder> _asyncRepository;
+        private IAsyncRepository<PQDisplay> _pqDisplayAsyncRepository;
+
         private readonly IAuthorizationService _authorizationService;
 
         public GetPriceQuote(IAsyncRepository<PriceQuoteOrder> asyncRepository, IAuthorizationService authorizationService)
@@ -26,7 +30,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
             _authorizationService = authorizationService;
         }
         
-        [HttpGet("api/pricequote/{number}")]
+        [HttpGet("api/pricequote/{Number}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Get all price quote",
             Description = "Get all price quote",
@@ -47,10 +51,15 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
             
             var response = new GetPriceQuoteResponse();
 
-            if (request.number == "all")
+
+            PagingOption<PriceQuoteOrder> pagingOption = new PagingOption<PriceQuoteOrder>(
+                request.CurrentPage, request.SizePerPage);
+            
+            if (request.Number == "all")
             {
-                var pqrs = await _asyncRepository.ListAllAsync(cancellationToken);
-                foreach (var priceQuoteOrder in pqrs)
+                var pqrs = await _asyncRepository.ListAllAsync(pagingOption, cancellationToken);
+                pagingOption.RowCountTotal = pqrs.Results.Count;
+                foreach (var priceQuoteOrder in pqrs.Results)
                 {
                     if (priceQuoteOrder.PriceQuoteStatus == PriceQuoteType.Pending)
                     {
@@ -68,9 +77,10 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
                         {
                             pq.NumberOfProduct += 1 ;
                         }
-                        response.PriceQuotes.Add(pq);     
+                        response.PriceQuotes.Add(pq);
                     }
                 }
+                
             }
 
             else
@@ -78,9 +88,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
                 // var pos = await _asyncRepository.ListAllAsync(cancellationToken);
                 // var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>(
                 //     s => s.Query(q => q.QueryString(d => d.Query('*' + request.number + '*'))));
-                var pqr = _asyncRepository.GetPriceQuoteByNumber(request.number, cancellationToken);
-                response.PriceQuoteOrders.Clear();
-                response.PriceQuoteOrders.Add(pqr);    
+                response.PriceQuoteOrder = _asyncRepository.GetPriceQuoteByNumber(request.Number, cancellationToken);
             }
             return Ok(response);
         }

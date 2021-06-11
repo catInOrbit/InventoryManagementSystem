@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Products
 {
@@ -6,6 +8,5 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
     {
         public string CategoryName { get; set; }
         public string CategoryDescription { get; set; }
-        public virtual ICollection<Product> Product { get; set; }
     }
 }

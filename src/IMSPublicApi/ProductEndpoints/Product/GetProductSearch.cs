@@ -22,7 +22,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
             _authorizationService = authorizationService;
         }
 
-        [HttpGet("api/product/search/{Query}")]
+        [HttpGet("api/product/search/{Query}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Search Product by Name",
             Description = "Search Product by Id",
@@ -35,16 +35,17 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
             
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Read))
                 return Unauthorized();
-            var page = 1;
-            var pageSize = 5;
+            
             // var response = await _elasticClient.SearchAsync<ProductSearchIndex>(
             //     s => s.Query(q => q.QueryString(d => d.Query('*' + request.Query + '*'))));
             // var response = await _elasticClient.SearchAsync<ProductIndex>(
             //     s => s.Query(q =>  q.Match(m => m.Field(f => f.Name).Query(request.Query))));
             //
             
-            var response = await _elasticClient.SearchAsync<ProductSearchIndex>(
-                s => s.Index("productindices").Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
+            var response = await _elasticClient.SearchAsync<ProductSearchIndex>
+            (
+                s => s.From(request.CurrentPage).Size(request.SizePerPage).Index("productindices").Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
+            
             if (!response.IsValid)
             {
                 Console.WriteLine("Invalid Response");

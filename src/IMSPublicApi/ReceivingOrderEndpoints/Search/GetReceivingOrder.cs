@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
@@ -28,7 +29,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
         }
         
         
-        [HttpGet("api/goodsreceipt/{Query}")]
+        [HttpGet("api/goodsreceipt/{Query}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Get all receive Order",
             Description = "Get all Receive Order, api/receive/{Query} to get all ",
@@ -37,22 +38,25 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
         ]
         public override async Task<ActionResult<ROGetResponse>> HandleAsync([FromRoute] ROGetRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            //
-            // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
-            //     return Unauthorized();
+            
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
+                return Unauthorized();
+            
+            PagingOption<GoodsReceiptOrder> pagingOption = new PagingOption<GoodsReceiptOrder>(
+                request.CurrentPage, request.SizePerPage);
 
             var response = new ROGetResponse();
             response.IsDislayingAll = true;
             if (request.Query == "all")
             {
-                var posi = await _asyncRepository.GetROForELIndexAsync(cancellationToken);
+                var posi = await _asyncRepository.GetROForELIndexAsync(pagingOption, cancellationToken);
                 response.ReceiveingOrderSearchIndex = posi.ToList();
             }
             else
             {
-                var pos = await _asyncRepository.ListAllAsync(cancellationToken);
+                var pos = await _asyncRepository.ListAllAsync(pagingOption, cancellationToken);
                 var responseElastic = await _elasticClient.SearchAsync<GoodsReceiptOrderSearchIndex>(
-                    s => s.Index("receivingorders").Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
+                    s => s.From(request.CurrentPage).Size(request.SizePerPage).Index("receivingorders").Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
                 return Ok(responseElastic.Documents);
             }
 

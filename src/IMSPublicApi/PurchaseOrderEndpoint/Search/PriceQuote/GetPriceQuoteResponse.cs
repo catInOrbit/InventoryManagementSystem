@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using Newtonsoft.Json;
@@ -32,9 +33,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
             return false;
         }
         
-        public List<PriceQuoteOrder> PriceQuoteOrders { get; set; } = new List<PriceQuoteOrder>();
+        public PriceQuoteOrder PriceQuoteOrder { get; set; } = new PriceQuoteOrder();
         public List<PQDisplay> PriceQuotes { get; set; } = new List<PQDisplay>();
-     
+
         [JsonIgnore]
         public bool IsForDisplay { get; set; }
         

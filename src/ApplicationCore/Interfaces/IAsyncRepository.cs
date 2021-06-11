@@ -15,20 +15,22 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
     {
         Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default);
 
-        Task<List<ProductSearchIndex>> GetProductForELIndexAsync(CancellationToken cancellationToken = default);
-        Task<List<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(CancellationToken cancellationToken = default);
-        Task<List<GoodsReceiptOrderSearchIndex>> GetROForELIndexAsync(CancellationToken cancellationToken = default);
+        Task<List<ProductSearchIndex>> GetProductForELIndexAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default);
+        Task<List<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default);
+        Task<List<GoodsReceiptOrderSearchIndex>> GetROForELIndexAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default);
         
-        Task<List<GoodsIssueSearchIndex>> GetGIForELIndexAsync(CancellationToken cancellationToken = default);
+        Task<List<GoodsIssueSearchIndex>> GetGIForELIndexAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default);
 
-        Task<List<StockTakeSearchIndex>> GetSTForELIndexAsync(CancellationToken cancellationToken = default);
+        Task<List<StockTakeSearchIndex>> GetSTForELIndexAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default);
 
         PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber,  CancellationToken cancellationToken = default);
         PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderNumber,  CancellationToken cancellationToken = default);
         GoodsReceiptOrder GetReceivingOrderByNumber(string receiveOrderNumber,  CancellationToken cancellationToken = default);
         GoodsIssueOrder GetGoodsIssueOrderByNumber(string goodsIssueOrderNumber,  CancellationToken cancellationToken = default);
 
-        Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default);
+        // Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default);
+        Task<PagingOption<T>> ListAllAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default);
+
         Task<IEnumerable<Product>> ListAllProductAsync(CancellationToken cancellationToken = default);
         Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);
         Task<T> AddAsync(T entity, CancellationToken cancellationToken = default);

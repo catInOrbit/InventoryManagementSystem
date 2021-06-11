@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
@@ -27,7 +29,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
             _elasticClient = elasticClient;
         }
 
-        [HttpGet("api/goodsissue/search/{SearchQuery}")]
+        [HttpGet("api/goodsissue/search/{SearchQuery}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Search for good issue with all or elasticsearch field",
             Description = "Search for good issue with all or elasticsearch field",
@@ -40,11 +42,14 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
                 return Unauthorized();
 
             var response = new GiSearchResponse();
+            PagingOption<GoodsIssueOrder> pagingOption = new PagingOption<GoodsIssueOrder>(
+                request.CurrentPage, request.SizePerPage);
+            
             if (request.SearchQuery == "all")
             {
                 response.IsForDisplay = true;
-                var gis = await _asyncRepository.ListAllAsync(cancellationToken);
-                foreach (var goodsIssueOrder in gis)
+                var gis = await _asyncRepository.ListAllAsync(pagingOption, cancellationToken);
+                foreach (var goodsIssueOrder in gis.Results)
                 {
                     if (goodsIssueOrder.GoodsIssueType == GoodsIssueType.Pending)
                     {
@@ -59,7 +64,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
                         response.GoodsIssueOrdersDisplays.Add(giDisplay);
                     }
                 }
-
+                    
                 return Ok(response);
             }
 

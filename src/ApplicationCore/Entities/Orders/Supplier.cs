@@ -6,7 +6,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 
     public class Supplier : BaseEntity
     {
-
         [StringLength(50)] [Required] public string SupplierName { get; set; }
 
         [Display(Name = "Description")] public string Description { get; set; }

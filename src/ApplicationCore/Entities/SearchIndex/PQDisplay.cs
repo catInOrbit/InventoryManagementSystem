@@ -2,7 +2,7 @@
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
-    public class PQDisplay
+    public class PQDisplay : BaseEntity
     {
 
         public PQDisplay()
@@ -11,7 +11,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         }
         
         
-        public virtual string Id { get; set; }
+        public override string Id { get; set; }
         public string PriceQuoteOrderNumber { get; set; }
         public int NumberOfProduct { get; set; }
         public string CreatedDate { get; set; }

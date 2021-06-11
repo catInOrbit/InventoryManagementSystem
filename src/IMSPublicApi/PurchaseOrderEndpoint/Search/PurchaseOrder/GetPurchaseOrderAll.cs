@@ -5,6 +5,7 @@ using Ardalis.ApiEndpoints;
 using Elasticsearch.Net;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
@@ -28,7 +29,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             _elasticClient = elasticClient;
         }
 
-        [HttpGet("api/purchaseorder/{SearchQuery}")]
+        [HttpGet("api/purchaseorder/{SearchQuery}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Get all purchase Order",
             Description = "Get all purchase Order",
@@ -42,18 +43,23 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
                 return Unauthorized();
 
+            PagingOption<ApplicationCore.Entities.Orders.PurchaseOrder> pagingOption = new PagingOption<ApplicationCore.Entities.Orders.PurchaseOrder>(
+                request.CurrentPage, request.SizePerPage);
+
+            
             if (request.SearchQuery == "all")
             {
                 response.IsDisplayingAll = true;
-                var posi = await _asyncRepository.GetPOForELIndexAsync(cancellationToken);
+                var posi = await _asyncRepository.GetPOForELIndexAsync(pagingOption, cancellationToken);
                 response.PurchaseOrderSearchIndices = posi.ToList();
+                
                 return Ok(response);
             }
             else
             {
-                var pos = await _asyncRepository.ListAllAsync(cancellationToken);
-                var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>(
-                    s => s.Index("purchaseorders").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+                var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>
+                (
+                    s => s.From(request.CurrentPage).Size(request.SizePerPage).Index("purchaseorders").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
                 response.PurchaseOrderSearchIndices.Clear();
                 
                 foreach (var purchaseOrderSearchIndex in responseElastic.Documents)
