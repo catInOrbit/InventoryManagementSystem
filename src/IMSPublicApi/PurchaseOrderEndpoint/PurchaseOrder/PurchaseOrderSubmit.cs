@@ -52,14 +52,15 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             try
             {
                 var po = _asyncRepository.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
-                po.PurchaseOrderStatus = PurchaseOrderStatusType.Sent;
+                po.PurchaseOrderStatus = PurchaseOrderStatusType.POSent;
                 po.Transaction.ModifiedDate = DateTime.Now;
                 po.Transaction.ConfirmedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
                 await _asyncRepository.UpdateAsync(po);
                 var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
                 var message = new EmailMessage(request.To, request.Subject, request.Content, files);
                 await _emailSender.SendEmailAsync(message);
-                
+
+                await _asyncRepository.UpdateAsync(po);
                 await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(IndexingHelper.PurchaseOrderSearchIndex(po));
 
                 return Ok();

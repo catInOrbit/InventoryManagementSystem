@@ -4,6 +4,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
 {
     public class PQCreateResponse : BaseResponse
     {
-        public PriceQuoteOrder PriceQuoteOrder { get; set; }
+        public ApplicationCore.Entities.Orders.PurchaseOrder PurchaseOrderPQ { get; set; }
     }
 }

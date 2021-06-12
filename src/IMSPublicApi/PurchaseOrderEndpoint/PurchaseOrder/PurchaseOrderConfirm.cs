@@ -36,7 +36,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 return Unauthorized();
             
             var po = _purchaseOrderRepos.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
-            po.PurchaseOrderStatus = PurchaseOrderStatusType.Confirmed;
+            po.PurchaseOrderStatus = PurchaseOrderStatusType.POConfirm;
             await _purchaseOrderRepos.UpdateAsync(po);
             return Ok();
         }

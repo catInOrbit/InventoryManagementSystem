@@ -7,6 +7,7 @@ using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -20,16 +21,17 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
     {
         private readonly IEmailSender _emailSender;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IAsyncRepository<PriceQuoteOrder> _asyncRepository;
+        private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
         private readonly IUserAuthentication _userAuthentication;
-
+        private readonly IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
         
-        public PriceQuoteRequestSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<PriceQuoteOrder> asyncRepository, IUserAuthentication userAuthentication)
+        public PriceQuoteRequestSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserAuthentication userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository)
         {
             _emailSender = emailSender;
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
             _userAuthentication = userAuthentication;
+            _indexAsyncRepository = indexAsyncRepository;
         }
         
         [HttpPost("api/pricequote/submit")]
@@ -45,17 +47,19 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PriceQuoteOrder", UserOperations.Update))
                 return Unauthorized();
             
-            var pqr = _asyncRepository.GetPriceQuoteByNumber(request.PriceQuoteNumberGet);
-            pqr.PriceQuoteStatus = PriceQuoteType.Sent;
-            pqr.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
-            pqr.Transaction.ModifiedDate = DateTime.Now;
-            await _asyncRepository.UpdateAsync(pqr);
+            var po = _asyncRepository.GetPurchaseOrderByNumber(request.OrderNumber);
+            po.PurchaseOrderStatus = PurchaseOrderStatusType.PQSent;
+            po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            po.Transaction.ModifiedDate = DateTime.Now;
+            await _asyncRepository.UpdateAsync(po);
 
             var subject = "REQUEST FOR QUOTATION-" + DateTime.Now.ToString("dd/MM//yyyy") + " FROM IMS Inventory";
             
             var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
             var message = new EmailMessage(request.To, subject, request.Content, files);
             await _emailSender.SendEmailAsync(message);
+            await _asyncRepository.UpdateAsync(po);
+            await _indexAsyncRepository.ElasticSaveSingleAsync(IndexingHelper.PurchaseOrderSearchIndex(po));
             return Ok();
         }
     }

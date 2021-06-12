@@ -5,6 +5,7 @@ using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -16,11 +17,11 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
     public class PriceQuoteRequestEdit : BaseAsyncEndpoint.WithRequest<PQEditRequest>.WithResponse<PQEditResponse>
     {
         private readonly IAuthorizationService _authorizationService;
-        private readonly IAsyncRepository<PriceQuoteOrder> _asyncRepository;
+        private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
         private readonly IUserAuthentication _userAuthentication;
         private readonly IAsyncRepository<ProductVariant> _productVariantRepos;
-
-        public PriceQuoteRequestEdit(IAuthorizationService authorizationService, IAsyncRepository<PriceQuoteOrder> asyncRepository, IUserAuthentication userAuthentication, IAsyncRepository<ProductVariant> productVariantRepos)
+        private readonly IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
+        public PriceQuoteRequestEdit(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserAuthentication userAuthentication, IAsyncRepository<ProductVariant> productVariantRepos)
         {
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
@@ -41,26 +42,27 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PriceQuoteOrder", UserOperations.Create))
                 return Unauthorized();
 
-            var pqr = _asyncRepository.GetPriceQuoteByNumber(request.PriceQuoteNumberGet);
-            pqr.Transaction.ModifiedDate = DateTime.Now;
-            pqr.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            var po = _asyncRepository.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
+            po.Transaction.ModifiedDate = DateTime.Now;
+            po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             foreach (var requestOrderItemInfo in request.OrderItemInfos)
             {
-                requestOrderItemInfo.OrderNumber = pqr.PriceQuoteNumber;
+                requestOrderItemInfo.OrderNumber = po.PurchaseOrderNumber;
                 requestOrderItemInfo.ProductVariant = await _productVariantRepos.GetByIdAsync(requestOrderItemInfo.ProductVariantId);
                 requestOrderItemInfo.TotalAmount += requestOrderItemInfo.Price;
-                pqr.TotalOrderAmount += requestOrderItemInfo.Price;
-                pqr.PurchaseOrderProduct.Add(requestOrderItemInfo);
+                po.TotalOrderAmount += requestOrderItemInfo.Price;
+                po.PurchaseOrderProduct.Add(requestOrderItemInfo);
             }
             
-            pqr.MailDescription = request.MailDescription;
-            pqr.SupplierId = request.SupplierId;
-            pqr.Deadline = request.Deadline;
+            po.MailDescription = request.MailDescription;
+            po.SupplierId = request.SupplierId;
+            po.Deadline = request.Deadline;
             
-            await _asyncRepository.UpdateAsync(pqr);
+            await _asyncRepository.UpdateAsync(po);
+            await _indexAsyncRepository.ElasticSaveSingleAsync(IndexingHelper.PurchaseOrderSearchIndex(po));
 
             var response = new PQEditResponse();
-            response.PriceQuoteResponse = pqr;
+            response.PriceQuoteResponse = po;
             return Ok(response);
         }
     }

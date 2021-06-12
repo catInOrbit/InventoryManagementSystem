@@ -12,22 +12,25 @@ using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Nest;
 
 namespace Infrastructure.Data
 {
     public class AppGlobalRepository<T> : IAsyncRepository<T> where T : BaseEntity
     {
+        private readonly ILogger _logger;
         private readonly IdentityAndProductDbContext _identityAndProductDbContext;
         private readonly IElasticClient _elasticClient;
 
         private List<T> _elasticCache = new List<T>();
         private List<ProductSearchIndex> _elasticCacheProductSearchIndex = new List<ProductSearchIndex>();
 
-        public AppGlobalRepository(IdentityAndProductDbContext identityAndProductDbContext, IElasticClient elasticClient)
+        public AppGlobalRepository(IdentityAndProductDbContext identityAndProductDbContext, IElasticClient elasticClient, ILogger logger)
         {
             _identityAndProductDbContext = identityAndProductDbContext;
             _elasticClient = elasticClient;
+            _logger = logger;
         }
 
         public async Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default)
@@ -220,12 +223,12 @@ namespace Infrastructure.Data
             return pagingOption;
         }
 
-        public PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber, CancellationToken cancellationToken = default)
-        {
-            return _identityAndProductDbContext.PriceQuote.Where(pq => pq.PriceQuoteNumber == priceQuoteNumber).
-                SingleOrDefault(pq => pq.PriceQuoteNumber == priceQuoteNumber);
-        }
- 
+        // public PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber, CancellationToken cancellationToken = default)
+        // {
+        //     return _identityAndProductDbContext.PriceQuote.Where(pq => pq.PriceQuoteNumber == priceQuoteNumber).
+        //         SingleOrDefault(pq => pq.PriceQuoteNumber == priceQuoteNumber);
+        // }
+        //
         public PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderNumber, CancellationToken cancellationToken = default)
         {
             return _identityAndProductDbContext.PurchaseOrder.Where(po => po.PurchaseOrderNumber == purchaseOrderNumber && po.Transaction.TransactionStatus == true).
@@ -363,6 +366,9 @@ namespace Infrastructure.Data
             // );
 
             _elasticCache.AddRange(types);
+            _logger.LogInformation($"Elastic search cache count {_elasticCache.Count}");
+            _logger.LogInformation($"Elastic search cache type {_elasticCache.GetType()}");
+
             var result = await _elasticClient.BulkAsync(b => b.Index(index).IndexMany(types));
             if (result.Errors)
             {

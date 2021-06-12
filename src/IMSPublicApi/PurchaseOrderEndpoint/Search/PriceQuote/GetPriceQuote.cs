@@ -19,12 +19,12 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
 {
     public class GetPriceQuote : BaseAsyncEndpoint.WithRequest<GetPriceQuoteRequest>.WithResponse<GetPriceQuoteResponse>
     {
-        private IAsyncRepository<PriceQuoteOrder> _asyncRepository;
-        private IAsyncRepository<PQDisplay> _pqDisplayAsyncRepository;
+        private IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
+        private IAsyncRepository<PqDisplay> _pqDisplayAsyncRepository;
 
         private readonly IAuthorizationService _authorizationService;
 
-        public GetPriceQuote(IAsyncRepository<PriceQuoteOrder> asyncRepository, IAuthorizationService authorizationService)
+        public GetPriceQuote(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IAuthorizationService authorizationService)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
@@ -33,7 +33,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
         [HttpGet("api/pricequote/{Number}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Get all price quote",
-            Description = "Get all price quote",
+            Description = "Get all price quote, {Number} = all to get all or search for a specific price quote",
             OperationId = "po.update",
             Tags = new[] { "PriceQuoteOrderEndpoints" })
         ]
@@ -51,24 +51,24 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
             
             var response = new GetPriceQuoteResponse();
 
-            PagingOption<PriceQuoteOrder> pagingOption = new PagingOption<PriceQuoteOrder>(
+            PagingOption<ApplicationCore.Entities.Orders.PurchaseOrder> pagingOption = new PagingOption<ApplicationCore.Entities.Orders.PurchaseOrder>(
                 request.CurrentPage, request.SizePerPage);
             
             if (request.Number == "all")
             {
-                var pqrs = await _asyncRepository.ListAllAsync(pagingOption, cancellationToken);
-                pagingOption.RowCountTotal = pqrs.ResultList.Count;
-                foreach (var priceQuoteOrder in pqrs.ResultList)
+                var po = await _asyncRepository.ListAllAsync(pagingOption, cancellationToken);
+                pagingOption.RowCountTotal = po.ResultList.Count;
+                foreach (var priceQuoteOrder in po.ResultList)
                 {
-                    if (priceQuoteOrder.PriceQuoteStatus == PriceQuoteType.Pending)
+                    if (CheckFormDisplayable(priceQuoteOrder))
                     {
-                        var pq = new PQDisplay
+                        var pq = new PqDisplay
                         {
                             Id = priceQuoteOrder.Id,
                             Deadline = priceQuoteOrder.Deadline.ToString("MM/dd/yyyy"),
                             CreatedDate = priceQuoteOrder.Transaction.CreatedDate.ToString("MM/dd/yyyy"),
                             CreatedByName = priceQuoteOrder.Transaction.CreatedBy.Fullname,
-                            PriceQuoteOrderNumber = priceQuoteOrder.PriceQuoteNumber,
+                            OrderNumber = priceQuoteOrder.PurchaseOrderNumber,
                             SupplierName = (priceQuoteOrder.Supplier != null) ? priceQuoteOrder.Supplier.SupplierName : "",
                         };
                         
@@ -87,9 +87,17 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
                 // var pos = await _asyncRepository.ListAllAsync(cancellationToken);
                 // var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>(
                 //     s => s.Query(q => q.QueryString(d => d.Query('*' + request.number + '*'))));
-                response.PriceQuoteOrder = _asyncRepository.GetPriceQuoteByNumber(request.Number, cancellationToken);
+                response.PriceQuoteOrder = _asyncRepository.GetPurchaseOrderByNumber(request.Number, cancellationToken);
             }
             return Ok(response);
+        }
+
+        private bool CheckFormDisplayable(ApplicationCore.Entities.Orders.PurchaseOrder purchaseOrder)
+        {
+            if (purchaseOrder.PurchaseOrderStatus == PurchaseOrderStatusType.PQCreated ||
+                purchaseOrder.PurchaseOrderStatus == PurchaseOrderStatusType.PQSent)
+                return true;
+            return false;
         }
     }
 }

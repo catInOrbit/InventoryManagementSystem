@@ -9,6 +9,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -20,16 +21,18 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
     public class PriceQuoteRequestCreate : BaseAsyncEndpoint.WithoutRequest.WithResponse<PQCreateResponse>
     {
         private readonly IAuthorizationService _authorizationService;
-        private readonly IAsyncRepository<PriceQuoteOrder> _asyncRepository;
+        private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
+        private readonly IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
         private readonly IUserAuthentication _userAuthentication;
         private readonly IAsyncRepository<Product> _productRepos;
 
-        public PriceQuoteRequestCreate(IAuthorizationService authorizationService, IAsyncRepository<PriceQuoteOrder> asyncRepository, IUserAuthentication userAuthentication,  IAsyncRepository<Product> productRepos)
+        public PriceQuoteRequestCreate(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserAuthentication userAuthentication,  IAsyncRepository<Product> productRepos, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository)
         {
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
             _userAuthentication = userAuthentication;
             _productRepos = productRepos;
+            _indexAsyncRepository = indexAsyncRepository;
         }
         
         [HttpPost("api/pricequote/create")]
@@ -45,7 +48,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 return Unauthorized();
             
             var response = new PQCreateResponse();
-            var pqr = new PriceQuoteOrder();
+            var po = new ApplicationCore.Entities.Orders.PurchaseOrder();
             var transaction = new Transaction
             {
                 CreatedDate = DateTime.Now,
@@ -53,9 +56,10 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id
             };
 
-            pqr.Transaction = transaction;
-            response.PriceQuoteOrder = pqr;
-            await _asyncRepository.AddAsync(pqr);
+            po.Transaction = transaction;
+            response.PurchaseOrderPQ = po;
+            await _asyncRepository.AddAsync(po);
+            await _indexAsyncRepository.ElasticSaveSingleAsync(IndexingHelper.PurchaseOrderSearchIndex(po));
             // pqr.CreatedBy
             return Ok(response);
         }

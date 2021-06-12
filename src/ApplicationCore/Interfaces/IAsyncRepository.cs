@@ -23,7 +23,7 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
 
         Task<PagingOption<StockTakeSearchIndex>> GetSTForELIndexAsync(CancellationToken cancellationToken = default);
 
-        PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber,  CancellationToken cancellationToken = default);
+        // PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber,  CancellationToken cancellationToken = default);
         PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderNumber,  CancellationToken cancellationToken = default);
         GoodsReceiptOrder GetReceivingOrderByNumber(string receiveOrderNumber,  CancellationToken cancellationToken = default);
         GoodsIssueOrder GetGoodsIssueOrderByNumber(string goodsIssueOrderNumber,  CancellationToken cancellationToken = default);

@@ -1,4 +1,5 @@
 ﻿using System;
+using Nest;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
@@ -16,6 +17,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public decimal TotalPrice { get; set; }
         public DateTime DeliveryDate { get; set; }
         public DateTime CreatedDate { get; set; }
-
+        public CompletionField Suggest {get;set;}
     }
 }

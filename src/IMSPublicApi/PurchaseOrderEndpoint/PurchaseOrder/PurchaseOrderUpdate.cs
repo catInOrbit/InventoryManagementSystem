@@ -58,7 +58,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             var po =  _purchaseOrderRepos.GetPurchaseOrderByNumber(request.PurchaseOrderNumberGet);
             po.Transaction.ModifiedDate = DateTime.Now;
             po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
-            po.PurchaseOrderStatus = PurchaseOrderStatusType.WaitingConfirmation;
             
             foreach (var requestOrderItemInfo in request.OrderItemInfos)
             {

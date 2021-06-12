@@ -9,6 +9,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -22,21 +23,20 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _purchaseOrderRepos;
-        private readonly IAsyncRepository<PriceQuoteOrder> _priceQuoteRepos;
-
+        private readonly IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
         private readonly IUserAuthentication _userAuthentication;
 
-        public PurchaseOrderCreate(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IUserAuthentication userAuthentication, IAsyncRepository<PriceQuoteOrder> priceQuoteRepos)
+        public PurchaseOrderCreate(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IUserAuthentication userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository)
         {
             _authorizationService = authorizationService;
             _purchaseOrderRepos = purchaseOrderRepos;
             _userAuthentication = userAuthentication;
-            _priceQuoteRepos = priceQuoteRepos;
+            _indexAsyncRepository = indexAsyncRepository;
         }
 
-        public PurchaseOrderCreate()
+        public PurchaseOrderCreate(IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository)
         {
-            
+            _indexAsyncRepository = indexAsyncRepository;
         }
 
 
@@ -54,29 +54,19 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Create))
                 return Unauthorized();
 
-            var purchaseOrder = new ApplicationCore.Entities.Orders.PurchaseOrder();
 
-            var transaction = new Transaction
-            {
-                CreatedDate = DateTime.Now,
-                Type = TransactionType.Purchase,
-                CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id
-            };
+            var poData = _purchaseOrderRepos.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
+            poData.PurchaseOrderStatus = PurchaseOrderStatusType.POCreated;
+            // if (poData != null)
+            // {
+            //     purchaseOrder.PurchaseOrderNumber = poData.PriceQuoteNumber;
+            //     purchaseOrder.PurchaseOrderProduct = poData.PurchaseOrderProduct;
+            //     purchaseOrder.SupplierId = poData.SupplierId;
+            // }
 
-            purchaseOrder.Transaction = transaction;
-            
-            var pqData = _priceQuoteRepos.GetPriceQuoteByNumber(request.PriceQuoteNumber);
-            purchaseOrder.PurchaseOrderStatus = PurchaseOrderStatusType.Created;
-            if (pqData != null)
-            {
-                purchaseOrder.PurchaseOrderNumber = pqData.PriceQuoteNumber;
-                purchaseOrder.PurchaseOrderProduct = pqData.PurchaseOrderProduct;
-                purchaseOrder.SupplierId = pqData.SupplierId;
-            }
-
-            response.PurchaseOrder = purchaseOrder;
-            await _purchaseOrderRepos.AddAsync(purchaseOrder);
-            await _purchaseOrderRepos.ElasticSaveSingleAsync(purchaseOrder);
+            response.PurchaseOrder = poData;
+            await _purchaseOrderRepos.UpdateAsync(poData);
+            await _indexAsyncRepository.ElasticSaveSingleAsync(IndexingHelper.PurchaseOrderSearchIndex(poData));
             return Ok(response);
         }
     }

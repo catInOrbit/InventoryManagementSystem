@@ -2,6 +2,6 @@
 {
     public class POCreateRequest : BaseRequest
     {
-        public string PriceQuoteNumber { get; set; }
+        public string PurchaseOrderNumber { get; set; }
     }
 }

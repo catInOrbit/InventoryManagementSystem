@@ -11,7 +11,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
         public PQEditResponse()
         { }
         
-        public PriceQuoteOrder PriceQuoteResponse { get; set; }
+        public ApplicationCore.Entities.Orders.PurchaseOrder PriceQuoteResponse { get; set; }
         public bool Result { get; set; }
     }
 }

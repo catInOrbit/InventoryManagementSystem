@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -30,12 +31,12 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         ]
         public override async Task<ActionResult> HandleAsync([FromRoute] PODeleteRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            //TODO: IMPORTANT: Database relationship for child table must have cascade in insert and delete option
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Delete))
                 return Unauthorized();
 
             var po = await _asyncRepository.GetByIdAsync(request.Id);
             po.Transaction.TransactionStatus = false;
+            po.PurchaseOrderStatus = PurchaseOrderStatusType.Canceled;
            await _asyncRepository.UpdateAsync(po,cancellationToken);
            return Ok();
         }

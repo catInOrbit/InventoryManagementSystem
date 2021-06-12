@@ -6,7 +6,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
 {
     public class PQSubmitRequest : BaseRequest
     {
-        public string PriceQuoteNumberGet { get; set; }
+        public string OrderNumber { get; set; }
         public string[] To { get; set; }
         public string Content { get; set; }
         public string Subject { get; set; }

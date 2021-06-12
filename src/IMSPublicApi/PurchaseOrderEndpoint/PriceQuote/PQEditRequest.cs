@@ -10,7 +10,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
     {
         // public PriceQuoteOrder PriceQuoteOrder { get; set; }
         
-        public string PriceQuoteNumberGet { get; set; }
+        public string PurchaseOrderNumber { get; set; }
         public string SupplierId { get; set; }
         public DateTime Deadline { get; set; }
         public string MailDescription { get; set; }

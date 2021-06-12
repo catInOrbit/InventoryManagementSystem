@@ -2,17 +2,17 @@
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
-    public class PQDisplay : BaseEntity
+    public class PqDisplay : BaseEntity
     {
 
-        public PQDisplay()
+        public PqDisplay()
         {
                 
         }
         
         
         public override string Id { get; set; }
-        public string PriceQuoteOrderNumber { get; set; }
+        public string OrderNumber { get; set; }
         public int NumberOfProduct { get; set; }
         public string CreatedDate { get; set; }
         public string Deadline { get; set; }

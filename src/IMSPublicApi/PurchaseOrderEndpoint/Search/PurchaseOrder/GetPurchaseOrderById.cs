@@ -23,9 +23,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
 
         [HttpGet("api/purchaseorder/number/{SearchQuery}")]
         [SwaggerOperation(
-            Summary = "Get all purchase Order",
-            Description = "Get all purchase Order",
-            OperationId = "po.update",
+            Summary = "Get a purchase Order",
+            Description = "Get a purchase Order",
+            OperationId = "po.searchnumber",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
         public override async Task<ActionResult<GetAllPurchaseOrderResponse>> HandleAsync([FromRoute] GetAllPurchaseOrderRequest request, CancellationToken cancellationToken = new CancellationToken())
@@ -36,7 +36,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             var response = new GetAllPurchaseOrderResponse();
             response.IsDisplayingAll = false;
 
-            response.PurchaseOrder = _purchaseAsyncRepository.GetPurchaseOrderByNumber(request.SearchQuery);
+            response.PurchaseOrder = await _purchaseAsyncRepository.GetByIdAsync(request.SearchQuery);
 
             return Ok(response);
         }

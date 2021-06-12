@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm;
 
@@ -14,7 +13,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
             // Transaction.TransactionId = Id;
             // Transaction.TransactionNumber =  DateTime.UtcNow.Date.ToString("ddMMyyyy") +
             //                Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
-            PurchaseOrderStatus = PurchaseOrderStatusType.Created;
+            PurchaseOrderStatus = PurchaseOrderStatusType.PQCreated;
             // Transaction.CreatedDate = DateTime.Now;
             // Transaction.Type = TransactionType.Purchase;
             PurchaseOrderNumber = DateTime.UtcNow.Date.ToString("ddMMyyyy") +
@@ -36,10 +35,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public decimal TotalDiscountAmount { get; set; }
         public decimal TotalOrderAmount { get; set; }
         public virtual ICollection<OrderItem> PurchaseOrderProduct { get; set; } = new List<OrderItem>();
-        
-        public string PriceQuoteOrderId { get; set; }
-        public virtual PriceQuoteOrder PriceQuoteOrder { get; set; }
         public string TransactionId { get; set; }
+        public DateTime Deadline { get; set; }
         public virtual Transaction Transaction { get; set; }
         
     }

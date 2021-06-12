@@ -33,8 +33,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
             return false;
         }
         
-        public PriceQuoteOrder PriceQuoteOrder { get; set; } = new PriceQuoteOrder();
-        public List<PQDisplay> PriceQuotes { get; set; } = new List<PQDisplay>();
+        public ApplicationCore.Entities.Orders.PurchaseOrder PriceQuoteOrder { get; set; } = new ApplicationCore.Entities.Orders.PurchaseOrder();
+        public List<PqDisplay> PriceQuotes { get; set; } = new List<PqDisplay>();
 
         [JsonIgnore]
         public bool IsForDisplay { get; set; }
