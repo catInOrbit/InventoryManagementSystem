@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
@@ -15,11 +16,13 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
+        private readonly IUserAuthentication _userAuthentication;
 
-        public PurchaseOrderDelete(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository)
+        public PurchaseOrderDelete(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserAuthentication userAuthentication)
         {
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
+            _userAuthentication = userAuthentication;
         }
         
         [HttpPut("api/purchaseorder/delete/{Id}")]
@@ -35,8 +38,10 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 return Unauthorized();
 
             var po = await _asyncRepository.GetByIdAsync(request.Id);
+            po.Transaction.ModifiedDate = DateTime.Now;
+            po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             po.Transaction.TransactionStatus = false;
-            po.PurchaseOrderStatus = PurchaseOrderStatusType.Canceled;
+            po.PurchaseOrderStatus = PurchaseOrderStatusType.POCanceled;
            await _asyncRepository.UpdateAsync(po,cancellationToken);
            return Ok();
         }

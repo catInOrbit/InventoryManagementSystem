@@ -4,7 +4,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 
-namespace InventoryManagementSystem.PublicApi
+namespace Infrastructure
 {
     public class IndexingHelper
     {
@@ -21,8 +21,31 @@ namespace InventoryManagementSystem.PublicApi
                 CreatedDate = po.Transaction.CreatedDate,
                 DeliveryDate = po.DeliveryDate,
                 TotalPrice = (po.TotalOrderAmount != null) ? po.TotalOrderAmount : 0,
-                ConfirmedByName = (po.Transaction.CreatedBy != null) ? po.Transaction.CreatedBy.Fullname : ""
+                ConfirmedByName = (po.Transaction.CreatedBy != null) ? po.Transaction.CreatedBy.Fullname : "",
+                SupplierEmail = (po.Supplier != null) ? po.Supplier.Email : "",
+                SupplierId = (po.Supplier != null) ? po.Supplier.Id : "",
+                SupplierPhone = (po.Supplier != null) ? po.Supplier.PhoneNumber : "",
+                CanceledByName = (po.Transaction.CreatedBy != null) ? po.Transaction.CreatedBy.Fullname : "",
+                CreatedByName = (po.Transaction.CreatedBy != null) ? po.Transaction.CreatedBy.Fullname : ""
             };
+
+            //
+            // var index = new PurchaseOrderSearchIndex();
+            // index.Id = po.Id;
+            // index.SupplierName = (po.Supplier != null) ? po.Supplier.SupplierName : "";
+            // index.PurchaseOrderNumber = (po.PurchaseOrderNumber != null) ? po.PurchaseOrderNumber : "";
+            // index.Status = (po.PurchaseOrderStatus.GetStringValue() != null)
+            //     ? po.PurchaseOrderStatus.GetStringValue()
+            //     : "";
+            // index.CreatedDate = po.Transaction.CreatedDate;
+            // index.DeliveryDate = po.DeliveryDate;
+            // index.TotalPrice = (po.TotalOrderAmount != null) ? po.TotalOrderAmount : 0;
+            // index.ConfirmedByName = (po.Transaction.CreatedBy != null) ? po.Transaction.CreatedBy.Fullname : "";
+            // index.SupplierEmail = (po.Supplier != null) ? po.Supplier.Email : "";
+            // index.SupplierId = (po.Supplier != null) ? po.Supplier.Id : "";
+            // index.SupplierPhone = (po.Supplier != null) ? po.Supplier.PhoneNumber : "";
+            // index.CanceledByName = (po.Transaction.CreatedBy != null) ? po.Transaction.CreatedBy.Fullname : "";
+            // index.CreatedByName = (po.Transaction.CreatedBy != null) ? po.Transaction.CreatedBy.Fullname : "";
 
             return index;
         }

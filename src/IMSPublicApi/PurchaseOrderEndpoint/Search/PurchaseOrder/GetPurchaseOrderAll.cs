@@ -6,6 +6,7 @@ using Elasticsearch.Net;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
@@ -29,7 +30,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             _elasticClient = elasticClient;
         }
 
-        [HttpGet("api/purchaseorder/{SearchQuery}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
+        [HttpGet("api/purchaseorder/{SearchQuery}&status={Status}&page={CurrentPage}&size={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Get all purchase Order",
             Description = "Get all purchase Order, {SearchQuery} = all to get all or search for individual field",
@@ -62,10 +63,12 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
                     s => s.From(request.CurrentPage).Size(request.SizePerPage).Index("purchaseorders").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
                 response.PurchaseOrderSearchIndices.Clear();
                 
-                foreach (var purchaseOrderSearchIndex in responseElastic.Documents)
-                {
-                    response.PurchaseOrderSearchIndices.Add(purchaseOrderSearchIndex);
-                }
+                response.PurchaseOrderSearchIndices.AddRange(responseElastic.Documents.Where(d => d.Status == ((PurchaseOrderStatusType)request.Status).ToString()));
+
+                // foreach (var purchaseOrderSearchIndex in responseElastic.Documents)
+                // {
+                //     response.PurchaseOrderSearchIndices.Add(purchaseOrderSearchIndex);
+                // }
                 return Ok(response);
             }
         }

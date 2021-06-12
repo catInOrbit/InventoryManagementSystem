@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
@@ -66,7 +67,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             }
 
             await _asyncRepository.AddAsync(product);
-            await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(IndexingHelper.ProductSearchIndex(product));
+            await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(true,IndexingHelper.ProductSearchIndex(product));
             return Ok();
         }
     }

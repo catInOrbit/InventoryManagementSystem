@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure;
 using Infrastructure.Data;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
@@ -55,10 +56,11 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Update))
                 return Unauthorized();
 
-            var po =  _purchaseOrderRepos.GetPurchaseOrderByNumber(request.PurchaseOrderNumberGet);
+            var po =  _purchaseOrderRepos.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
             po.Transaction.ModifiedDate = DateTime.Now;
             po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             
+            po.PurchaseOrderProduct.Clear();
             foreach (var requestOrderItemInfo in request.OrderItemInfos)
             {
                 requestOrderItemInfo.OrderNumber = po.PurchaseOrderNumber;
@@ -72,7 +74,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             // await _supplierRepos.ElasticSaveManyAsync(supplierList.ToArray());
 
             await _purchaseOrderRepos.UpdateAsync(po);
-            await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(IndexingHelper.PurchaseOrderSearchIndex(po));
+            await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false,IndexingHelper.PurchaseOrderSearchIndex(po));
             response.PurchaseOrder = po;
             return Ok(response);
         }

@@ -30,7 +30,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
             _authorizationService = authorizationService;
         }
         
-        [HttpGet("api/pricequote/{Number}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
+        [HttpGet("api/pricequote/{Number}&page={CurrentPage}&size={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Get all price quote",
             Description = "Get all price quote, {Number} = all to get all or search for a specific price quote",
@@ -56,6 +56,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
             
             if (request.Number == "all")
             {
+                response.IsForDisplay = true;
                 var po = await _asyncRepository.ListAllAsync(pagingOption, cancellationToken);
                 pagingOption.RowCountTotal = po.ResultList.Count;
                 foreach (var priceQuoteOrder in po.ResultList)
@@ -84,6 +85,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
 
             else
             {
+                response.IsForDisplay = false;
                 // var pos = await _asyncRepository.ListAllAsync(cancellationToken);
                 // var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>(
                 //     s => s.Query(q => q.QueryString(d => d.Query('*' + request.number + '*'))));

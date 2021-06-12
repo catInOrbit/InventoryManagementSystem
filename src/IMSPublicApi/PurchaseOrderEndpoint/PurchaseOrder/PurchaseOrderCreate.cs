@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
@@ -34,20 +35,14 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             _indexAsyncRepository = indexAsyncRepository;
         }
 
-        public PurchaseOrderCreate(IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository)
-        {
-            _indexAsyncRepository = indexAsyncRepository;
-        }
-
-
-        [HttpPost("api/purchaseorder/create")]
+        [HttpPost("api/purchaseorder/create/{PurchaseOrderNumber}")]
         [SwaggerOperation(
             Summary = "Create purchase order",
             Description = "Create purchase order",
             OperationId = "po.create",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
-        public override async Task<ActionResult<POCreateResponse>> HandleAsync(POCreateRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<POCreateResponse>> HandleAsync([FromRoute] POCreateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var response = new POCreateResponse();
 
@@ -63,10 +58,12 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             //     purchaseOrder.PurchaseOrderProduct = poData.PurchaseOrderProduct;
             //     purchaseOrder.SupplierId = poData.SupplierId;
             // }
+            poData.Transaction.ModifiedDate = DateTime.Now;
+            poData.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
 
             response.PurchaseOrder = poData;
             await _purchaseOrderRepos.UpdateAsync(poData);
-            await _indexAsyncRepository.ElasticSaveSingleAsync(IndexingHelper.PurchaseOrderSearchIndex(poData));
+            await _indexAsyncRepository.ElasticSaveSingleAsync(true, IndexingHelper.PurchaseOrderSearchIndex(poData));
             return Ok(response);
         }
     }

@@ -20,8 +20,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public string Unit { get; set; }
         public decimal Price { get; set; }
         public decimal DiscountAmount { get; set; }
-        
-        [JsonIgnore]
         public decimal TotalAmount { get; set; }
+        
+
+      
     }
 }

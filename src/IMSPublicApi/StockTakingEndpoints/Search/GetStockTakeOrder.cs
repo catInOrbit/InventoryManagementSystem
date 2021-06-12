@@ -28,7 +28,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
             _asyncRepository = asyncRepository;
         }
 
-        [HttpGet("api/stocktake/search/{SearchQuery}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
+        [HttpGet("api/stocktake/search/{SearchQuery}&page={CurrentPage}&size={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Get all stock take Order or specific with search query",
             Description = "Get all stock take Order or specific with search query",

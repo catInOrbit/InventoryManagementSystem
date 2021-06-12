@@ -22,7 +22,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
             _authorizationService = authorizationService;
         }
 
-        [HttpGet("api/product/search/{Query}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
+        [HttpGet("api/product/search/{Query}&page={CurrentPage}&size={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Search Product by Name",
             Description = "Search Product by Id",

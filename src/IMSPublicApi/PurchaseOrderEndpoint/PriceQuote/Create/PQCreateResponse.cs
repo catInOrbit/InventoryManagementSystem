@@ -1,6 +1,4 @@
-﻿using InventoryManagementSystem.ApplicationCore.Entities.Orders;
-
-namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
+﻿namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote.Create
 {
     public class PQCreateResponse : BaseResponse
     {

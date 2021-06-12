@@ -26,7 +26,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
             _authorizationService = authorizationService;
         }
         
-        [HttpGet("api/product/category/currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
+        [HttpGet("api/product/category/page={CurrentPage}&size={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Get list of category",
             Description = "Get list of category",

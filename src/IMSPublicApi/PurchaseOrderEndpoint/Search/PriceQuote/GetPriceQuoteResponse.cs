@@ -18,7 +18,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
         {
                 
         }
-        public virtual bool ShouldSerializePriceQuoteOrders()
+        public virtual bool ShouldSerializePriceQuoteOrder()
         {
             if(!IsForDisplay)
                 return true;
@@ -26,7 +26,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Price
         }
         
         
-        public virtual bool ShouldSerializePriceQuoteOs()
+        public virtual bool ShouldSerializePriceQuotes()
         {
             if(IsForDisplay)
                 return true;

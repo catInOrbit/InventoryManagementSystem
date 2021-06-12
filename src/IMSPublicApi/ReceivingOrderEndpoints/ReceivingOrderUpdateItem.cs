@@ -69,7 +69,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 CreatedDate = ro.Transaction.CreatedDate.ToShortDateString()
             };
             await _recevingOrderRepository.UpdateAsync(ro);
-            await _recevingOrderSearchIndexRepository.ElasticSaveSingleAsync(index);
+            await _recevingOrderSearchIndexRepository.ElasticSaveSingleAsync(false,index);
             return Ok();
         }
     }

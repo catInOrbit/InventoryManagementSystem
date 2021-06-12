@@ -7,7 +7,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
 {
     public class POUpdateRequest : BaseRequest
     {
-        public string PurchaseOrderNumberGet { get; set; }
+        public string PurchaseOrderNumber { get; set; }
         public string SupplierId { get; set; }
         public ICollection<OrderItem> OrderItemInfos  { get; set; }
     }

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Elasticsearch.Net;
+using Infrastructure;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
@@ -44,8 +45,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             
             await _poAsyncRepository.UpdateAsync(po);
             await _roAsyncRepository.UpdateAsync(ro);
-            await _poSearchIndexAsyncRepository.ElasticSaveSingleAsync(IndexingHelper.PurchaseOrderSearchIndex(po));
-            await _roSearchIndexAsyncRepository.ElasticSaveSingleAsync(IndexingHelper.GoodsReceiptOrderSearchIndex(ro));
+            await _poSearchIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po));
+            await _roSearchIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.GoodsReceiptOrderSearchIndex(ro));
             return Ok();
         }
     }

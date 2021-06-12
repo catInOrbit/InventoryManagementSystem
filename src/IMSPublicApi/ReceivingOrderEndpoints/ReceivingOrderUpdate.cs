@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
@@ -74,7 +75,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             ro.SupplierId = po.SupplierId;
             ro.WarehouseLocation = request.StorageLocation;
             await _receivingOrderRepository.UpdateAsync(ro);
-            await _receivingOrderSearchRepository.ElasticSaveSingleAsync(IndexingHelper.GoodsReceiptOrderSearchIndex(ro));
+            await _receivingOrderSearchRepository.ElasticSaveSingleAsync(false,IndexingHelper.GoodsReceiptOrderSearchIndex(ro));
             response.ReceivingOrder = ro;
             return Ok(response);
         }

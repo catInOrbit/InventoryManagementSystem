@@ -29,7 +29,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
         }
         
         
-        [HttpGet("api/goodsreceipt/{Query}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
+        [HttpGet("api/goodsreceipt/{Query}&page={CurrentPage}&size={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Get all receive Order",
             Description = "Get all Receive Order, {Query} = all to get all ",

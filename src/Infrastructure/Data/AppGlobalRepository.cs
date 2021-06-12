@@ -19,18 +19,16 @@ namespace Infrastructure.Data
 {
     public class AppGlobalRepository<T> : IAsyncRepository<T> where T : BaseEntity
     {
-        private readonly ILogger _logger;
         private readonly IdentityAndProductDbContext _identityAndProductDbContext;
         private readonly IElasticClient _elasticClient;
 
         private List<T> _elasticCache = new List<T>();
         private List<ProductSearchIndex> _elasticCacheProductSearchIndex = new List<ProductSearchIndex>();
 
-        public AppGlobalRepository(IdentityAndProductDbContext identityAndProductDbContext, IElasticClient elasticClient, ILogger logger)
+        public AppGlobalRepository(IdentityAndProductDbContext identityAndProductDbContext, IElasticClient elasticClient)
         {
             _identityAndProductDbContext = identityAndProductDbContext;
             _elasticClient = elasticClient;
-            _logger = logger;
         }
 
         public async Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default)
@@ -92,18 +90,7 @@ namespace Infrastructure.Data
                 PurchaseOrderSearchIndex index; 
                 try
                 {
-                    index = new PurchaseOrderSearchIndex
-                    {
-                        Id = po.Id,
-                        SupplierName = (po.Supplier!=null) ? po.Supplier.SupplierName : "",
-                        PurchaseOrderNumber = (po.PurchaseOrderNumber !=null) ? po.PurchaseOrderNumber : "",
-                        Status = (po.PurchaseOrderStatus.GetStringValue()!=null) ? po.PurchaseOrderStatus.GetStringValue() : "",
-                        CreatedDate = po.Transaction.CreatedDate,
-                        DeliveryDate = po.DeliveryDate ,
-                        TotalPrice = (po.TotalOrderAmount!=null) ? po.TotalOrderAmount : 0,
-                        ConfirmedByName = (po.Transaction.CreatedBy!=null) ? po.Transaction.CreatedBy.Fullname : "" 
-                    };
-                    pagingOption.ResultList.Add(index);
+                    pagingOption.ResultList.Add(IndexingHelper.PurchaseOrderSearchIndex(po));
                 }
                 catch (Exception e)
                 {
@@ -138,16 +125,7 @@ namespace Infrastructure.Data
                 GoodsReceiptOrderSearchIndex index; 
                 try
                 {
-                    index = new GoodsReceiptOrderSearchIndex
-                    {
-                        Id = ro.Id,
-                        PurchaseOrderId = (ro.PurchaseOrderId!=null) ? ro.PurchaseOrderId : "",
-                        SupplierName = (ro.Supplier!=null) ? ro.Supplier.SupplierName : "",
-                        CreatedBy = (ro.Transaction.CreatedBy!=null) ? ro.Transaction.CreatedBy.Fullname : "" ,
-                        ReceiptNumber = (ro.GoodsReceiptOrderNumber !=null) ? ro.GoodsReceiptOrderNumber : ""  ,
-                        CreatedDate = ro.Transaction.CreatedDate.ToShortDateString()
-                    };
-                    pagingOption.ResultList.Add(index);
+                    pagingOption.ResultList.Add(IndexingHelper.GoodsReceiptOrderSearchIndex(ro));
                 }
                 catch (Exception e)
                 {
@@ -316,16 +294,20 @@ namespace Infrastructure.Data
             throw new System.NotImplementedException();
         }
         
-        public async Task ElasticSaveSingleAsync(T types)
+        public async Task ElasticSaveSingleAsync(bool isSavingNew, T type)
         {
-            if (_elasticCache.Any(p => p.Id == types.Id))
-            {
-                await _elasticClient.UpdateAsync<T>(types, u => u.Doc(types));
-            }
+            // if (_elasticCache.Any(p => p.Id == type.Id))
+            // {
+            //     await _elasticClient.UpdateAsync<T>(type, u => u.Doc(type));
+            // }
+            
+            if(!isSavingNew)
+                await _elasticClient.UpdateAsync<T>(type, u => u.Doc(type));
+
             else
             {
-                _elasticCache.Add(types);
-                await _elasticClient.IndexDocumentAsync<T>(types);
+                _elasticCache.Add(type);
+                await _elasticClient.IndexDocumentAsync<T>(type);
             }
         }
 
@@ -366,8 +348,8 @@ namespace Infrastructure.Data
             // );
 
             _elasticCache.AddRange(types);
-            _logger.LogInformation($"Elastic search cache count {_elasticCache.Count}");
-            _logger.LogInformation($"Elastic search cache type {_elasticCache.GetType()}");
+            // _logger.LogInformation($"Elastic search cache count {_elasticCache.Count}");
+            // _logger.LogInformation($"Elastic search cache type {_elasticCache.GetType()}");
 
             var result = await _elasticClient.BulkAsync(b => b.Index(index).IndexMany(types));
             if (result.Errors)

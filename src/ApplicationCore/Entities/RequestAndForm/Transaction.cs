@@ -17,7 +17,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm
         public  DateTime ValidUntil { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
-        
         public string CreatedById { get; set; }
         public virtual ApplicationUser CreatedBy { get; set; }
         public string ConfirmedById { get; set; }

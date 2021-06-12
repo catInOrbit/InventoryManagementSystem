@@ -2,12 +2,15 @@
 {
     public enum PurchaseOrderStatusType
     {
-        PQCreated = 1,
-        PQSent = 2,
-        POCreated = 3,
-        POConfirm = 4,
-        POSent = 5,
-        Done = 6,
-        Canceled = -1
+        RequisitionCreated = 0,
+        RequisitionSent = 1,
+        PQCreated = 2,
+        PQSent = 3,
+        POCreated = 4,
+        POConfirm = 5,
+        POSent = 6,
+        Done = 7,
+        POCanceled = -1,
+        RequisitionCanceled = -2,
     }
 }
