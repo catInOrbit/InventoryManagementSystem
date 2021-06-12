@@ -31,7 +31,10 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
         [HttpGet("api/stocktake/search/{SearchQuery}&page={CurrentPage}&size={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Get all stock take Order or specific with search query",
-            Description = "Get all stock take Order or specific with search query",
+            Description = "Get all stock take Order or specific with search query"+
+                          "\n {SearchQuery}: Query to search, all to search all \n " +
+                          "{CurrentPage}: Current page to display \n" +
+                          "{SizePerPage}: Number of rows to display in a page",
             OperationId = "st.search",
             Tags = new[] { "StockTakingEndpoints" })
         ]

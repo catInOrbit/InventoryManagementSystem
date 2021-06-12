@@ -32,7 +32,10 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
         [HttpGet("api/goodsreceipt/{Query}&page={CurrentPage}&size={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Get all receive Order",
-            Description = "Get all Receive Order, {Query} = all to get all ",
+            Description = "Get all Receive Order"+
+                          "\n {Query}: Querry to search, all to search all \n " +
+                          "{CurrentPage}: Current page to display \n" +
+                          "{SizePerPage}: Number of rows to display in a page" ,
             OperationId = "ro.search",
             Tags = new[] { "GoodsReceiptOrders" })
         ]

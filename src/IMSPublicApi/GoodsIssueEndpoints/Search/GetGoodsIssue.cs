@@ -29,13 +29,16 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
             _elasticClient = elasticClient;
         }
 
-        [HttpGet("api/goodsissue/search/{SearchQuery}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Search for good issue with all or elasticsearch field",
-            Description = "Search for good issue with all or elasticsearch field",
+            Description = "Search for good issue with all or elasticsearch field" +
+                          "\n {SearchQuery}: Querry to search, all to search all \n " +
+                          "{CurrentPage}: Current page to display \n" +
+                          "{SizePerPage}: Number of rows to display in a page",
             OperationId = "gi.search",
             Tags = new[] { "GoodsIssueEndpoints" })
         ]
+        [HttpGet("api/goodsissue/search/{SearchQuery}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
         public override async Task<ActionResult<GiSearchResponse>> HandleAsync([FromRoute]GiSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "GoodsIssue", UserOperations.Read))

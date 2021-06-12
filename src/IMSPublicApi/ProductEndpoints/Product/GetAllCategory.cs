@@ -29,7 +29,9 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
         [HttpGet("api/product/category/page={CurrentPage}&size={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Get list of category",
-            Description = "Get list of category",
+            Description = "Get list of category" +
+                          "\n{CurrentPage}: Current page to display \n" +
+                          "{SizePerPage}: Number of rows to display in a page",
             OperationId = "product-category.getall",
             Tags = new[] { "ProductEndpoints" })
         ]

@@ -33,7 +33,11 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
         [HttpGet("api/purchaseorder/{SearchQuery}&status={Status}&page={CurrentPage}&size={SizePerPage}")]
         [SwaggerOperation(
             Summary = "Get all purchase Order",
-            Description = "Get all purchase Order, {SearchQuery} = all to get all or search for individual field",
+            Description = "Get all purchase Order"  +
+                          "\n {SearchQuery}: Querry to search, all to search all \n " +
+                          "{CurrentPage}: Current page to display \n" +
+                          "{SizePerPage}: Number of rows to display in a page \n " +
+                          "{Status} Status of purchase order",
             OperationId = "po.update",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
