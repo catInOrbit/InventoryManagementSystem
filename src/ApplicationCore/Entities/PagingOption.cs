@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities
 {
@@ -16,6 +17,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
     public class PagingOption<T> : PagingOptionBase where T : class
     {
         public IList<T> ResultList { get; set; } = new List<T>();
+
+        [JsonIgnore] public bool SkipPaging { get; set; } = false;
+
         public PagingOption(int currentPage, int sizePerPage)
         {
             CurrentPage = currentPage;
@@ -27,7 +31,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         {
             RowCountTotal = ResultList.Count;            
             PageCount = (int) Math.Ceiling((double)RowCountTotal / SizePerPage);
-            if (!(CurrentPage == 0 && SizePerPage == 0))
+            if (SkipPaging == false)
                 ResultList = ResultList.Skip(SkipValue).Take(SizePerPage).ToList();
         }
     }

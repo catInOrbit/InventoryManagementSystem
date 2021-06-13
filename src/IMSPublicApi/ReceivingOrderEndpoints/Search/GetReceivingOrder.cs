@@ -45,19 +45,18 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
                 return Unauthorized();
             
-            PagingOption<GoodsReceiptOrder> pagingOption = new PagingOption<GoodsReceiptOrder>(
+            PagingOption<GoodsReceiptOrderSearchIndex> pagingOption = new PagingOption<GoodsReceiptOrderSearchIndex>(
                 request.CurrentPage, request.SizePerPage);
 
             var response = new ROGetResponse();
             response.IsDislayingAll = true;
             if (request.Query == "all")
             {
-                var posi = await _asyncRepository.GetROForELIndexAsync(cancellationToken);
+                var posi = await _asyncRepository.GetROForELIndexAsync(pagingOption, cancellationToken);
                 response.ReceiveingOrderSearchIndex = posi.ResultList.ToList();
             }
             else
             {
-                var pos = await _asyncRepository.ListAllAsync(pagingOption, cancellationToken);
                 var responseElastic = await _elasticClient.SearchAsync<GoodsReceiptOrderSearchIndex>(
                     s => s.From(request.CurrentPage).Size(request.SizePerPage).Index("receivingorders").Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
                 return Ok(responseElastic.Documents);

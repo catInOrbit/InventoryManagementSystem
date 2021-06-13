@@ -44,7 +44,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "StockTakeOrder", UserOperations.Read))
                 return Unauthorized();
             
-            PagingOption<StockTakeOrder> pagingOption = new PagingOption<StockTakeOrder>(
+            PagingOption<StockTakeSearchIndex> pagingOption = new PagingOption<StockTakeSearchIndex>(
                 request.CurrentPage, request.SizePerPage);
 
 
@@ -52,7 +52,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
             if (request.SearchQuery == "all")
             {
                 response.IsDisplayingAll = true;
-                response.StockTakeSearchIndices = (await _asyncRepository.GetSTForELIndexAsync(cancellationToken)).ResultList.ToList();
+                response.StockTakeSearchIndices = (await _asyncRepository.GetSTForELIndexAsync(pagingOption, cancellationToken)).ResultList.ToList();
                 return Ok(response);
             }
             else

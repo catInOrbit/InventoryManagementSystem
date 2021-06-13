@@ -8,6 +8,7 @@ using Elasticsearch.Net;
 using Infrastructure.Identity.DbContexts;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
@@ -37,13 +38,11 @@ namespace Infrastructure.Data
             return await _identityAndProductDbContext.Set<T>().FindAsync(keyValues, cancellationToken);
         }
 
-        public async Task<PagingOption<ProductSearchIndex>> GetProductForELIndexAsync(CancellationToken cancellationToken = default)
+        public async Task<PagingOption<ProductSearchIndex>> GetProductForELIndexAsync(PagingOption<ProductSearchIndex> pagingOption, CancellationToken cancellationToken = default)
         {
             // var products= await _identityAndProductDbContext.Set<ProductVariant>().Select(p=> new {p.Id, p.Name}).ToListAsync(cancellationToken);
             // var products= await _identityAndProductDbContext.Set<ProductVariant>().ToListAsync(cancellationToken);
             var variants =  await _identityAndProductDbContext.ProductVariant.ToListAsync(cancellationToken);
-            PagingOption<ProductSearchIndex> pagingOption = new PagingOption<ProductSearchIndex>(0, 0);
-            
             foreach (var productVariant in variants)
             {
                 try
@@ -65,7 +64,6 @@ namespace Infrastructure.Data
                         ModifiedDate = productVariant.ModifiedDate
                     };
                 
-                    
                     pagingOption.ResultList.Add(index);
                 }
                 catch (Exception e)
@@ -79,12 +77,14 @@ namespace Infrastructure.Data
             return pagingOption;
         }
 
-        public async Task<PagingOption<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(CancellationToken cancellationToken = default)
+        public async Task<PagingOption<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(PagingOption<PurchaseOrderSearchIndex> pagingOption, int orderStatus, CancellationToken cancellationToken = default)
         {
-            var pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => po.Transaction.TransactionStatus==true).ToListAsync(cancellationToken);
+            List<PurchaseOrder> pos;
+            if (orderStatus == -99)
+                pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => po.Transaction.TransactionStatus==true).ToListAsync(cancellationToken);
+            else
+                pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => po.Transaction.TransactionStatus==true && po.PurchaseOrderStatus == (PurchaseOrderStatusType) orderStatus).ToListAsync(cancellationToken);
             
-            PagingOption<PurchaseOrderSearchIndex> pagingOption = new PagingOption<PurchaseOrderSearchIndex>(0, 0);
-
             foreach (var po in pos)
             {
                 PurchaseOrderSearchIndex index; 
@@ -115,10 +115,9 @@ namespace Infrastructure.Data
             return nameConcat;
         }
 
-        public async Task<PagingOption<GoodsReceiptOrderSearchIndex>> GetROForELIndexAsync( CancellationToken cancellationToken = default)
+        public async Task<PagingOption<GoodsReceiptOrderSearchIndex>> GetROForELIndexAsync(PagingOption<GoodsReceiptOrderSearchIndex> pagingOption, CancellationToken cancellationToken = default)
         {
             var ros = await _identityAndProductDbContext.Set<GoodsReceiptOrder>().ToListAsync(cancellationToken);
-            PagingOption<GoodsReceiptOrderSearchIndex> pagingOption = new PagingOption<GoodsReceiptOrderSearchIndex>(0, 0);
 
             foreach (var ro in ros)
             {
@@ -138,10 +137,9 @@ namespace Infrastructure.Data
             return pagingOption;
         }
 
-        public async Task<PagingOption<GoodsIssueSearchIndex>> GetGIForELIndexAsync(CancellationToken cancellationToken = default)
+        public async Task<PagingOption<GoodsIssueSearchIndex>> GetGIForELIndexAsync(PagingOption<GoodsIssueSearchIndex> pagingOption, CancellationToken cancellationToken = default)
         {
             var gis = await _identityAndProductDbContext.Set<GoodsIssueOrder>().ToListAsync(cancellationToken);
-            PagingOption<GoodsIssueSearchIndex> pagingOption = new PagingOption<GoodsIssueSearchIndex>(0, 0);
             foreach (var gi in gis)
             {
                 GoodsIssueSearchIndex index; 
@@ -168,13 +166,11 @@ namespace Infrastructure.Data
             return pagingOption;
         }
 
-        public async Task<PagingOption<StockTakeSearchIndex>> GetSTForELIndexAsync( CancellationToken cancellationToken = default)
+        public async Task<PagingOption<StockTakeSearchIndex>> GetSTForELIndexAsync(PagingOption<StockTakeSearchIndex> pagingOption, CancellationToken cancellationToken = default)
         {
             
             var sts = await _identityAndProductDbContext.Set<StockTakeOrder>().ToListAsync(cancellationToken);
             
-            PagingOption<StockTakeSearchIndex> pagingOption = new PagingOption<StockTakeSearchIndex>(0, 0);
-
             foreach (var st in sts)
             {
                 StockTakeSearchIndex index; 

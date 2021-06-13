@@ -38,11 +38,12 @@ namespace InventoryManagementSystem.PublicApi
     
                 try
                 {
-                    await elasticProductRepos.ElasticSaveBulkAsync((await elasticProductRepos.GetProductForELIndexAsync()).ResultList.ToArray(), "productindices");
-                    await elasticPoRepos.ElasticSaveBulkAsync((await elasticPoRepos.GetPOForELIndexAsync()).ResultList.ToArray(), "purchaseorders");
-                    await elasticRoRepos.ElasticSaveBulkAsync((await elasticRoRepos.GetROForELIndexAsync()).ResultList.ToArray(), "receivingorders");
-                    await elasticGiRepos.ElasticSaveBulkAsync((await elasticGiRepos.GetGIForELIndexAsync()).ResultList.ToArray(), "goodsissueorders");
-                    await elasticStRepos.ElasticSaveBulkAsync((await elasticStRepos.GetSTForELIndexAsync()).ResultList.ToArray(), "stocktakeorders");
+                    
+                    await elasticProductRepos.ElasticSaveBulkAsync((await elasticProductRepos.GetProductForELIndexAsync(new PagingOption<ProductSearchIndex>(0, 0){SkipPaging = true})).ResultList.ToArray(), "productindices");
+                    await elasticPoRepos.ElasticSaveBulkAsync((await elasticPoRepos.GetPOForELIndexAsync(new PagingOption<PurchaseOrderSearchIndex>(0,0){SkipPaging = true}, -99)).ResultList.ToArray(), "purchaseorders");
+                    await elasticRoRepos.ElasticSaveBulkAsync((await elasticRoRepos.GetROForELIndexAsync(new PagingOption<GoodsReceiptOrderSearchIndex>(0,0){SkipPaging = true})).ResultList.ToArray(), "receivingorders");
+                    await elasticGiRepos.ElasticSaveBulkAsync((await elasticGiRepos.GetGIForELIndexAsync(new PagingOption<GoodsIssueSearchIndex>(0,0){SkipPaging = true})).ResultList.ToArray(), "goodsissueorders");
+                    await elasticStRepos.ElasticSaveBulkAsync((await elasticStRepos.GetSTForELIndexAsync(new PagingOption<StockTakeSearchIndex>(0,0){SkipPaging = true})).ResultList.ToArray(), "stocktakeorders");
           
                     await SeedRole.Initialize(services, "test@12345Aha");
                 }
