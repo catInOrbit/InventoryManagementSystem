@@ -51,15 +51,19 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
             var response = new ROGetResponse();
             response.IsDislayingAll = true;
             if (request.Query == "all")
-            {
-                var posi = await _asyncRepository.GetROForELIndexAsync(pagingOption, cancellationToken);
-                response.ReceiveingOrderSearchIndex = posi.ResultList.ToList();
-            }
+                response.Paging  = await _asyncRepository.GetROForELIndexAsync(pagingOption, cancellationToken);
+            
+            
             else
             {
                 var responseElastic = await _elasticClient.SearchAsync<GoodsReceiptOrderSearchIndex>(
-                    s => s.From(request.CurrentPage).Size(request.SizePerPage).Index("receivingorders").Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
-                return Ok(responseElastic.Documents);
+                    s => s.Index("receivingorders").Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
+                
+                foreach (var goodsReceiptOrderSearchIndex in responseElastic.Documents)
+                    pagingOption.ResultList.Add(goodsReceiptOrderSearchIndex);
+                pagingOption.ExecuteResourcePaging();
+
+                response.Paging = pagingOption;
             }
 
             return Ok(response);

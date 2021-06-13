@@ -11,7 +11,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.PurchaseOrder
 {
-    public class GetPurchaseOrderById : BaseAsyncEndpoint.WithRequest<GetAllPurchaseOrderRequest>.WithResponse<GetAllPurchaseOrderResponse>
+    public class GetPurchaseOrderById : BaseAsyncEndpoint.WithRequest<GetPurchaseOrderIdRequest>.WithResponse<GetAllPurchaseOrderResponse>
     {
         private IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _purchaseAsyncRepository;
         private IAuthorizationService _authorizationService;
@@ -21,14 +21,14 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             _authorizationService = authorizationService;
         }
 
-        [HttpGet("api/purchaseorder/number/{SearchQuery}")]
+        [HttpGet("api/purchaseorder/number/{Id}")]
         [SwaggerOperation(
             Summary = "Get a purchase Order",
             Description = "Get a purchase Order",
             OperationId = "po.searchnumber",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
-        public override async Task<ActionResult<GetAllPurchaseOrderResponse>> HandleAsync([FromRoute] GetAllPurchaseOrderRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<GetAllPurchaseOrderResponse>> HandleAsync([FromRoute] GetPurchaseOrderIdRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
                 return Unauthorized();
@@ -36,7 +36,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             var response = new GetAllPurchaseOrderResponse();
             response.IsDisplayingAll = false;
 
-            response.PurchaseOrder = await _purchaseAsyncRepository.GetByIdAsync(request.SearchQuery);
+            response.PurchaseOrder = await _purchaseAsyncRepository.GetByIdAsync(request.Id);
 
             return Ok(response);
         }

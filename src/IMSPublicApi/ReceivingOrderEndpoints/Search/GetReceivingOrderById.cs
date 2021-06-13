@@ -11,7 +11,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
 {
-    public class GetReceivingOrderById : BaseAsyncEndpoint.WithRequest<ROGetRequest>.WithResponse<ROGetResponse>
+    public class GetReceivingOrderById : BaseAsyncEndpoint.WithRequest<ROIdGetRequest>.WithResponse<ROGetResponse>
     {
         private readonly IAsyncRepository<GoodsReceiptOrder> _receivingOrderAsyncRepository;
         private readonly IAuthorizationService _authorizationService;
@@ -23,14 +23,14 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
         }
 
         
-        [HttpGet("api/goodsreceipt/id/{Query}")]
+        [HttpGet("api/goodsreceipt/id/{Id}")]
         [SwaggerOperation(
             Summary = "Get specific receive Order",
             Description = "Get specific receive Order",
             OperationId = "po.update",
             Tags = new[] { "GoodsReceiptOrders" })
         ]
-        public override async Task<ActionResult<ROGetResponse>> HandleAsync([FromRoute]ROGetRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<ROGetResponse>> HandleAsync([FromRoute]ROIdGetRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
             //     return Unauthorized();
@@ -38,7 +38,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
             var response = new ROGetResponse();
             response.IsDislayingAll = false;
 
-            response.ReceiveingOrder = await _receivingOrderAsyncRepository.GetByIdAsync(request.Query);
+            response.ReceiveingOrder = await _receivingOrderAsyncRepository.GetByIdAsync(request.Id);
             return Ok(response);
         }
     }

@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,14 +16,17 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
 {
-    public class GetProductSearch : BaseAsyncEndpoint.WithRequest<GetProductSearchRequest>.WithoutResponse
+    public class GetProductSearch : BaseAsyncEndpoint.WithRequest<GetProductSearchRequest>.WithResponse<GetProductSearchResponse>
     {
         private readonly IElasticClient _elasticClient;
         private readonly IAuthorizationService _authorizationService;
-        public GetProductSearch(IElasticClient elasticClient, IAuthorizationService authorizationService)
+        private readonly IAsyncRepository<ApplicationCore.Entities.Products.Product> _asyncRepository;
+
+        public GetProductSearch(IElasticClient elasticClient, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository)
         {
             _elasticClient = elasticClient;
             _authorizationService = authorizationService;
+            _asyncRepository = asyncRepository;
         }
 
         [HttpGet("api/product/search/{Query}&page={CurrentPage}&size={SizePerPage}")]
@@ -29,30 +36,43 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
             OperationId = "catalog-items.create",
             Tags = new[] { "ProductEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync([FromRoute] GetProductSearchRequest request,
-            CancellationToken cancellationToken = new CancellationToken())
+
+        public override async Task<ActionResult<GetProductSearchResponse>> HandleAsync([FromRoute]GetProductSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Read))
                 return Unauthorized();
+            var response = new GetProductSearchResponse();
+
+            PagingOption<ProductSearchIndex> pagingOption =
+                new PagingOption<ProductSearchIndex>(request.CurrentPage, request.SizePerPage);
             
-            // var response = await _elasticClient.SearchAsync<ProductSearchIndex>(
-            //     s => s.Query(q => q.QueryString(d => d.Query('*' + request.Query + '*'))));
-            // var response = await _elasticClient.SearchAsync<ProductIndex>(
-            //     s => s.Query(q =>  q.Match(m => m.Field(f => f.Name).Query(request.Query))));
-            //
-            
-            var response = await _elasticClient.SearchAsync<ProductSearchIndex>
-            (
-                s => s.From(request.CurrentPage).Size(request.SizePerPage).Index("productindices").Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
-            
-            if (!response.IsValid)
+            if (request.Query == "all")
             {
-                Console.WriteLine("Invalid Response");
-                return Ok(new ApplicationCore.Entities.Products.Product[] { });
+                response.Paging = await 
+                    _asyncRepository.GetProductForELIndexAsync(pagingOption, cancellationToken);
             }
 
-            return Ok(response.Documents);
+            else
+            {
+                var responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
+                (
+                    s => s.Index("productindices").Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
+            
+                foreach (var productSearchIndex in responseElastic.Documents)
+                    pagingOption.ResultList.Add(productSearchIndex);
+            
+                pagingOption.ExecuteResourcePaging();
+            
+                if (!responseElastic.IsValid)
+                {
+                    Console.WriteLine("Invalid Response");
+                    return Ok(new ApplicationCore.Entities.Products.Product[] { });
+                }
+
+                response.Paging = pagingOption;
+            }
+           
+            return Ok(response);
         }
     }
 }

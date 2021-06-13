@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using Newtonsoft.Json;
@@ -17,7 +18,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
         {
                 
         }
-        public virtual bool ShouldSerializeGoodsIssueOrders()
+        public virtual bool ShouldSerializeGoodsIssueOrder()
         {
             if(!IsForDisplay)
                 return true;
@@ -25,16 +26,18 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
         }
         
         
-        public virtual bool ShouldSerializeGoodsIssueOrdersDisplays()
+        public virtual bool ShouldSerializePaging()
         {
             if(IsForDisplay)
                 return true;
             return false;
         }
         
-        public List<GoodsIssueOrder> GoodsIssueOrders { get; set; } = new List<GoodsIssueOrder>();
-        public List<GIDisplay> GoodsIssueOrdersDisplays { get; set; } = new List<GIDisplay>();
+        public GoodsIssueOrder GoodsIssueOrder { get; set; }
+        // public List<GIDisplay> GoodsIssueOrdersDisplays { get; set; } = new List<GIDisplay>();
      
+        public PagingOption<GoodsIssueSearchIndex> Paging { get; set; }
+  
         [JsonIgnore]
         public bool IsForDisplay { get; set; }
     }

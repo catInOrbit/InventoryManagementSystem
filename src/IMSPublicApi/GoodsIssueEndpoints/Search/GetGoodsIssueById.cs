@@ -34,8 +34,8 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
                 return Unauthorized();
 
             var response = new GiSearchResponse();
-            response.GoodsIssueOrders.Clear();
-            response.GoodsIssueOrders.Add(await _asyncRepository.GetByIdAsync(request.IssueId));
+            response.IsForDisplay = false;
+            response.GoodsIssueOrder = await _asyncRepository.GetByIdAsync(request.IssueId);
             return Ok(response);
         }
     }

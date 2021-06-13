@@ -45,28 +45,15 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
                 return Unauthorized();
 
             var response = new GiSearchResponse();
-            PagingOption<GoodsIssueOrder> pagingOption = new PagingOption<GoodsIssueOrder>(
+            PagingOption<GoodsIssueSearchIndex> pagingOption = new PagingOption<GoodsIssueSearchIndex>(
                 request.CurrentPage, request.SizePerPage);
-            
+            response.IsForDisplay = true;
+
             if (request.SearchQuery == "all")
             {
-                response.IsForDisplay = true;
-                var gis = await _asyncRepository.ListAllAsync(pagingOption, cancellationToken);
-                foreach (var goodsIssueOrder in gis.ResultList)
-                {
-                    if (goodsIssueOrder.GoodsIssueType == GoodsIssueType.Pending)
-                    {
-                        var giDisplay = new GIDisplay()
-                        {
-                            Id = goodsIssueOrder.Id,
-                            DeliveryDate = goodsIssueOrder.DeliveryDate,
-                            CreatedByName = goodsIssueOrder.Transaction.CreatedBy.Fullname,
-                            GoodsIssueNumber = goodsIssueOrder.GoodsIssueNumber
-                        };
-                        
-                        response.GoodsIssueOrdersDisplays.Add(giDisplay);
-                    }
-                }
+                
+                response.Paging = await _asyncRepository.GetGIForELIndexAsync(pagingOption, cancellationToken);
+              
                     
                 return Ok(response);
             }
@@ -74,8 +61,15 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
             else
             {
                 var responseElastic = await _elasticClient.SearchAsync<GoodsIssueSearchIndex>(
-                    s => s.From(request.CurrentPage).Size(request.SizePerPage).Index("goodsissueorders").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
-                return Ok(responseElastic.Documents);
+                    s => s.Index("goodsissueorders").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+                
+                foreach (var goodsIssueSearchIndex in responseElastic.Documents)
+                {
+                    pagingOption.ResultList.Add(goodsIssueSearchIndex);
+                }
+                pagingOption.ExecuteResourcePaging();
+                response.Paging = pagingOption;
+                return Ok(response);
             }
         }
     }

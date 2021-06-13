@@ -1,4 +1,5 @@
 ﻿using System;
+using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace InventoryManagementSystem.PublicApi
 {
@@ -15,5 +16,6 @@ namespace InventoryManagementSystem.PublicApi
         public BaseResponse()
         {
         }
+        
     }
 }

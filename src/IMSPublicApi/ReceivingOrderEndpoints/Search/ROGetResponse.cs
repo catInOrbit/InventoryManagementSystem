@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using Newtonsoft.Json;
@@ -16,7 +17,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
         [JsonIgnore]
         public bool IsDislayingAll { get; set; }
 
-        public bool ShouldSerializeReceiveingOrderSearchIndex()
+        public bool ShouldSerializePaging()
         {
             if (IsDislayingAll) 
                 return true;
@@ -28,6 +29,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
 
         public GoodsReceiptOrder ReceiveingOrder { get; set; }
 
-        public List<GoodsReceiptOrderSearchIndex> ReceiveingOrderSearchIndex { get; set; } = new List<GoodsReceiptOrderSearchIndex>();
+        // public List<GoodsReceiptOrderSearchIndex> ReceiveingOrderSearchIndex { get; set; } = new List<GoodsReceiptOrderSearchIndex>();
+        public PagingOption<GoodsReceiptOrderSearchIndex> Paging { get; set; }
+
     }
 }

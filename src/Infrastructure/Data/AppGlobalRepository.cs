@@ -343,10 +343,10 @@ namespace Infrastructure.Data
             //     .Query(q => q.QueryString(qs=>qs.Query("*")))
             // );
 
-            _elasticCache.AddRange(types);
+            // _elasticCache.AddRange(types);
             // _logger.LogInformation($"Elastic search cache count {_elasticCache.Count}");
             // _logger.LogInformation($"Elastic search cache type {_elasticCache.GetType()}");
-
+            Console.WriteLine("Indexing " + types.Length + "objects of type " + types.GetType());
             var result = await _elasticClient.BulkAsync(b => b.Index(index).IndexMany(types));
             if (result.Errors)
             {

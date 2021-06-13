@@ -44,14 +44,14 @@ namespace Infrastructure.Services
                 .DefaultMappingFor<PurchaseOrderSearchIndex>(m => m.IndexName(indexName));
         }
 
-        private static void CreateIndex(IElasticClient client, string defaultIndexName)
+        private static async Task CreateIndex(IElasticClient client, string defaultIndexName)
         {
-            client.Indices.DeleteAsync("productindices");
-            client.Indices.DeleteAsync(defaultIndexName);
-            client.Indices.DeleteAsync("receivingorders");
-            client.Indices.DeleteAsync("goodsissueorders");
+            await client.Indices.DeleteAsync("productindices");
+            await client.Indices.DeleteAsync("purchaseorders");
+            await client.Indices.DeleteAsync("receivingorders");
+            await client.Indices.DeleteAsync("goodsissueorders");
 
-            client.Indices.CreateAsync("productindices",
+            await client.Indices.CreateAsync("productindices",
                 index => index.Map<ProductSearchIndex>(x => x.AutoMap())
             );
             
@@ -59,20 +59,20 @@ namespace Infrastructure.Services
             //     index => index.Map<PurchaseOrderSearchIndex>(x => x.AutoMap())
             // );
             
-            client.Indices.CreateAsync(defaultIndexName,
+            await client.Indices.CreateAsync("purchaseorders",
                 index => index.Map<PurchaseOrderSearchIndex>(x => x.AutoMap())
             );
             
             
-            client.Indices.CreateAsync("receivingorders",
+            await client.Indices.CreateAsync("receivingorders",
                 index => index.Map<GoodsReceiptOrderSearchIndex>(x => x.AutoMap())
             );
             
-            client.Indices.CreateAsync("goodsissueorders",
+            await client.Indices.CreateAsync("goodsissueorders",
                 index => index.Map<GoodsReceiptOrderSearchIndex>(x => x.AutoMap())
             );
             
-            client.Indices.CreateAsync("stocktakeorders",
+            await client.Indices.CreateAsync("stocktakeorders",
                 index => index.Map<StockTakeSearchIndex>(x => x.AutoMap())
             );
 

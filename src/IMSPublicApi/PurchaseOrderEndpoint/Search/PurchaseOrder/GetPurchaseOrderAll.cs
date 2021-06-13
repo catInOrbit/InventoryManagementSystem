@@ -60,14 +60,16 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
                 var posi = await 
                     _asyncRepository.GetPOForELIndexAsync(pagingOption, request.Status, cancellationToken);
                 List<PurchaseOrderSearchIndex> indexList = new List<PurchaseOrderSearchIndex>();
-                
-                foreach (var purchaseOrder in posi.ResultList)
-                    if (purchaseOrder.Status ==
-                        ((PurchaseOrderStatusType) request.Status).ToString())
-                        indexList.Add(purchaseOrder);
-                
+
+                if (request.Status == -99)
+                {
+                    foreach (var purchaseOrder in posi.ResultList)
+                        if (purchaseOrder.Status ==
+                            ((PurchaseOrderStatusType) request.Status).ToString())
+                            indexList.Add(purchaseOrder);
+                }
+               
                 response.Paging = posi;
-                response.Paging.ExecuteResourcePaging();
                 return Ok(response);
             }
             else
@@ -75,17 +77,15 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
                 var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>
                 (
                     s => s.Index("purchaseorders").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
-                // response.PurchaseOrderSearchIndices.AddRange(responseElastic.Documents.Where(d => d.Status == ((PurchaseOrderStatusType)request.Status).ToString()));
 
-                response.Paging = new PagingOption<PurchaseOrderSearchIndex>(request.CurrentPage,request.SizePerPage);
-                response.Paging.ResultList = new List<PurchaseOrderSearchIndex>();
-                
                 foreach (var purchaseOrderSearchIndex in responseElastic.Documents)
                 {
                     if(purchaseOrderSearchIndex.Status == ((PurchaseOrderStatusType)request.Status).ToString())
-                        response.Paging.ResultList.Add(purchaseOrderSearchIndex);
+                        pagingOption.ResultList.Add(purchaseOrderSearchIndex);
                 }
-                response.Paging.ExecuteResourcePaging();
+                
+                pagingOption.ExecuteResourcePaging();
+                response.Paging = pagingOption;
                 return Ok(response);
             }
         }

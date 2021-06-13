@@ -262,7 +262,7 @@ namespace InventoryManagementSystem.PublicApi
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllers(); 
                 endpoints.MapHub<NotificationHub>("/notiHub");
             });
 
