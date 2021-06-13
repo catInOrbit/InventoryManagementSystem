@@ -63,7 +63,6 @@ namespace Infrastructure.Services
                 index => index.Map<PurchaseOrderSearchIndex>(x => x.AutoMap())
             );
             
-            
             await client.Indices.CreateAsync("receivingorders",
                 index => index.Map<GoodsReceiptOrderSearchIndex>(x => x.AutoMap())
             );
