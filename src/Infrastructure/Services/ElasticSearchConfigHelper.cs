@@ -42,6 +42,7 @@ namespace Infrastructure.Services
         {
             settings
                 .DefaultMappingFor<PurchaseOrderSearchIndex>(m => m.IndexName(indexName));
+            
         }
 
         private static async Task CreateIndex(IElasticClient client, string defaultIndexName)
@@ -50,9 +51,13 @@ namespace Infrastructure.Services
             await client.Indices.DeleteAsync("purchaseorders");
             await client.Indices.DeleteAsync("receivingorders");
             await client.Indices.DeleteAsync("goodsissueorders");
-
+            
             await client.Indices.CreateAsync("productindices",
-                index => index.Map<ProductSearchIndex>(x => x.AutoMap())
+                index 
+                    => index.Map<ProductSearchIndex>(x 
+                    => x.AutoMap().Properties(ps 
+                        => ps.Completion(c 
+                            => c.Name(n => n.Suggest))))
             );
             
             // client.Indices.CreateAsync(defaultIndexName,
@@ -60,7 +65,10 @@ namespace Infrastructure.Services
             // );
             
             await client.Indices.CreateAsync("purchaseorders",
-                index => index.Map<PurchaseOrderSearchIndex>(x => x.AutoMap())
+                index => index.Map<PurchaseOrderSearchIndex>(x 
+                    => x.AutoMap().Properties(ps 
+                        => ps.Completion(c 
+                            => c.Name(n => n.Suggest))))
             );
             
             await client.Indices.CreateAsync("receivingorders",

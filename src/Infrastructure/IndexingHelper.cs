@@ -28,6 +28,8 @@ namespace Infrastructure
                 CanceledByName = (po.Transaction.CreatedBy != null) ? po.Transaction.CreatedBy.Fullname : "",
                 CreatedByName = (po.Transaction.CreatedBy != null) ? po.Transaction.CreatedBy.Fullname : ""
             };
+            
+            index.FillSuggestion();
 
             //
             // var index = new PurchaseOrderSearchIndex();
@@ -88,6 +90,7 @@ namespace Infrastructure
                         Quantity = productVariant.StorageQuantity,
                         ModifiedDate = productVariant.ModifiedDate
                     };
+                    index.FillSuggestion();
                 }
                 catch (Exception e)
                 {

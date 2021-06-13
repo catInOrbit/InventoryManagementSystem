@@ -63,6 +63,8 @@ namespace Infrastructure.Data
                         Quantity = productVariant.StorageQuantity,
                         ModifiedDate = productVariant.ModifiedDate
                     };
+                    
+                    index.FillSuggestion();
                 
                     pagingOption.ResultList.Add(index);
                 }
