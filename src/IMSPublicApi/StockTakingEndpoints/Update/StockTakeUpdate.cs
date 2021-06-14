@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -48,6 +49,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Update
                 }
             }
 
+            storder.StockTakeOrderType = StockTakeOrderType.Progressing;
             storder.Transaction.ModifiedDate = DateTime.Now;
             storder.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             await _asyncRepository.UpdateAsync(storder);

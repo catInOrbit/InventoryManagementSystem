@@ -50,6 +50,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Create
                 }
             };
 
+            sto.StockTakeOrderType = StockTakeOrderType.Progressing;
             await _asyncRepository.AddAsync(sto);
             return Ok();
         }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.StockTakingEndpoints.Create;
@@ -40,7 +41,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Update
             stockTakeOrder.CheckItems = new List<StockTakeItem>();
             foreach (var stockTakeItem in request.StockTakeItems)
                 stockTakeOrder.CheckItems.Add(stockTakeItem);
-            
+
+            stockTakeOrder.StockTakeOrderType = StockTakeOrderType.Progressing;
             stockTakeOrder.Transaction.ModifiedDate = DateTime.Now;
             stockTakeOrder.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             await _stAsyncRepository.UpdateAsync(stockTakeOrder);
