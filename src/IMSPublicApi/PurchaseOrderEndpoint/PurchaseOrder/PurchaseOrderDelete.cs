@@ -25,7 +25,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             _userAuthentication = userAuthentication;
         }
         
-        [HttpPut("api/purchaseorder/delete/{Id}")]
+        [HttpPut("api/purchaseorder/cancel/{Id}")]
         [SwaggerOperation(
             Summary = "Create purchase order",
             Description = "Create purchase order",
