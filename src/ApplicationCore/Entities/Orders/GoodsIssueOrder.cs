@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
-using InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {

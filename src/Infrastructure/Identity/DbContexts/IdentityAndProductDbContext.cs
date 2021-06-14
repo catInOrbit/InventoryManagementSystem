@@ -2,7 +2,6 @@
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
-using InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +30,8 @@ namespace Infrastructure.Identity.DbContexts
         
         public DbSet<GoodsIssueOrder> GoodsIssueOrder { get; set; }
         public DbSet<StockTakeOrder> StockTakeOrder { get; set; }
+        public DbSet<StockTakeItem> StockTakeItem { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

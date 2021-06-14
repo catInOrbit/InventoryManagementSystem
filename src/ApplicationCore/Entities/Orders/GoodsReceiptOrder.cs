@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
-using InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {

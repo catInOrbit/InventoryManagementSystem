@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
-using InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
@@ -13,12 +12,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         {
             Id = DateTime.Now.Date.ToString("ddMMyyyy") + "-"+Guid.NewGuid();
         }
-
-        public string ProductVariantId { get; set; }
-        public virtual ICollection<OrderItem> Products { get; set; }
-        public string ProductName { get; set; }
-        public int RecordedQuantity { get; set; }
-        public string Note { get; set; }
+        public virtual ICollection<StockTakeItem> CheckItems { get; set; }
         
         public string TransactionId { get; set; }
         public virtual Transaction Transaction { get; set; }

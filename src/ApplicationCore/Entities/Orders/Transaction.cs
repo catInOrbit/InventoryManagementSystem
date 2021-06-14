@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
-using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 
-namespace InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm
+namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
     public class Transaction : BaseEntity
     {

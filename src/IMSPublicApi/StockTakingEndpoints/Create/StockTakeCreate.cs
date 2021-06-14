@@ -5,7 +5,6 @@ using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
-using InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -14,7 +13,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Create
 {
-    public class StockTakeCreate : BaseAsyncEndpoint.WithoutRequest.WithResponse<STCreateResponse>
+    public class StockTakeCreate : BaseAsyncEndpoint.WithoutRequest.WithResponse<STCreateItemResponse>
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<StockTakeOrder> _asyncRepository;
@@ -34,12 +33,12 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Create
             OperationId = "st.create",
             Tags = new[] { "StockTakingEndpoints" })
         ]
-        public override async Task<ActionResult<STCreateResponse>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<STCreateItemResponse>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "StockTakeOrder", UserOperations.Create))
                 return Unauthorized();
 
-            var response = new STCreateResponse();
+            var response = new STCreateItemResponse();
 
             var sto = new StockTakeOrder
             {

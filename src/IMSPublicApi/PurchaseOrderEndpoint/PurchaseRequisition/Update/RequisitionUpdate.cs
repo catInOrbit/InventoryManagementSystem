@@ -31,7 +31,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             _pvasyncRepository = pvasyncRepository;
         }
 
-        [HttpPost("api/requisition/update")]
+        [HttpPut("api/requisition/update")]
         [SwaggerOperation(
             Summary = "Update Requsition as role Saleman",
             Description = "Submit Requsition as role Saleman ",
