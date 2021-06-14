@@ -12,7 +12,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
             Id = Guid.NewGuid().ToString();
         }
         [JsonIgnore]
-        public string OrderNumber { get; set; }
+        public string OrderId { get; set; }
         public string ProductVariantId { get; set; }
         [JsonIgnore]
         public virtual ProductVariant ProductVariant { get; set; }

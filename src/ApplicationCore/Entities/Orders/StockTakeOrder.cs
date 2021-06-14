@@ -10,7 +10,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
     {
         public StockTakeOrder()
         {
-            Id = DateTime.Now.Date.ToString("ddMMyyyy") + "-"+Guid.NewGuid();
+            Id = "ST"+Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
         }
         public virtual ICollection<StockTakeItem> CheckItems { get; set; }
         

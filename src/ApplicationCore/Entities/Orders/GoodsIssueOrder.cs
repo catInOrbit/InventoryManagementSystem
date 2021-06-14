@@ -11,12 +11,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
     {
         public GoodsIssueOrder()
         {
-            Id = DateTime.Now.Date.ToString("ddMMyyyy") + "-"+Guid.NewGuid();
-            GoodsIssueNumber = DateTime.UtcNow.Date.ToString("ddMMyyyy") +
-                               Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
+            Id = "GO"+Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
         }
         
-        public string GoodsIssueNumber { get; set; }
         public string RequestId { get; set; }
         
         public string DeliveryMethod { get; set; }

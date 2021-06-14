@@ -63,7 +63,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             po.PurchaseOrderProduct.Clear();
             foreach (var requestOrderItemInfo in request.OrderItemInfos)
             {
-                requestOrderItemInfo.OrderNumber = po.PurchaseOrderNumber;
+                requestOrderItemInfo.OrderId = po.Id;
                 requestOrderItemInfo.ProductVariant = await _productVariantRepos.GetByIdAsync(requestOrderItemInfo.ProductVariantId);
                 po.TotalOrderAmount += requestOrderItemInfo.Price;
                 po.TotalDiscountAmount += requestOrderItemInfo.DiscountAmount;

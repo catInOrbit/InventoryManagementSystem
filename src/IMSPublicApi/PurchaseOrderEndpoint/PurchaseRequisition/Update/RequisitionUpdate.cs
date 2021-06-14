@@ -48,7 +48,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             po.PurchaseOrderProduct.Clear();
             foreach (var requestOrderItem in request.OrderItems)
             {
-                requestOrderItem.OrderNumber = po.PurchaseOrderNumber;
+                requestOrderItem.OrderId = po.Id;
                 requestOrderItem.ProductVariant = await _pvasyncRepository.GetByIdAsync(requestOrderItem.ProductVariantId);
             }
             

@@ -65,7 +65,6 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 PurchaseOrderId = (ro.PurchaseOrderId!=null) ? ro.PurchaseOrderId : "",
                 SupplierName = (ro.Supplier!=null) ? ro.Supplier.SupplierName : "",
                 CreatedBy = (ro.Transaction.CreatedBy!=null) ? ro.Transaction.CreatedBy.Fullname : "" ,
-                ReceiptNumber = (ro.GoodsReceiptOrderNumber !=null) ? ro.GoodsReceiptOrderNumber : ""  ,
                 CreatedDate = ro.Transaction.CreatedDate.ToShortDateString()
             };
             await _recevingOrderRepository.UpdateAsync(ro);

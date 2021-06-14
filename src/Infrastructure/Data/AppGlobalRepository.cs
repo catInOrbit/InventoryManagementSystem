@@ -150,7 +150,7 @@ namespace Infrastructure.Data
                     index = new GoodsIssueSearchIndex
                     {
                         Id = gi.Id,
-                        GoodsIssueNumber = gi.GoodsIssueNumber, 
+                        GoodsIssueNumber = gi.Id, 
                         GoodsIssueRequestNumber = gi.RequestId,
                         Status = gi.GoodsIssueType.ToString(),
                         DeliveryDate = gi.DeliveryDate,
@@ -205,22 +205,22 @@ namespace Infrastructure.Data
         //         SingleOrDefault(pq => pq.PriceQuoteNumber == priceQuoteNumber);
         // }
         //
-        public PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderNumber, CancellationToken cancellationToken = default)
+        public PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderId, CancellationToken cancellationToken = default)
         {
-            return _identityAndProductDbContext.PurchaseOrder.Where(po => po.PurchaseOrderNumber == purchaseOrderNumber && po.Transaction.TransactionStatus == true).
-                SingleOrDefault(po => po.PurchaseOrderNumber == purchaseOrderNumber);   
+            return _identityAndProductDbContext.PurchaseOrder.Where(po => po.Id == purchaseOrderId && po.Transaction.TransactionStatus == true).
+                SingleOrDefault(po => po.Id == purchaseOrderId);   
         }
 
-        public GoodsReceiptOrder GetReceivingOrderByNumber(string receiveOrderNumber, CancellationToken cancellationToken = default)
+        public GoodsReceiptOrder GetReceivingOrderByNumber(string receiveOrderId, CancellationToken cancellationToken = default)
         {
-            return _identityAndProductDbContext.GoodsReceiptOrder.Where(go => go.GoodsReceiptOrderNumber == receiveOrderNumber).
-                SingleOrDefault(po => po.GoodsReceiptOrderNumber == receiveOrderNumber);   
+            return _identityAndProductDbContext.GoodsReceiptOrder.Where(go => go.Id == receiveOrderId).
+                SingleOrDefault(po => po.Id == receiveOrderId);   
         }
 
-        public GoodsIssueOrder GetGoodsIssueOrderByNumber(string goodsIssueOrderNumber, CancellationToken cancellationToken = default)
+        public GoodsIssueOrder GetGoodsIssueOrderByNumber(string goodsIssueOrderId, CancellationToken cancellationToken = default)
         {
-            return _identityAndProductDbContext.GoodsIssueOrder.Where(go => go.GoodsIssueNumber == goodsIssueOrderNumber).
-                SingleOrDefault(po => po.GoodsIssueNumber == goodsIssueOrderNumber);
+            return _identityAndProductDbContext.GoodsIssueOrder.Where(go => go.Id == goodsIssueOrderId).
+                SingleOrDefault(po => po.Id == goodsIssueOrderId);
         }
 
         public async Task<PagingOption<T>> ListAllAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default)
@@ -270,7 +270,7 @@ namespace Infrastructure.Data
         public async Task DeletePurchaseOrderAsync(PurchaseOrder entity, CancellationToken cancellationToken = default)
         {
             var po = _identityAndProductDbContext.PurchaseOrder.Where(po => po.Id == entity.Id);
-            var poItems = _identityAndProductDbContext.OrderItem.Where(poItem => poItem.OrderNumber == entity.Id);
+            var poItems = _identityAndProductDbContext.OrderItem.Where(poItem => poItem.OrderId == entity.Id);
 
             _identityAndProductDbContext.RemoveRange(poItems);
             _identityAndProductDbContext.Remove(po);

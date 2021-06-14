@@ -24,9 +24,9 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         Task<PagingOption<StockTakeSearchIndex>> GetSTForELIndexAsync(PagingOption<StockTakeSearchIndex> pagingOption, CancellationToken cancellationToken = default);
 
         // PriceQuoteOrder GetPriceQuoteByNumber(string priceQuoteNumber,  CancellationToken cancellationToken = default);
-        PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderNumber,  CancellationToken cancellationToken = default);
-        GoodsReceiptOrder GetReceivingOrderByNumber(string receiveOrderNumber,  CancellationToken cancellationToken = default);
-        GoodsIssueOrder GetGoodsIssueOrderByNumber(string goodsIssueOrderNumber,  CancellationToken cancellationToken = default);
+        PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderId,  CancellationToken cancellationToken = default);
+        GoodsReceiptOrder GetReceivingOrderByNumber(string receiveOrderId,  CancellationToken cancellationToken = default);
+        GoodsIssueOrder GetGoodsIssueOrderByNumber(string goodsIssueOrderId,  CancellationToken cancellationToken = default);
 
         // Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default);
         Task<PagingOption<T>> ListAllAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default);

@@ -14,7 +14,6 @@ namespace Infrastructure
             {
                 Id = po.Id,
                 SupplierName = (po.Supplier != null) ? po.Supplier.SupplierName : "",
-                PurchaseOrderNumber = (po.PurchaseOrderNumber != null) ? po.PurchaseOrderNumber : "",
                 Status = (po.PurchaseOrderStatus.GetStringValue() != null)
                     ? po.PurchaseOrderStatus.GetStringValue()
                     : "",
@@ -60,7 +59,6 @@ namespace Infrastructure
                 PurchaseOrderId = (ro.PurchaseOrderId!=null) ? ro.PurchaseOrderId : "",
                 SupplierName = (ro.Supplier!=null) ? ro.Supplier.SupplierName : "",
                 CreatedBy = (ro.Transaction.CreatedBy!=null) ? ro.Transaction.CreatedBy.Fullname : "" ,
-                ReceiptNumber = (ro.GoodsReceiptOrderNumber !=null) ? ro.GoodsReceiptOrderNumber : ""  ,
                 CreatedDate = ro.Transaction.CreatedDate.ToShortDateString()
             };
 
