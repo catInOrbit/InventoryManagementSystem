@@ -7,7 +7,7 @@
         PQSent = 2,
         POCreated = 3,
         POConfirm = 4,
-        POSent = 5,
+        POSent = 5, 
         Done = 6,
         PQCanceled = -1,
         RequisitionCanceled = -2,

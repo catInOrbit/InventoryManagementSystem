@@ -7,10 +7,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
 {
     public class GetAllPurchaseOrderResponse : BaseResponse
     {
-
         [JsonIgnore]
         public bool IsDisplayingAll { get; set; }
-        
         
         // public List<PurchaseOrderSearchIndex> PurchaseOrderSearchIndices { get; set; } =
         //     new List<PurchaseOrderSearchIndex>();

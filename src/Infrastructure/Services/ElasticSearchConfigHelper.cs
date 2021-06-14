@@ -51,7 +51,8 @@ namespace Infrastructure.Services
             await client.Indices.DeleteAsync("purchaseorders");
             await client.Indices.DeleteAsync("receivingorders");
             await client.Indices.DeleteAsync("goodsissueorders");
-            
+            await client.Indices.DeleteAsync("supplier");
+
             await client.Indices.CreateAsync("productindices",
                 index 
                     => index.Map<ProductSearchIndex>(x 
@@ -83,6 +84,9 @@ namespace Infrastructure.Services
                 index => index.Map<StockTakeSearchIndex>(x => x.AutoMap())
             );
 
+            await client.Indices.CreateAsync("suppliers",
+                index => index.Map<Supplier>(x => x.AutoMap())
+            );
 
             // client.Indices.Create(indexName, i => i
             //     .Settings(s => s

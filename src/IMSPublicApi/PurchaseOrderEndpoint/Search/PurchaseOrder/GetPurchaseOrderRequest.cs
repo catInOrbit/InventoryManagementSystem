@@ -5,7 +5,6 @@
         public string SearchQuery { get; set; }
         public int CurrentPage { get; set; }
         public int SizePerPage { get; set; }
-        
         public int Status { get; set; }
 
     }

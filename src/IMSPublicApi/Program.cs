@@ -35,7 +35,8 @@ namespace InventoryManagementSystem.PublicApi
                 var elasticRoRepos = services.GetRequiredService<IAsyncRepository<GoodsReceiptOrderSearchIndex>>();
                 var elasticGiRepos = services.GetRequiredService<IAsyncRepository<GoodsIssueSearchIndex>>();
                 var elasticStRepos = services.GetRequiredService<IAsyncRepository<StockTakeSearchIndex>>();
-    
+                var elasticSupRepos = services.GetRequiredService<IAsyncRepository<Supplier>>();
+
                 try
                 {
                     
@@ -44,7 +45,8 @@ namespace InventoryManagementSystem.PublicApi
                     await elasticRoRepos.ElasticSaveBulkAsync((await elasticRoRepos.GetROForELIndexAsync(new PagingOption<GoodsReceiptOrderSearchIndex>(0,0){SkipPaging = true})).ResultList.ToArray(), "receivingorders");
                     await elasticGiRepos.ElasticSaveBulkAsync((await elasticGiRepos.GetGIForELIndexAsync(new PagingOption<GoodsIssueSearchIndex>(0,0){SkipPaging = true})).ResultList.ToArray(), "goodsissueorders");
                     await elasticStRepos.ElasticSaveBulkAsync((await elasticStRepos.GetSTForELIndexAsync(new PagingOption<StockTakeSearchIndex>(0,0){SkipPaging = true})).ResultList.ToArray(), "stocktakeorders");
-          
+                    await elasticSupRepos.ElasticSaveBulkAsync((await elasticSupRepos.ListAllAsync(new PagingOption<Supplier>(0,0){SkipPaging = true})).ResultList.ToArray(), "suppliers");
+                        
                     await SeedRole.Initialize(services, "test@12345Aha");
                 }
                 catch (Exception ex)
