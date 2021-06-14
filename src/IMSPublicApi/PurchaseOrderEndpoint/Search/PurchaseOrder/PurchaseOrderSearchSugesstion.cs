@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
@@ -33,7 +34,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
                             => c.Field(f=>f.Suggest).
                                 Prefix(request.Query).
                                 Fuzzy(f => f.Fuzziness(Fuzziness.Auto)).Size(5)))
-                    .Query(q => q.QueryString(d => d.Query('*' + request.Query + '*'))));
+                    .Query(q => q.QueryString(d => d.Query('*' + request.Query + '*'))).From(0).Size(6));
             var response = new SearchSuggestionResponse();
             foreach (var purchaseOrderSearchIndex in responseElastic.Documents)
                 response.Suggestions.AddRange(purchaseOrderSearchIndex.Suggest.Input);
@@ -57,7 +58,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
 
         public override async Task<ActionResult<SearchSuggestionResponse>> HandleAsync([FromRoute]SearchSuggestionRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>
+            var responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
             (
                 s => s.Index("productindices").
                     Suggest(su 
@@ -65,7 +66,10 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
                             => c.Field(f=>f.Suggest).
                                 Prefix(request.Query).
                                 Fuzzy(f => f.Fuzziness(Fuzziness.Auto)).Size(5)))
-                    .Query(q => q.QueryString(d => d.Query('*' + request.Query + '*'))));
+                    .Query(q 
+                        => q.MultiMatch(qs => qs.Fields(d
+                            => d.Field(f => f.Name)
+                           ).Type(TextQueryType.BoolPrefix).Query(request.Query))).From(0).Size(6));
             var response = new SearchSuggestionResponse();
             foreach (var purchaseOrderSearchIndex in responseElastic.Documents)
                 response.Suggestions.AddRange(purchaseOrderSearchIndex.Suggest.Input);

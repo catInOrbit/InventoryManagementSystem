@@ -9,8 +9,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public ProductSearchIndex()
         {
             Id = Guid.NewGuid().ToString() + "-ignore-id";
-            
-           
         }
 
         public bool ShouldSerializeId()
@@ -29,11 +27,15 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 
         public void FillSuggestion()
         {
+            List<string> list = new List<string>();
+            list.Add(Name);
+            
             Suggest = new CompletionField
             {
-                Input = new List<string>(this.Name.Split('-')) { Name },
+                Input = list,
                 Weight = 1
             };
+            
         }
     }
 }
