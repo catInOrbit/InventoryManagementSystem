@@ -37,7 +37,7 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
             Summary = "Get a User by Id",
             Description = "Gets a user by Id",
             OperationId = "users.getByID",
-            Tags = new[] { "UserDetailEndpoint" })
+            Tags = new[] { "ManagerEndpoints" })
         ]
         [HttpGet("api/users/{UserID}")]
         public override async Task<ActionResult<UsersResponse>> HandleAsync([FromRoute] UsersRequest request, CancellationToken cancellationToken = new CancellationToken())

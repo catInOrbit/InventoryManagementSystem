@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
@@ -36,7 +37,7 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
             Summary = "Get all users",
             Description = "Gets all users",
             OperationId = "users.GetAll",
-            Tags = new[] { "UserDetailEndpoint" })
+            Tags = new[] { "ManagerEndpoints" })
         ]
         public override async Task<ActionResult<UsersResponse>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -50,7 +51,7 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
 
             if (await _userManager.IsInRoleAsync(user, "Manager"))
             {
-                var users = _userManager.Users;
+                var users = _userManager.Users.Where(user => user.IsActive == true);
                 response.ImsUser = (List<ApplicationUser>) users;
                 return Ok(response);
             }
