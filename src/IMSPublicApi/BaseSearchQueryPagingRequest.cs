@@ -1,6 +1,6 @@
-﻿namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
+namespace InventoryManagementSystem.PublicApi
 {
-    public class GetProductSearchRequest : BaseRequest
+    public abstract class BaseSearchQueryPagingRequest : BaseRequest
     {
         public string Query { get; set; }
         public int CurrentPage { get; set; }

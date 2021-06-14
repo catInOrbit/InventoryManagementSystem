@@ -11,7 +11,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
 {
-    public class GetStockTakeOrderById : BaseAsyncEndpoint.WithRequest<STIdRequest>.WithResponse<STSearchRequest>
+    public class GetStockTakeOrderById : BaseAsyncEndpoint.WithRequest<STIdRequest>.WithResponse<STIdResponse>
     {
         private readonly IAsyncRepository<StockTakeOrder> _asyncRepository;
         private readonly IAuthorizationService _authorizationService;
@@ -29,15 +29,15 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
             OperationId = "st.search",
             Tags = new[] { "StockTakingEndpoints" })
         ]
-        public override async Task<ActionResult<STSearchRequest>> HandleAsync([FromRoute]STIdRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<STIdResponse>> HandleAsync([FromRoute]STIdRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "StockTakeOrder", UserOperations.Read))
                 return Unauthorized();
             
-            var response = new STSearchResponse();
+            var response = new STIdResponse();
             var order = await _asyncRepository.GetByIdAsync(request.Id);
             response.IsDisplayingAll = false;
-            response.StockTakeOrder = order;
+            response.SingleResult = order;
 
             return Ok(response);
         }

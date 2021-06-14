@@ -41,32 +41,46 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
         ]
         public override async Task<ActionResult> HandleAsync(ProductCreateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Create))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Create))
                 return Unauthorized();
             
-            var product = new ApplicationCore.Entities.Products.Product
-            {
-                Name = request.ProductName,
-                BrandName = request.BrandName,
-                CategoryId = request.CategoryId,
-                CreatedDate = DateTime.Now,
-                CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
-                ModifiedDate = DateTime.Now,
-                SellingStrategy = request.SellingStrategy,
-            };
+            await _asyncRepository.AddAsync(request.Product);
+            await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(true,IndexingHelper.ProductSearchIndex(request.Product));
+            return Ok();
+        }
+    }
+    
+     public class ProductUpdate : BaseAsyncEndpoint.WithRequest<ProductUpdateRequest>.WithoutResponse
+    {
+        private IAsyncRepository<ApplicationCore.Entities.Products.Product> _asyncRepository;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly IUserAuthentication _userAuthentication;
+        private readonly IAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
 
-            if (request.IsVariantType)
-            {
-                product.IsVariantType = true;
-                product.ProductVariants = request.ProductVariants;
-            }
-            else
-            {
-                product.IsVariantType = false;
-                product.ProductVariants.Add(request.ProductVariants[0]);
-            }
 
-            await _asyncRepository.AddAsync(product);
+        public ProductUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserAuthentication userAuthentication, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos)
+        {
+            _asyncRepository = asyncRepository;
+            _authorizationService = authorizationService;
+            _userAuthentication = userAuthentication;
+            _productIndexAsyncRepositoryRepos = productIndexAsyncRepositoryRepos;
+        }
+        
+        [HttpPost("api/product/update")]
+        [SwaggerOperation(
+            Summary = "Update info of a product",
+            Description = "Update info of a product",
+            OperationId = "product.update",
+            Tags = new[] { "ProductEndpoints" })
+        ]
+        public override async Task<ActionResult> HandleAsync(ProductUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Create))
+                return Unauthorized();
+            
+            var product = await _asyncRepository.GetByIdAsync(request.Id);
+            product = request.ProductUpdate;
+            await _asyncRepository.UpdateAsync(product);
             await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(true,IndexingHelper.ProductSearchIndex(product));
             return Ok();
         }

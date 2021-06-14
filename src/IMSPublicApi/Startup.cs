@@ -47,7 +47,6 @@ namespace InventoryManagementSystem.PublicApi
             Configuration = configuration;
         }
 
-
         // public void ConfigureDevelopmentServices(IServiceCollection services)
         // {
         //     services.AddDbContext<IdentityAndProductDbContext>(options =>

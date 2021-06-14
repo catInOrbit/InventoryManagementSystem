@@ -1,0 +1,197 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Ardalis.ApiEndpoints;
+using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+
+namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
+{
+    public class StockTakeSubmit : BaseAsyncEndpoint.WithRequest<StockTakeSubmitRequest>.WithoutResponse
+    {
+        private IAsyncRepository<StockTakeOrder> _asyncRepository;
+        private IAsyncRepository<ProductVariant> _poAsyncRepository;
+
+        private readonly IAuthorizationService _authorizationService;
+
+        public StockTakeSubmit(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IAsyncRepository<ProductVariant> poAsyncRepository)
+        {
+            _asyncRepository = asyncRepository;
+            _authorizationService = authorizationService;
+            _poAsyncRepository = poAsyncRepository;
+        }
+
+        [HttpPut("api/stocktake/submit")]
+        [SwaggerOperation(
+            Summary = "Submit and complete a stocktake",
+            Description = "Submit and complete a stocktake",
+            OperationId = "st.submit",
+            Tags = new[] { "StockTakingEndpoints" })
+        ]
+        public override async Task<ActionResult> HandleAsync(StockTakeSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.STOCKTAKEORDER, UserOperations.Update))
+                return Unauthorized();
+
+            var stockTakeOrder = await _asyncRepository.GetByIdAsync(request.Id);
+            stockTakeOrder.StockTakeOrderType = StockTakeOrderType.Completed;
+            await _asyncRepository.UpdateAsync(stockTakeOrder);
+
+            return Ok();
+        }
+    }
+    
+     public class StockTakeUpdate : BaseAsyncEndpoint.WithRequest<STUpdateRequest>.WithResponse<STUpdateResponse>
+    {
+        private readonly IAsyncRepository<StockTakeOrder> _asyncRepository;
+
+        private readonly IAuthorizationService _authorizationService;
+        private readonly IUserAuthentication _userAuthentication;
+
+        public StockTakeUpdate(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IUserAuthentication userAuthentication)
+        {
+            _asyncRepository = asyncRepository;
+            _authorizationService = authorizationService;
+            _userAuthentication = userAuthentication;
+        }
+
+        [HttpPut("api/stocktake/update")]
+        [SwaggerOperation(
+            Summary = "Update stock taking file",
+            Description = "Update stock taking file",
+            OperationId = "st.update",
+            Tags = new[] { "StockTakingEndpoints" })
+        ]
+
+        public override async Task<ActionResult<STUpdateResponse>> HandleAsync(STUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.STOCKTAKEORDER, UserOperations.Update))
+                return Unauthorized();
+
+            var response = new STUpdateResponse();
+
+            var storder = await _asyncRepository.GetByIdAsync(request.StockTakeId);
+            foreach (var requestStockTakeItem in request.StockTakeItems)
+            {
+                if (storder.CheckItems.Any(item => item.Id == requestStockTakeItem.Id))
+                {
+                    storder.CheckItems.Remove(requestStockTakeItem);
+                    storder.CheckItems.Add(requestStockTakeItem);
+                }
+                storder.CheckItems.Add(requestStockTakeItem);
+
+                if (requestStockTakeItem.ActualQuantity != storder.CheckItems
+                    .SingleOrDefault(st => st.Id == requestStockTakeItem.Id).ProductVariant.StorageQuantity)
+                    response.MismatchProductVariantId.Add(requestStockTakeItem.ProductVariantId);
+            }
+
+            storder.StockTakeOrderType = StockTakeOrderType.Progressing;
+            storder.Transaction.ModifiedDate = DateTime.Now;
+            storder.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            await _asyncRepository.UpdateAsync(storder);
+            return Ok(response);
+        }
+    }
+     
+     public class StockTakeAddProduct : BaseAsyncEndpoint.WithRequest<STAddRequest>.WithResponse<STCreateItemResponse>
+     {
+         private readonly IAsyncRepository<StockTakeOrder> _stAsyncRepository;
+         private readonly IAsyncRepository<ProductVariant> _productAsyncRepository;
+         private readonly IUserAuthentication _userAuthentication;
+
+         public StockTakeAddProduct(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IUserAuthentication userAuthentication)
+         {
+             _stAsyncRepository = stAsyncRepository;
+             _productAsyncRepository = productAsyncRepository;
+             _userAuthentication = userAuthentication;
+         }
+        
+         [HttpPut("api/stocktake/add")]
+         [SwaggerOperation(
+             Summary = "Add product to check to stock take order",
+             Description = "Add product to check to stock take order",
+             OperationId = "st.add",
+             Tags = new[] { "StockTakingEndpoints" })
+         ]
+         public override async Task<ActionResult<STCreateItemResponse>> HandleAsync(STAddRequest request, CancellationToken cancellationToken = new CancellationToken())
+         {
+             var response = new STCreateItemResponse();
+             var stockTakeOrder = await _stAsyncRepository.GetByIdAsync(request.StockTakeId);
+             stockTakeOrder.CheckItems = new List<StockTakeItem>();
+             foreach (var id in request.ProductIds)
+             {
+                 
+                 var productVariant = await _productAsyncRepository.GetByIdAsync(id);
+                 var stockTakeItem = new StockTakeItem
+                 {
+                     Note = "",
+                     ProductName = productVariant.Name,
+                     ProductVariantId = productVariant.Id
+                 };
+                 
+                 stockTakeOrder.CheckItems.Add(stockTakeItem);
+             }
+
+             stockTakeOrder.StockTakeOrderType = StockTakeOrderType.Progressing;
+             stockTakeOrder.Transaction.ModifiedDate = DateTime.Now;
+             stockTakeOrder.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+             await _stAsyncRepository.UpdateAsync(stockTakeOrder);
+             response.StockTakeOrder = stockTakeOrder;
+             return Ok(response);
+         }
+     }
+     
+     public class StockTakeCreate : BaseAsyncEndpoint.WithoutRequest.WithResponse<STCreateItemResponse>
+     {
+         private readonly IAuthorizationService _authorizationService;
+         private readonly IAsyncRepository<StockTakeOrder> _asyncRepository;
+         private readonly IUserAuthentication _userAuthentication;
+
+         public StockTakeCreate(IAuthorizationService authorizationService, IAsyncRepository<StockTakeOrder> asyncRepository, IUserAuthentication userAuthentication)
+         {
+             _authorizationService = authorizationService;
+             _asyncRepository = asyncRepository;
+             _userAuthentication = userAuthentication;
+         }
+
+         [HttpPost("api/stocktake/create")]
+         [SwaggerOperation(
+             Summary = "Create a stock take order",
+             Description = "Create a stock take order",
+             OperationId = "st.create",
+             Tags = new[] { "StockTakingEndpoints" })
+         ]
+         public override async Task<ActionResult<STCreateItemResponse>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
+         {
+             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "StockTakeOrder", UserOperations.Create))
+                 return Unauthorized();
+
+             var response = new STCreateItemResponse();
+
+             var sto = new StockTakeOrder
+             {
+                 Transaction = new Transaction
+                 {
+                     CreatedDate = DateTime.Now,
+                     Type = TransactionType.StockTake,
+                     CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id
+                 }
+             };
+
+             sto.StockTakeOrderType = StockTakeOrderType.Progressing;
+             await _asyncRepository.AddAsync(sto);
+             response.StockTakeOrder = sto;
+             return Ok(response);
+         }
+     }
+}

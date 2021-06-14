@@ -36,6 +36,5 @@ namespace InventoryManagementSystem.PublicApi
         
         public PagingOption<T> Paging { get; set; }
         public T SingleResult { get; set; }
-        
     }
 }
