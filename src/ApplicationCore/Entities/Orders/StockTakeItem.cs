@@ -7,7 +7,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
     {
         public StockTakeItem()
         {
-            Id = DateTime.Now.Date.ToString("ddMMyyyy") + "-"+Guid.NewGuid();
+            Id = Guid.NewGuid().ToString();
         }
         public string ProductVariantId { get; set; }
         public virtual ProductVariant ProductVariant { get; set; }
