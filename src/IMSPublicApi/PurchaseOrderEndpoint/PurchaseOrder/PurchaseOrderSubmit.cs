@@ -53,7 +53,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             try
             {
                 var po = _asyncRepository.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
-                po.PurchaseOrderStatus = PurchaseOrderStatusType.POSent;
+                po.PurchaseOrderStatus = PurchaseOrderStatusType.POConfirm;
                 po.Transaction.ModifiedDate = DateTime.Now;
                 po.Transaction.ConfirmedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
                 await _asyncRepository.UpdateAsync(po);
