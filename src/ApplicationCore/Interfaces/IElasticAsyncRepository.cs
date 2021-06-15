@@ -1,14 +1,31 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using Nest;
 
 namespace InventoryManagementSystem.ApplicationCore.Interfaces
 {
     public interface IElasticAsyncRepository<T> where T : BaseEntity
     {
-        Task<IEnumerable<T>> GetAll(int count, int skip = 0);
-        Task<T> GetByID(int id);
-        Task<T> GetByCategory(string category);
-        Task<T> GetByBrand(string category);
+        Task<ISearchResponse<T>> GetAllWithQuery(string index, string query);
+    }
+
+    public class ElasticSearchImplementation<T> : IElasticAsyncRepository<T> where T : BaseEntity
+    {
+        private IElasticClient _elasticClient;
+
+        public ElasticSearchImplementation(IElasticClient elasticClient)
+        {
+            _elasticClient = elasticClient;
+        }
+
+        public async Task<ISearchResponse<T>> GetAllWithQuery(string index, string query)
+        {
+            var responseElastic = await _elasticClient.SearchAsync<T>
+            (
+                s => s.Index(index).Query(q => q.QueryString(d => d.Query('*' + query + '*'))));
+
+            return responseElastic;
+        }
     }
 }
