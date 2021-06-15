@@ -26,8 +26,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public DateTime CreatedDate { get; set; }
         [Date(Format = "yyyy-MM-dd")]
         public DateTime ModifiedDate { get; set; }
-        //  [JsonIgnore]
-        // public virtual Product Product { get; set; }
+        [JsonIgnore]
+        public virtual Product Product { get; set; }
         [Nest.PropertyName("variantValues")]
         [Nest.Nested]
         public virtual ICollection<VariantValue> VariantValues { get; set; }

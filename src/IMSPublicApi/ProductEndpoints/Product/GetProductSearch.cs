@@ -48,12 +48,15 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
             
             if (request.Query == "all")
             {
+                response.IsDisplayingAll = true;
                 response.Paging = await 
                     _asyncRepository.GetProductForELIndexAsync(pagingOption, cancellationToken);
             }
 
             else
             {
+                response.IsDisplayingAll = true;
+
                 var responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
                 (
                     s => s.Index("productindices").Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));

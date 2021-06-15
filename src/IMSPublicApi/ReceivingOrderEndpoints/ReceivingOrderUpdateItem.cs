@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
@@ -42,33 +43,27 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         ]
         public override async Task<ActionResult> HandleAsync(ROUpdateItemRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
+        
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Read))
                 return Unauthorized();
-
+            
             var ro = _recevingOrderRepository.GetReceivingOrderByNumber(request.CurrentReceivingOrderNumber);
-            var productVariant = await _productRepository.GetByIdAsync(request.ProductVariantId);
+            // var productVariant = await _productRepository.GetByIdAsync(request.ProductVariantId);
+            
+            //Transaction Update
             ro.Transaction.ModifiedDate = DateTime.Now;
             ro.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
 
-            foreach (var roReceivedOrderItem in ro.ReceivedOrderItems)
+            //Update item row in order 
+            foreach (var goodsReceiptOrderItem in request.UpdateItems)
             {
-                if (roReceivedOrderItem.Id == request.ProductVariantId)
-                {
-                    productVariant.Unit = request.UnitUpdate;
-                    productVariant.StorageQuantity = request.QuantityUpdate;
-                }
+                var productVariant = await _productRepository.GetByIdAsync(goodsReceiptOrderItem.ProductVariantId);
+                productVariant.StorageQuantity = goodsReceiptOrderItem.QuantityReceived;
             }
             
-            var index = new GoodsReceiptOrderSearchIndex
-            {
-                Id = ro.Id,
-                PurchaseOrderId = (ro.PurchaseOrderId!=null) ? ro.PurchaseOrderId : "",
-                SupplierName = (ro.Supplier!=null) ? ro.Supplier.SupplierName : "",
-                CreatedBy = (ro.Transaction.CreatedBy!=null) ? ro.Transaction.CreatedBy.Fullname : "" ,
-                CreatedDate = ro.Transaction.CreatedDate.ToShortDateString()
-            };
+            //Update and indexing
             await _recevingOrderRepository.UpdateAsync(ro);
-            await _recevingOrderSearchIndexRepository.ElasticSaveSingleAsync(false,index);
+            await _recevingOrderSearchIndexRepository.ElasticSaveSingleAsync(false,IndexingHelper.GoodsReceiptOrderSearchIndex(ro));
             return Ok();
         }
     }

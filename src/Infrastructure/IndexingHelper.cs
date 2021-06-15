@@ -59,7 +59,8 @@ namespace Infrastructure
                 PurchaseOrderId = (ro.PurchaseOrderId!=null) ? ro.PurchaseOrderId : "",
                 SupplierName = (ro.Supplier!=null) ? ro.Supplier.SupplierName : "",
                 CreatedBy = (ro.Transaction.CreatedBy!=null) ? ro.Transaction.CreatedBy.Fullname : "" ,
-                CreatedDate = ro.Transaction.CreatedDate.ToShortDateString()
+                CreatedDate = ro.Transaction.CreatedDate.ToShortDateString(),
+                
             };
 
             return index;
@@ -86,9 +87,11 @@ namespace Infrastructure
                         VariantId = productVariant.Id,
                         Catagory = product.Category.CategoryName,
                         Quantity = productVariant.StorageQuantity,
-                        ModifiedDate = productVariant.ModifiedDate
+                        ModifiedDate = productVariant.ModifiedDate,
+                        Sku = productVariant.Sku,
                     };
                     index.FillSuggestion();
+                    
                 }
                 catch (Exception e)
                 {

@@ -42,6 +42,7 @@ namespace Infrastructure.Data
         {
             // var products= await _identityAndProductDbContext.Set<ProductVariant>().Select(p=> new {p.Id, p.Name}).ToListAsync(cancellationToken);
             // var products= await _identityAndProductDbContext.Set<ProductVariant>().ToListAsync(cancellationToken);
+            
             var variants =  await _identityAndProductDbContext.ProductVariant.ToListAsync(cancellationToken);
             foreach (var productVariant in variants)
             {
@@ -61,7 +62,8 @@ namespace Infrastructure.Data
                         VariantId = productVariant.Id,
                         Catagory = _identityAndProductDbContext.Product.Where(pro => pro.Id == productVariant.ProductId).FirstOrDefault()?.Category.CategoryName,
                         Quantity = productVariant.StorageQuantity,
-                        ModifiedDate = productVariant.ModifiedDate
+                        ModifiedDate = productVariant.ModifiedDate,
+                        Sku = productVariant.Sku,
                     };
                     
                     index.FillSuggestion();

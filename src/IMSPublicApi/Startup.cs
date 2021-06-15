@@ -115,21 +115,21 @@ namespace InventoryManagementSystem.PublicApi
 
             services.AddAutoMapper(typeof(Startup).Assembly);
             
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                });
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.Cookie.Name = "IMSCookie";
-                options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-                // options.LoginPath = "/Identity/Account/Login";
-                // ReturnUrlParameter requires 
-                //using Microsoft.AspNetCore.Authentication.Cookies;
-                options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
-                options.SlidingExpiration = true;
-            });
+            // services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //     .AddCookie(options =>
+            //     {
+            //     });
+            // services.ConfigureApplicationCookie(options =>
+            // {
+            //     options.Cookie.Name = "IMSCookie";
+            //     options.Cookie.HttpOnly = true;
+            //     options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+            //     // options.LoginPath = "/Identity/Account/Login";
+            //     // ReturnUrlParameter requires 
+            //     //using Microsoft.AspNetCore.Authentication.Cookies;
+            //     options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+            //     options.SlidingExpiration = true;
+            // });
             
             //Email Service
             var emailConfig = Configuration
@@ -164,18 +164,18 @@ namespace InventoryManagementSystem.PublicApi
                     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = false;
             });
-
-            services.ConfigureApplicationCookie(options =>
-            {
-                // Cookie settings
-                options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-
-                // options.LoginPath = "/Identity/Account/Login";
-                // options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-                options.SlidingExpiration = true;
-            });
-            
+            //
+            // services.ConfigureApplicationCookie(options =>
+            // {
+            //     // Cookie settings
+            //     options.Cookie.HttpOnly = true;
+            //     options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+            //
+            //     // options.LoginPath = "/Identity/Account/Login";
+            //     // options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+            //     options.SlidingExpiration = true;
+            // });
+            //
             
             services.AddSwaggerGen(c =>
             {
@@ -240,12 +240,12 @@ namespace InventoryManagementSystem.PublicApi
             app.UseRouting();
             app.UseMiddleware<JwtMiddleware>();
 
-            var cookiePolicyOptions = new CookiePolicyOptions
-            {
-                MinimumSameSitePolicy = SameSiteMode.Strict,
-            };
-            
-            app.UseCookiePolicy(cookiePolicyOptions);
+            // var cookiePolicyOptions = new CookiePolicyOptions
+            // {
+            //     MinimumSameSitePolicy = SameSiteMode.Strict,
+            // };
+            //
+            // app.UseCookiePolicy(cookiePolicyOptions);
             app.UseCors(options => options.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials());
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();

@@ -18,7 +18,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
     {
         public IList<T> ResultList { get; set; } = new List<T>();
 
-        [JsonIgnore] public bool SkipPaging { get; set; } = false;
+        // [JsonIgnore] public bool SkipPaging { get; set; } = false;
 
         public PagingOption(int currentPage, int sizePerPage)
         {
@@ -31,7 +31,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         {
             RowCountTotal = ResultList.Count;            
             PageCount = (int) Math.Ceiling((double)RowCountTotal / SizePerPage);
-            if (SkipPaging == false)
+            if (!(CurrentPage == 0 && SizePerPage == 0))
                 ResultList = ResultList.Skip(SkipValue).Take(SizePerPage).ToList();
         }
     }

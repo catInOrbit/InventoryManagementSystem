@@ -10,5 +10,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public static string PURCHASEORDER = "PurchaseOrder";
         public static string REQUISITION = "Requisition";
         public static string SUPPLIER = "Supplier";
+        public static string GOODSRECEIPT = "GoodsReceipt";
+
     }
 }
