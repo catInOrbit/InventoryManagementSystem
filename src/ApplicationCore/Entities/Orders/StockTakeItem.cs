@@ -13,7 +13,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public string ProductVariantId { get; set; }
         [JsonIgnore]
         public virtual ProductVariant ProductVariant { get; set; }
-        public string ProductName { get; set; }
         public int ActualQuantity { get; set; }
         public string Note { get; set; }
     }

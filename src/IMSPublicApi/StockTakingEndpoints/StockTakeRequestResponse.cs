@@ -43,14 +43,16 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
         public string StockTakeId { get; set; }
     }
     
-    public class STUpdateRequest : BaseRequest
+    public class STSingleUpdateRequest : BaseRequest
     {
-        public List<StockTakeItem> StockTakeItems { get; set; } = new List<StockTakeItem>();
         public string StockTakeId { get; set; }
+        public string StockTakeItemId { get; set; }
+        public int ActualQuantity { get; set; }
+        public string Note { get; set; }
     }
 
     public class STUpdateResponse : BaseResponse
     {
-        public List<string> MismatchProductVariantId { get; set; }
+        public List<string> MismatchProductVariantId { get; set; } = new List<string>();
     }
 }

@@ -16,7 +16,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public string BrandName { get; set; }
         public string CategoryId { get; set; }
 
-        public Transaction Transaction { get; set; }
+        public virtual Transaction Transaction { get; set; }
         public string SellingStrategy { get; set; }
         public virtual Category Category { get; set; }
         public virtual ICollection<ProductVariant> ProductVariants { get; set; }

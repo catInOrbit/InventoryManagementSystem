@@ -51,18 +51,20 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
         }
     }
     
-     public class StockTakeUpdate : BaseAsyncEndpoint.WithRequest<STUpdateRequest>.WithResponse<STUpdateResponse>
+     public class StockTakeUpdate : BaseAsyncEndpoint.WithRequest<STSingleUpdateRequest>.WithResponse<STUpdateResponse>
     {
         private readonly IAsyncRepository<StockTakeOrder> _asyncRepository;
+        private readonly IAsyncRepository<ProductVariant> _pvasyncRepository;
 
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserAuthentication _userAuthentication;
 
-        public StockTakeUpdate(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IUserAuthentication userAuthentication)
+        public StockTakeUpdate(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IUserAuthentication userAuthentication, IAsyncRepository<ProductVariant> pvasyncRepository)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
+            _pvasyncRepository = pvasyncRepository;
         }
 
         [HttpPut("api/stocktake/update")]
@@ -73,28 +75,28 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
             Tags = new[] { "StockTakingEndpoints" })
         ]
 
-        public override async Task<ActionResult<STUpdateResponse>> HandleAsync(STUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<STUpdateResponse>> HandleAsync(STSingleUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.STOCKTAKEORDER, UserOperations.Update))
                 return Unauthorized();
 
+            //TODO: Fix Error
             var response = new STUpdateResponse();
 
             var storder = await _asyncRepository.GetByIdAsync(request.StockTakeId);
-            foreach (var requestStockTakeItem in request.StockTakeItems)
+            foreach (var storderCheckItem in storder.CheckItems)
             {
-                if (storder.CheckItems.Any(item => item.Id == requestStockTakeItem.Id))
+                if (storderCheckItem.Id == request.StockTakeItemId)
                 {
-                    storder.CheckItems.Remove(requestStockTakeItem);
-                    storder.CheckItems.Add(requestStockTakeItem);
+                    storderCheckItem.Note = request.Note;
+                    storderCheckItem.ActualQuantity = request.ActualQuantity;
+
+                    var productVariant = await _pvasyncRepository.GetByIdAsync(storderCheckItem.ProductVariantId);
+                    if (request.ActualQuantity != productVariant.StorageQuantity)
+                        response.MismatchProductVariantId.Add(productVariant.Id);
                 }
-                storder.CheckItems.Add(requestStockTakeItem);
-
-                if (requestStockTakeItem.ActualQuantity != storder.CheckItems
-                    .SingleOrDefault(st => st.Id == requestStockTakeItem.Id).ProductVariant.StorageQuantity)
-                    response.MismatchProductVariantId.Add(requestStockTakeItem.ProductVariantId);
             }
-
+            
             storder.StockTakeOrderType = StockTakeOrderType.Progressing;
             storder.Transaction.ModifiedDate = DateTime.Now;
             storder.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
@@ -135,7 +137,6 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                  var stockTakeItem = new StockTakeItem
                  {
                      Note = "",
-                     ProductName = productVariant.Name,
                      ProductVariantId = productVariant.Id
                  };
                  
