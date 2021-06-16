@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Castle.Core.Internal;
 using Elasticsearch.Net;
 using Infrastructure;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
@@ -40,13 +42,29 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             var ro = await _roAsyncRepository.GetByIdAsync(request.ReceivingOrderId);
             var po = await _poAsyncRepository.GetByIdAsync(ro.PurchaseOrderId);
             ro.Transaction.ModifiedDate = DateTime.Now;
-            po.PurchaseOrderStatus = PurchaseOrderStatusType.Done;
+
+            var response = new ROSubmitResponse();
+            foreach (var goodsReceiptOrderItem in ro.ReceivedOrderItems)
+            {
+                if (goodsReceiptOrderItem.QuantityReceived < po.PurchaseOrderProduct
+                    .FirstOrDefault(orderItem => orderItem.ProductVariantId == goodsReceiptOrderItem.ProductVariantId)
+                    .OrderQuantity)
+                {
+                    response.IncompletePurchaseOrderId = po.Id;
+                    response.IncompleteVariantId.Add(goodsReceiptOrderItem.ProductVariantId);
+                }
+            }
             
+            if(response.IncompleteVariantId.IsNullOrEmpty())
+                po.PurchaseOrderStatus = PurchaseOrderStatusType.Done;
             
             await _poAsyncRepository.UpdateAsync(po);
             await _roAsyncRepository.UpdateAsync(ro);
             await _poSearchIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po));
             await _roSearchIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.GoodsReceiptOrderSearchIndex(ro));
+            
+            if(!response.IncompleteVariantId.IsNullOrEmpty())
+                return Ok(response);
             return Ok();
         }
     }

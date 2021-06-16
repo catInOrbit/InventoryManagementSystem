@@ -25,10 +25,35 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
     {
         public string ReceivingOrderId { get; set; }
     }
-         
-    public class ROAdjustRequest : BaseRequest
+    
+    public class ROSubmitResponse : BaseRequest
     {
-        public string CurrentReceivingOrderNumber { get; set; }
-        public List<GoodsReceiptOrderItem> UpdateItems { get; set; }
+        public string IncompletePurchaseOrderId { get; set; }
+        public List<string> IncompleteVariantId { get; set; } = new List<string>();
+    }
+         
+    public class ROUpdateRequest : BaseRequest
+    {
+        public string PurchaseOrderNumber { get; set; }
+        public List<ROItemUpdateRequest> UpdateItems { get; set; }
+    }
+    
+    public class ROUpdateResponse : BaseRequest
+    {
+        public string CreatedGoodsReceiptId { get; set; }
+    }
+
+    public class ROItemUpdateRequest
+    {
+        public string ProductVariantId { get; set; }
+        public int QuantityReceived { get; set; }
+    }
+    
+    public class ROSingleProductUpdateRequest : BaseRequest
+    {
+        public string ProductVariantId { get; set; }
+        public string ProductStorageLocation { get; set; }
+        public string Sku { get; set; }
+        public decimal SalePrice { get; set; }
     }
 }

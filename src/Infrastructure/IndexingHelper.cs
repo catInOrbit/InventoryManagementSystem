@@ -103,5 +103,39 @@ namespace Infrastructure
 
             return index;
         }
+        
+        public static ProductSearchIndex ProductSearchIndex(ProductVariant productVariant)
+        {
+            ProductSearchIndex index = null; 
+                try
+                {
+                    string nameConcat = productVariant.Name;
+                    foreach (var productVariantVariantValue in productVariant.VariantValues)
+                    {
+                        nameConcat += "-" + productVariantVariantValue.Value.Trim();
+                    }
+                
+                    index = new ProductSearchIndex
+                    {
+                        Id = productVariant.Id,
+                        Name = nameConcat,
+                        ProductId = productVariant.ProductId,
+                        VariantId = productVariant.Id,
+                        Catagory = productVariant.Product.Category.CategoryName,
+                        Quantity = productVariant.StorageQuantity,
+                        ModifiedDate = productVariant.Transaction.ModifiedDate,
+                        Sku = productVariant.Sku,
+                    };
+                    index.FillSuggestion();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(productVariant.Id);
+                    Console.WriteLine(e);
+                    throw;
+                }
+            return index;
+        }
+
     }
 }

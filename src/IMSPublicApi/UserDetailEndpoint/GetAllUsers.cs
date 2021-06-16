@@ -52,21 +52,10 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
             if (await _userManager.IsInRoleAsync(user, "Manager"))
             {
                 var users = _userManager.Users.Where(user => user.IsActive == true);
-                response.ImsUser = (List<ApplicationUser>) users;
+                response.ImsUser = users.ToList();
                 return Ok(response);
             }
 
-            // requires using ContactManager.Authorization;
-            // var isAuthorized = await _authorizationService.AuthorizeAsync(
-            //     HttpContext.User, UserInfo,
-            //     UserOperations.Read);
-            
-            // if (isAuthorized.Succeeded)
-            // {
-            //     var users = await _userRepository.ListAllAsync();
-            //     response.ImsUser = (List<UserInfo>) users;
-            //     return Ok(response);
-            // }
             return Unauthorized();
         }
     }

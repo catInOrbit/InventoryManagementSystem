@@ -14,11 +14,21 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public string GoodsReceiptOrderId { get; set; }
         [JsonIgnore]
         public virtual GoodsReceiptOrder GoodsReceiptOrder { get; set; }
-        public string ProductStorageLocation { get; set; }
         public string ProductVariantId { get; set; }
         public string ProductVariantName { get; set; }
         [JsonIgnore]
         public virtual ProductVariant ProductVariant { get; set; }
         public int QuantityReceived { get; set; }
+
+        public bool ShouldSerializeGoodsReceiptOrder()
+        {
+            return false;
+        }
+
+        public bool ShouldSerializeProductVariant()
+        {
+            return false;
+        }
+        
     }
 }

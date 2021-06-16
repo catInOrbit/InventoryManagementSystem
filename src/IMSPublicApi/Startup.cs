@@ -86,8 +86,6 @@ namespace InventoryManagementSystem.PublicApi
                     .AddRoles<IdentityRole>()
                     .AddDefaultTokenProviders();
             
-           
-            
             services.Configure<DataProtectionTokenProviderOptions>(opt =>
                 opt.TokenLifespan = TimeSpan.FromHours(1));
             

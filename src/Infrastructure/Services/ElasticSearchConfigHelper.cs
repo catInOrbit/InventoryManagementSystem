@@ -61,10 +61,6 @@ namespace Infrastructure.Services
                             => c.Name(n => n.Suggest))))
             );
             
-            // client.Indices.CreateAsync(defaultIndexName,
-            //     index => index.Map<PurchaseOrderSearchIndex>(x => x.AutoMap())
-            // );
-            
             await client.Indices.CreateAsync("purchaseorders",
                 index => index.Map<PurchaseOrderSearchIndex>(x 
                     => x.AutoMap().Properties(ps 

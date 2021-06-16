@@ -1,12 +1,22 @@
 using System;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities
 {
     public class ApplicationUser : IdentityUser
     {
         public bool ShouldSerializePasswordHash()
+        {
+            return false;
+        }
+        
+        public bool ShouldSerializeSecurityStamp()
+        {
+            return false;
+        }
+        
+        public bool ShouldSerializeConcurrencyStamp()
         {
             return false;
         }

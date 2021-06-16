@@ -3,6 +3,8 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
+using Infrastructure.Data;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Controllers;
@@ -25,10 +27,10 @@ namespace IMSBackend.Tests
         }
 
         private TestServer Server;
-
+        private string appUri = "http://0.0.0.0:34397";
         public TestFixture()
         {
-            TestFixtureInit("");
+            TestFixtureInit(appUri);
         }
 
         public HttpClient Client { get; set; }
@@ -59,7 +61,7 @@ namespace IMSBackend.Tests
             services.AddSingleton(manager);
         }
 
-        void TestFixtureInit(string relativeTargetProjectParentDir)
+        void TestFixtureInit(string appUri)
         {
             var startupAssembly = typeof(TStartup).GetTypeInfo().Assembly;
             // var contentRoot = GetProjectPath(relativeTargetProjectParentDir, startupAssembly);
@@ -78,7 +80,7 @@ namespace IMSBackend.Tests
 
             // Add configuration for client
             Client = Server.CreateClient();
-            Client.BaseAddress = new Uri("http://0.0.0.0:41543");
+            Client.BaseAddress = new Uri(appUri);
             Client.DefaultRequestHeaders.Accept.Clear();
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
