@@ -62,7 +62,6 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                     var roi = new GoodsReceiptOrderItem
                     {
                         Id = Guid.NewGuid().ToString(),
-                        ProductVariant = purchaseOrderItem.ProductVariant,
                         QuantityReceived =  purchaseOrderItem.OrderQuantity,
                         ProductVariantId = purchaseOrderItem.ProductVariantId,
                         GoodsReceiptOrderId = ro.Id,

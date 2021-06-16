@@ -90,13 +90,18 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
        ]
        public override async Task<ActionResult<ROGetResponse>> HandleAsync([FromRoute]ROIdGetRequest request, CancellationToken cancellationToken = new CancellationToken())
        {
-           if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Read))
-               return Unauthorized();
+           // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Read))
+           //     return Unauthorized();
             
            var response = new ROGetResponse();
            response.IsDislayingAll = false;
 
            response.ReceiveingOrder = await _receivingOrderAsyncRepository.GetByIdAsync(request.Id);
+           foreach (var receiveingOrderReceivedOrderItem in response.ReceiveingOrder.ReceivedOrderItems)
+           {
+               receiveingOrderReceivedOrderItem.ProductVariantName =
+                   receiveingOrderReceivedOrderItem.ProductVariant.Name;
+           }
            return Ok(response);
        }
    }

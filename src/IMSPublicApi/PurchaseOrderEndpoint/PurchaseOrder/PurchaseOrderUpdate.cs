@@ -68,10 +68,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 po.TotalOrderAmount += requestOrderItemInfo.Price;
                 po.TotalDiscountAmount += requestOrderItemInfo.DiscountAmount;
                 po.PurchaseOrderProduct.Add(requestOrderItemInfo);
+                po.MailDescription = request.MailDescription;
             }
-            // var supplierList = await _supplierRepos.ListAllAsync();
-            // var indexList = productList.Select(p => new {p.Id, p.Name});
-            // await _supplierRepos.ElasticSaveManyAsync(supplierList.ToArray());
+      
 
             await _purchaseOrderRepos.UpdateAsync(po);
             await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false,IndexingHelper.PurchaseOrderSearchIndex(po));

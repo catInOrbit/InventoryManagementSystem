@@ -63,7 +63,7 @@ namespace Infrastructure.Data
                         Sku = productVariant.Sku,
                     };
                     
-                    index.FillSuggestion();
+               
                 
                     pagingOption.ResultList.Add(index);
                 }

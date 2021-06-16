@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using Nest;
+using Newtonsoft.Json;
+
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Products
 {

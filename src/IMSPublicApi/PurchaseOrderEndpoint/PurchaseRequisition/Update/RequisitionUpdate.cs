@@ -56,6 +56,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             
             po.Transaction.ModifiedDate = DateTime.Now;
             po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            po.Deadline = request.Deadline;
             
             await _asyncRepository.UpdateAsync(po);
             await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po));

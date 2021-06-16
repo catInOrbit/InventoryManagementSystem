@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
+using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
@@ -17,6 +17,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         
         [JsonIgnore]
         public string PurchaseOrderId { get; set; }
+        [JsonIgnore]
         public virtual PurchaseOrder PurchaseOrder { get; set; }
         public DateTime ReceivedDate { get; set; }
         
