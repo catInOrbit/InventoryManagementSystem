@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Policy;
 using System.Text;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
@@ -16,7 +16,10 @@ using InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Moq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace IMSBackend.Tests
 {
@@ -127,11 +130,10 @@ namespace IMSBackend.Tests
             var value = await response.Content.ReadAsStringAsync();
         }
         
-        [Theory]
-        [InlineData("GRDE67BB78")]
-        private async Task GetGoodReceipt(string id)
+        [Fact]
+        private async Task GetGoodReceipt()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "/api/goodsreceipt/id/"+id);
+            var request = new HttpRequestMessage(HttpMethod.Get, "/api/goodsreceipt/id/"+  "GR39BDAC94");
             tokenBearer =
                 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzg2NjA3NSwiZXhwIjoxNjI0NDcwODc1LCJpYXQiOjE2MjM4NjYwNzV9.ZS1WfUKZNJRgaem4FpTYklOGU8I66cSgdJMLTSSTkxM";
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenBearer);
@@ -139,12 +141,10 @@ namespace IMSBackend.Tests
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             var value = await response.Content.ReadAsStringAsync();
+            var data = (JObject)JsonConvert.DeserializeObject(value);
             
-            GoodsReceiptOrder ro = JsonSerializer.Deserialize<GoodsReceiptOrder>(value);
-            
-            Assert.NotNull(ro.PurchaseOrderId);
-            Assert.NotNull(ro.Transaction.CreatedBy);
-            Assert.True(ro.ReceivedOrderItems.Count >=0);
+            Assert.NotEqual(data["supplier"], "null");
+            Assert.True(data["receivedOrderItems"].Count() > 0);
         }
     }
 }

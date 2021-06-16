@@ -14,8 +14,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
                            Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
             ReceivedDate = DateTime.Now;
         }
-        
-        [JsonIgnore]
         public string PurchaseOrderId { get; set; }
         [JsonIgnore]
         public virtual PurchaseOrder PurchaseOrder { get; set; }
