@@ -87,7 +87,7 @@ namespace Infrastructure
                         VariantId = productVariant.Id,
                         Catagory = product.Category.CategoryName,
                         Quantity = productVariant.StorageQuantity,
-                        ModifiedDate = productVariant.ModifiedDate,
+                        ModifiedDate = productVariant.Transaction.ModifiedDate,
                         Sku = productVariant.Sku,
                     };
                     index.FillSuggestion();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
@@ -10,23 +11,22 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public GoodsReceiptOrder()
         {
             Id = "GR" +Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
-            // Transaction.TransactionId = Id;
-            // Transaction.TransactionNumber =  DateTime.UtcNow.Date.ToString("ddMMyyyy") +
                            Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
             ReceivedDate = DateTime.Now;
-            // Transaction.Type = TransactionType.Receive;
         }
         
+        [JsonIgnore]
         public string PurchaseOrderId { get; set; }
         public virtual PurchaseOrder PurchaseOrder { get; set; }
         public DateTime ReceivedDate { get; set; }
         
+        [JsonIgnore]
         public string SupplierId { get; set; }
         public virtual  Supplier Supplier { get; set; }
         
         public string SupplierInvoice { get; set; }
-        public string WarehouseLocation { get; set; }
         public virtual List<GoodsReceiptOrderItem> ReceivedOrderItems { get; set; } = new List<GoodsReceiptOrderItem>();
+        [JsonIgnore]
         public string TransactionId { get; set; }
         public virtual Transaction Transaction { get; set; }
         

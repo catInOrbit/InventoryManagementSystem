@@ -1,19 +1,26 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
     public class GoodsReceiptOrderItem : BaseEntity
     {
-        public string ReceivedOrderId { get; set; }
+        public GoodsReceiptOrderItem()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
+        
+        public string GoodsReceiptOrderId { get; set; }
         [JsonIgnore]
-        public virtual GoodsReceiptOrder ReceivingOrder { get; set; }
-        public string StorageLocation { get; set; }
+        public virtual GoodsReceiptOrder GoodsReceiptOrder { get; set; }
+        public string ProductStorageLocation { get; set; }
+        [JsonIgnore]
         public string ProductVariantId { get; set; }
+        public string ProductVariantName { get; set; }
+
         [JsonIgnore]
         public virtual ProductVariant ProductVariant { get; set; }
-        public int Quantity { get; set; }
         public int QuantityReceived { get; set; }
-        public int QuantityInventory { get; set; }
     }
 }

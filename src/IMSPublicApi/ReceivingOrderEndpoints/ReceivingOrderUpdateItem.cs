@@ -15,7 +15,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
 {
-    public class ReceivingOrderUpdateItem : BaseAsyncEndpoint.WithRequest<ROUpdateItemRequest>.WithoutResponse
+    public class ReceivingOrderUpdateItem : BaseAsyncEndpoint.WithRequest<ROAdjustRequest>.WithoutResponse
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<GoodsReceiptOrder> _recevingOrderRepository;
@@ -41,7 +41,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             OperationId = "gr.updateitem",
             Tags = new[] { "GoodsReceiptOrders" })
         ]
-        public override async Task<ActionResult> HandleAsync(ROUpdateItemRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult> HandleAsync(ROAdjustRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
         
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Read))
@@ -59,6 +59,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             {
                 var productVariant = await _productRepository.GetByIdAsync(goodsReceiptOrderItem.ProductVariantId);
                 productVariant.StorageQuantity = goodsReceiptOrderItem.QuantityReceived;
+                productVariant.StorageLocation = goodsReceiptOrderItem.ProductStorageLocation;
             }
             
             //Update and indexing

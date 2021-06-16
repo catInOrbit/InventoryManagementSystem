@@ -63,17 +63,15 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                     {
                         Id = Guid.NewGuid().ToString(),
                         ProductVariant = purchaseOrderItem.ProductVariant,
-                        Quantity =  purchaseOrderItem.OrderQuantity,
+                        QuantityReceived =  purchaseOrderItem.OrderQuantity,
                         ProductVariantId = purchaseOrderItem.ProductVariantId,
-                        StorageLocation = request.StorageLocation,
-                        ReceivedOrderId = ro.Id,
-                        QuantityInventory = (await _productVariantRepository.GetByIdAsync(purchaseOrderItem.ProductVariantId)).StorageQuantity
+                        GoodsReceiptOrderId = ro.Id,
+                        ProductStorageLocation = purchaseOrderItem.ProductVariant.StorageLocation
                     };
                     ro.ReceivedOrderItems.Add(roi);
                 }
             }
             ro.SupplierId = po.SupplierId;
-            ro.WarehouseLocation = request.StorageLocation;
             await _receivingOrderRepository.UpdateAsync(ro);
             await _receivingOrderSearchRepository.ElasticSaveSingleAsync(false,IndexingHelper.GoodsReceiptOrderSearchIndex(ro));
             response.ReceivingOrder = ro;

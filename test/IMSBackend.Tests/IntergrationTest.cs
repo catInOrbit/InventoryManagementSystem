@@ -35,6 +35,8 @@ namespace IMSBackend.Tests
             
             var response = await _client.PostAsync(request.Url, ContentHelper.GetStringContent(request.Body));
             var value = await response.Content.ReadAsStringAsync();
+            var indexFound = value.IndexOf(": ");
+            var token = value.Substring(value.IndexOf("token: "));
         }
 
         [Fact]

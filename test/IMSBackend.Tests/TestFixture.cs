@@ -78,7 +78,7 @@ namespace IMSBackend.Tests
 
             // Add configuration for client
             Client = Server.CreateClient();
-            Client.BaseAddress = new Uri("http://0.0.0.0:45737/");
+            Client.BaseAddress = new Uri("http://0.0.0.0:41543");
             Client.DefaultRequestHeaders.Accept.Clear();
             Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
