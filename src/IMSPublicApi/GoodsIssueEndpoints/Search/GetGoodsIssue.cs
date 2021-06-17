@@ -38,8 +38,8 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
             OperationId = "gi.search",
             Tags = new[] { "GoodsIssueEndpoints" })
         ]
-        [HttpGet("api/goodsissue/all/status={Status}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
-        public override async Task<ActionResult<GiSearchResponse>> HandleAsync([FromRoute]GIAllRequest request, CancellationToken cancellationToken = new CancellationToken())
+        [HttpGet("api/goodsissue/all")]
+        public override async Task<ActionResult<GiSearchResponse>> HandleAsync(GIAllRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "GoodsIssue", UserOperations.Read))
                 return Unauthorized();
@@ -48,26 +48,26 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
             PagingOption<GoodsIssueSearchIndex> pagingOption = new PagingOption<GoodsIssueSearchIndex>(
                 request.CurrentPage, request.SizePerPage);
             response.IsForDisplay = true;
-            
-            var gisi = await _asyncRepository.GetGIForELIndexAsync(pagingOption, cancellationToken);
-            
-            List<GoodsIssueSearchIndex> indexList = new List<GoodsIssueSearchIndex>();
 
-            if (request.Status != - 99)
-            {
-                foreach (var goodsIssueSearchIndex in gisi.ResultList)
-                {
-                    if(goodsIssueSearchIndex.Status == ((GoodsIssueStatusType)request.Status).ToString())
-                        indexList.Add(goodsIssueSearchIndex);    
-                }
-                
-                response.Paging.ResultList = indexList;
-                response.Paging.ExecuteResourcePaging();
-                return Ok(response);
-            }
+            GISearchFilter searchFilter = new GISearchFilter();
+            searchFilter.Status = request.GiSearchFilter.Status;
+            var gisi = await _asyncRepository.GetGIForELIndexAsync(pagingOption, searchFilter, cancellationToken);
+            response.Paging = pagingOption;
+            // List<GoodsIssueSearchIndex> indexList = new List<GoodsIssueSearchIndex>();
+
+            // if (request.Status != - 99)
+            // {
+            //     foreach (var goodsIssueSearchIndex in gisi.ResultList)
+            //     {
+            //         if(goodsIssueSearchIndex.Status == ((GoodsIssueStatusType)request.Status).ToString())
+            //             indexList.Add(goodsIssueSearchIndex);    
+            //     }
+            //     
+            //     response.Paging.ResultList = indexList;
+            //     return Ok(response);
+            // }
 
             response.Paging = gisi;
-            response.Paging.ExecuteResourcePaging();
             return Ok(response);
         }
     }

@@ -8,7 +8,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
 {
     public class GIAllRequest : BaseRequest
     {
-        public int Status { get; set; }
+        public GISearchFilter GiSearchFilter { get; set; }
         public int CurrentPage { get; set; }
         public int SizePerPage { get; set; }
     }

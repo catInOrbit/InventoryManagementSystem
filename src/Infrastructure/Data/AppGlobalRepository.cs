@@ -77,13 +77,19 @@ namespace Infrastructure.Data
             return pagingOption;
         }
 
-        public async Task<PagingOption<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(PagingOption<PurchaseOrderSearchIndex> pagingOption, int orderStatus, CancellationToken cancellationToken = default)
+        public async Task<PagingOption<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(PagingOption<PurchaseOrderSearchIndex> pagingOption, POSearchFilter poSearchFilter, CancellationToken cancellationToken = default)
         {
-            List<PurchaseOrder> pos;
-            if (orderStatus == -99)
-                pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => po.Transaction.TransactionStatus==true).ToListAsync(cancellationToken);
-            else
-                pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => po.Transaction.TransactionStatus==true && po.PurchaseOrderStatus == (PurchaseOrderStatusType) orderStatus).ToListAsync(cancellationToken);
+            
+            //
+            // List<PurchaseOrder> pos;
+            // if (orderStatus == -99)
+            //     pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => po.Transaction.TransactionStatus==true).ToListAsync(cancellationToken);
+            // else
+            //     pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => po.Transaction.TransactionStatus==true && po.PurchaseOrderStatus == (PurchaseOrderStatusType) orderStatus).ToListAsync(cancellationToken);
+            //
+            
+            var pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => 
+                poSearchFilter.Status == -99 || po.PurchaseOrderStatus == (PurchaseOrderStatusType) poSearchFilter.Status).ToListAsync(cancellationToken);
             
             foreach (var po in pos)
             {
@@ -97,7 +103,6 @@ namespace Infrastructure.Data
                     Console.WriteLine(po.Id);
                     throw;
                 }
-               
             }
             
             pagingOption.ExecuteResourcePaging();
@@ -137,9 +142,14 @@ namespace Infrastructure.Data
             return pagingOption;
         }
 
-        public async Task<PagingOption<GoodsIssueSearchIndex>> GetGIForELIndexAsync(PagingOption<GoodsIssueSearchIndex> pagingOption, CancellationToken cancellationToken = default)
+        public async Task<PagingOption<GoodsIssueSearchIndex>> GetGIForELIndexAsync(PagingOption<GoodsIssueSearchIndex> pagingOption,GISearchFilter searchFilter, CancellationToken cancellationToken = default)
         {
-            var gis = await _identityAndProductDbContext.Set<GoodsIssueOrder>().ToListAsync(cancellationToken);
+            // var gis = await _identityAndProductDbContext.Set<GoodsIssueOrder>().ToListAsync(cancellationToken);
+            var gis = await _identityAndProductDbContext.Set<GoodsIssueOrder>().
+                Where(gi => searchFilter.Status == -99 || gi.GoodsIssueType == (GoodsIssueStatusType) searchFilter.Status &&
+                    searchFilter.CreatedById == null || gi.Transaction.CreatedById == searchFilter.CreatedById ).
+                ToListAsync(cancellationToken);
+
             foreach (var gi in gis)
             {
                 GoodsIssueSearchIndex index; 

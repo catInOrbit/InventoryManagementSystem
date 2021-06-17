@@ -33,7 +33,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             _elasticClient = elasticClient;
         }
 
-        [HttpGet("api/purchaseorder/all/status={Status}&page={CurrentPage}&size={SizePerPage}")]
+        [HttpGet("api/purchaseorder/all")]
         [SwaggerOperation(
             Summary = "Get all purchase Order",
             Description = "Get all purchase Order"  +
@@ -44,35 +44,20 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
 
-        public override async Task<ActionResult<GetAllPurchaseOrderResponse>> HandleAsync([FromRoute] GetAllPurchaseOrderRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<GetAllPurchaseOrderResponse>> HandleAsync(GetAllPurchaseOrderRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var response = new GetAllPurchaseOrderResponse();
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
-                return Unauthorized();
+            // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
+            //     return Unauthorized();
 
             PagingOption<PurchaseOrderSearchIndex> pagingOption =
                  new PagingOption<PurchaseOrderSearchIndex>(request.CurrentPage, request.SizePerPage);
             response.IsDisplayingAll = true;
             
             var posi = await 
-                _asyncRepository.GetPOForELIndexAsync(pagingOption, request.Status, cancellationToken);
-            List<PurchaseOrderSearchIndex> indexList = new List<PurchaseOrderSearchIndex>();
-
-            if (request.Status != -99)
-            {
-                foreach (var purchaseOrder in posi.ResultList)
-                {
-                    if (purchaseOrder.Status ==
-                        ((PurchaseOrderStatusType) request.Status).ToString())
-                        indexList.Add(purchaseOrder);
-                }
-
-                response.Paging.ResultList = indexList;
-                response.Paging.ExecuteResourcePaging();
-                return Ok(response);
-            }
+                _asyncRepository.GetPOForELIndexAsync(pagingOption, new POSearchFilter(){Status = request.PoSearchFilter.Status}, cancellationToken);
+            
             response.Paging = posi;
-            response.Paging.ExecuteResourcePaging();
             return Ok(response);
         }
     }
@@ -106,8 +91,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
         public override async Task<ActionResult<GetAllPurchaseOrderResponse>> HandleAsync([FromRoute] SearchPurchaseOrderRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var response = new GetAllPurchaseOrderResponse();
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
-                return Unauthorized();
+            // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
+            //     return Unauthorized();
 
             PagingOption<PurchaseOrderSearchIndex> pagingOption =
                 new PagingOption<PurchaseOrderSearchIndex>(request.CurrentPage, request.SizePerPage);
