@@ -174,9 +174,7 @@ namespace Infrastructure.Services
                 //Create new role if role is new
             if (getRole == null)
             {
-                var newRole = new ApplicationRole();
-                newRole.Name = roleName;
-                newRole.RoleDescription = roleDescription;
+                var newRole = new IdentityRole(roleName);
                 await RoleManager.CreateAsync(newRole);
                 //Add claim to this role
                 result = await RoleManager.AddClaimAsync(newRole, authorizationOperation);

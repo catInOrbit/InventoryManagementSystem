@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 
@@ -30,8 +31,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public bool IsActive { get; set; }
     }
     
-    public class ApplicationRole : IdentityRole
-    {
-        public string RoleDescription { get; set; }
-    }
+    // public class ApplicationRole : IdentityRole
+    // {
+    //     // public string RoleDescription { get; set; }
+    // }
 }
