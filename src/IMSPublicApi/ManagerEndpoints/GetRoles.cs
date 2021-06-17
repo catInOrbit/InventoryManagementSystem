@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,10 +17,10 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
     {        
         private IUserAuthentication _userAuthentication;
 
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly IAuthorizationService _authorizationService;
 
-        public GetRoles(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, IUserAuthentication userAuthentication)
+        public GetRoles(RoleManager<ApplicationRole> roleManager, IAuthorizationService authorizationService, IUserAuthentication userAuthentication)
         {
             _roleManager = roleManager;
             _authorizationService = authorizationService;
@@ -49,13 +50,13 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
                 var response = new GetRoleResponse();
                 var roleList =  _roleManager.Roles.ToList();
 
-                List<string> roles = new List<string>();
-                foreach (var role in roleList)
-                {
-                    roles.Add(role.Name);
-                }
+                // List<string> roles = new List<string>();
+                // foreach (var role in roleList)
+                // {
+                //     roles.Add(role.Name);
+                // }
 
-                response.Roles = roles;
+                response.Roles = roleList;
                 return Ok(response);
             }
 

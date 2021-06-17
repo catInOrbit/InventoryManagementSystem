@@ -52,7 +52,6 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
     public class ROSingleProductUpdateRequest : BaseRequest
     {
         public string ProductVariantId { get; set; }
-        public string ProductStorageLocation { get; set; }
         public string Sku { get; set; }
         public decimal SalePrice { get; set; }
     }

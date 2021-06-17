@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
@@ -15,6 +16,6 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             
         }
 
-        public List<string> Roles { get; set; }
+        public List<ApplicationRole> Roles { get; set; }
     }
 }

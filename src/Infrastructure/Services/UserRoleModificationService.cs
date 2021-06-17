@@ -164,9 +164,9 @@ namespace Infrastructure.Services
             return result;
         }
 
-        public async Task<IdentityResult> ClaimCreatingHelper(string roleRequest, string roleDescription, Claim authorizationOperation)
+        public async Task<IdentityResult> ClaimCreatingHelper(string roleName, string roleDescription, Claim authorizationOperation)
         {
-            var getRole = await RoleManager.FindByNameAsync(roleRequest);
+            var getRole = await RoleManager.FindByNameAsync(roleName);
             IdentityResult result = new IdentityResult();
 
             //Done deleting
@@ -174,7 +174,8 @@ namespace Infrastructure.Services
                 //Create new role if role is new
             if (getRole == null)
             {
-                var newRole = new ApplicationRole(roleRequest);
+                var newRole = new ApplicationRole();
+                newRole.Name = roleName;
                 newRole.RoleDescription = roleDescription;
                 await RoleManager.CreateAsync(newRole);
                 //Add claim to this role
@@ -184,7 +185,7 @@ namespace Infrastructure.Services
             else
             {
                 //Add claim to this role (already exists)
-                var getRoleAddNew = await RoleManager.FindByNameAsync(roleRequest);
+                var getRoleAddNew = await RoleManager.FindByNameAsync(roleName);
                 result = await RoleManager.AddClaimAsync(getRoleAddNew, authorizationOperation);
             }
            

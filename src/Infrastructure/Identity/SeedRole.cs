@@ -78,7 +78,9 @@ namespace Infrastructure.Identity
 
             if (!await roleManager.RoleExistsAsync(role))
             {
-                var identityRole = new IdentityRole(role);
+                var identityRole = new ApplicationRole();
+                identityRole.Name = role;
+                identityRole.RoleDescription = "Manager Description";
 
                 IR = await roleManager.CreateAsync(identityRole);
                 await roleManager.AddClaimAsync(identityRole, new Claim("RolePermissionUpdate", AuthenticationConstants.CreateOperationName));

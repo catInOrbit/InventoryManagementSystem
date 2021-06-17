@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210609094032_Creation")]
+    [Migration("20210617083411_Creation")]
     partial class Creation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -112,13 +112,13 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("CustomerName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CustomerPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("DeliveryDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeliveryMethod")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("GoodsIssueNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("GoodsIssueType")
@@ -147,14 +147,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("GoodsReceiptOrderNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PurchaseOrderId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ReceivedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("StorageLocationReceipt")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SupplierId")
                         .HasColumnType("nvarchar(450)");
@@ -164,9 +164,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.Property<string>("TransactionId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("WarehouseLocation")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -184,32 +181,23 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("GoodsReceiptOrderId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ProductVariantId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuantityInventory")
-                        .HasColumnType("int");
+                    b.Property<string>("ProductVariantName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("QuantityReceived")
                         .HasColumnType("int");
 
-                    b.Property<string>("ReceivedOrderId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReceivingOrderId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("StorageLocation")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductVariantId");
+                    b.HasIndex("GoodsReceiptOrderId");
 
-                    b.HasIndex("ReceivingOrderId");
+                    b.HasIndex("ProductVariantId");
 
                     b.ToTable("GoodsReceiptOrderItems");
                 });
@@ -225,7 +213,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("GoodsIssueOrderId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("OrderNumber")
+                    b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OrderQuantity")
@@ -234,16 +222,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("PriceQuoteOrderId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("ProductVariantId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PurchaseOrderId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("StockTakeOrderId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("TotalAmount")
@@ -256,56 +238,20 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.HasIndex("GoodsIssueOrderId");
 
-                    b.HasIndex("PriceQuoteOrderId");
-
                     b.HasIndex("ProductVariantId");
 
                     b.HasIndex("PurchaseOrderId");
 
-                    b.HasIndex("StockTakeOrderId");
-
                     b.ToTable("OrderItem");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("Deadline")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("MailDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PriceQuoteNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PriceQuoteStatus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SupplierId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<decimal>("TotalOrderAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SupplierId");
-
-                    b.HasIndex("TransactionId");
-
-                    b.ToTable("PriceQuote");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeliveryAddress")
                         .HasColumnType("nvarchar(max)");
@@ -314,12 +260,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("MailDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PriceQuoteOrderId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("PurchaseOrderNumber")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PurchaseOrderStatus")
@@ -342,8 +282,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PriceQuoteOrderId");
-
                     b.HasIndex("SupplierId");
 
                     b.HasIndex("TransactionId");
@@ -351,22 +289,36 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.ToTable("PurchaseOrder");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", b =>
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeItem", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("ActualQuantity")
+                        .HasColumnType("int");
+
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProductName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ProductVariantId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("RecordedQuantity")
-                        .HasColumnType("int");
+                    b.Property<string>("StockTakeOrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductVariantId");
+
+                    b.HasIndex("StockTakeOrderId");
+
+                    b.ToTable("StockTakeItem");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("StockTakeOrderType")
                         .HasColumnType("int");
@@ -429,160 +381,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.ToTable("Supplier");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Brand", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("BrandDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("BrandName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Brand");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Category", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CategoryDescription")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CategoryName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Category");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("BrandId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CategoryId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SellingStrategy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BrandId");
-
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("CreatedById");
-
-                    b.ToTable("Product");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductSerialNumber", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductVariantId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SerialNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductVariantId");
-
-                    b.ToTable("ProductSerialNumber");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsVariantType")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Sku")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StorageLocation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("StorageQuantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Unit")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductVariant");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.VariantValue", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Attribute")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductVariantId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductVariantId");
-
-                    b.ToTable("VariantValue");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm.Transaction", b =>
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -625,6 +424,116 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.ToTable("Transaction");
                 });
 
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Category", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CategoryDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CategoryName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("BrandName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CategoryId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsVariantType")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SellingStrategy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("TransactionId");
+
+                    b.ToTable("Product");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsVariantType")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ProductId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Sku")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StorageLocation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StorageQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Unit")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("TransactionId");
+
+                    b.ToTable("ProductVariant");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.VariantValue", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Attribute")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductVariantId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductVariantId");
+
+                    b.ToTable("VariantValue");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -649,7 +558,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("Role");
+                    b.ToTable("AspNetRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -756,13 +665,23 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.ToTable("UserToken");
                 });
 
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.ApplicationRole", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
+
+                    b.Property<string>("RoleDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("Role");
+                });
+
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsIssueOrder", b =>
                 {
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", "Supplier")
                         .WithMany()
                         .HasForeignKey("SupplierId");
 
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm.Transaction", "Transaction")
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", "Transaction")
                         .WithMany()
                         .HasForeignKey("TransactionId");
 
@@ -781,7 +700,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .WithMany()
                         .HasForeignKey("SupplierId");
 
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm.Transaction", "Transaction")
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", "Transaction")
                         .WithMany()
                         .HasForeignKey("TransactionId");
 
@@ -794,17 +713,17 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsReceiptOrderItem", b =>
                 {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsReceiptOrder", "GoodsReceiptOrder")
+                        .WithMany("ReceivedOrderItems")
+                        .HasForeignKey("GoodsReceiptOrderId");
+
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", "ProductVariant")
                         .WithMany()
                         .HasForeignKey("ProductVariantId");
 
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsReceiptOrder", "ReceivingOrder")
-                        .WithMany("ReceivedOrderItems")
-                        .HasForeignKey("ReceivingOrderId");
+                    b.Navigation("GoodsReceiptOrder");
 
                     b.Navigation("ProductVariant");
-
-                    b.Navigation("ReceivingOrder");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.OrderItem", b =>
@@ -812,10 +731,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsIssueOrder", null)
                         .WithMany("GoodsIssueProducts")
                         .HasForeignKey("GoodsIssueOrderId");
-
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", null)
-                        .WithMany("PurchaseOrderProduct")
-                        .HasForeignKey("PriceQuoteOrderId");
 
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", "ProductVariant")
                         .WithMany()
@@ -825,101 +740,47 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .WithMany("PurchaseOrderProduct")
                         .HasForeignKey("PurchaseOrderId");
 
+                    b.Navigation("ProductVariant");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", "Transaction")
+                        .WithMany()
+                        .HasForeignKey("TransactionId");
+
+                    b.Navigation("Supplier");
+
+                    b.Navigation("Transaction");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeItem", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", "ProductVariant")
+                        .WithMany()
+                        .HasForeignKey("ProductVariantId");
+
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", null)
-                        .WithMany("Products")
+                        .WithMany("CheckItems")
                         .HasForeignKey("StockTakeOrderId");
 
                     b.Navigation("ProductVariant");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", "Supplier")
-                        .WithMany()
-                        .HasForeignKey("SupplierId");
-
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm.Transaction", "Transaction")
-                        .WithMany()
-                        .HasForeignKey("TransactionId");
-
-                    b.Navigation("Supplier");
-
-                    b.Navigation("Transaction");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", "PriceQuoteOrder")
-                        .WithMany()
-                        .HasForeignKey("PriceQuoteOrderId");
-
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", "Supplier")
-                        .WithMany()
-                        .HasForeignKey("SupplierId");
-
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm.Transaction", "Transaction")
-                        .WithMany()
-                        .HasForeignKey("TransactionId");
-
-                    b.Navigation("PriceQuoteOrder");
-
-                    b.Navigation("Supplier");
-
-                    b.Navigation("Transaction");
-                });
-
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", b =>
                 {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm.Transaction", "Transaction")
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", "Transaction")
                         .WithMany()
                         .HasForeignKey("TransactionId");
 
                     b.Navigation("Transaction");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Brand", "Brand")
-                        .WithMany("Product")
-                        .HasForeignKey("BrandId");
-
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Category", "Category")
-                        .WithMany("Product")
-                        .HasForeignKey("CategoryId");
-
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.Navigation("Brand");
-
-                    b.Navigation("Category");
-
-                    b.Navigation("CreatedBy");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductSerialNumber", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", null)
-                        .WithMany("SerialNumbers")
-                        .HasForeignKey("ProductVariantId");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", null)
-                        .WithMany("ProductVariants")
-                        .HasForeignKey("ProductId");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.VariantValue", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", null)
-                        .WithMany("VariantValues")
-                        .HasForeignKey("ProductVariantId");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.RequestAndForm.Transaction", b =>
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", b =>
                 {
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.ApplicationUser", "ConfirmedBy")
                         .WithMany()
@@ -938,6 +799,43 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("CreatedBy");
 
                     b.Navigation("ModifiedBy");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", "Transaction")
+                        .WithMany()
+                        .HasForeignKey("TransactionId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Transaction");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", "Product")
+                        .WithMany("ProductVariants")
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", "Transaction")
+                        .WithMany()
+                        .HasForeignKey("TransactionId");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Transaction");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.VariantValue", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", null)
+                        .WithMany("VariantValues")
+                        .HasForeignKey("ProductVariantId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -991,6 +889,15 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.ApplicationRole", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                        .WithOne()
+                        .HasForeignKey("InventoryManagementSystem.ApplicationCore.Entities.ApplicationRole", "Id")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsIssueOrder", b =>
                 {
                     b.Navigation("GoodsIssueProducts");
@@ -1001,11 +908,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("ReceivedOrderItems");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PriceQuoteOrder", b =>
-                {
-                    b.Navigation("PurchaseOrderProduct");
-                });
-
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", b =>
                 {
                     b.Navigation("PurchaseOrderProduct");
@@ -1013,17 +915,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", b =>
                 {
-                    b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Brand", b =>
-                {
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Category", b =>
-                {
-                    b.Navigation("Product");
+                    b.Navigation("CheckItems");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
@@ -1033,8 +925,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", b =>
                 {
-                    b.Navigation("SerialNumbers");
-
                     b.Navigation("VariantValues");
                 });
 #pragma warning restore 612, 618

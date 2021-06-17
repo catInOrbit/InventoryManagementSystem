@@ -136,7 +136,6 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             
             //Update SKU, LOCATION, PRICE
             productVariant.Sku = request.Sku;
-            productVariant.StorageLocation = request.ProductStorageLocation;
             productVariant.Price = request.SalePrice;
             
             //Update and indexing
