@@ -37,8 +37,8 @@ namespace Infrastructure.Identity.DbContexts
         {
             base.OnModelCreating(builder);
             builder.Entity<ApplicationUser>().ToTable("SystemUser");
-            builder.Entity<IdentityRole>().ToTable("Role");
-            // builder.Entity<ApplicationRole>().ToTable("Role");
+            // builder.Entity<IdentityRole>().ToTable("Role");
+            builder.Entity<ApplicationRole>().ToTable("Role");
             builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaim");
             builder.Entity<IdentityUserRole<string>>().ToTable("UserRole");
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin");

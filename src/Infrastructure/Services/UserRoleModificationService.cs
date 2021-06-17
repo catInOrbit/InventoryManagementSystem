@@ -164,7 +164,7 @@ namespace Infrastructure.Services
             return result;
         }
 
-        public async Task<IdentityResult> ClaimCreatingHelper(string roleRequest, Claim authorizationOperation)
+        public async Task<IdentityResult> ClaimCreatingHelper(string roleRequest, string roleDescription, Claim authorizationOperation)
         {
             var getRole = await RoleManager.FindByNameAsync(roleRequest);
             IdentityResult result = new IdentityResult();
@@ -174,7 +174,8 @@ namespace Infrastructure.Services
                 //Create new role if role is new
             if (getRole == null)
             {
-                var newRole = new IdentityRole(roleRequest);
+                var newRole = new ApplicationRole(roleRequest);
+                newRole.RoleDescription = roleDescription;
                 await RoleManager.CreateAsync(newRole);
                 //Add claim to this role
                 result = await RoleManager.AddClaimAsync(newRole, authorizationOperation);

@@ -68,7 +68,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
                     foreach (var pageClaim in pageClaimKeyValuePair.Value)
                     {
                         var result =
-                           await _userRoleModificationService.ClaimCreatingHelper(request.Role, new Claim(pageClaimKeyValuePair.Key, pageClaim));
+                           await _userRoleModificationService.ClaimCreatingHelper(request.Role, request.RoleDescription, new Claim(pageClaimKeyValuePair.Key, pageClaim));
 
                         if (!result.Succeeded)
                         {
