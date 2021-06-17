@@ -17,6 +17,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public string PurchaseOrderId { get; set; }
         [JsonIgnore]
         public virtual PurchaseOrder PurchaseOrder { get; set; }
+        public string StorageLocationReceipt { get; set; }
         public DateTime ReceivedDate { get; set; }
         
         [JsonIgnore]

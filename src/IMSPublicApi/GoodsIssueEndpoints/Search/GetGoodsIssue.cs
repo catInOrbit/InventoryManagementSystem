@@ -16,7 +16,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
 {
-    public class GetGoodsIssue : BaseAsyncEndpoint.WithRequest<GiSearchRequest>.WithResponse<GiSearchResponse>
+    public class GetGoodsIssue : BaseAsyncEndpoint.WithRequest<GIAllRequest>.WithResponse<GiSearchResponse>
     {
         private IAsyncRepository<GoodsIssueOrder> _asyncRepository;
         private readonly IAuthorizationService _authorizationService;
@@ -30,16 +30,16 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
         }
 
         [SwaggerOperation(
-            Summary = "Search for good issue with all or elasticsearch field",
-            Description = "Search for good issue with all or elasticsearch field" +
+            Summary = "Get all good issue with status (requisition at 0)",
+            Description = "Get all good issue with status (requisition at 0)" +
                           "\n {SearchQuery}: Querry to search, all to search all \n " +
                           "{CurrentPage}: Current page to display \n" +
                           "{SizePerPage}: Number of rows to display in a page",
             OperationId = "gi.search",
             Tags = new[] { "GoodsIssueEndpoints" })
         ]
-        [HttpGet("api/goodsissue/search/{SearchQuery}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
-        public override async Task<ActionResult<GiSearchResponse>> HandleAsync([FromRoute]GiSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
+        [HttpGet("api/goodsissue/all/status={Status}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
+        public override async Task<ActionResult<GiSearchResponse>> HandleAsync([FromRoute]GIAllRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "GoodsIssue", UserOperations.Read))
                 return Unauthorized();
@@ -48,29 +48,79 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
             PagingOption<GoodsIssueSearchIndex> pagingOption = new PagingOption<GoodsIssueSearchIndex>(
                 request.CurrentPage, request.SizePerPage);
             response.IsForDisplay = true;
+            
+            var gisi = await _asyncRepository.GetGIForELIndexAsync(pagingOption, cancellationToken);
+            
+            List<GoodsIssueSearchIndex> indexList = new List<GoodsIssueSearchIndex>();
 
-            if (request.SearchQuery == "all")
+            if (request.Status != - 99)
             {
-                
-                response.Paging = await _asyncRepository.GetGIForELIndexAsync(pagingOption, cancellationToken);
-              
-                    
-                return Ok(response);
-            }
-
-            else
-            {
-                var responseElastic = await _elasticClient.SearchAsync<GoodsIssueSearchIndex>(
-                    s => s.Index("goodsissueorders").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
-                
-                foreach (var goodsIssueSearchIndex in responseElastic.Documents)
+                foreach (var goodsIssueSearchIndex in gisi.ResultList)
                 {
-                    pagingOption.ResultList.Add(goodsIssueSearchIndex);
+                    if(goodsIssueSearchIndex.Status == ((GoodsIssueStatusType)request.Status).ToString())
+                        indexList.Add(goodsIssueSearchIndex);    
                 }
-                pagingOption.ExecuteResourcePaging();
-                response.Paging = pagingOption;
+                
+                response.Paging.ResultList = indexList;
+                response.Paging.ExecuteResourcePaging();
                 return Ok(response);
             }
+
+            response.Paging = gisi;
+            response.Paging.ExecuteResourcePaging();
+            return Ok(response);
+        }
+    }
+    
+    public class SearchGoodsIssue : BaseAsyncEndpoint.WithRequest<GISearchRequest>.WithResponse<GiSearchResponse>
+    {
+        private IAsyncRepository<GoodsIssueOrder> _asyncRepository;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly IElasticClient _elasticClient;
+
+        public SearchGoodsIssue(IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, IElasticClient elasticClient)
+        {
+            _asyncRepository = asyncRepository;
+            _authorizationService = authorizationService;
+            _elasticClient = elasticClient;
+        }
+
+        [SwaggerOperation(
+            Summary = "Get all good issue with status (requisition at 0)",
+            Description = "Get all good issue with status (requisition at 0)" +
+                          "\n {SearchQuery}: Querry to search, all to search all \n " +
+                          "{CurrentPage}: Current page to display \n" +
+                          "{SizePerPage}: Number of rows to display in a page",
+            OperationId = "gi.search",
+            Tags = new[] { "GoodsIssueEndpoints" })
+        ]
+        [HttpGet("api/goodsissue/search/{SearchQuery}&status={Status}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
+        public override async Task<ActionResult<GiSearchResponse>> HandleAsync([FromRoute]GISearchRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "GoodsIssue", UserOperations.Read))
+                return Unauthorized();
+
+            var response = new GiSearchResponse();
+            PagingOption<GoodsIssueSearchIndex> pagingOption = new PagingOption<GoodsIssueSearchIndex>(
+                request.CurrentPage, request.SizePerPage);
+            response.IsForDisplay = true;
+            
+            var responseElastic = await _elasticClient.SearchAsync<GoodsIssueSearchIndex>(
+                s => s.Index("goodsissueorders").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+            
+            foreach (var goodsIssueSearchIndex in responseElastic.Documents)
+            {
+                if (request.Status != -99)
+                {
+                    if(goodsIssueSearchIndex.Status == ((GoodsIssueStatusType)request.Status).ToString())
+                        pagingOption.ResultList.Add(goodsIssueSearchIndex);    
+                }
+                else
+                    pagingOption.ResultList.Add(goodsIssueSearchIndex);  
+            }
+            pagingOption.ExecuteResourcePaging();
+            response.Paging = pagingOption;
+            return Ok(response);
         }
     }
 }

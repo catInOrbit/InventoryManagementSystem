@@ -1,8 +1,8 @@
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders.Status
 {
-    public enum GoodsIssueType
+    public enum GoodsIssueStatusType
     {
-        Pending = 0,
+        IssueRequisition = 0,
         Packing = 1,
         Shipping = 2,
         Completed = 3,

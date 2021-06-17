@@ -47,7 +47,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Create
                 Type = TransactionType.PriceQuote,
                 CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id
             };
-            gio.GoodsIssueType = GoodsIssueType.Packing; 
+            gio.GoodsIssueType = GoodsIssueStatusType.Packing; 
             response.GoodsIssueOrder = gio;
             await _asyncRepository.UpdateAsync(gio);
             return Ok(response);

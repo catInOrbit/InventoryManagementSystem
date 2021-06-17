@@ -29,4 +29,13 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public string DateOfBirthNormalizedString { get; set; }
         public bool IsActive { get; set; }
     }
+    
+    public class ApplicationRole : IdentityRole
+    {
+        public ApplicationRole(string roleName) : base(roleName)
+        {
+            Name = roleName;
+        }
+        public string RoleDescription { get; set; }
+    }
 }

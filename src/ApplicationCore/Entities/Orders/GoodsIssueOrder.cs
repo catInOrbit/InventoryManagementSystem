@@ -18,12 +18,13 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         
         public string DeliveryMethod { get; set; }
         public string CustomerName { get; set; }
+        public string CustomerPhoneNumber { get; set; }
         public string SupplierId { get; set; }
         public virtual Supplier Supplier { get; set; }
            
         public string TransactionId { get; set; }
         public virtual Transaction Transaction { get; set; }
-        public GoodsIssueType GoodsIssueType { get; set; }
+        public GoodsIssueStatusType GoodsIssueType { get; set; }
         
         public virtual ICollection<OrderItem> GoodsIssueProducts { get; set; }
         

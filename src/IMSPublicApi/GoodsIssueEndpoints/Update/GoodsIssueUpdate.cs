@@ -43,13 +43,13 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Update
             switch (request.ChangeStatusTo)
             {
                 case "Shipping":
-                    gio.GoodsIssueType = GoodsIssueType.Shipping;
+                    gio.GoodsIssueType = GoodsIssueStatusType.Shipping;
                     break;
                 case "Confirm":
-                    gio.GoodsIssueType = GoodsIssueType.Completed;
+                    gio.GoodsIssueType = GoodsIssueStatusType.Completed;
                     break;
             }
-            gio.GoodsIssueType = GoodsIssueType.Shipping;
+            gio.GoodsIssueType = GoodsIssueStatusType.Shipping;
             gio.Transaction.ModifiedDate = DateTime.Now;
             gio.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             await _asyncRepository.UpdateAsync(gio);
