@@ -19,21 +19,23 @@ using Moq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
+using Xunit.Abstractions;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace IMSBackend.Tests
 {
     public class EndpointsTest : IClassFixture<TestFixture<Startup>>
     {
+        private readonly ITestOutputHelper _testOutputHelper;
         private readonly HttpClient _client;
         private string authorization;
-        public EndpointsTest(TestFixture<Startup> fixture)
+        public EndpointsTest(TestFixture<Startup> fixture, ITestOutputHelper testOutputHelper)
         {
-            // Arrange
+            _testOutputHelper = testOutputHelper;
             _client = fixture.Client;
         }
 
-        private string tokenBearer;
+        private string tokenBearer = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkyZThlZGFjLWFkNTQtNGFlNi1hZTIyLTBlMGM1MDJkYTYxMSIsIm5iZiI6MTYyMzk1NDcwNywiZXhwIjoxNjI0NTU5NTA3LCJpYXQiOjE2MjM5NTQ3MDd9.3ODV-egYmxK6NkdAdJ6VI3qLNBEctwldRi45QfRyEOE";
         
         [Fact]
         private async Task Authorization()
@@ -55,21 +57,19 @@ namespace IMSBackend.Tests
             String[] seperator = {":", ","};
             var token = value.Split(seperator,7, StringSplitOptions.RemoveEmptyEntries);
             tokenBearer = token[5];
-            tokenBearer =
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzg2NTYzNCwiZXhwIjoxNjI0NDcwNDM0LCJpYXQiOjE2MjM4NjU2MzR9.U3LC_R02VBH4mcEDNtxbfSh3EWsQ1TH-NWL5qaafCyU";
-            Console.WriteLine(tokenBearer);
+            // System.Environment.SetEnvironmentVariable("token", tokenBearer);
+            _testOutputHelper.WriteLine(tokenBearer);
             // _client.DefaultRequestHeaders.Add("Authorization", "Bearer " + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzg2NTA0MCwiZXhwIjoxNjI0NDY5ODQwLCJpYXQiOjE2MjM4NjUwNDB9.R4PdfhLqs4z-zOpMiCMXyD2xYm5UXNTPR_AdkkASLSw");        
         }
 
         [Fact]
         private async Task UpdateGoodsReceipt()
         {
-            string body = File.ReadAllText(@"/home/thomasm/InventoryManagementSystem/test/IMSBackend.Tests/GoodsReceiptRequests/UpdateRequest");
-            
             var request = new HttpRequestMessage(HttpMethod.Put, "api/goodsreceipt/update");
             request.Content = new StringContent(JsonSerializer.Serialize(new
             {
                 purchaseOrderNumber = "PO6XW9M1Y4",
+                storageLocation = "Back",
                 updateItems = new List<ROItemUpdateRequest>
                 {
                     new ROItemUpdateRequest
@@ -79,8 +79,7 @@ namespace IMSBackend.Tests
                     }
                 }                    
             }), Encoding.UTF8, "application/json");
-            tokenBearer =
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzg2NjA3NSwiZXhwIjoxNjI0NDcwODc1LCJpYXQiOjE2MjM4NjYwNzV9.ZS1WfUKZNJRgaem4FpTYklOGU8I66cSgdJMLTSSTkxM";
+            // vtokenBearer = System.Environment.GetEnvironmentVariable("token", EnvironmentVariableTarget.User);
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenBearer);
 
             // Act
@@ -90,7 +89,7 @@ namespace IMSBackend.Tests
             var value = await response.Content.ReadAsStringAsync();
             
             string id = value.Split(":")[1].Trim(new Char[]{'\"', '}'});
-            System.Environment.SetEnvironmentVariable("receiptCreatedId", id);
+            File.WriteAllText (@"/home/thomasm/InventoryManagementSystem/test/IMSBackend.Tests/UpdateGoodsReceipt.txt", value);
             Assert.NotNull(id);
         }
         
@@ -101,28 +100,26 @@ namespace IMSBackend.Tests
             request.Content = new StringContent(JsonSerializer.Serialize(new
             {
                 productVariantId = "11748",
-                productStorageLocation = "Back",
                 sku = "fwoekfweopkop21",
                 salePrice = 3123
             }), Encoding.UTF8, "application/json");
-            tokenBearer =
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzg2NjA3NSwiZXhwIjoxNjI0NDcwODc1LCJpYXQiOjE2MjM4NjYwNzV9.ZS1WfUKZNJRgaem4FpTYklOGU8I66cSgdJMLTSSTkxM";
+            var tokenBearer = System.Environment.GetEnvironmentVariable("token",  EnvironmentVariableTarget.User);
+
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenBearer);
 
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
         }
         
-        [Fact]
-        private async Task SubmitGoodsReceipt()
+        [Theory]
+        [InlineData("")]
+        private async Task SubmitGoodsReceipt(string receiptId)
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "/api/goodsreceipt/submit");
             request.Content = new StringContent(JsonSerializer.Serialize(new
             {
-                ReceivingOrderId =  System.Environment.GetEnvironmentVariable("receiptCreatedId")
+                ReceivingOrderId = receiptId
             }), Encoding.UTF8, "application/json");
-            tokenBearer =
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzg2NjA3NSwiZXhwIjoxNjI0NDcwODc1LCJpYXQiOjE2MjM4NjYwNzV9.ZS1WfUKZNJRgaem4FpTYklOGU8I66cSgdJMLTSSTkxM";
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenBearer);
             
             var response = await _client.SendAsync(request);
@@ -133,14 +130,14 @@ namespace IMSBackend.Tests
         [Fact]
         private async Task GetGoodReceipt()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "/api/goodsreceipt/id/"+  "GR39BDAC94");
-            tokenBearer =
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3ODY3NmY2LTc1NTUtNGU3ZS05OWQ5LWE4OTcxZGI4NWU5MiIsIm5iZiI6MTYyMzg2NjA3NSwiZXhwIjoxNjI0NDcwODc1LCJpYXQiOjE2MjM4NjYwNzV9.ZS1WfUKZNJRgaem4FpTYklOGU8I66cSgdJMLTSSTkxM";
+            var request = new HttpRequestMessage(HttpMethod.Get, "/api/goodsreceipt/id/"+  System.Environment.GetEnvironmentVariable("receiptCreatedId",  EnvironmentVariableTarget.User));
+            // tokenBearer = System.Environment.GetEnvironmentVariable("token");
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", tokenBearer);
                         
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
             var value = await response.Content.ReadAsStringAsync();
+            await File.WriteAllTextAsync("GetGoodReceipt.txt", value);
             var data = (JObject)JsonConvert.DeserializeObject(value);
             
             Assert.NotEqual(data["supplier"], "null");

@@ -72,7 +72,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             var purhchaseOrder = await _poRepository.GetByIdAsync(request.PurchaseOrderNumber);
             ro.SupplierId = purhchaseOrder.SupplierId;
             ro.PurchaseOrderId = request.PurchaseOrderNumber;
-            
+            ro.StorageLocationReceipt = request.StorageLocation;
             //TODO: Update sku of product in a seperate API
             
             //Data of receipt order is from frontend

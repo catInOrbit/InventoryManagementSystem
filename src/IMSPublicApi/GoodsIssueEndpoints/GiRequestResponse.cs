@@ -21,7 +21,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
         public int SizePerPage { get; set; }
     }
     
-  public class GiSearchResponse : BaseResponse
+    public class GiSearchResponse : BaseResponse
     {
         public GiSearchResponse(Guid correlationId) : base(correlationId)
         {
@@ -54,5 +54,22 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
   
         [JsonIgnore]
         public bool IsForDisplay { get; set; }
+    }
+  
+    public class GiResponse : BaseResponse
+    {
+        public GoodsIssueOrder GoodsIssueOrder { get; set; }
+    }
+  
+    public class GiIdRequest
+    {
+        public string IssueId { get; set; }
+    }
+    
+    public class GiRequest : BaseRequest
+    {
+        public string IssueNumber { get; set; }
+        public string ChangeStatusTo { get; set; }
+
     }
 }

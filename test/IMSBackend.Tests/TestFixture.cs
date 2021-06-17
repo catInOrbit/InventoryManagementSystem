@@ -27,7 +27,7 @@ namespace IMSBackend.Tests
         }
 
         private TestServer Server;
-        private string appUri = "http://0.0.0.0:40953";
+        private string appUri = "http://0.0.0.0:46449";
         public TestFixture()
         {
             TestFixtureInit(appUri);
