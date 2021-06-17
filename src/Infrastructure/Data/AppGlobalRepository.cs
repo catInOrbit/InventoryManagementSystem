@@ -88,9 +88,17 @@ namespace Infrastructure.Data
             //     pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => po.Transaction.TransactionStatus==true && po.PurchaseOrderStatus == (PurchaseOrderStatusType) orderStatus).ToListAsync(cancellationToken);
             //
             
-            var pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => 
-                poSearchFilter.Status == -99 || po.PurchaseOrderStatus == (PurchaseOrderStatusType) poSearchFilter.Status).ToListAsync(cancellationToken);
+            // var pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => 
+            //     poSearchFilter.Status == -99 || po.PurchaseOrderStatus == (PurchaseOrderStatusType) poSearchFilter.Status).ToListAsync(cancellationToken);
             
+            var pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => 
+                (poSearchFilter.Status == -99 || po.PurchaseOrderStatus == (PurchaseOrderStatusType) poSearchFilter.Status) &&
+                (poSearchFilter.FromDeliveryDate == null || (po.DeliveryDate >= DateTime.Parse(poSearchFilter.FromDeliveryDate) && po.DeliveryDate <= DateTime.Parse(poSearchFilter.ToDeliveryDate))) &&
+                (poSearchFilter.FromCreatedDate == null || (po.Transaction.CreatedDate >= DateTime.Parse(poSearchFilter.FromCreatedDate) && po.Transaction.CreatedDate <= DateTime.Parse(poSearchFilter.ToCreatedDate))) &&
+                (poSearchFilter.FromTotalOrderPrice == null || (po.TotalOrderAmount >= Decimal.Parse(poSearchFilter.FromTotalOrderPrice)  && po.TotalOrderAmount <= Decimal.Parse(poSearchFilter.ToTotalOrderPrice))) &&
+                (poSearchFilter.SupplierId == null || po.SupplierId == poSearchFilter.SupplierId) &&
+                (poSearchFilter.CreatedByName == null || po.Transaction.CreatedBy.Fullname == poSearchFilter.CreatedByName)) 
+                .ToListAsync(cancellationToken);
             foreach (var po in pos)
             {
                 PurchaseOrderSearchIndex index; 

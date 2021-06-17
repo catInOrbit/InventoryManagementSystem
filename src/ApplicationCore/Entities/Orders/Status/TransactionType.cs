@@ -7,5 +7,6 @@
         Receive= 3,
         GoodsIssue= 4,
         StockTake= 5,
+        NewProduct = 5,
     }
 }

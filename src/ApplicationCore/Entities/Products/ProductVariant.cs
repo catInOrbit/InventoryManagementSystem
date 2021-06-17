@@ -5,11 +5,14 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using Nest;
 using Newtonsoft.Json;
 
-
 namespace InventoryManagementSystem.ApplicationCore.Entities.Products
 {
     public class ProductVariant : BaseEntity
     {
+        public ProductVariant()
+        {
+            Id = Guid.NewGuid().ToString().Substring(0, 10).ToUpper();
+        }
         public string ProductId { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
@@ -18,6 +21,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public int StorageQuantity { get; set; }
         public string StorageLocation { get; set; }
         public string TransactionId { get; set; }
+        
+        [JsonIgnore]
         public virtual Transaction Transaction { get; set; }
         [JsonIgnore]
         public virtual Product Product { get; set; }
@@ -26,5 +31,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public virtual ICollection<VariantValue> VariantValues { get; set; }
 
         public bool IsVariantType { get; set; }
+
     }
 }

@@ -53,20 +53,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
             searchFilter.Status = request.GiSearchFilter.Status;
             var gisi = await _asyncRepository.GetGIForELIndexAsync(pagingOption, searchFilter, cancellationToken);
             response.Paging = pagingOption;
-            // List<GoodsIssueSearchIndex> indexList = new List<GoodsIssueSearchIndex>();
-
-            // if (request.Status != - 99)
-            // {
-            //     foreach (var goodsIssueSearchIndex in gisi.ResultList)
-            //     {
-            //         if(goodsIssueSearchIndex.Status == ((GoodsIssueStatusType)request.Status).ToString())
-            //             indexList.Add(goodsIssueSearchIndex);    
-            //     }
-            //     
-            //     response.Paging.ResultList = indexList;
-            //     return Ok(response);
-            // }
-
+            
             response.Paging = gisi;
             return Ok(response);
         }

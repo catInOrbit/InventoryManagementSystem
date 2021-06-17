@@ -185,7 +185,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
    {
        public int CurrentPage { get; set; }
        public int SizePerPage { get; set; }
-
        public POSearchFilter PoSearchFilter { get; set; }
    }
   

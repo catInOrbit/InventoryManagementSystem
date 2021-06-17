@@ -33,7 +33,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             _elasticClient = elasticClient;
         }
 
-        [HttpGet("api/purchaseorder/all")]
+        [HttpPost("api/purchaseorder/all")]
         [SwaggerOperation(
             Summary = "Get all purchase Order",
             Description = "Get all purchase Order"  +
@@ -53,9 +53,10 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             PagingOption<PurchaseOrderSearchIndex> pagingOption =
                  new PagingOption<PurchaseOrderSearchIndex>(request.CurrentPage, request.SizePerPage);
             response.IsDisplayingAll = true;
-            
+
+           
             var posi = await 
-                _asyncRepository.GetPOForELIndexAsync(pagingOption, new POSearchFilter(){Status = request.PoSearchFilter.Status}, cancellationToken);
+                _asyncRepository.GetPOForELIndexAsync(pagingOption, request.PoSearchFilter, cancellationToken);
             
             response.Paging = posi;
             return Ok(response);

@@ -85,7 +85,7 @@ namespace Infrastructure
                         Name = nameConcat,
                         ProductId = productVariant.ProductId,
                         VariantId = productVariant.Id,
-                        Catagory = product.Category.CategoryName,
+                        Catagory = (product.Category != null) ? product.Category.CategoryName : "",
                         Quantity = productVariant.StorageQuantity,
                         ModifiedDate = productVariant.Transaction.ModifiedDate,
                         Sku = productVariant.Sku,
