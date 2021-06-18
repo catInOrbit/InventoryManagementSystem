@@ -185,7 +185,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                  {
                      CreatedDate = DateTime.Now,
                      Type = TransactionType.StockTake,
-                     CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id
+                     CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
+                     TransactionStatus = true
                  }
              };
 

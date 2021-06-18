@@ -47,7 +47,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             {
                 CreatedDate = DateTime.Now,
                 Type = TransactionType.PriceQuote,
-                CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id
+                CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
+                TransactionStatus = true
             };
 
             po.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionCreated;

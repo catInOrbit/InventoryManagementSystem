@@ -20,6 +20,7 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
     public class GetAllUsers : BaseAsyncEndpoint.WithoutRequest.WithResponse<UsersResponse>
     {
         private readonly UserManager<ApplicationUser> _userManager;
+
         private readonly IAuthorizationService _authorizationService;
         private IUserAuthentication _userAuthentication;
 
@@ -52,10 +53,11 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
             if (await _userManager.IsInRoleAsync(user, "Manager"))
             {
                 var users = _userManager.Users.Where(user => user.IsActive == true);
+                response.UserRole = (await _userManager.GetRolesAsync(user))[0];
                 response.ImsUser = users.ToList();
                 return Ok(response);
             }
-
+            
             return Unauthorized();
         }
     }

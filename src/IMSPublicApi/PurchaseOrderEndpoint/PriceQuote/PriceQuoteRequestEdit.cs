@@ -50,12 +50,13 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             
             po.PurchaseOrderProduct.Clear();
+            po.TotalOrderAmount = 0;
             foreach (var requestOrderItemInfo in request.OrderItemInfos)
             {
                 requestOrderItemInfo.OrderId = po.Id;
                 requestOrderItemInfo.ProductVariant = await _productVariantRepos.GetByIdAsync(requestOrderItemInfo.ProductVariantId);
-                requestOrderItemInfo.TotalAmount += requestOrderItemInfo.Price;
-                po.TotalOrderAmount += requestOrderItemInfo.Price;
+                requestOrderItemInfo.TotalAmount = requestOrderItemInfo.Price * requestOrderItemInfo.OrderQuantity;
+                po.TotalOrderAmount += requestOrderItemInfo.TotalAmount;
                 po.PurchaseOrderProduct.Add(requestOrderItemInfo);
             }
             

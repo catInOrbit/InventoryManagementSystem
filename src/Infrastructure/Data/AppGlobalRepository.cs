@@ -314,12 +314,16 @@ namespace Infrastructure.Data
             // {
             //     await _elasticClient.UpdateAsync<T>(type, u => u.Doc(type));
             // }
-            
-            if(!isSavingNew)
+
+            if (!isSavingNew)
+            {
+                Console.WriteLine("ElasticSaveSingleAsync: Type: " + type.GetType() + "Update");
                 await _elasticClient.UpdateAsync<T>(type, u => u.Doc(type));
+            }
 
             else
             {
+                Console.WriteLine("ElasticSaveSingleAsync: Type: " + type.GetType() + "AddNew");
                 _elasticCache.Add(type);
                 await _elasticClient.IndexDocumentAsync<T>(type);
             }

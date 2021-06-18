@@ -63,7 +63,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 {
                     CreatedDate = DateTime.Now,
                     Type = TransactionType.Purchase,
-                    CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id
+                    CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
+                    TransactionStatus = true
                 };
 
                 ro.Transaction = transaction;

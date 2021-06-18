@@ -58,7 +58,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             {
                 CreatedDate = DateTime.Now,
                 Type = TransactionType.NewProduct,
-                CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id
+                CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
+                TransactionStatus = true
             };
 
             if (request.ProductVariants.Count > 0)
@@ -79,7 +80,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                         {
                             CreatedDate = DateTime.Now,
                             Type = TransactionType.NewProduct,
-                            CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id
+                            CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
+                            TransactionStatus = true
                         }
                     };
                     

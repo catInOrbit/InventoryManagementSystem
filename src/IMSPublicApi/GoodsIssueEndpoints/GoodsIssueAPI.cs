@@ -45,7 +45,8 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 {
                     CreatedDate = DateTime.Now,
                     Type = TransactionType.PriceQuote,
-                    CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id
+                    CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
+                    TransactionStatus = true
                 };
                 gio.GoodsIssueType = GoodsIssueStatusType.Packing; 
                 response.GoodsIssueOrder = gio;
