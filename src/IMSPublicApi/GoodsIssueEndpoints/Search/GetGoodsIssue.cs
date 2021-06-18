@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
@@ -93,7 +94,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
             response.IsForDisplay = true;
             
             var responseElastic = await _elasticClient.SearchAsync<GoodsIssueSearchIndex>(
-                s => s.Index("goodsissueorders").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+                s => s.Index(ElasticIndexConstant.GOODS_ISSUE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
             
             foreach (var goodsIssueSearchIndex in responseElastic.Documents)
             {

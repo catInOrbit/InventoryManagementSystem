@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
@@ -51,7 +52,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.SupplierSearch
             {
                 var responseElastic = await _elasticClient.SearchAsync<Supplier>
                 (
-                    s => s.Index("suppliers").Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+                    s => s.Index(ElasticIndexConstant.SUPPLIERS).Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
 
                 foreach (var purchaseOrderSearchIndex in responseElastic.Documents)
                 {

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
@@ -59,7 +60,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
 
                 var responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
                 (
-                    s => s.Index("productindices").Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
+                    s => s.Index( ElasticIndexConstant.PRODUCT_INDICES).Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
             
                 foreach (var productSearchIndex in responseElastic.Documents)
                     pagingOption.ResultList.Add(productSearchIndex);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
@@ -47,13 +48,13 @@ namespace Infrastructure.Services
 
         private static async Task CreateIndex(IElasticClient client, string defaultIndexName)
         {
-            await client.Indices.DeleteAsync("productindices");
-            await client.Indices.DeleteAsync("purchaseorders");
-            await client.Indices.DeleteAsync("receivingorders");
-            await client.Indices.DeleteAsync("goodsissueorders");
-            await client.Indices.DeleteAsync("supplier");
+            await client.Indices.DeleteAsync(ElasticIndexConstant.PRODUCT_INDICES);
+            await client.Indices.DeleteAsync(ElasticIndexConstant.PURCHASE_ORDERS);
+            await client.Indices.DeleteAsync( ElasticIndexConstant.RECEIVING_ORDERS);
+            await client.Indices.DeleteAsync( ElasticIndexConstant.GOODS_ISSUE_ORDERS);
+            await client.Indices.DeleteAsync( ElasticIndexConstant.SUPPLIERS);
 
-            await client.Indices.CreateAsync("productindices",
+            await client.Indices.CreateAsync( ElasticIndexConstant.PRODUCT_INDICES,
                 index 
                     => index.Map<ProductSearchIndex>(x 
                     => x.AutoMap().Properties(ps 
@@ -61,26 +62,26 @@ namespace Infrastructure.Services
                             => c.Name(n => n.Suggest))))
             );
             
-            await client.Indices.CreateAsync("purchaseorders",
+            await client.Indices.CreateAsync(ElasticIndexConstant.PURCHASE_ORDERS,
                 index => index.Map<PurchaseOrderSearchIndex>(x 
                     => x.AutoMap().Properties(ps 
                         => ps.Completion(c 
                             => c.Name(n => n.Suggest))))
             );
             
-            await client.Indices.CreateAsync("receivingorders",
+            await client.Indices.CreateAsync( ElasticIndexConstant.RECEIVING_ORDERS,
                 index => index.Map<GoodsReceiptOrderSearchIndex>(x => x.AutoMap())
             );
             
-            await client.Indices.CreateAsync("goodsissueorders",
+            await client.Indices.CreateAsync( ElasticIndexConstant.GOODS_ISSUE_ORDERS,
                 index => index.Map<GoodsReceiptOrderSearchIndex>(x => x.AutoMap())
             );
             
-            await client.Indices.CreateAsync("stocktakeorders",
+            await client.Indices.CreateAsync( ElasticIndexConstant.STOCK_TAKE_ORDERS,
                 index => index.Map<StockTakeSearchIndex>(x => x.AutoMap())
             );
 
-            await client.Indices.CreateAsync("suppliers",
+            await client.Indices.CreateAsync( ElasticIndexConstant.SUPPLIERS,
                 index => index.Map<Supplier>(x => x.AutoMap())
             );
 

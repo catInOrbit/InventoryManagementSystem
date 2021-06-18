@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
@@ -57,7 +58,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
               else
               {
                   var responseElastic = await _elasticClient.SearchAsync<GoodsReceiptOrderSearchIndex>(
-                      s => s.Index("receivingorders").Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
+                      s => s.Index(ElasticIndexConstant.RECEIVING_ORDERS).Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
                   
                   foreach (var goodsReceiptOrderSearchIndex in responseElastic.Documents)
                       pagingOption.ResultList.Add(goodsReceiptOrderSearchIndex);
@@ -134,7 +135,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
            
            var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>
            (
-               s => s.Index("purchaseorders").Query(q => q.QueryString(d => d.Query('*' + request.Id + '*'))));
+               s => s.Index(ElasticIndexConstant.PURCHASE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.Id + '*'))));
 
            var poIndexList =
                responseElastic.Documents.Where(d => d.Status == PurchaseOrderStatusType.POConfirm.ToString());

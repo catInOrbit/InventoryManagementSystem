@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.PublicApi.SuggestionSearchSchema;
 using Microsoft.AspNetCore.Mvc;
@@ -28,7 +29,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
         {
             var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>
             (
-                s => s.Index("purchaseorders").
+                s => s.Index( ElasticIndexConstant.PURCHASE_ORDERS).
                     Suggest(su 
                         => su.Completion("suggestions", c 
                             => c.Field(f=>f.Suggest).
@@ -60,7 +61,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
         {
             var responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
             (
-                s => s.Index("productindices").
+                s => s.Index( ElasticIndexConstant.PRODUCT_INDICES).
                     Suggest(su 
                         => su.Completion("suggestions", c 
                             => c.Field(f=>f.Suggest).
