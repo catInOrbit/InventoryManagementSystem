@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
-    public partial class Test : Migration
+    public partial class Creation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -447,35 +447,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Package",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProductVariantId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    TotalImportPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TotalImportQuantity = table.Column<int>(type: "int", nullable: false),
-                    ImportedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PurchaseOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Package", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Package_ProductVariant_ProductVariantId",
-                        column: x => x.ProductVariantId,
-                        principalTable: "ProductVariant",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Package_PurchaseOrder_PurchaseOrderId",
-                        column: x => x.PurchaseOrderId,
-                        principalTable: "PurchaseOrder",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "StockTakeItem",
                 columns: table => new
                 {
@@ -549,6 +520,35 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Package",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProductVariantId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TotalImportPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalImportQuantity = table.Column<int>(type: "int", nullable: false),
+                    ImportedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GoodsReceiptOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Package", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Package_GoodsReceiptOrder_GoodsReceiptOrderId",
+                        column: x => x.GoodsReceiptOrderId,
+                        principalTable: "GoodsReceiptOrder",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Package_ProductVariant_ProductVariantId",
+                        column: x => x.ProductVariantId,
+                        principalTable: "ProductVariant",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_GoodsIssueOrder_SupplierId",
                 table: "GoodsIssueOrder",
@@ -600,14 +600,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 column: "PurchaseOrderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Package_GoodsReceiptOrderId",
+                table: "Package",
+                column: "GoodsReceiptOrderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Package_ProductVariantId",
                 table: "Package",
                 column: "ProductVariantId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Package_PurchaseOrderId",
-                table: "Package",
-                column: "PurchaseOrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_CategoryId",
@@ -747,10 +747,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "VariantValue");
 
             migrationBuilder.DropTable(
-                name: "GoodsReceiptOrder");
+                name: "GoodsIssueOrder");
 
             migrationBuilder.DropTable(
-                name: "GoodsIssueOrder");
+                name: "GoodsReceiptOrder");
 
             migrationBuilder.DropTable(
                 name: "StockTakeOrder");

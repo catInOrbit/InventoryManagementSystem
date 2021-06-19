@@ -45,24 +45,8 @@ namespace Infrastructure.Data
             {
                 try
                 {
-                    string nameConcat = productVariant.Name;
-                    foreach (var productVariantVariantValue in productVariant.VariantValues)
-                    {
-                        nameConcat += "-" + productVariantVariantValue.Value.Trim();
-                    }
-                
-                    var index = new ProductSearchIndex
-                    {
-                        Id = productVariant.Id,
-                        Name = nameConcat,
-                        ProductId = productVariant.ProductId,
-                        VariantId = productVariant.Id,
-                        Catagory = _identityAndProductDbContext.Product.Where(pro => pro.Id == productVariant.ProductId).FirstOrDefault()?.Category.CategoryName,
-                        Quantity = productVariant.StorageQuantity,
-                        ModifiedDate = productVariant.Transaction.ModifiedDate,
-                        Sku = productVariant.Sku,
-                    };
-                    
+                 
+                    var index = IndexingHelper.ProductSearchIndex(productVariant);
                     index.FillSuggestion();
                     pagingOption.ResultList.Add(index);
                 }

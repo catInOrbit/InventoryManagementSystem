@@ -125,6 +125,7 @@ namespace Infrastructure
                         Quantity = productVariant.StorageQuantity,
                         ModifiedDate = productVariant.Transaction.ModifiedDate,
                         Sku = productVariant.Sku,
+                        Unit = productVariant.Unit
                     };
                     index.FillSuggestion();
                 }

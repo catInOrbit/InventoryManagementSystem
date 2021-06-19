@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using Newtonsoft.Json;
 
@@ -61,8 +62,8 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
     {
         public GoodsIssueOrder GoodsIssueOrder { get; set; }
 
-        public List<GoodsReceiptStrategySuggestion> StrategySuggestions { get; set; } =
-            new List<GoodsReceiptStrategySuggestion>();
+        public List<Package> Packages { get; set; } =
+            new List<Package>();
     }
 
     public class GoodsReceiptStrategySuggestion

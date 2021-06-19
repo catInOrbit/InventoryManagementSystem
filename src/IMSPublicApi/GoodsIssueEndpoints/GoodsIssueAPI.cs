@@ -7,6 +7,7 @@ using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -21,16 +22,18 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             private readonly IAsyncRepository<GoodsIssueOrder> _asyncRepository;
             private IAsyncRepository<GoodsReceiptOrder> _roAsyncRepository;
             private IAsyncRepository<GoodsReceiptOrderItem> _goOrderItemsAsyncRepository;
+            private IAsyncRepository<Package> _packageAsyncRepository;
 
             private readonly IAuthorizationService _authorizationService;
     
-            public GoodsIssueCreate(IUserAuthentication userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<GoodsReceiptOrderItem> goOrderItemsAsyncRepository)
+            public GoodsIssueCreate(IUserAuthentication userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<GoodsReceiptOrderItem> goOrderItemsAsyncRepository, IAsyncRepository<Package> packageAsyncRepository)
             {
                 _userAuthentication = userAuthentication;
                 _asyncRepository = asyncRepository;
                 _authorizationService = authorizationService;
                 _roAsyncRepository = roAsyncRepository;
                 _goOrderItemsAsyncRepository = goOrderItemsAsyncRepository;
+                _packageAsyncRepository = packageAsyncRepository;
             }
             
             [HttpPost("api/goodsissue/create")]
@@ -61,22 +64,15 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 
                 //-------------
                 ProductStrategyService productStrategyService =
-                    new ProductStrategyService(_roAsyncRepository, _goOrderItemsAsyncRepository);
+                    new ProductStrategyService(_packageAsyncRepository);
 
-                List<string> productIds = new List<string>();
+                List<string> productVariantIds = new List<string>();
                 foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
-                    productIds.Add(gioGoodsIssueProduct.ProductVariantId);
+                    productVariantIds.Add(gioGoodsIssueProduct.ProductVariantId);
 
-
-                var grs = await productStrategyService.GetFIFOROFromProducts(productIds);
-                foreach (var goodsReceiptOrder in grs)
-                {
-                    response.StrategySuggestions.Add(new GoodsReceiptStrategySuggestion
-                    {
-                        Location = goodsReceiptOrder.StorageLocationReceipt,
-                        GoodsReceiptId = goodsReceiptOrder.Id
-                    });
-                }
+                var packages = await productStrategyService.FIFOPackagesSuggestion(productVariantIds);
+                
+                response.Packages.AddRange(packages);
                 
                 await _asyncRepository.UpdateAsync(gio);
                 return Ok(response);

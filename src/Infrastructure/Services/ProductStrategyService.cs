@@ -10,35 +10,23 @@ namespace Infrastructure.Services
 {
     public class ProductStrategyService
     {
-        private IAsyncRepository<GoodsReceiptOrder> _roAsyncRepository;
-        private IAsyncRepository<GoodsReceiptOrderItem> _goOrderItemsAsyncRepository;
+        private IAsyncRepository<Package> _packageAsyncRepository;
 
-        public ProductStrategyService(IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<GoodsReceiptOrderItem> goOrderItemsAsyncRepository)
+        public ProductStrategyService(IAsyncRepository<Package> packageAsyncRepository)
         {
-            _roAsyncRepository = roAsyncRepository;
-            _goOrderItemsAsyncRepository = goOrderItemsAsyncRepository;
+            _packageAsyncRepository = packageAsyncRepository;
         }
 
 
-        public async Task<List<GoodsReceiptOrder>> GetFIFOROFromProducts(List<string> productVariantIds)
+        public async Task<List<Package>> FIFOPackagesSuggestion(IList<string> productVariantIds)
         {
-            List<GoodsReceiptOrderItem> orderItems = new List<GoodsReceiptOrderItem>();
-            var pagingOption = await _goOrderItemsAsyncRepository.ListAllAsync(new PagingOption<GoodsReceiptOrderItem>(0,0));
-            orderItems = pagingOption.ResultList.ToList();
-            
-            List<GoodsReceiptOrder> receiptOrders = new List<GoodsReceiptOrder>();
-            
-            foreach (var orderItem in orderItems)
-            {
-                if (productVariantIds.Contains(orderItem.ProductVariantId))
-                {
-                    var receiptOrder = await _roAsyncRepository.GetByIdAsync(orderItem.GoodsReceiptOrderId); 
-                    if(!receiptOrders.Contains(receiptOrder))
-                        receiptOrders.Add(receiptOrder);
-                }
-            }
-            receiptOrders.OrderBy(ro => ro.ReceivedDate);
-            return receiptOrders;
+            List<Package> packages = new List<Package>();
+            var pagingOption = await _packageAsyncRepository.ListAllAsync(new PagingOption<Package>(0, 0));
+
+            packages.AddRange(pagingOption.ResultList.Where(package => productVariantIds.Contains(package.ProductVariantId)));
+            return packages;
         }
+
+     
     }
 }

@@ -20,6 +20,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string VariantId { get; set; }
         public string Name { get; set; }
         public string Sku { get; set; }
+        public string Unit { get; set; }
         public string Catagory { get; set; }
         public int Quantity { get; set; }
         public DateTime ModifiedDate { get; set; }

@@ -23,13 +23,14 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<GoodsReceiptOrder> _recevingOrderRepository;
         private readonly IAsyncRepository<PurchaseOrder> _poRepository;
+        private readonly IAsyncRepository<Package> _packageRepository;
 
         private readonly IAsyncRepository<GoodsReceiptOrderSearchIndex> _recevingOrderSearchIndexRepository;
 
         private readonly IAsyncRepository<ProductVariant> _productRepository;
         private readonly IUserAuthentication _userAuthentication;
 
-        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IAsyncRepository<ProductVariant> productRepository, IUserAuthentication userAuthentication, IAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository, IAsyncRepository<PurchaseOrder> poRepository)
+        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IAsyncRepository<ProductVariant> productRepository, IUserAuthentication userAuthentication, IAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository, IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository)
         {
             _authorizationService = authorizationService;
             _recevingOrderRepository = recevingOrderRepository;
@@ -37,6 +38,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             _userAuthentication = userAuthentication;
             _recevingOrderSearchIndexRepository = recevingOrderSearchIndexRepository;
             _poRepository = poRepository;
+            _packageRepository = packageRepository;
         }
         
         [HttpPut("api/goodsreceipt/update")]
@@ -90,6 +92,20 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                     ProductVariantName = (await _productRepository.GetByIdAsync(item.ProductVariantId)).Name
                 };
                 ro.ReceivedOrderItems.Add(roi);
+
+                var package = (await _packageRepository.ListAllAsync(new PagingOption<Package>(0, 0))).ResultList.FirstOrDefault(package => package.ProductVariantId == roi.ProductVariantId);
+                
+                //Package
+                package = new Package
+                {
+                    ProductVariantId =  roi.ProductVariantId,
+                    TotalImportQuantity = roi.QuantityReceived,
+                    Location = ro.StorageLocationReceipt,
+                    ImportedDate = ro.ReceivedDate,
+                    GoodsReceiptOrderId = ro.Id
+                };
+
+                await _packageRepository.AddAsync(package);
             }
 
             //Update and indexing

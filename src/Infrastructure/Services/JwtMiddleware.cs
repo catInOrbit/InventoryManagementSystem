@@ -4,7 +4,6 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Infrastructure.Services;
@@ -25,24 +24,24 @@ namespace WebApi.Helpers
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, IUserAuthentication authentication)
+        public async Task Invoke(HttpContext context, IUserAuthentication authentication, ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
-                    await attachUserToContext(context, authentication,token);
+                    await attachUserToContext(context, userManager, authentication, tokenClaimsService,token);
 
             await _next(context);
         }
 
-        private async Task attachUserToContext(HttpContext context, IUserAuthentication userAuthentication, string token)
+        private async Task attachUserToContext(HttpContext context, UserManager<ApplicationUser>  userManager, IUserAuthentication userAuthentication, ITokenClaimsService tokenClaimsService, string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(AuthorizationConstants.JWT_SECRET_KEY);
             try
             {
                 ValidateToken(tokenHandler, token, key);
-                await userAuthentication.SaveUserAsync(await userAuthentication.GetById(userId));
+                await userAuthentication.SaveUserAsync(await userManager.FindByIdAsync(userId));
             }
             catch
             {
@@ -51,12 +50,12 @@ namespace WebApi.Helpers
                 {
                     context.Request.Headers.Remove("Authorization");
                     
-                    var tokenRefresh = await userAuthentication.GetTokenRefreshOfUser(await userAuthentication.GetCurrentSessionUser());
+                    var tokenRefresh = await tokenClaimsService.GetRefreshTokenAsync((await userAuthentication.GetCurrentSessionUser()).Email);
                     if (tokenRefresh != null)
                     {
                         try
                         {
-                            ValidateToken(tokenHandler, token, key);
+                            ValidateToken(tokenHandler, tokenRefresh, key);
                             context.Request.Headers.Add("Authorization",tokenRefresh);
                         }
                         catch (Exception e)

@@ -17,8 +17,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public DateTime ImportedDate { get; set; }
         public string Location { get; set; }
 
-        public string PurchaseOrderId { get; set; }
+        public string GoodsReceiptOrderId { get; set; }
         [JsonIgnore]
-        public virtual PurchaseOrder PurchaseOrder { get; set; }
+        public virtual GoodsReceiptOrder GoodsReceiptOrder { get; set; }
     }
 }

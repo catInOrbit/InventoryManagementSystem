@@ -48,7 +48,19 @@ namespace Infrastructure.Services
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            return  tokenHandler.WriteToken(token);
+        }
+        
+        public async Task SaveRefreshTokenForUser(ApplicationUser user, string tokenRefresh)
+        {
+            if (await _userManager.GetAuthenticationTokenAsync(user, "IMSPublicAPI", "RefreshToken") != null)
+            {
+                await _userManager.RemoveAuthenticationTokenAsync(user, "IMSPublicAPI", "RefreshToken");
+                await _userManager.SetAuthenticationTokenAsync(user, "IMSPublicAPI", "RefreshToken", tokenRefresh);
+            }
+            else
+                await _userManager.SetAuthenticationTokenAsync(user, "IMSPublicAPI", "RefreshToken", tokenRefresh);
+        
         }
     }
 }

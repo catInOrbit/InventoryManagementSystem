@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace InventoryManagementSystem.ApplicationCore.Interfaces
 {
@@ -6,5 +7,6 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
     {
         Task<string> GetTokenAsync(string email);
         Task<string> GetRefreshTokenAsync(string email);
+        Task SaveRefreshTokenForUser(ApplicationUser user, string tokenRefresh);
     }
 }

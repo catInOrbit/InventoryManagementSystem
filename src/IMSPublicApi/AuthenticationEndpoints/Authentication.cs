@@ -74,6 +74,7 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                     // await HttpContext.AuthenticateAsync("Cookie", userPrincipal);
                     var jwttoken = await _tokenClaimsService.GetTokenAsync(user.Email);
                     var jwtRefreshtoken = await _tokenClaimsService.GetRefreshTokenAsync(user.Email);
+                    await _tokenClaimsService.SaveRefreshTokenForUser(user, jwtRefreshtoken);
 
                     // Write the login id in the login claim, so we identify the login context
                     // Claim[] customClaims = { new Claim("UserLoginSessionId", token) };
@@ -104,7 +105,6 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                     response.ApplicationUser = userGet;
 
 
-                    await _userAuthentication.GenerateRefreshTokenForUser(user);
                     await _userAuthentication.SaveUserAsync(user);
 
                     // await _userRoleModificationService.UserManager.RemoveAuthenticationTokenAsync(user, "IMSPublicAPI",

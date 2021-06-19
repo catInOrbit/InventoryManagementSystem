@@ -443,6 +443,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("GoodsReceiptOrderId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("ImportedDate")
                         .HasColumnType("datetime2");
 
@@ -450,9 +453,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProductVariantId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("PurchaseOrderId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("TotalImportPrice")
@@ -463,9 +463,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductVariantId");
+                    b.HasIndex("GoodsReceiptOrderId");
 
-                    b.HasIndex("PurchaseOrderId");
+                    b.HasIndex("ProductVariantId");
 
                     b.ToTable("Package");
                 });
@@ -823,17 +823,17 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Package", b =>
                 {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsReceiptOrder", "GoodsReceiptOrder")
+                        .WithMany()
+                        .HasForeignKey("GoodsReceiptOrderId");
+
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", "ProductVariant")
                         .WithMany()
                         .HasForeignKey("ProductVariantId");
 
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", "PurchaseOrder")
-                        .WithMany()
-                        .HasForeignKey("PurchaseOrderId");
+                    b.Navigation("GoodsReceiptOrder");
 
                     b.Navigation("ProductVariant");
-
-                    b.Navigation("PurchaseOrder");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>

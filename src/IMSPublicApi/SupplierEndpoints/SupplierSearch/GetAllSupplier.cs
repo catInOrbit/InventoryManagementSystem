@@ -2,12 +2,15 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nest;
 using Swashbuckle.AspNetCore.Annotations;
@@ -17,12 +20,12 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.SupplierSearch
     public class GetAllSupplier : BaseAsyncEndpoint.WithRequest<GetAllSupplierRequest>.WithResponse<GetSupplierResponse>
     {
         private IAsyncRepository<Supplier> _asyncRepository;
-        private readonly IElasticClient _elasticClient;
+        private readonly IAuthorizationService _authorizationService;
 
-        public GetAllSupplier(IAsyncRepository<Supplier> asyncRepository, IElasticClient elasticClient)
+        public GetAllSupplier(IAsyncRepository<Supplier> asyncRepository, IAuthorizationService authorizationService)
         {
             _asyncRepository = asyncRepository;
-            _elasticClient = elasticClient;
+            _authorizationService = authorizationService;
         }
         
         [HttpPost("api/suppliers/all")]
@@ -38,6 +41,9 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.SupplierSearch
         ]
         public override async Task<ActionResult<GetSupplierResponse>> HandleAsync(GetAllSupplierRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.SUPPLIER, UserOperations.Read))
+                return Unauthorized();
+            
             var response = new GetSupplierResponse();
             PagingOption<Supplier> pagingOption =
                 new PagingOption<Supplier>(request.CurrentPage, request.SizePerPage);
@@ -54,11 +60,13 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.SupplierSearch
     {
         private IAsyncRepository<Supplier> _asyncRepository;
         private readonly IElasticClient _elasticClient;
+        private readonly IAuthorizationService _authorizationService;
 
-        public SearchSupplier(IAsyncRepository<Supplier> asyncRepository, IElasticClient elasticClient)
+        public SearchSupplier(IAsyncRepository<Supplier> asyncRepository, IElasticClient elasticClient, IAuthorizationService authorizationService)
         {
             _asyncRepository = asyncRepository;
             _elasticClient = elasticClient;
+            _authorizationService = authorizationService;
         }
         
         [HttpPost("api/suppliers/search")]
@@ -74,6 +82,9 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.SupplierSearch
         ]
         public override async Task<ActionResult<GetSupplierResponse>> HandleAsync(SupplierSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.SUPPLIER, UserOperations.Read))
+                return Unauthorized();
+            
             var response = new GetSupplierResponse();
             PagingOption<Supplier> pagingOption =
                 new PagingOption<Supplier>(request.CurrentPage, request.SizePerPage);
