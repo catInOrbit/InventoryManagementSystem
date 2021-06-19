@@ -7,7 +7,15 @@ using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
 {
-    public class ROGetRequest : BaseRequest
+    
+    public class ROGetAllRequest : BaseRequest
+    {
+        public int CurrentPage { get; set; }
+        public int SizePerPage { get; set; }
+        public ROSearchFilter RoSearchFilter { get; set; }
+    }
+    
+    public class ROSearchRequest : BaseRequest
     {
         public string Query { get; set; }
         public int CurrentPage { get; set; }

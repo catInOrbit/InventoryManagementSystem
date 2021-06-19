@@ -34,5 +34,13 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
             if (!(CurrentPage == 0 && SizePerPage == 0))
                 ResultList = ResultList.Skip(SkipValue).Take(SizePerPage).ToList();
         }
+        
+        public void ExecuteResourcePaging(int overideRowCountTotalNumber)
+        {
+            RowCountTotal = overideRowCountTotalNumber;            
+            PageCount = (int) Math.Ceiling((double)RowCountTotal / SizePerPage);
+            if (!(CurrentPage == 0 && SizePerPage == 0))
+                ResultList = ResultList.Skip(SkipValue).Take(SizePerPage).ToList();
+        }
     }
 }

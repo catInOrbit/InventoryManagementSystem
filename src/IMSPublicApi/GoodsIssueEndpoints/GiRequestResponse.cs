@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
@@ -59,8 +60,17 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
     public class GiResponse : BaseResponse
     {
         public GoodsIssueOrder GoodsIssueOrder { get; set; }
+
+        public List<GoodsReceiptStrategySuggestion> StrategySuggestions { get; set; } =
+            new List<GoodsReceiptStrategySuggestion>();
     }
-  
+
+    public class GoodsReceiptStrategySuggestion
+    {
+        public string GoodsReceiptId { get; set; }
+        public string Location { get; set; }
+    }
+
     public class GiIdRequest
     {
         public string IssueId { get; set; }

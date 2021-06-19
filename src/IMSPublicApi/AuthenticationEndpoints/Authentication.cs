@@ -29,15 +29,18 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ITokenClaimsService _tokenClaimsService;
+        private readonly IUserAuthentication _userAuthentication;
+
 
         private readonly UserRoleModificationService _userRoleModificationService;
         public UserInfoAuth UserInfo { get; set; } = new UserInfoAuth();
 
         public Authentication(SignInManager<ApplicationUser> signInManager,
-            ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+            ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IUserAuthentication userAuthentication)
         {
             _signInManager = signInManager;
             _tokenClaimsService = tokenClaimsService;
+            _userAuthentication = userAuthentication;
             _userRoleModificationService = new UserRoleModificationService(roleManager, userManager);
         }
 
@@ -70,6 +73,8 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                 {
                     // await HttpContext.AuthenticateAsync("Cookie", userPrincipal);
                     var jwttoken = await _tokenClaimsService.GetTokenAsync(user.Email);
+                    var jwtRefreshtoken = await _tokenClaimsService.GetRefreshTokenAsync(user.Email);
+
                     // Write the login id in the login claim, so we identify the login context
                     // Claim[] customClaims = { new Claim("UserLoginSessionId", token) };
 
@@ -97,6 +102,17 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                         response.Username = userGet.Fullname;
                     response.UserRole = roles[0];
                     response.ApplicationUser = userGet;
+
+
+                    await _userAuthentication.GenerateRefreshTokenForUser(user);
+                    await _userAuthentication.SaveUserAsync(user);
+
+                    // await _userRoleModificationService.UserManager.RemoveAuthenticationTokenAsync(user, "IMSPublicAPI",
+                    //     "Refreshtoken");
+                    //
+                    // await _userRoleModificationService.UserManager.GenerateUserTokenAsync(user, "IMSPublicAPI",
+                    //     jwtRefreshtoken);
+                    
                     return Ok(response);
                 }
 

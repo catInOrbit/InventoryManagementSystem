@@ -48,8 +48,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
         public override async Task<ActionResult<GetAllPurchaseOrderResponse>> HandleAsync(GetAllPurchaseOrderRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var response = new GetAllPurchaseOrderResponse();
-            // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
-            //     return Unauthorized();
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
+                return Unauthorized();
 
             PagingOption<PurchaseOrderSearchIndex> pagingOption =
                  new PagingOption<PurchaseOrderSearchIndex>(request.CurrentPage, request.SizePerPage);
@@ -78,7 +78,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             _elasticClient = elasticClient;
         }
 
-        [HttpGet("api/purchaseorder/search/{SearchQuery}&status={Status}&page={CurrentPage}&size={SizePerPage}")]
+        [HttpPost("api/purchaseorder/search")]
         [SwaggerOperation(
             Summary = "Search purchase Order",
             Description = "Search purchase Order"  +
@@ -90,28 +90,20 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
 
-        public override async Task<ActionResult<GetAllPurchaseOrderResponse>> HandleAsync([FromRoute] SearchPurchaseOrderRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<GetAllPurchaseOrderResponse>> HandleAsync(SearchPurchaseOrderRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var response = new GetAllPurchaseOrderResponse();
-            // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
-            //     return Unauthorized();
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Read))
+                return Unauthorized();
 
             PagingOption<PurchaseOrderSearchIndex> pagingOption =
                 new PagingOption<PurchaseOrderSearchIndex>(request.CurrentPage, request.SizePerPage);
             var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>
             (
                 s => s.Index(ElasticIndexConstant.PURCHASE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
-
-            foreach (var purchaseOrderSearchIndex in responseElastic.Documents)
-            {
-                if (request.Status != -99)
-                {
-                    if(purchaseOrderSearchIndex.Status == ((PurchaseOrderStatusType)request.Status).ToString())
-                        pagingOption.ResultList.Add(purchaseOrderSearchIndex);    
-                }
-                else
-                    pagingOption.ResultList.Add(purchaseOrderSearchIndex);    
-            }
+        
+            pagingOption.ResultList = _asyncRepository.PurchaseOrderIndexFiltering(responseElastic.Documents.ToList(), request.PoSearchFilter,
+                new CancellationToken());
             
             pagingOption.ExecuteResourcePaging();
             response.Paging = pagingOption;

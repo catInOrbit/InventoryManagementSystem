@@ -43,15 +43,14 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
         ]
         public override async Task<ActionResult> HandleAsync(ProductRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Create))
-            //     return Unauthorized();
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Create))
+                return Unauthorized();
 
             ApplicationCore.Entities.Products.Product product = new ApplicationCore.Entities.Products.Product
             {
                 Name = request.Name,
                 BrandName = request.BrandName,
                 CategoryId = request.CategoryId,
-                SellingStrategy = request.SellingStrategy,
             };
 
             product.Transaction = new Transaction

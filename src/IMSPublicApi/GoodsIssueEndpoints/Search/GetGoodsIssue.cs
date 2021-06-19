@@ -39,11 +39,11 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
             OperationId = "gi.search",
             Tags = new[] { "GoodsIssueEndpoints" })
         ]
-        [HttpGet("api/goodsissue/all")]
+        [HttpPost("api/goodsissue/all")]
         public override async Task<ActionResult<GiSearchResponse>> HandleAsync(GIAllRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "GoodsIssue", UserOperations.Read))
-            //     return Unauthorized();
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "GoodsIssue", UserOperations.Read))
+                return Unauthorized();
 
             var response = new GiSearchResponse();
             PagingOption<GoodsIssueSearchIndex> pagingOption = new PagingOption<GoodsIssueSearchIndex>(
@@ -85,8 +85,8 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
         [HttpGet("api/goodsissue/search/{SearchQuery}&status={Status}&currentPage={CurrentPage}&sizePerPage={SizePerPage}")]
         public override async Task<ActionResult<GiSearchResponse>> HandleAsync([FromRoute]GISearchRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "GoodsIssue", UserOperations.Read))
-            //     return Unauthorized();
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "GoodsIssue", UserOperations.Read))
+                return Unauthorized();
 
             var response = new GiSearchResponse();
             PagingOption<GoodsIssueSearchIndex> pagingOption = new PagingOption<GoodsIssueSearchIndex>(

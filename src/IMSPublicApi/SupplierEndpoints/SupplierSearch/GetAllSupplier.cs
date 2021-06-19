@@ -25,7 +25,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.SupplierSearch
             _elasticClient = elasticClient;
         }
         
-        [HttpGet("api/suppliers/{SearchQuery}&status={Status}&page={CurrentPage}&size={SizePerPage}")]
+        [HttpPost("api/suppliers/all")]
         [SwaggerOperation(
             Summary = "Get all supplier",
             Description = "Get all supplier"  +
@@ -41,27 +41,55 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.SupplierSearch
             var response = new GetSupplierResponse();
             PagingOption<Supplier> pagingOption =
                 new PagingOption<Supplier>(request.CurrentPage, request.SizePerPage);
-            if (request.SearchQuery == "all")
-            {
-                response.IsDisplayingAll = true;
-                
-                response.Paging = await 
-                    _asyncRepository.ListAllAsync(pagingOption, cancellationToken);
-            }
-            else
-            {
-                var responseElastic = await _elasticClient.SearchAsync<Supplier>
-                (
-                    s => s.Index(ElasticIndexConstant.SUPPLIERS).Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+            response.IsDisplayingAll = true;
+            
+            response.Paging = await 
+                _asyncRepository.ListAllAsync(pagingOption, cancellationToken);
+     
+            return Ok(response);
+        }
+    }
+    
+     public class SearchSupplier : BaseAsyncEndpoint.WithRequest<SupplierSearchRequest>.WithResponse<GetSupplierResponse>
+    {
+        private IAsyncRepository<Supplier> _asyncRepository;
+        private readonly IElasticClient _elasticClient;
 
-                foreach (var purchaseOrderSearchIndex in responseElastic.Documents)
-                {
-                    pagingOption.ResultList.Add(purchaseOrderSearchIndex);
-                }
-                
-                pagingOption.ExecuteResourcePaging();
-                response.Paging = pagingOption;
+        public SearchSupplier(IAsyncRepository<Supplier> asyncRepository, IElasticClient elasticClient)
+        {
+            _asyncRepository = asyncRepository;
+            _elasticClient = elasticClient;
+        }
+        
+        [HttpPost("api/suppliers/search")]
+        [SwaggerOperation(
+            Summary = "Get all supplier",
+            Description = "Get all supplier"  +
+                          "\n {SearchQuery}: Querry to search, all to search all \n " +
+                          "{CurrentPage}: Current page to display \n" +
+                          "{SizePerPage}: Number of rows to display in a page \n " +
+                          "{Status} Status of purchase order",
+            OperationId = "sups.update",
+            Tags = new[] { "SupplierEndpoints" })
+        ]
+        public override async Task<ActionResult<GetSupplierResponse>> HandleAsync(SupplierSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            var response = new GetSupplierResponse();
+            PagingOption<Supplier> pagingOption =
+                new PagingOption<Supplier>(request.CurrentPage, request.SizePerPage);
+            response.IsDisplayingAll = true;
+
+            var responseElastic = await _elasticClient.SearchAsync<Supplier>
+            (
+                s => s.Index(ElasticIndexConstant.SUPPLIERS).Query(q => q.QueryString(d => d.Query('*' + request.Query + '*'))));
+
+            foreach (var purchaseOrderSearchIndex in responseElastic.Documents)
+            {
+                pagingOption.ResultList.Add(purchaseOrderSearchIndex);
             }
+            
+            pagingOption.ExecuteResourcePaging();
+            response.Paging = pagingOption;
             return Ok(response);
         }
     }

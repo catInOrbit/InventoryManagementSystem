@@ -80,25 +80,7 @@ namespace Infrastructure.Data
         public async Task<PagingOption<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(PagingOption<PurchaseOrderSearchIndex> pagingOption, POSearchFilter poSearchFilter, CancellationToken cancellationToken = default)
         {
             
-            //
-            // List<PurchaseOrder> pos;
-            // if (orderStatus == -99)
-            //     pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => po.Transaction.TransactionStatus==true).ToListAsync(cancellationToken);
-            // else
-            //     pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => po.Transaction.TransactionStatus==true && po.PurchaseOrderStatus == (PurchaseOrderStatusType) orderStatus).ToListAsync(cancellationToken);
-            //
-            
-            // var pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => 
-            //     poSearchFilter.Status == -99 || po.PurchaseOrderStatus == (PurchaseOrderStatusType) poSearchFilter.Status).ToListAsync(cancellationToken);
-            
-            var pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po => 
-                (poSearchFilter.Status == -99 || po.PurchaseOrderStatus == (PurchaseOrderStatusType) poSearchFilter.Status) &&
-                (poSearchFilter.FromDeliveryDate == null || (po.DeliveryDate >= DateTime.Parse(poSearchFilter.FromDeliveryDate) && po.DeliveryDate <= DateTime.Parse(poSearchFilter.ToDeliveryDate))) &&
-                (poSearchFilter.FromCreatedDate == null || (po.Transaction.CreatedDate >= DateTime.Parse(poSearchFilter.FromCreatedDate) && po.Transaction.CreatedDate <= DateTime.Parse(poSearchFilter.ToCreatedDate))) &&
-                (poSearchFilter.FromTotalOrderPrice == null || (po.TotalOrderAmount >= Decimal.Parse(poSearchFilter.FromTotalOrderPrice)  && po.TotalOrderAmount <= Decimal.Parse(poSearchFilter.ToTotalOrderPrice))) &&
-                (poSearchFilter.SupplierId == null || po.SupplierId == poSearchFilter.SupplierId) &&
-                (poSearchFilter.CreatedByName == null || po.Transaction.CreatedBy.Fullname == poSearchFilter.CreatedByName)) 
-                .ToListAsync(cancellationToken);
+            var pos = await PurchaseOrderFiltering(poSearchFilter, cancellationToken);
             foreach (var po in pos)
             {
                 PurchaseOrderSearchIndex index; 
@@ -117,6 +99,45 @@ namespace Infrastructure.Data
             return pagingOption;
         }
 
+        public async Task<List<PurchaseOrder>> PurchaseOrderFiltering(POSearchFilter poSearchFilter, CancellationToken cancellationToken)
+        {
+            var pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po =>
+                    (poSearchFilter.Status == -99 ||
+                     po.PurchaseOrderStatus == (PurchaseOrderStatusType) poSearchFilter.Status) &&
+                    (poSearchFilter.FromDeliveryDate == null ||
+                     (po.DeliveryDate >= DateTime.Parse(poSearchFilter.FromDeliveryDate) &&
+                      po.DeliveryDate <= DateTime.Parse(poSearchFilter.ToDeliveryDate))) &&
+                    (poSearchFilter.FromCreatedDate == null ||
+                     (po.Transaction.CreatedDate >= DateTime.Parse(poSearchFilter.FromCreatedDate) &&
+                      po.Transaction.CreatedDate <= DateTime.Parse(poSearchFilter.ToCreatedDate))) &&
+                    (poSearchFilter.FromTotalOrderPrice == null ||
+                     (po.TotalOrderAmount >= Decimal.Parse(poSearchFilter.FromTotalOrderPrice) &&
+                      po.TotalOrderAmount <= Decimal.Parse(poSearchFilter.ToTotalOrderPrice))) &&
+                    (poSearchFilter.SupplierId == null || po.SupplierId == poSearchFilter.SupplierId) &&
+                    (poSearchFilter.CreatedByName == null || po.Transaction.CreatedBy.Fullname == poSearchFilter.CreatedByName))
+                .ToListAsync(cancellationToken);
+            return pos;
+        }
+        
+        public List<PurchaseOrderSearchIndex> PurchaseOrderIndexFiltering(List<PurchaseOrderSearchIndex> resource, POSearchFilter poSearchFilter, CancellationToken cancellationToken)
+        {
+            var pos = resource.Where(poi =>
+                    (poSearchFilter.Status == -99 ||
+                     (poSearchFilter.CreatedByName == null ||
+                      (poi.DeliveryDate >= DateTime.Parse(poSearchFilter.FromDeliveryDate) &&
+                       poi.DeliveryDate <= DateTime.Parse(poSearchFilter.ToDeliveryDate))) &&
+                     (poSearchFilter.FromCreatedDate == null ||
+                      (poi.CreatedDate >= DateTime.Parse(poSearchFilter.FromCreatedDate) &&
+                       poi.CreatedDate <= DateTime.Parse(poSearchFilter.ToCreatedDate))) &&
+                     (poSearchFilter.FromTotalOrderPrice == null ||
+                      (poi.TotalPrice >= Decimal.Parse(poSearchFilter.FromTotalOrderPrice) &&
+                       poi.TotalPrice <= Decimal.Parse(poSearchFilter.ToTotalOrderPrice))) &&
+                     (poSearchFilter.SupplierId == null || poi.SupplierId == poSearchFilter.SupplierId) &&
+                     (poSearchFilter.CreatedByName == null || poi.CreatedByName == poSearchFilter.CreatedByName)))
+                .ToList();
+            return pos;
+        }
+
         public string VariantNameConcat(List<string> productVariantValues)
         {
             string nameConcat = "";
@@ -128,9 +149,12 @@ namespace Infrastructure.Data
             return nameConcat;
         }
 
-        public async Task<PagingOption<GoodsReceiptOrderSearchIndex>> GetROForELIndexAsync(PagingOption<GoodsReceiptOrderSearchIndex> pagingOption, CancellationToken cancellationToken = default)
+        public async Task<PagingOption<GoodsReceiptOrderSearchIndex>> GetROForELIndexAsync(PagingOption<GoodsReceiptOrderSearchIndex> pagingOption, ROSearchFilter roSearchFilter, CancellationToken cancellationToken = default)
         {
-            var ros = await _identityAndProductDbContext.Set<GoodsReceiptOrder>().ToListAsync(cancellationToken);
+            
+            var ros = await _identityAndProductDbContext.Set<GoodsReceiptOrder>().
+                Where(ro => roSearchFilter.FromCreatedDate == null || (ro.Transaction.CreatedDate >= DateTime.Parse(roSearchFilter.FromCreatedDate) && (ro.Transaction.CreatedDate <= DateTime.Parse(roSearchFilter.ToCreatedDate))))
+                .ToListAsync(cancellationToken);
 
             foreach (var ro in ros)
             {
@@ -245,7 +269,7 @@ namespace Infrastructure.Data
             pagingOption.ExecuteResourcePaging();
             return pagingOption;
         }
-        
+
         public async Task<IEnumerable<Product>> ListAllProductAsync(CancellationToken cancellationToken = default)
         {
             var query =  await _identityAndProductDbContext.Set<Product>()

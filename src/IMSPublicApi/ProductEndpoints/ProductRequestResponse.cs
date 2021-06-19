@@ -12,7 +12,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
         public string Barcode { get; set; }
         public string Unit { get; set; }
         public string CategoryId { get; set; }
-        public string SellingStrategy { get; set; }
         public List<ProductVairantRequestInfo> ProductVariants { get; set; }
     }
 
@@ -63,9 +62,17 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
         public ApplicationCore.Entities.Products.Product Product { get; set; }
     }
     
-    public class GetProductSearchRequest : BaseSearchQueryPagingRequest
+    public class GetProductAllRequest
     {
-  
+        public int CurrentPage { get; set; }
+        public int SizePerPage { get; set; }
+    }
+    
+    public class GetProductSearchRequest
+    {
+        public string Query { get; set; }
+        public int CurrentPage { get; set; }
+        public int SizePerPage { get; set; }
     }
     
     public class GetProductSearchResponse : BaseSearchResponse<ProductSearchIndex>
