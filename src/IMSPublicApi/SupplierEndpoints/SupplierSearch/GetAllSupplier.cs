@@ -92,7 +92,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.SupplierSearch
 
             var responseElastic = await _elasticClient.SearchAsync<Supplier>
             (
-                s => s.Index(ElasticIndexConstant.SUPPLIERS).Query(q => q.QueryString(d => d.Query('*' + request.Query + '*'))));
+                s => s.Size(2000).Index(ElasticIndexConstant.SUPPLIERS).Query(q => q.QueryString(d => d.Query('*' + request.Query + '*'))));
 
             foreach (var purchaseOrderSearchIndex in responseElastic.Documents)
             {

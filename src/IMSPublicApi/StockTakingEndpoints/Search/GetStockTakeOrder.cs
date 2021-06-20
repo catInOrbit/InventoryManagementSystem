@@ -60,7 +60,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
             else
             {
                 var responseElastic = await _elasticClient.SearchAsync<StockTakeSearchIndex>(
-                    s => s.Index(ElasticIndexConstant.STOCK_TAKE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+                    s => s.Size(2000).Index(ElasticIndexConstant.STOCK_TAKE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
                 
                 foreach (var stockTakeSearchIndex in responseElastic.Documents)
                     pagingOption.ResultList.Add(stockTakeSearchIndex);

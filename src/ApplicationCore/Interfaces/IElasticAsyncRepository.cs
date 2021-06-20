@@ -23,7 +23,7 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         {
             var responseElastic = await _elasticClient.SearchAsync<T>
             (
-                s => s.Index(index).Query(q => q.QueryString(d => d.Query('*' + query + '*'))));
+                s => s.Size(2000).Index(index).Query(q => q.QueryString(d => d.Query('*' + query + '*'))));
 
             return responseElastic;
         }

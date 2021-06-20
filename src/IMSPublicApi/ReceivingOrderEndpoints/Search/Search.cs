@@ -43,8 +43,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
       public override async Task<ActionResult<ROGetResponse>> HandleAsync(ROGetAllRequest request, CancellationToken cancellationToken = new CancellationToken())
       {
           
-          if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Read))
-              return Unauthorized();
+          // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Read))
+              // return Unauthorized();
           
           PagingOption<GoodsReceiptOrderSearchIndex> pagingOption = new PagingOption<GoodsReceiptOrderSearchIndex>(
               request.CurrentPage, request.SizePerPage);
@@ -90,10 +90,13 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
               
               PagingOption<GoodsReceiptOrderSearchIndex> pagingOption = new PagingOption<GoodsReceiptOrderSearchIndex>(
                   request.CurrentPage, request.SizePerPage);
-  
+              
               var response = new ROGetResponse();
+              response.IsDislayingAll = true;
+              
+              
               var responseElastic = await _elasticClient.SearchAsync<GoodsReceiptOrderSearchIndex>(
-                  s => s.Index(ElasticIndexConstant.RECEIVING_ORDERS).Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
+                  s => s.Size(2000).Index(ElasticIndexConstant.RECEIVING_ORDERS).Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
               
               foreach (var goodsReceiptOrderSearchIndex in responseElastic.Documents)
                   pagingOption.ResultList.Add(goodsReceiptOrderSearchIndex);
@@ -169,7 +172,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
            
            var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>
            (
-               s => s.Index(ElasticIndexConstant.PURCHASE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.Id + '*'))));
+               s => s.Size(2000).Index(ElasticIndexConstant.PURCHASE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.Id + '*'))));
 
            var poIndexList =
                responseElastic.Documents.Where(d => d.Status == PurchaseOrderStatusType.POConfirm.ToString());

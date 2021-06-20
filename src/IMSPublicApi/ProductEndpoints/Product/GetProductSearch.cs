@@ -89,7 +89,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
 
             var responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
             (
-                s => s.Index( ElasticIndexConstant.PRODUCT_INDICES).Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
+                s => s.Size(2000).Index( ElasticIndexConstant.PRODUCT_INDICES).Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
         
             foreach (var productSearchIndex in responseElastic.Documents)
                 pagingOption.ResultList.Add(productSearchIndex);
