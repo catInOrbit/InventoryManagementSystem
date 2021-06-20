@@ -106,7 +106,7 @@ namespace Infrastructure.Data
         public List<PurchaseOrderSearchIndex> PurchaseOrderIndexFiltering(List<PurchaseOrderSearchIndex> resource, POSearchFilter poSearchFilter, CancellationToken cancellationToken)
         {
             var pos = resource.Where(poi =>
-                    (poSearchFilter.Status == -99 ||
+                    (poSearchFilter.Status == -99 ||   (poi.Status == ((PurchaseOrderStatusType) poSearchFilter.Status).ToString()) &&
                      (poSearchFilter.CreatedByName == null ||
                       (poi.DeliveryDate >= DateTime.Parse(poSearchFilter.FromDeliveryDate) &&
                        poi.DeliveryDate <= DateTime.Parse(poSearchFilter.ToDeliveryDate))) &&
