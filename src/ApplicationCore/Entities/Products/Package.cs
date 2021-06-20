@@ -11,6 +11,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
             Id = Guid.NewGuid().ToString();
         }
         public string ProductVariantId { get; set; }
+        [JsonIgnore]
         public virtual ProductVariant  ProductVariant { get; set; }
         public decimal TotalImportPrice { get; set; }
         public int TotalImportQuantity { get; set; }
