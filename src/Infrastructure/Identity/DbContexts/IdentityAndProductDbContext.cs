@@ -32,6 +32,7 @@ namespace Infrastructure.Identity.DbContexts
         public DbSet<StockTakeOrder> StockTakeOrder { get; set; }
         public DbSet<StockTakeItem> StockTakeItem { get; set; }
         public DbSet<Package> Package { get; set; }
+        public DbSet<Notification> Notification { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
