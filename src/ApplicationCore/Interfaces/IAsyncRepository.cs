@@ -49,5 +49,8 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         Task ElasticSaveSingleAsync(bool isSavingNew, T types);
         Task ElasticSaveManyAsync(T[] types);
         Task ElasticSaveBulkAsync(T[] types, string index);
+
+        Notification GetNotificationInfoFromUserId(string userId);
+
     }
 }

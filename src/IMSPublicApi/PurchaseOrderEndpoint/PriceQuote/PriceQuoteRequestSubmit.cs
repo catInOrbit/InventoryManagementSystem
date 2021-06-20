@@ -14,6 +14,7 @@ using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
@@ -26,13 +27,21 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
         private readonly IUserAuthentication _userAuthentication;
         private readonly IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
         
-        public PriceQuoteRequestSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserAuthentication userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository)
+        private readonly IRedisRepository _redisRepository;
+        private readonly IAsyncRepository<Notification> _notificationAsyncRepository;
+        private IHubContext<NotificationHub> _hubContext;
+
+        
+        public PriceQuoteRequestSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserAuthentication userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, IRedisRepository redisRepository, IAsyncRepository<Notification> notificationAsyncRepository, IHubContext<NotificationHub> hubContext)
         {
             _emailSender = emailSender;
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
             _userAuthentication = userAuthentication;
             _indexAsyncRepository = indexAsyncRepository;
+            _redisRepository = redisRepository;
+            _notificationAsyncRepository = notificationAsyncRepository;
+            _hubContext = hubContext;
         }
         
         [HttpPost("api/pricequote/submit")]
@@ -53,7 +62,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             po.Transaction.ModifiedDate = DateTime.Now;
             await _asyncRepository.UpdateAsync(po);
-
+            
             var subject = "REQUEST FOR QUOTATION-" + DateTime.Now.ToString("dd/MM//yyyy") + " FROM IMS Inventory";
             
             var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
@@ -61,6 +70,13 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             await _emailSender.SendEmailAsync(message);
             await _asyncRepository.UpdateAsync(po);
             await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po));
+            //
+            // var notificationService = new NotificationService(_redisRepository, _notificationAsyncRepository, _hubContext);
+            //
+            // var currentUser = await _userAuthentication.GetCurrentSessionUser();
+            // var messageNotification = "User " + currentUser.Fullname + "created Price Quote Order ID: " + po.Id + "at " +
+            //               DateTime.Now.TimeOfDay;
+            // await notificationService.SendNotification(currentUser.UserName, currentUser.Id, messageNotification);
             return Ok();
         }
     }

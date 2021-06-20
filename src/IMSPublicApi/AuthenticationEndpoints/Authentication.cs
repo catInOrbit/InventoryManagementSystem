@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Notifications;
 using Microsoft.AspNetCore.Cors;
 
 namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
@@ -30,17 +31,19 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ITokenClaimsService _tokenClaimsService;
         private readonly IUserAuthentication _userAuthentication;
+        private readonly IRedisRepository _redisRepository;
 
 
         private readonly UserRoleModificationService _userRoleModificationService;
         public UserInfoAuth UserInfo { get; set; } = new UserInfoAuth();
 
         public Authentication(SignInManager<ApplicationUser> signInManager,
-            ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IUserAuthentication userAuthentication)
+            ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IUserAuthentication userAuthentication, IRedisRepository redisRepository)
         {
             _signInManager = signInManager;
             _tokenClaimsService = tokenClaimsService;
             _userAuthentication = userAuthentication;
+            _redisRepository = redisRepository;
             _userRoleModificationService = new UserRoleModificationService(roleManager, userManager);
         }
 
@@ -69,6 +72,7 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                 var roles = await _userRoleModificationService.UserManager.GetRolesAsync(user);
                 var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, true, true);
 
+                
                 if (result.Succeeded)
                 {
                     // await HttpContext.AuthenticateAsync("Cookie", userPrincipal);
@@ -104,9 +108,11 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                     response.UserRole = roles[0];
                     response.ApplicationUser = userGet;
 
-
                     await _userAuthentication.SaveUserAsync(user);
-
+                    
+                    await _redisRepository.AddUserToGroup(roles[0], new NotificationUser(user, roles[0]));
+                    
+        
                     // await _userRoleModificationService.UserManager.RemoveAuthenticationTokenAsync(user, "IMSPublicAPI",
                     //     "Refreshtoken");
                     //

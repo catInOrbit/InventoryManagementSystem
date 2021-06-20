@@ -28,8 +28,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
 using WebApi.Helpers;
 
 namespace InventoryManagementSystem.PublicApi
@@ -222,6 +224,24 @@ namespace InventoryManagementSystem.PublicApi
             
             services.AddSingleton<IUserAuthentication, JwtUserSessionService>();
             services.AddSignalR();
+            
+            services.AddTransient<IRedisRepository, RedisRepository>();
+
+            services.AddSingleton<ConnectionMultiplexer>(sp =>
+            {
+                ConfigurationOptions configuration = new ConfigurationOptions()
+                {
+                    AllowAdmin = true,
+                    EndPoints = { { "redis-11726.c258.us-east-1-4.ec2.cloud.redislabs.com", 11726 }},
+                    Password = "6FSKO6Yu0vT8A34f761k84gisHlI5GAt",
+                    ConnectTimeout = 5000,
+                    ConnectRetry = 5,
+                    SyncTimeout = 5000,
+                    AbortOnConnectFail = false,
+                };
+
+                return ConnectionMultiplexer.Connect(configuration);
+            });
             
             
         }

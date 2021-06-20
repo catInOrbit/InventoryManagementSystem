@@ -25,13 +25,16 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
         private IUserAuthentication _userAuthentication;
 
         private UserRoleModificationService _userRoleModificationService;
+        private IAsyncRepository<Notification> _notificationAsyncRepository;
+
         public ApplicationUser UserInfo { get; set; } = new ApplicationUser();
         public Registration(UserManager<ApplicationUser> userManager, ITokenClaimsService tokenClaimsService,
-            RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService , IUserAuthentication userAuthentication)
+            RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService , IUserAuthentication userAuthentication, IAsyncRepository<Notification> notificationAsyncRepository)
         {
             _tokenClaimsService = tokenClaimsService;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
+            _notificationAsyncRepository = notificationAsyncRepository;
             _userRoleModificationService = new UserRoleModificationService(roleManager, userManager);
         }
         
@@ -89,6 +92,17 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                             {
                                 response.Token = await _tokenClaimsService.GetTokenAsync(request.Email);
                                 response.Verbose = "Authorized";
+                                
+                                //Save user notification info such as channel
+                                var notification = new Notification
+                                {
+                                    Channel = request.RoleName,
+                                    UserId = user.Id,
+                                    CreatedDate = DateTime.Now,
+                                    UserName = user.Fullname
+                                };
+
+                                await _notificationAsyncRepository.AddAsync(notification);
                             }
                         }
 

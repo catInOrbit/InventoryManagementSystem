@@ -49,6 +49,8 @@ namespace InventoryManagementSystem.PublicApi
                     await elasticSupRepos.ElasticSaveBulkAsync((await elasticSupRepos.ListAllAsync(new PagingOption<Supplier>(0,0))).ResultList.ToArray(),    ElasticIndexConstant.SUPPLIERS);
                         
                     await SeedRole.Initialize(services, "test@12345Aha");
+                    
+                    
                 }
                 catch (Exception ex)
                 {

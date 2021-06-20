@@ -51,18 +51,13 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
 
             var poData = _purchaseOrderRepos.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
             poData.PurchaseOrderStatus = PurchaseOrderStatusType.POCreated;
-            // if (poData != null)
-            // {
-            //     purchaseOrder.PurchaseOrderNumber = poData.PriceQuoteNumber;
-            //     purchaseOrder.PurchaseOrderProduct = poData.PurchaseOrderProduct;
-            //     purchaseOrder.SupplierId = poData.SupplierId;
-            // }
+     
             poData.Transaction.ModifiedDate = DateTime.Now;
             poData.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
 
             response.PurchaseOrder = poData;
             await _purchaseOrderRepos.UpdateAsync(poData);
-            await _indexAsyncRepository.ElasticSaveSingleAsync(true, IndexingHelper.PurchaseOrderSearchIndex(poData));
+            await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(poData));
             return Ok(response);
         }
     }

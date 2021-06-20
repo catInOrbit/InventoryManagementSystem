@@ -332,7 +332,7 @@ namespace Infrastructure.Data
             else
             {
                 Console.WriteLine("ElasticSaveSingleAsync: Type: " + type.GetType() + "AddNew");
-                _elasticCache.Add(type);
+                // _elasticCache.Add(type);
                 await _elasticClient.IndexDocumentAsync<T>(type);
             }
         }
@@ -386,6 +386,12 @@ namespace Infrastructure.Data
                     throw new Exception();
                 }
             }
+        }
+
+        public Notification GetNotificationInfoFromUserId(string userId)
+        {
+            return _identityAndProductDbContext.Notification
+                .FirstOrDefault(noti => noti.UserId == userId);
         }
     }
 }

@@ -60,7 +60,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote.C
             po.Transaction = transaction;
             response.PurchaseOrderPQ = po;
             await _asyncRepository.UpdateAsync(po);
-            await _indexAsyncRepository.ElasticSaveSingleAsync(true,IndexingHelper.PurchaseOrderSearchIndex(po));
+            await _indexAsyncRepository.ElasticSaveSingleAsync(false,IndexingHelper.PurchaseOrderSearchIndex(po));
             // pqr.CreatedBy
             return Ok(response);
         }
