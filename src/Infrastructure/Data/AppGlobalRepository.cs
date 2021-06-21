@@ -83,6 +83,7 @@ namespace Infrastructure.Data
             return pagingOption;
         }
 
+
         public async Task<List<PurchaseOrder>> PurchaseOrderFiltering(POSearchFilter poSearchFilter, CancellationToken cancellationToken)
         {
             var pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po =>
@@ -98,7 +99,12 @@ namespace Infrastructure.Data
                      (po.TotalOrderAmount >= Decimal.Parse(poSearchFilter.FromTotalOrderPrice) &&
                       po.TotalOrderAmount <= Decimal.Parse(poSearchFilter.ToTotalOrderPrice))) &&
                     (poSearchFilter.SupplierId == null || po.SupplierId == poSearchFilter.SupplierId) &&
-                    (poSearchFilter.CreatedByName == null || po.Transaction.CreatedBy.Fullname == poSearchFilter.CreatedByName))
+                    (poSearchFilter.CreatedByName == null || po.Transaction.CreatedBy.Fullname == poSearchFilter.CreatedByName)
+                    &&
+                    (poSearchFilter.FromModifiedDate == null ||
+                     (po.Transaction.ModifiedDate >= DateTime.Parse(poSearchFilter.FromModifiedDate) &&
+                      po.Transaction.ModifiedDate <= DateTime.Parse(poSearchFilter.ToModifiedDate)))
+                    )
                 .ToListAsync(cancellationToken);
             return pos;
         }
@@ -316,7 +322,7 @@ namespace Infrastructure.Data
             throw new System.NotImplementedException();
         }
         
-        public async Task ElasticSaveSingleAsync(bool isSavingNew, T type)
+        public async Task ElasticSaveSingleAsync(bool isSavingNew, T type, string index)
         {
             // if (_elasticCache.Any(p => p.Id == type.Id))
             // {
@@ -325,15 +331,20 @@ namespace Infrastructure.Data
 
             if (!isSavingNew)
             {
-                Console.WriteLine("ElasticSaveSingleAsync: Type: " + type.GetType() + "Update");
-                await _elasticClient.UpdateAsync<T>(type, u => u.Doc(type));
+                Console.WriteLine("ElasticSaveSingleAsync: Type: " + type.GetType() + " || Update");
+                var response = await _elasticClient.UpdateAsync<T>(type, u => u.Index(index).Doc(type));
+                if (!response.IsValid)
+                    throw new Exception();
             }
 
             else
             {
-                Console.WriteLine("ElasticSaveSingleAsync: Type: " + type.GetType() + "AddNew");
+                Console.WriteLine("ElasticSaveSingleAsync: Type: " + type.GetType() + " || AddNew");
                 // _elasticCache.Add(type);
-                await _elasticClient.IndexDocumentAsync<T>(type);
+                // await _elasticClient.IndexDocumentAsync<T>(type);
+                var respone = await _elasticClient.IndexAsync(type, i => i.Index(index));
+                if (!respone.IsValid)
+                    throw new Exception();
             }
         }
 

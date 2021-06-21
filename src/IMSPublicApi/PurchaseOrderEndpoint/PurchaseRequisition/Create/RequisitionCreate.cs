@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
@@ -54,7 +55,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             po.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionCreated;
             
             await _asyncRepository.AddAsync(po);
-            await _indexAsyncRepository.ElasticSaveSingleAsync(true, IndexingHelper.PurchaseOrderSearchIndex(po));
+            await _indexAsyncRepository.ElasticSaveSingleAsync(true, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
             var response = new RCreateResponse();
             response.PurchaseOrder = po;
             return Ok(response);

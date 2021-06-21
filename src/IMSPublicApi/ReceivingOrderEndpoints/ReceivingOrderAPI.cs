@@ -6,6 +6,7 @@ using Ardalis.ApiEndpoints;
 using Castle.Core.Internal;
 using Infrastructure;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
@@ -110,7 +111,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
 
             //Update and indexing
             await _recevingOrderRepository.AddAsync(ro);
-            await _recevingOrderSearchIndexRepository.ElasticSaveSingleAsync(true,IndexingHelper.GoodsReceiptOrderSearchIndex(ro));
+            await _recevingOrderSearchIndexRepository.ElasticSaveSingleAsync(true,IndexingHelper.GoodsReceiptOrderSearchIndex(ro), ElasticIndexConstant.RECEIVING_ORDERS);
 
             var response = new ROUpdateResponse();
             response.CreatedGoodsReceiptId = ro.Id;
@@ -157,7 +158,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             
             //Update and indexing
             await _productVariantRepository.UpdateAsync(productVariant);
-            await _poSearchIndexRepository.ElasticSaveSingleAsync(false,IndexingHelper.ProductSearchIndex(productVariant));
+            await _poSearchIndexRepository.ElasticSaveSingleAsync(false,IndexingHelper.ProductSearchIndex(productVariant), ElasticIndexConstant.RECEIVING_ORDERS);
             return Ok();
         }
     }
@@ -207,8 +208,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             
             await _poAsyncRepository.UpdateAsync(po);
             await _roAsyncRepository.UpdateAsync(ro);
-            await _poSearchIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po));
-            await _roSearchIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.GoodsReceiptOrderSearchIndex(ro));
+            await _poSearchIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po),ElasticIndexConstant.PURCHASE_ORDERS);
+            await _roSearchIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.GoodsReceiptOrderSearchIndex(ro),ElasticIndexConstant.RECEIVING_ORDERS);
             
             if(!response.IncompleteVariantId.IsNullOrEmpty())
                 return Ok(response);

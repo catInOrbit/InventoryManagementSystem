@@ -7,6 +7,7 @@ using Ardalis.ApiEndpoints;
 using Infrastructure;
 using Infrastructure.Data;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
@@ -73,7 +74,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
       
 
             await _purchaseOrderRepos.UpdateAsync(po);
-            await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false,IndexingHelper.PurchaseOrderSearchIndex(po));
+            await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false,IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
             response.PurchaseOrder = po;
             return Ok(response);
         }

@@ -1,28 +1,39 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
 
     public class Supplier : BaseEntity
     {
+        public Supplier()
+        {
+            Id = "SPL" +Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
+        }
         [StringLength(50)] [Required] public string SupplierName { get; set; }
 
-        [Display(Name = "Description")] public string Description { get; set; }
+         public string Description { get; set; }
 
-        [Required] [StringLength(50)] public string Street { get; set; }
+         public string Street { get; set; }
 
-        [Required] [StringLength(30)] public string City { get; set; }
+         public string City { get; set; }
 
-        [Required] [StringLength(30)] public string Province { get; set; }
+         public string Province { get; set; }
 
-        [Required] [StringLength(30)] public string Country { get; set; }
+         public string Country { get; set; }
 
-        [StringLength(50)] public string SalePersonName { get; set; }
+         public string SalePersonName { get; set; }
         public string PhoneNumber { get; set; }
 
         public string Email { get; set; }
         //IBaseAddress
+
+        public bool ShouldSerializeId()
+        {
+            return false;
+        }
 
     }
 }
