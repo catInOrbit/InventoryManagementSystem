@@ -28,7 +28,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public DateTime DeliveryDate { get; set; }
         public DateTime ConfirmedDate { get; set; }
         public DateTime CreatedDate { get; set; }
-        
+        public DateTime ModifiedDate { get; set; }
+
         public CompletionField Suggest { get; set; }
 
 

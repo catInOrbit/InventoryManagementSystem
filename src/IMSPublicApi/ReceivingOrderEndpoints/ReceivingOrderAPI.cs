@@ -93,7 +93,14 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                     ProductVariantName = (await _productRepository.GetByIdAsync(item.ProductVariantId)).Name
                 };
                 ro.ReceivedOrderItems.Add(roi);
+            }
 
+            //Update and indexing
+            await _recevingOrderRepository.AddAsync(ro);
+            
+            
+            foreach (var roi in ro.ReceivedOrderItems)
+            {
                 var package = (await _packageRepository.ListAllAsync(new PagingOption<Package>(0, 0))).ResultList.FirstOrDefault(package => package.ProductVariantId == roi.ProductVariantId);
                 
                 //Package
@@ -105,12 +112,10 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                     ImportedDate = ro.ReceivedDate,
                     GoodsReceiptOrderId = ro.Id
                 };
-
+                
                 await _packageRepository.AddAsync(package);
             }
-
-            //Update and indexing
-            await _recevingOrderRepository.AddAsync(ro);
+           
             await _recevingOrderSearchIndexRepository.ElasticSaveSingleAsync(true,IndexingHelper.GoodsReceiptOrderSearchIndex(ro), ElasticIndexConstant.RECEIVING_ORDERS);
 
             var response = new ROUpdateResponse();

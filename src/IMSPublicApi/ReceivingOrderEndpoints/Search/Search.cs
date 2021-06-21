@@ -72,7 +72,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
           }
           
           
-          [HttpGet("api/goodsreceipt/search/{Query}&page={CurrentPage}&size={SizePerPage}")]
+          [HttpPost("api/goodsreceipt/search")]
           [SwaggerOperation(
               Summary = "Get all receive Order",
               Description = "Get all Receive Order"+
@@ -82,7 +82,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
               OperationId = "ro.search",
               Tags = new[] { "GoodsReceiptOrders" })
           ]
-          public override async Task<ActionResult<ROGetResponse>> HandleAsync([FromRoute] ROSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
+          public override async Task<ActionResult<ROGetResponse>> HandleAsync(ROSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
           {
               
               if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Read))
@@ -93,13 +93,20 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
               
               var response = new ROGetResponse();
               response.IsDislayingAll = true;
-              
+
+              if (request.Query == "")
+              {
+                  response.Paging  = await _asyncRepository.GetROForELIndexAsync(pagingOption, request.RoSearchFilter, cancellationToken);
+                  return Ok(response);
+              }
               
               var responseElastic = await _elasticClient.SearchAsync<GoodsReceiptOrderSearchIndex>(
                   s => s.Size(2000).Index(ElasticIndexConstant.RECEIVING_ORDERS).Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
-              
-              foreach (var goodsReceiptOrderSearchIndex in responseElastic.Documents)
-                  pagingOption.ResultList.Add(goodsReceiptOrderSearchIndex);
+
+
+              pagingOption.ResultList = _asyncRepository.ReceivingOrderIndexFiltering(
+                  responseElastic.Documents.ToList(), request.RoSearchFilter, cancellationToken);
+                              
               pagingOption.ExecuteResourcePaging();
 
               response.Paging = pagingOption;
@@ -170,6 +177,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
             
            var response = new POsForROResponse();
            
+                       
            var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>
            (
                s => s.Size(2000).Index(ElasticIndexConstant.PURCHASE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.Id + '*'))));

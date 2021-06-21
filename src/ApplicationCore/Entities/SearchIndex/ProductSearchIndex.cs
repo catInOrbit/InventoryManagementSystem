@@ -15,14 +15,20 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         {
             return false;
         }
-        
+        public string Category { get; set; }
+        public string Strategy { get; set; }
+        public string Brand { get; set; }
+
         public string ProductId { get; set; }
         public string VariantId { get; set; }
         public string Name { get; set; }
         public string Sku { get; set; }
         public string Unit { get; set; }
-        public string Catagory { get; set; }
         public int Quantity { get; set; }
+        
+        public decimal Price { get; set; }
+
+        public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public CompletionField Suggest { get; set; }
 

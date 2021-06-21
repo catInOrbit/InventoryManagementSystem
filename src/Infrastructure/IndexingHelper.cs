@@ -1,6 +1,7 @@
 using System;
 using Elasticsearch.Net;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 
@@ -18,6 +19,7 @@ namespace Infrastructure
                     ? po.PurchaseOrderStatus.GetStringValue()
                     : "",
                 CreatedDate = po.Transaction.CreatedDate,
+                ModifiedDate = po.Transaction.ModifiedDate,
                 DeliveryDate = po.DeliveryDate,
                 TotalPrice = (po.TotalOrderAmount != null) ? po.TotalOrderAmount : 0,
                 ConfirmedByName = (po.Transaction.CreatedBy != null) ? po.Transaction.CreatedBy.Fullname : "",
@@ -30,23 +32,6 @@ namespace Infrastructure
             
             index.FillSuggestion();
 
-            //
-            // var index = new PurchaseOrderSearchIndex();
-            // index.Id = po.Id;
-            // index.SupplierName = (po.Supplier != null) ? po.Supplier.SupplierName : "";
-            // index.PurchaseOrderNumber = (po.PurchaseOrderNumber != null) ? po.PurchaseOrderNumber : "";
-            // index.Status = (po.PurchaseOrderStatus.GetStringValue() != null)
-            //     ? po.PurchaseOrderStatus.GetStringValue()
-            //     : "";
-            // index.CreatedDate = po.Transaction.CreatedDate;
-            // index.DeliveryDate = po.DeliveryDate;
-            // index.TotalPrice = (po.TotalOrderAmount != null) ? po.TotalOrderAmount : 0;
-            // index.ConfirmedByName = (po.Transaction.CreatedBy != null) ? po.Transaction.CreatedBy.Fullname : "";
-            // index.SupplierEmail = (po.Supplier != null) ? po.Supplier.Email : "";
-            // index.SupplierId = (po.Supplier != null) ? po.Supplier.Id : "";
-            // index.SupplierPhone = (po.Supplier != null) ? po.Supplier.PhoneNumber : "";
-            // index.CanceledByName = (po.Transaction.CreatedBy != null) ? po.Transaction.CreatedBy.Fullname : "";
-            // index.CreatedByName = (po.Transaction.CreatedBy != null) ? po.Transaction.CreatedBy.Fullname : "";
 
             return index;
         }
@@ -59,12 +44,29 @@ namespace Infrastructure
                 PurchaseOrderId = (ro.PurchaseOrderId!=null) ? ro.PurchaseOrderId : "",
                 SupplierName = (ro.Supplier!=null) ? ro.Supplier.SupplierName : "",
                 CreatedBy = (ro.Transaction.CreatedBy!=null) ? ro.Transaction.CreatedBy.Fullname : "" ,
-                CreatedDate = ro.Transaction.CreatedDate.ToShortDateString(),
-                
+                CreatedDate = ro.Transaction.CreatedDate
             };
 
             return index;
         }
+        
+        public static GoodsIssueSearchIndex GoodsIssueSearchIndexHelper(GoodsIssueOrder gi)
+        {
+            var index = new GoodsIssueSearchIndex
+            {
+                Id = gi.Id,
+                Status = gi.GoodsIssueType.ToString(),
+                CreatedByName = (gi.Transaction.CreatedBy!=null) ? gi.Transaction.CreatedBy.Fullname : "" ,
+                CreatedDate =  gi.Transaction.CreatedDate,
+                DeliveryDate = gi.DeliveryDate,
+                DeliveryMethod = gi.DeliveryMethod,
+                GoodsIssueNumber = gi.Id,
+                GoodsIssueRequestNumber = gi.RequestId
+            };
+
+            return index;
+        }
+        
 
         public static ProductSearchIndex ProductSearchIndex(Product product)
         {
@@ -85,10 +87,11 @@ namespace Infrastructure
                         Name = nameConcat,
                         ProductId = productVariant.ProductId,
                         VariantId = productVariant.Id,
-                        Catagory = (product.Category != null) ? product.Category.CategoryName : "",
+                        Category = (product.Category != null) ? product.Category.CategoryName : "",
                         Quantity = productVariant.StorageQuantity,
                         ModifiedDate = productVariant.Transaction.ModifiedDate,
                         Sku = productVariant.Sku,
+                        Brand = product.BrandName
                     };
                     index.FillSuggestion();
                     
@@ -121,11 +124,15 @@ namespace Infrastructure
                         Name = nameConcat,
                         ProductId = productVariant.ProductId,
                         VariantId = productVariant.Id,
-                        Catagory = productVariant.Product.Category.CategoryName,
+                        Category = (productVariant.Product.Category.CategoryName != null) ? productVariant.Product.Category.CategoryName : "",
                         Quantity = productVariant.StorageQuantity,
                         ModifiedDate = productVariant.Transaction.ModifiedDate,
                         Sku = productVariant.Sku,
-                        Unit = productVariant.Unit
+                        Unit = productVariant.Unit,
+                        Brand = (productVariant.Product.BrandName != null) ? productVariant.Product.BrandName : "",
+                        Price = productVariant.Price,
+                        Strategy = (productVariant.Product.SellingStrategy!= null) ? productVariant.Product.SellingStrategy : "",
+                        CreatedDate = productVariant.Transaction.CreatedDate
                     };
                     index.FillSuggestion();
                 }

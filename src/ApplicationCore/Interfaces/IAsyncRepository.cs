@@ -30,6 +30,12 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
 
         List<PurchaseOrderSearchIndex> PurchaseOrderIndexFiltering(List<PurchaseOrderSearchIndex> resource,
             POSearchFilter poSearchFilter, CancellationToken cancellationToken);
+        
+        List<GoodsReceiptOrderSearchIndex> ReceivingOrderIndexFiltering(List<GoodsReceiptOrderSearchIndex> resource,
+            ROSearchFilter roSearchFilter, CancellationToken cancellationToken);
+        
+        List<GoodsIssueSearchIndex> GoodsIssueIndexFiltering(List<GoodsIssueSearchIndex> resource,
+            GISearchFilter giSearchFilter, CancellationToken cancellationToken);
 
         // Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default);
         Task<PagingOption<T>> ListAllAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default);

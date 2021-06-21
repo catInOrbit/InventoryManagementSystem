@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities
@@ -10,6 +11,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         [JsonIgnore]
         [Nest.PropertyName("id")]
         public virtual string Id { get; set; }
-
+        
     }
 }
