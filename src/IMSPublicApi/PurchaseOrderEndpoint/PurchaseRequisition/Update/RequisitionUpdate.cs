@@ -5,6 +5,8 @@ using Ardalis.ApiEndpoints;
 using Infrastructure;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Constants;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
@@ -48,13 +50,23 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Requisition", UserOperations.Update))
                 return Unauthorized();
-            var po = await _asyncRepository.GetByIdAsync(request.Id);
+                
+            var po = new ApplicationCore.Entities.Orders.PurchaseOrder();
+            po.Transaction = new Transaction
+            {
+                CreatedDate = DateTime.Now,
+                Type = TransactionType.Requisition,
+                CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
+                TransactionStatus = true
+            };
 
-            po.PurchaseOrderProduct.Clear();
+            po.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionCreated;
+            
             foreach (var requestOrderItem in request.OrderItems)
             {
                 requestOrderItem.OrderId = po.Id;
                 requestOrderItem.ProductVariant = await _pvasyncRepository.GetByIdAsync(requestOrderItem.ProductVariantId);
+                requestOrderItem.TotalAmount = requestOrderItem.OrderQuantity * requestOrderItem.Price;
             }
             
             po.PurchaseOrderProduct = request.OrderItems;
@@ -63,19 +75,17 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             po.Deadline = request.Deadline;
             
-            await _asyncRepository.UpdateAsync(po);
-            await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
-            
-            
+            await _asyncRepository.AddAsync(po);
+            await _indexAsyncRepository.ElasticSaveSingleAsync(true, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
             
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
                 
             var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Update","Purchase Requisition", po.Id);
+                _notificationService.CreateMessage(currentUser.Fullname, "Create","Purchase Requisition", po.Id);
                 
             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
                 currentUser.Id, messageNotification);
-            return Ok(new RUpdateResponse{PurchaseOrder = po});
+            return Ok(new RUpdateResponse{CreatedRequisitionId = po.Id});
         }
     }
 }

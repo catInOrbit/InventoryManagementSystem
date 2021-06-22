@@ -2,6 +2,7 @@
 {
     public enum TransactionType
     {
+        Requisition = 0,
         PriceQuote = 1,
         Purchase = 2,
         Receive= 3,

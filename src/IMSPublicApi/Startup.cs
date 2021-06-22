@@ -62,8 +62,10 @@ namespace InventoryManagementSystem.PublicApi
             // services.AddDbContext<IdentityAndProductDbContext>(options =>
             //     options.UseNpgsql(Configuration.GetConnectionString("Heroku"),  b => b.MigrationsAssembly("IMSPublicApi")));
             
+            services.AddHostedService<RedisWorkerService>();
+            
             services.AddDbContext<IdentityAndProductDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString(LOCAL_IDENTITY),  b => b.MigrationsAssembly("IMSPublicApi")));
+                options.UseSqlServer(Configuration.GetConnectionString(HEROKUSQL),  b => b.MigrationsAssembly("IMSPublicApi")));
 
             services.AddCors(c =>
             {

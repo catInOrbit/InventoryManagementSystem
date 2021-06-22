@@ -32,7 +32,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
         private readonly IAsyncRepository<Notification> _notificationAsyncRepository;
         private IHubContext<NotificationHub> _hubContext;
 
-        private INotificationService _notificationService;
+        private readonly INotificationService _notificationService;
 
         public PriceQuoteRequestSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, IRedisRepository redisRepository, IAsyncRepository<Notification> notificationAsyncRepository, IHubContext<NotificationHub> hubContext, INotificationService notificationService)
         {

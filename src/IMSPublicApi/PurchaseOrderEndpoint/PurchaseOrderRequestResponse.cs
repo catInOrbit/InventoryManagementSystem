@@ -121,7 +121,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
     
     public class RUpdateResponse : BaseResponse
     {
-        public ApplicationCore.Entities.Orders.PurchaseOrder PurchaseOrder { get; set; }
+        public string CreatedRequisitionId { get; set; }
     }
     
    public class GetPriceQuoteRequest : BaseRequest

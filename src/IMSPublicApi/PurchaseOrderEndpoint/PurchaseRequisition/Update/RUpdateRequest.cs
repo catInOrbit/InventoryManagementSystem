@@ -6,7 +6,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
 {
     public class RUpdateRequest
     {
-        public string Id { get; set; }
         public DateTime Deadline { get; set; }
         public List<OrderItem> OrderItems { get; set; }
     }

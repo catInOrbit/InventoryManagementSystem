@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 
@@ -21,8 +22,5 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public decimal Price { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal TotalAmount { get; set; }
-        
-
-      
     }
 }

@@ -4,6 +4,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
 {
     public class Notification : BaseEntity
     {
+        public override string Id { get; set; }
         public Notification()
         {
             Id = Guid.NewGuid().ToString();

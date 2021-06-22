@@ -15,6 +15,7 @@ namespace Infrastructure.Identity.DbContexts
             : base(options)
         {
         }
+
         // public DbSet<Brand> Brand { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<Supplier> Supplier { get; set; }
