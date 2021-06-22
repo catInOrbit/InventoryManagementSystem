@@ -26,7 +26,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
             _authorizationService = authorizationService;
         }
         
-        [HttpGet("api/product/category/page={CurrentPage}&size={SizePerPage}")]
+        [HttpGet("api/product/category")]
         [SwaggerOperation(
             Summary = "Get list of category",
             Description = "Get list of category" +
@@ -35,7 +35,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
             OperationId = "product-category.getall",
             Tags = new[] { "ProductEndpoints" })
         ]
-        public override async Task<ActionResult<GetAllCategoryResponse>> HandleAsync([FromRoute] GetCategoryRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<GetAllCategoryResponse>> HandleAsync([FromQuery] GetCategoryRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Read))
                 return Unauthorized();

@@ -17,45 +17,45 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.SupplierSearch
 {
-    public class GetAllSupplier : BaseAsyncEndpoint.WithRequest<GetAllSupplierRequest>.WithResponse<GetSupplierResponse>
-    {
-        private IAsyncRepository<Supplier> _asyncRepository;
-        private readonly IAuthorizationService _authorizationService;
-
-        public GetAllSupplier(IAsyncRepository<Supplier> asyncRepository, IAuthorizationService authorizationService)
-        {
-            _asyncRepository = asyncRepository;
-            _authorizationService = authorizationService;
-        }
-        
-        [HttpPost("api/suppliers/all")]
-        [SwaggerOperation(
-            Summary = "Get all supplier",
-            Description = "Get all supplier"  +
-                          "\n {SearchQuery}: Querry to search, all to search all \n " +
-                          "{CurrentPage}: Current page to display \n" +
-                          "{SizePerPage}: Number of rows to display in a page \n " +
-                          "{Status} Status of purchase order",
-            OperationId = "sups.update",
-            Tags = new[] { "SupplierEndpoints" })
-        ]
-        public override async Task<ActionResult<GetSupplierResponse>> HandleAsync(GetAllSupplierRequest request, CancellationToken cancellationToken = new CancellationToken())
-        {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.SUPPLIER, UserOperations.Read))
-                return Unauthorized();
-            
-            var response = new GetSupplierResponse();
-            PagingOption<Supplier> pagingOption =
-                new PagingOption<Supplier>(request.CurrentPage, request.SizePerPage);
-            response.IsDisplayingAll = true;
-            
-            response.Paging = await 
-                _asyncRepository.ListAllAsync(pagingOption, cancellationToken);
-     
-            return Ok(response);
-        }
-    }
-    
+    // public class GetAllSupplier : BaseAsyncEndpoint.WithRequest<GetAllSupplierRequest>.WithResponse<GetSupplierResponse>
+    // {
+    //     private IAsyncRepository<Supplier> _asyncRepository;
+    //     private readonly IAuthorizationService _authorizationService;
+    //
+    //     public GetAllSupplier(IAsyncRepository<Supplier> asyncRepository, IAuthorizationService authorizationService)
+    //     {
+    //         _asyncRepository = asyncRepository;
+    //         _authorizationService = authorizationService;
+    //     }
+    //     
+    //     [HttpPost("api/suppliers/all")]
+    //     [SwaggerOperation(
+    //         Summary = "Get all supplier",
+    //         Description = "Get all supplier"  +
+    //                       "\n {SearchQuery}: Querry to search, all to search all \n " +
+    //                       "{CurrentPage}: Current page to display \n" +
+    //                       "{SizePerPage}: Number of rows to display in a page \n " +
+    //                       "{Status} Status of purchase order",
+    //         OperationId = "sups.update",
+    //         Tags = new[] { "SupplierEndpoints" })
+    //     ]
+    //     public override async Task<ActionResult<GetSupplierResponse>> HandleAsync(GetAllSupplierRequest request, CancellationToken cancellationToken = new CancellationToken())
+    //     {
+    //         if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.SUPPLIER, UserOperations.Read))
+    //             return Unauthorized();
+    //         
+    //         var response = new GetSupplierResponse();
+    //         PagingOption<Supplier> pagingOption =
+    //             new PagingOption<Supplier>(request.CurrentPage, request.SizePerPage);
+    //         response.IsDisplayingAll = true;
+    //         
+    //         response.Paging = await 
+    //             _asyncRepository.ListAllAsync(pagingOption, cancellationToken);
+    //  
+    //         return Ok(response);
+    //     }
+    // }
+    //
      public class SearchSupplier : BaseAsyncEndpoint.WithRequest<SupplierSearchRequest>.WithResponse<GetSupplierResponse>
     {
         private IAsyncRepository<Supplier> _asyncRepository;
@@ -69,7 +69,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.SupplierSearch
             _authorizationService = authorizationService;
         }
         
-        [HttpPost("api/suppliers/search")]
+        [HttpGet("api/suppliers/search")]
         [SwaggerOperation(
             Summary = "Get all supplier",
             Description = "Get all supplier"  +
@@ -80,7 +80,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.SupplierSearch
             OperationId = "sups.update",
             Tags = new[] { "SupplierEndpoints" })
         ]
-        public override async Task<ActionResult<GetSupplierResponse>> HandleAsync(SupplierSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<GetSupplierResponse>> HandleAsync([FromQuery]SupplierSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.SUPPLIER, UserOperations.Read))
                 return Unauthorized();
@@ -90,9 +90,16 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.SupplierSearch
                 new PagingOption<Supplier>(request.CurrentPage, request.SizePerPage);
             response.IsDisplayingAll = true;
 
+            if (request.SearchQuery == null)
+            {
+                response.Paging = await 
+                    _asyncRepository.ListAllAsync(pagingOption, cancellationToken);
+                return Ok(response);
+            }
+
             var responseElastic = await _elasticClient.SearchAsync<Supplier>
             (
-                s => s.Size(2000).Index(ElasticIndexConstant.SUPPLIERS).Query(q => q.QueryString(d => d.Query('*' + request.Query + '*'))));
+                s => s.Size(2000).Index(ElasticIndexConstant.SUPPLIERS).Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
 
             foreach (var purchaseOrderSearchIndex in responseElastic.Documents)
             {

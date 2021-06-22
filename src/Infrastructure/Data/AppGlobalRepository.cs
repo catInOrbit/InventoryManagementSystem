@@ -61,10 +61,10 @@ namespace Infrastructure.Data
             return pagingOption;
         }
 
-        public async Task<PagingOption<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(PagingOption<PurchaseOrderSearchIndex> pagingOption, POSearchFilter poSearchFilter, CancellationToken cancellationToken = default)
+        public async Task<PagingOption<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(PagingOption<PurchaseOrderSearchIndex> pagingOption, POSearchFilter poSearchFilter,  CancellationToken cancellationToken = default)
         {
-            
-            var pos = await PurchaseOrderFiltering(poSearchFilter, cancellationToken);
+
+            var pos = await _identityAndProductDbContext.PurchaseOrder.ToListAsync();
             foreach (var po in pos)
             {
                 PurchaseOrderSearchIndex index; 
@@ -78,43 +78,50 @@ namespace Infrastructure.Data
                     throw;
                 }
             }
-            
+
+            pagingOption.ResultList = PurchaseOrderIndexFiltering(pagingOption.ResultList.ToList(), poSearchFilter);
             pagingOption.ExecuteResourcePaging();
             return pagingOption;
         }
 
 
-        public async Task<List<PurchaseOrder>> PurchaseOrderFiltering(POSearchFilter poSearchFilter, CancellationToken cancellationToken)
-        {
-            var pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po =>
-                    (poSearchFilter.Status == -99 ||
-                     po.PurchaseOrderStatus == (PurchaseOrderStatusType) poSearchFilter.Status) &&
-                    (poSearchFilter.FromDeliveryDate == null ||
-                     (po.DeliveryDate >= DateTime.Parse(poSearchFilter.FromDeliveryDate) &&
-                      po.DeliveryDate <= DateTime.Parse(poSearchFilter.ToDeliveryDate))) &&
-                    (poSearchFilter.FromCreatedDate == null ||
-                     (po.Transaction.CreatedDate >= DateTime.Parse(poSearchFilter.FromCreatedDate) &&
-                      po.Transaction.CreatedDate <= DateTime.Parse(poSearchFilter.ToCreatedDate))) &&
-                    (poSearchFilter.FromTotalOrderPrice == null ||
-                     (po.TotalOrderAmount >= Decimal.Parse(poSearchFilter.FromTotalOrderPrice) &&
-                      po.TotalOrderAmount <= Decimal.Parse(poSearchFilter.ToTotalOrderPrice))) &&
-                    (poSearchFilter.SupplierId == null || po.SupplierId == poSearchFilter.SupplierId) &&
-                    (poSearchFilter.CreatedByName == null || po.Transaction.CreatedBy.Fullname == poSearchFilter.CreatedByName)
-                    &&
-                    (poSearchFilter.FromModifiedDate == null ||
-                     (po.Transaction.ModifiedDate >= DateTime.Parse(poSearchFilter.FromModifiedDate) &&
-                      po.Transaction.ModifiedDate <= DateTime.Parse(poSearchFilter.ToModifiedDate)))
-                    )
-                .ToListAsync(cancellationToken);
-            return pos;
-        }
+        // public async Task<List<PurchaseOrder>> PurchaseOrderFiltering(POSearchFilter poSearchFilter, CancellationToken cancellationToken)
+        // {
+        //     var pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po =>
+        //             (poSearchFilter.FromStatus == null ||
+        //              
+        //              po.PurchaseOrderStatus == (PurchaseOrderStatusType) poSearchFilter.Status) &&
+        //             
+        //             
+        //             (poSearchFilter.FromDeliveryDate == null ||
+        //              (po.DeliveryDate >= DateTime.Parse(poSearchFilter.FromDeliveryDate) &&
+        //               po.DeliveryDate <= DateTime.Parse(poSearchFilter.ToDeliveryDate))) &&
+        //             (poSearchFilter.FromCreatedDate == null ||
+        //              (po.Transaction.CreatedDate >= DateTime.Parse(poSearchFilter.FromCreatedDate) &&
+        //               po.Transaction.CreatedDate <= DateTime.Parse(poSearchFilter.ToCreatedDate))) &&
+        //             (poSearchFilter.FromTotalOrderPrice == null ||
+        //              (po.TotalOrderAmount >= Decimal.Parse(poSearchFilter.FromTotalOrderPrice) &&
+        //               po.TotalOrderAmount <= Decimal.Parse(poSearchFilter.ToTotalOrderPrice))) &&
+        //             (poSearchFilter.SupplierId == null || po.SupplierId == poSearchFilter.SupplierId) &&
+        //             (poSearchFilter.CreatedByName == null || po.Transaction.CreatedBy.Fullname == poSearchFilter.CreatedByName)
+        //             &&
+        //             (poSearchFilter.FromModifiedDate == null ||
+        //              (po.Transaction.ModifiedDate >= DateTime.Parse(poSearchFilter.FromModifiedDate) &&
+        //               po.Transaction.ModifiedDate <= DateTime.Parse(poSearchFilter.ToModifiedDate)))
+        //             )
+        //         .ToListAsync(cancellationToken);
+        //     return pos;
+        // }
         
-        public List<PurchaseOrderSearchIndex> PurchaseOrderIndexFiltering(List<PurchaseOrderSearchIndex> resource, POSearchFilter poSearchFilter, CancellationToken cancellationToken)
+        
+        public List<PurchaseOrderSearchIndex> PurchaseOrderIndexFiltering(List<PurchaseOrderSearchIndex> resource, POSearchFilter poSearchFilter, CancellationToken cancellationToken  = default)
         {
             var pos = resource.Where(po =>
-                    (poSearchFilter.Status == -99 ||
-                     po.Status == ((PurchaseOrderStatusType) poSearchFilter.Status).ToString()) 
-                    
+                    ( (poSearchFilter.FromStatus  == null ||
+                      (int)(ParseEnum<PurchaseOrderStatusType>(po.Status))  >= Int32.Parse(poSearchFilter.FromStatus)
+                        &&
+                      (int)(ParseEnum<PurchaseOrderStatusType>(po.Status))  <= Int32.Parse(poSearchFilter.ToStatus))
+                      
                     &&
                     (poSearchFilter.FromDeliveryDate == null ||
                      (po.DeliveryDate >= DateTime.Parse(poSearchFilter.FromDeliveryDate) &&
@@ -145,14 +152,20 @@ namespace Infrastructure.Data
                       po.ConfirmedDate <= DateTime.Parse(poSearchFilter.ToConfirmedDate)))
                     &&
                     (poSearchFilter.ConfirmedByName == null || po.ConfirmedByName == poSearchFilter.ConfirmedByName)
-                )
+                ))
                 .ToList();
             return pos;
         }
+        
+        private static T ParseEnum<T>(string value)
+        {
+            return (T) Enum.Parse(typeof(T), value, true);
+        }
 
-        public List<GoodsReceiptOrderSearchIndex> ReceivingOrderIndexFiltering(List<GoodsReceiptOrderSearchIndex> resource, ROSearchFilter roSearchFilter, CancellationToken cancellationToken)
+        public List<GoodsReceiptOrderSearchIndex> ReceivingOrderIndexFiltering(List<GoodsReceiptOrderSearchIndex> resource, ROSearchFilter roSearchFilter, CancellationToken cancellationToken = default)
         {
             var ros = resource.Where(ro =>
+                    
                     (roSearchFilter.CreatedByName == null || ro.CreatedBy == roSearchFilter.CreatedByName)
                     &&
                     (roSearchFilter.FromCreatedDate == null ||
@@ -165,10 +178,14 @@ namespace Infrastructure.Data
             return ros;
         }
 
-        public List<GoodsIssueSearchIndex> GoodsIssueIndexFiltering(List<GoodsIssueSearchIndex> resource, GISearchFilter giSearchFilter, CancellationToken cancellationToken)
+        public List<GoodsIssueSearchIndex> GoodsIssueIndexFiltering(List<GoodsIssueSearchIndex> resource, GISearchFilter giSearchFilter, CancellationToken cancellationToken =default)
         {
             var ros = resource.Where(gi =>
-                    (giSearchFilter.Status == -99 || gi.Status == ((GoodsIssueStatusType)giSearchFilter.Status).ToString())
+                    
+                    (giSearchFilter.FromStatus  == null ||
+                     (int)(ParseEnum<GoodsIssueStatusType>(gi.Status))  >= Int32.Parse(giSearchFilter.FromStatus)
+                     &&
+                     (int)(ParseEnum<GoodsIssueStatusType>(gi.Status))  <= Int32.Parse(giSearchFilter.ToStatus))
                     &&
                     (giSearchFilter.FromCreatedDate == null ||
                      (gi.CreatedDate >= DateTime.Parse(giSearchFilter.FromCreatedDate) &&
@@ -186,6 +203,73 @@ namespace Infrastructure.Data
             return ros;
         }
 
+        public List<ProductSearchIndex> ProductIndexFiltering(List<ProductSearchIndex> resource, ProductSearchFilter productSearchFilter, CancellationToken cancellationToken)
+        {
+            var pos = resource.Where(product =>
+                ( 
+                    (productSearchFilter.FromCreatedDate == null ||
+                     (product.CreatedDate >= DateTime.Parse(productSearchFilter.FromCreatedDate) &&
+                      product.CreatedDate <= DateTime.Parse(productSearchFilter.ToCreatedDate))) 
+                    
+                    &&
+                    (productSearchFilter.FromModifiedDate == null ||
+                     (product.ModifiedDate >= DateTime.Parse(productSearchFilter.FromModifiedDate) &&
+                      product.ModifiedDate <= DateTime.Parse(productSearchFilter.ToModifiedDate))) 
+                    
+                    &&
+                    (productSearchFilter.Category == null ||
+                     (product.Category == productSearchFilter.Category) 
+                    
+                     &&
+                     (productSearchFilter.Strategy == null ||
+                      (product.Strategy == productSearchFilter.Strategy) 
+                    
+                      &&
+                      (productSearchFilter.CreatedByName == null || product.CreatedByName == productSearchFilter.CreatedByName)
+                     
+                      &&
+                      (productSearchFilter.ModifiedByName == null || product.ModifiedByName == productSearchFilter.ModifiedByName)
+                     
+                     
+                      &&
+                      (productSearchFilter.FromPrice == null || 
+                       (product.Price >= Decimal.Parse(productSearchFilter.FromPrice)
+                        && product.Price <= Decimal.Parse(productSearchFilter.ToPrice)
+                       ) )
+                      &&
+                      (productSearchFilter.Brand == null || product.Brand == productSearchFilter.Brand)
+                     ))))
+                .ToList();
+            return pos;
+        }
+
+        public List<StockTakeSearchIndex> StockTakeIndexFiltering(List<StockTakeSearchIndex> resource, STSearchFilter stSearchFilter, CancellationToken cancellationToken = default)
+        {
+            var sts = resource.Where(st =>
+                ( 
+                    (stSearchFilter.FromStatus  == null ||
+                     (int)(ParseEnum<StockTakeOrderType>(st.Status))  >= Int32.Parse(stSearchFilter.FromStatus)
+                     &&
+                     (int)(ParseEnum<StockTakeOrderType>(st.Status))  <= Int32.Parse(stSearchFilter.ToStatus))
+                    
+                    &&
+                    (stSearchFilter.FromCreatedDate == null ||
+                     (st.CreatedDate >= DateTime.Parse(stSearchFilter.FromCreatedDate) &&
+                      st.CreatedDate <= DateTime.Parse(stSearchFilter.ToCreatedDate))) 
+                    
+                    &&
+                    (stSearchFilter.FromDeliveryDate == null ||
+                     (st.ModifiedDate >= DateTime.Parse(stSearchFilter.FromDeliveryDate) &&
+                      st.ModifiedDate <= DateTime.Parse(stSearchFilter.ToDeliveryDate))) 
+                    
+               
+                      &&
+                      (stSearchFilter.CreatedByName == null || st.CreatedByName == stSearchFilter.CreatedByName)
+                     ))
+                .ToList();
+            return sts;
+        }
+
 
         public string VariantNameConcat(List<string> productVariantValues)
         {
@@ -201,9 +285,7 @@ namespace Infrastructure.Data
         public async Task<PagingOption<GoodsReceiptOrderSearchIndex>> GetROForELIndexAsync(PagingOption<GoodsReceiptOrderSearchIndex> pagingOption, ROSearchFilter roSearchFilter, CancellationToken cancellationToken = default)
         {
             
-            var ros = await _identityAndProductDbContext.Set<GoodsReceiptOrder>().
-                Where(ro => roSearchFilter.FromCreatedDate == null || (ro.Transaction.CreatedDate >= DateTime.Parse(roSearchFilter.FromCreatedDate) && (ro.Transaction.CreatedDate <= DateTime.Parse(roSearchFilter.ToCreatedDate))))
-                .ToListAsync(cancellationToken);
+            var ros = await _identityAndProductDbContext.Set<GoodsReceiptOrder>().ToListAsync(cancellationToken);
 
             foreach (var ro in ros)
             {
@@ -218,6 +300,7 @@ namespace Infrastructure.Data
                 }
             }
 
+            pagingOption.ResultList = ReceivingOrderIndexFiltering(pagingOption.ResultList.ToList(), roSearchFilter);
             pagingOption.ExecuteResourcePaging();
             return pagingOption;
         }
@@ -238,11 +321,13 @@ namespace Infrastructure.Data
                     throw;
                 }
             }
+            
+            pagingOption.ResultList = GoodsIssueIndexFiltering(pagingOption.ResultList.ToList(), searchFilter);
             pagingOption.ExecuteResourcePaging();
             return pagingOption;
         }
 
-        public async Task<PagingOption<StockTakeSearchIndex>> GetSTForELIndexAsync(PagingOption<StockTakeSearchIndex> pagingOption, CancellationToken cancellationToken = default)
+        public async Task<PagingOption<StockTakeSearchIndex>> GetSTForELIndexAsync(PagingOption<StockTakeSearchIndex> pagingOption,STSearchFilter stSearchFilter, CancellationToken cancellationToken = default)
         {
             
             var sts = await _identityAndProductDbContext.Set<StockTakeOrder>().ToListAsync(cancellationToken);
@@ -269,6 +354,7 @@ namespace Infrastructure.Data
                     throw;
                 }
             }
+            pagingOption.ResultList = StockTakeIndexFiltering(pagingOption.ResultList.ToList(), stSearchFilter);
             pagingOption.ExecuteResourcePaging();
             return pagingOption;
         }

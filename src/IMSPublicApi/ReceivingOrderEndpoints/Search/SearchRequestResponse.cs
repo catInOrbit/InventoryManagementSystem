@@ -17,11 +17,14 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
     
     public class ROSearchRequest : BaseRequest
     {
-        public string Query { get; set; }
+        public string SearchQuery { get; set; }
         public int CurrentPage { get; set; }
         public int SizePerPage { get; set; }
         
-        public ROSearchFilter RoSearchFilter { get; set; }
+        public string SupplierName { get; set; }
+        public string FromCreatedDate { get; set; }
+        public string ToCreatedDate { get; set; }
+        public string CreatedByName { get; set; }
 
     }
     

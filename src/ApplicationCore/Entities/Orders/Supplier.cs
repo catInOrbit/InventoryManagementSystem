@@ -12,6 +12,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         {
             Id = "SPL" +Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
         }
+
         [StringLength(50)] [Required] public string SupplierName { get; set; }
 
          public string Description { get; set; }
@@ -29,11 +30,5 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 
         public string Email { get; set; }
         //IBaseAddress
-
-        public bool ShouldSerializeId()
-        {
-            return false;
-        }
-
     }
 }

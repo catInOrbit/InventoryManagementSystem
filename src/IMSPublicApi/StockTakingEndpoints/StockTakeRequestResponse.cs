@@ -20,6 +20,15 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
 
         public int CurrentPage { get; set; }
         public int SizePerPage { get; set; }
+        
+        public string FromStatus { get; set; }
+        public string ToStatus { get; set; }
+        public string FromCreatedDate { get; set; }
+        public string ToCreatedDate { get; set; }
+        public string CreatedByName { get; set; }
+        public string DeliveryMethod { get; set; }
+        public string FromDeliveryDate { get; set; }
+        public string ToDeliveryDate { get; set; }
     }
     
     public class STSearchResponse : BaseSearchResponse<StockTakeSearchIndex>

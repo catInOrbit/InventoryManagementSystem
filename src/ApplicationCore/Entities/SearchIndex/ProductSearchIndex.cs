@@ -15,10 +15,12 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         {
             return false;
         }
+        public string CreatedByName { get; set; }
+        public string ModifiedByName { get; set; }
+
         public string Category { get; set; }
         public string Strategy { get; set; }
         public string Brand { get; set; }
-
         public string ProductId { get; set; }
         public string VariantId { get; set; }
         public string Name { get; set; }

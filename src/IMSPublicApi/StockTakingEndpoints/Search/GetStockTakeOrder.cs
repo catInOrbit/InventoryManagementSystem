@@ -29,7 +29,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
             _asyncRepository = asyncRepository;
         }
 
-        [HttpGet("api/stocktake/search/{SearchQuery}&page={CurrentPage}&size={SizePerPage}")]
+        [HttpGet("api/stocktake/search")]
         [SwaggerOperation(
             Summary = "Get all stock take Order or specific with search query",
             Description = "Get all stock take Order or specific with search query"+
@@ -40,7 +40,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
             Tags = new[] { "StockTakingEndpoints" })
         ]
 
-        public override async Task<ActionResult<STSearchResponse>> HandleAsync([FromRoute] STSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<STSearchResponse>> HandleAsync([FromQuery] STSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "StockTakeOrder", UserOperations.Read))
                 return Unauthorized();
@@ -50,24 +50,34 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
 
 
             var response = new STSearchResponse();
-            if (request.SearchQuery == "all")
+            
+            var stSearchFilter = new STSearchFilter
+            {
+                FromStatus = request.FromStatus,
+                ToStatus = request.ToStatus,
+                CreatedByName = request.CreatedByName,
+                FromCreatedDate = request.FromCreatedDate,
+                FromDeliveryDate = request.FromDeliveryDate,
+                ToCreatedDate = request.ToCreatedDate,
+                ToDeliveryDate = request.ToDeliveryDate,
+            };
+            
+            if (request.SearchQuery == null)
             {
                 response.IsDisplayingAll = true;
-                response.Paging = await _asyncRepository.GetSTForELIndexAsync(pagingOption, cancellationToken);
+                response.Paging = await _asyncRepository.GetSTForELIndexAsync(pagingOption, stSearchFilter, cancellationToken);
                 return Ok(response);
             }
             
-            else
-            {
-                var responseElastic = await _elasticClient.SearchAsync<StockTakeSearchIndex>(
-                    s => s.Size(2000).Index(ElasticIndexConstant.STOCK_TAKE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
-                
-                foreach (var stockTakeSearchIndex in responseElastic.Documents)
-                    pagingOption.ResultList.Add(stockTakeSearchIndex);
-                pagingOption.ExecuteResourcePaging();
-                response.Paging = pagingOption;
-                return Ok(response);
-            }
+            var responseElastic = await _elasticClient.SearchAsync<StockTakeSearchIndex>(
+                s => s.Size(2000).Index(ElasticIndexConstant.STOCK_TAKE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+            
+            pagingOption.ResultList = _asyncRepository.StockTakeIndexFiltering(responseElastic.Documents.ToList(), stSearchFilter,
+                new CancellationToken());
+            
+            pagingOption.ExecuteResourcePaging();
+            response.Paging = pagingOption;
+            return Ok(response);
         }
     }
 }

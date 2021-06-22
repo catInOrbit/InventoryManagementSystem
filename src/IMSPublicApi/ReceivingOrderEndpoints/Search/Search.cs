@@ -16,48 +16,48 @@ using Nest;
 using Swashbuckle.AspNetCore.Annotations;
 namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
 {
-   public class GetReceivingOrder : BaseAsyncEndpoint.WithRequest<ROGetAllRequest>.WithResponse<ROGetResponse>
-  {
-      private IAuthorizationService _authorizationService;
-      private IAsyncRepository<GoodsReceiptOrder> _asyncRepository;
-      private readonly IElasticClient _elasticClient;
-
-      public GetReceivingOrder(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> asyncRepository, IElasticClient elasticClient)
-      {
-          _authorizationService = authorizationService;
-          _asyncRepository = asyncRepository;
-          _elasticClient = elasticClient;
-      }
-      
-      
-      [HttpPost("api/goodsreceipt/all")]
-      [SwaggerOperation(
-          Summary = "Get all receive Order",
-          Description = "Get all Receive Order"+
-                        "\n {Query}: Querry to search, all to search all \n " +
-                        "{CurrentPage}: Current page to display \n" +
-                        "{SizePerPage}: Number of rows to display in a page" ,
-          OperationId = "ro.search",
-          Tags = new[] { "GoodsReceiptOrders" })
-      ]
-      public override async Task<ActionResult<ROGetResponse>> HandleAsync(ROGetAllRequest request, CancellationToken cancellationToken = new CancellationToken())
-      {
-          
-          // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Read))
-              // return Unauthorized();
-          
-          PagingOption<GoodsReceiptOrderSearchIndex> pagingOption = new PagingOption<GoodsReceiptOrderSearchIndex>(
-              request.CurrentPage, request.SizePerPage);
-
-          var response = new ROGetResponse();
-          response.IsDislayingAll = true;
-          
-          response.Paging  = await _asyncRepository.GetROForELIndexAsync(pagingOption, request.RoSearchFilter, cancellationToken);
-
-          return Ok(response);
-      }
-  }
-   
+  //  public class GetReceivingOrder : BaseAsyncEndpoint.WithRequest<ROGetAllRequest>.WithResponse<ROGetResponse>
+  // {
+  //     private IAuthorizationService _authorizationService;
+  //     private IAsyncRepository<GoodsReceiptOrder> _asyncRepository;
+  //     private readonly IElasticClient _elasticClient;
+  //
+  //     public GetReceivingOrder(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> asyncRepository, IElasticClient elasticClient)
+  //     {
+  //         _authorizationService = authorizationService;
+  //         _asyncRepository = asyncRepository;
+  //         _elasticClient = elasticClient;
+  //     }
+  //     
+  //     
+  //     [HttpPost("api/goodsreceipt/all")]
+  //     [SwaggerOperation(
+  //         Summary = "Get all receive Order",
+  //         Description = "Get all Receive Order"+
+  //                       "\n {Query}: Querry to search, all to search all \n " +
+  //                       "{CurrentPage}: Current page to display \n" +
+  //                       "{SizePerPage}: Number of rows to display in a page" ,
+  //         OperationId = "ro.search",
+  //         Tags = new[] { "GoodsReceiptOrders" })
+  //     ]
+  //     public override async Task<ActionResult<ROGetResponse>> HandleAsync(ROGetAllRequest request, CancellationToken cancellationToken = new CancellationToken())
+  //     {
+  //         
+  //         // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Read))
+  //             // return Unauthorized();
+  //         
+  //         PagingOption<GoodsReceiptOrderSearchIndex> pagingOption = new PagingOption<GoodsReceiptOrderSearchIndex>(
+  //             request.CurrentPage, request.SizePerPage);
+  //
+  //         var response = new ROGetResponse();
+  //         response.IsDislayingAll = true;
+  //         
+  //         response.Paging  = await _asyncRepository.GetROForELIndexAsync(pagingOption, request.RoSearchFilter, cancellationToken);
+  //
+  //         return Ok(response);
+  //     }
+  // }
+  //  
     public class SearchReceivingOrder : BaseAsyncEndpoint.WithRequest<ROSearchRequest>.WithResponse<ROGetResponse>
       {
           private IAuthorizationService _authorizationService;
@@ -72,7 +72,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
           }
           
           
-          [HttpPost("api/goodsreceipt/search")]
+          [HttpGet("api/goodsreceipt/search")]
           [SwaggerOperation(
               Summary = "Get all receive Order",
               Description = "Get all Receive Order"+
@@ -82,7 +82,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
               OperationId = "ro.search",
               Tags = new[] { "GoodsReceiptOrders" })
           ]
-          public override async Task<ActionResult<ROGetResponse>> HandleAsync(ROSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
+          public override async Task<ActionResult<ROGetResponse>> HandleAsync([FromQuery]ROSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
           {
               
               if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Read))
@@ -94,18 +94,26 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
               var response = new ROGetResponse();
               response.IsDislayingAll = true;
 
-              if (request.Query == "")
+              var roSearchFilter = new ROSearchFilter
               {
-                  response.Paging  = await _asyncRepository.GetROForELIndexAsync(pagingOption, request.RoSearchFilter, cancellationToken);
+                  CreatedByName = request.CreatedByName,
+                  FromCreatedDate = request.FromCreatedDate,
+                  ToCreatedDate = request.ToCreatedDate,
+                  SupplierName = request.SupplierName
+              };
+              
+              if (request.SearchQuery == null)
+              {
+                  response.Paging  = await _asyncRepository.GetROForELIndexAsync(pagingOption, roSearchFilter, cancellationToken);
                   return Ok(response);
               }
               
               var responseElastic = await _elasticClient.SearchAsync<GoodsReceiptOrderSearchIndex>(
-                  s => s.Size(2000).Index(ElasticIndexConstant.RECEIVING_ORDERS).Query(q =>q.QueryString(d =>d.Query('*' + request.Query + '*'))));
+                  s => s.Size(2000).Index(ElasticIndexConstant.RECEIVING_ORDERS).Query(q =>q.QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));
 
 
               pagingOption.ResultList = _asyncRepository.ReceivingOrderIndexFiltering(
-                  responseElastic.Documents.ToList(), request.RoSearchFilter, cancellationToken);
+                  responseElastic.Documents.ToList(), roSearchFilter, cancellationToken);
                               
               pagingOption.ExecuteResourcePaging();
 

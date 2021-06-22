@@ -8,7 +8,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.SupplierSearch
     
     public class SupplierSearchRequest : BaseRequest
     {
-        public string Query { get; set; }
+        public string SearchQuery { get; set; }
         public int CurrentPage { get; set; }
         public int SizePerPage { get; set; }
     }

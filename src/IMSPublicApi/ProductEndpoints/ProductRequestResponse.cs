@@ -70,9 +70,21 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
     
     public class GetProductSearchRequest
     {
-        public string Query { get; set; }
+        public string SearchQuery { get; set; }
         public int CurrentPage { get; set; }
         public int SizePerPage { get; set; }
+        
+        public string Category { get; set; }
+        public string Strategy { get; set; }
+        public string FromCreatedDate { get; set; }
+        public string ToCreatedDate { get; set; }
+        public string FromModifiedDate { get; set; }
+        public string ToModifiedDate { get; set; }
+        public string CreatedByName { get; set; }
+        public string ModifiedByName { get; set; }
+        public string FromPrice { get; set; }
+        public string ToPrice { get; set; }
+        public string Brand { get; set; }
     }
     
     public class GetProductSearchResponse : BaseSearchResponse<ProductSearchIndex>

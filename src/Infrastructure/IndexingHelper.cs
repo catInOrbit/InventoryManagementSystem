@@ -91,7 +91,7 @@ namespace Infrastructure
                         Quantity = productVariant.StorageQuantity,
                         ModifiedDate = productVariant.Transaction.ModifiedDate,
                         Sku = productVariant.Sku,
-                        Brand = product.BrandName
+                        Brand = product.BrandName,
                     };
                     index.FillSuggestion();
                     
@@ -103,6 +103,21 @@ namespace Infrastructure
                     throw;
                 }
             }
+
+            return index;
+        }
+        
+        public static StockTakeSearchIndex StockTakeSearchIndex(StockTakeOrder stockTake)
+        {
+            StockTakeSearchIndex index = null;
+            index = new StockTakeSearchIndex
+            {
+                Id = stockTake.Id,
+                Status = stockTake.StockTakeOrderType.ToString(),
+                CreatedDate = stockTake.Transaction.CreatedDate,
+                ModifiedDate = stockTake.Transaction.ModifiedDate,
+                CreatedByName = (stockTake.Transaction.CreatedBy != null) ? stockTake.Transaction.CreatedBy.Fullname : ""
+            };
 
             return index;
         }
@@ -132,7 +147,9 @@ namespace Infrastructure
                         Brand = (productVariant.Product.BrandName != null) ? productVariant.Product.BrandName : "",
                         Price = productVariant.Price,
                         Strategy = (productVariant.Product.SellingStrategy!= null) ? productVariant.Product.SellingStrategy : "",
-                        CreatedDate = productVariant.Transaction.CreatedDate
+                        CreatedDate = productVariant.Transaction.CreatedDate,
+                        CreatedByName = productVariant.Transaction.CreatedBy.Fullname,
+                        ModifiedByName = productVariant.Transaction.ModifiedBy.Fullname,
                     };
                     index.FillSuggestion();
                 }

@@ -11,6 +11,5 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         [JsonIgnore]
         [Nest.PropertyName("id")]
         public virtual string Id { get; set; }
-        
     }
 }
