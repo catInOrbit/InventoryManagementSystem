@@ -21,16 +21,20 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
-        private readonly IUserAuthentication _userAuthentication;
+        private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<ProductVariant> _productVariantRepos;
         private readonly IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
-        public PriceQuoteRequestEdit(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserAuthentication userAuthentication, IAsyncRepository<ProductVariant> productVariantRepos, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository)
+        
+        private INotificationService _notificationService;
+
+        public PriceQuoteRequestEdit(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<ProductVariant> productVariantRepos, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, INotificationService notificationService)
         {
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
             _userAuthentication = userAuthentication;
             _productVariantRepos = productVariantRepos;
             _indexAsyncRepository = indexAsyncRepository;
+            _notificationService = notificationService;
         }
         
         
@@ -70,6 +74,15 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
 
             var response = new PQEditResponse();
             response.PriceQuoteResponse = po;
+            
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Update", "Price Quote", po.Id);
+                
+            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                currentUser.Id, messageNotification);
+            
             return Ok(response);
         }
     }

@@ -23,9 +23,9 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenClaimsService _tokenClaimsService;
         private readonly IEmailSender _emailSender;
-        private IUserAuthentication _userAuthentication;
+        private IUserSession _userAuthentication;
 
-        public ResetPasswordLead(ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager, IEmailSender emailSender, IUserAuthentication userAuthentication)
+        public ResetPasswordLead(ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager, IEmailSender emailSender, IUserSession userAuthentication)
         {
             _tokenClaimsService = tokenClaimsService;
             _userManager = userManager;

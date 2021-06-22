@@ -30,7 +30,7 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ITokenClaimsService _tokenClaimsService;
-        private readonly IUserAuthentication _userAuthentication;
+        private readonly IUserSession _userAuthentication;
         private readonly IRedisRepository _redisRepository;
 
 
@@ -38,7 +38,7 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
         public UserInfoAuth UserInfo { get; set; } = new UserInfoAuth();
 
         public Authentication(SignInManager<ApplicationUser> signInManager,
-            ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IUserAuthentication userAuthentication, IRedisRepository redisRepository)
+            ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IUserSession userAuthentication, IRedisRepository redisRepository)
         {
             _signInManager = signInManager;
             _tokenClaimsService = tokenClaimsService;
@@ -108,16 +108,8 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                     response.UserRole = roles[0];
                     response.ApplicationUser = userGet;
 
-                    await _userAuthentication.SaveUserAsync(user);
-                    
+                    await _userAuthentication.SaveUserAsync(user, roles[0]);
                     await _redisRepository.AddUserToGroup(roles[0], new NotificationUser(user, roles[0]));
-                    
-        
-                    // await _userRoleModificationService.UserManager.RemoveAuthenticationTokenAsync(user, "IMSPublicAPI",
-                    //     "Refreshtoken");
-                    //
-                    // await _userRoleModificationService.UserManager.GenerateUserTokenAsync(user, "IMSPublicAPI",
-                    //     jwtRefreshtoken);
                     
                     return Ok(response);
                 }

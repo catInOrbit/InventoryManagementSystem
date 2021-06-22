@@ -19,15 +19,18 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
-        private readonly IUserAuthentication _userAuthentication;
+        private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
+        
+        private readonly INotificationService _notificationService;
 
-        public RequisitionSubmit(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserAuthentication userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository)
+        public RequisitionSubmit(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, INotificationService notificationService)
         {
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
             _userAuthentication = userAuthentication;
             _indexAsyncRepository = indexAsyncRepository;
+            _notificationService = notificationService;
         }
 
         [HttpPost("api/requisition/submit")]
@@ -51,6 +54,13 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             await _asyncRepository.UpdateAsync(po);
             await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
             
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+                
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Submit","Purchase Requisition", po.Id);
+                
+            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                currentUser.Id, messageNotification);
             return Ok();
         }
     }

@@ -18,10 +18,10 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
     {
         private UserRoleModificationService _userRoleModificationService;
         private readonly IAuthorizationService _authorizationService;
-        private IUserAuthentication _userAuthentication;
+        private IUserSession _userAuthentication;
 
         public RoleUserAssign(UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, IUserAuthentication userAuthentication)
+            RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, IUserSession userAuthentication)
         {
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;

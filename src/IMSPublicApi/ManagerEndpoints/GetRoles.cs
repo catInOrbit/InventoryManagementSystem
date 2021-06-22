@@ -15,12 +15,12 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
     public class GetRoles : BaseAsyncEndpoint.WithoutRequest.WithResponse<GetRoleResponse>
     {        
-        private IUserAuthentication _userAuthentication;
+        private IUserSession _userAuthentication;
 
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IAuthorizationService _authorizationService;
 
-        public GetRoles(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, IUserAuthentication userAuthentication)
+        public GetRoles(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, IUserSession userAuthentication)
         {
             _roleManager = roleManager;
             _authorizationService = authorizationService;

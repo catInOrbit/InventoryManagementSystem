@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Notifications;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 using StackExchange.Redis;
 
 namespace Infrastructure.Services

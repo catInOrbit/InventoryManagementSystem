@@ -24,17 +24,20 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         private readonly IEmailSender _emailSender;
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
-        private readonly IUserAuthentication _userAuthentication;
+        private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<PurchaseOrderSearchIndex> _poIndexAsyncRepositoryRepos;
 
+        private readonly INotificationService _notificationService;
 
-        public PurchaseOrderSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserAuthentication userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> poIndexAsyncRepositoryRepos)
+
+        public PurchaseOrderSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> poIndexAsyncRepositoryRepos, INotificationService notificationService)
         {
             _emailSender = emailSender;
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
             _userAuthentication = userAuthentication;
             _poIndexAsyncRepositoryRepos = poIndexAsyncRepositoryRepos;
+            _notificationService = notificationService;
         }
         
         [HttpPost("api/purchaseorder/submit")]
@@ -65,6 +68,13 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 await _asyncRepository.UpdateAsync(po);
                 await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
 
+                var currentUser = await _userAuthentication.GetCurrentSessionUser();
+                
+                var messageNotification =
+                    _notificationService.CreateMessage(currentUser.Fullname, "Submit","Purchase Order", po.Id);
+                
+                await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                    currentUser.Id, messageNotification);
                 return Ok();
             }
             catch (Exception e)

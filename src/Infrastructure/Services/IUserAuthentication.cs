@@ -3,11 +3,12 @@ using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace Infrastructure.Services
 {
-    public interface IUserAuthentication
+    public interface IUserSession
     {
         void InvalidateSession();
-        Task SaveUserAsync(ApplicationUser userGet);
+        Task SaveUserAsync(ApplicationUser userGet, string role);
 
         Task<ApplicationUser> GetCurrentSessionUser();
+        Task<string> GetCurrentSessionUserRole();
     }
 }

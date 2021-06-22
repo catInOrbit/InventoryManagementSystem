@@ -63,7 +63,7 @@ namespace InventoryManagementSystem.PublicApi
             //     options.UseNpgsql(Configuration.GetConnectionString("Heroku"),  b => b.MigrationsAssembly("IMSPublicApi")));
             
             services.AddDbContext<IdentityAndProductDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString(HEROKUSQL),  b => b.MigrationsAssembly("IMSPublicApi")));
+                options.UseSqlServer(Configuration.GetConnectionString(LOCAL_IDENTITY),  b => b.MigrationsAssembly("IMSPublicApi")));
 
             services.AddCors(c =>
             {
@@ -222,7 +222,7 @@ namespace InventoryManagementSystem.PublicApi
             services.AddScoped<IAuthorizationHandler,
                 AccountAuthorizationHandler>();
             
-            services.AddSingleton<IUserAuthentication, JwtUserSessionService>();
+            services.AddSingleton<IUserSession, UserSessionService>();
             services.AddSignalR();
             
             services.AddTransient<IRedisRepository, RedisRepository>();
@@ -243,7 +243,7 @@ namespace InventoryManagementSystem.PublicApi
                 return ConnectionMultiplexer.Connect(configuration);
             });
             
-            
+            services.AddScoped<INotificationService, NotificationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

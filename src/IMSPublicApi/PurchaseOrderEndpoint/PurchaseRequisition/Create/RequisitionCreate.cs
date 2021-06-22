@@ -19,16 +19,19 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
     public class RequisitionCreate : BaseAsyncEndpoint.WithoutRequest.WithResponse<RCreateResponse>
     {
         private readonly IAuthorizationService _authorizationService;
-        private readonly IUserAuthentication _userAuthentication;
+        private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
         private readonly IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
 
-        public RequisitionCreate(IAuthorizationService authorizationService, IUserAuthentication userAuthentication, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository)
+        private readonly INotificationService _notificationService;
+
+        public RequisitionCreate(IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, INotificationService notificationService)
         {
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
             _asyncRepository = asyncRepository;
             _indexAsyncRepository = indexAsyncRepository;
+            _notificationService = notificationService;
         }
 
         [HttpPost("api/requisition/create")]
@@ -58,6 +61,14 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             await _indexAsyncRepository.ElasticSaveSingleAsync(true, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
             var response = new RCreateResponse();
             response.PurchaseOrder = po;
+            
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+                
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Create","Purchase Requisition", po.Id);
+                
+            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                currentUser.Id, messageNotification);
             return Ok(response);
         }
     }

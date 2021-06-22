@@ -22,11 +22,11 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
         private readonly UserManager<ApplicationUser> _userManager;
 
         private readonly IAuthorizationService _authorizationService;
-        private IUserAuthentication _userAuthentication;
+        private IUserSession _userAuthentication;
 
         public ApplicationUser UserInfo { get; set; } = new ApplicationUser();
 
-        public GetAllUsers(UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService, IUserAuthentication userAuthentication)
+        public GetAllUsers(UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService, IUserSession userAuthentication)
         {
             _userManager = userManager;
             _authorizationService = authorizationService;

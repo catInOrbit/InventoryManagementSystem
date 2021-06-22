@@ -19,14 +19,20 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
     {
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _purchaseOrderRepos;
         private readonly IAsyncRepository<PurchaseOrderSearchIndex> _poSearchRepos;
+        private readonly IUserSession _userAuthentication;
+
 
         private readonly IAuthorizationService _authorizationService;
+        
+        private INotificationService _notificationService;
 
-        public PurchaseOrderConfirm(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService, IAsyncRepository<PurchaseOrderSearchIndex> poSearchRepos)
+        public PurchaseOrderConfirm(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService, IAsyncRepository<PurchaseOrderSearchIndex> poSearchRepos, INotificationService notificationService, IUserSession userAuthentication)
         {
             _purchaseOrderRepos = purchaseOrderRepos;
             _authorizationService = authorizationService;
             _poSearchRepos = poSearchRepos;
+            _notificationService = notificationService;
+            _userAuthentication = userAuthentication;
         }
 
         [HttpPost("api/po/confirm/{PurchaseOrderNumber}")]
@@ -45,6 +51,15 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             po.PurchaseOrderStatus = PurchaseOrderStatusType.POConfirm;
             await _purchaseOrderRepos.UpdateAsync(po);
             await _poSearchRepos.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
+
+            
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+                
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Confirm","Purchase Order", po.Id);
+                
+            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                currentUser.Id, messageNotification);
 
             return Ok();
         }

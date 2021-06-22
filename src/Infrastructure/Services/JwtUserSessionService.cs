@@ -5,40 +5,30 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Services
 {
-    public class JwtUserSessionService : IUserAuthentication
+    public class UserSessionService : IUserSession
     {
 
         private ApplicationUser currentLoggedIn = new ApplicationUser();
-
-
-        // public async Task<string> GenerateRefreshTokenForUser(ApplicationUser user)
-        // {
-        //     var tokenRefresh = await _tokenClaimsService.GetRefreshTokenAsync(user.Email);
-        //     if (await _userManager.GetAuthenticationTokenAsync(user, "IMSPublicAPI", "RefreshToken") != null)
-        //     {
-        //         await _userManager.RemoveAuthenticationTokenAsync(user, "IMSPublicAPI", "RefreshToken");
-        //         await _userManager.SetAuthenticationTokenAsync(user, "IMSPublicAPI", "RefreshToken", tokenRefresh);
-        //     }
-        //     else
-        //         await _userManager.SetAuthenticationTokenAsync(user, "IMSPublicAPI", "RefreshToken", tokenRefresh);
-        //
-        //     return tokenRefresh;
-        // }
-
-     
+        private string CurrentUserRole { get; set; }
 
         public async Task<ApplicationUser> GetCurrentSessionUser()
         {
             return await Task.FromResult(currentLoggedIn);
         }
-        
+
+        public async Task<string> GetCurrentSessionUserRole()
+        {
+            return await Task.FromResult(CurrentUserRole);
+        }
+
         public void InvalidateSession()
         {
             // _signInManager.SignOutAsync();
         }
 
-        public Task SaveUserAsync(ApplicationUser userGet)
+        public Task SaveUserAsync(ApplicationUser userGet, string role)
         {
+            Task.FromResult(CurrentUserRole = role);
             return Task.FromResult(currentLoggedIn = userGet);
         }
     }

@@ -16,9 +16,9 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
     public class UpdateEndpoint : BaseAsyncEndpoint.WithRequest<UpdateRequest>.WithResponse<UpdateResponse>
     {
         private UserManager<ApplicationUser> _userManager;
-        private IUserAuthentication _userAuthentication;
+        private IUserSession _userAuthentication;
 
-        public UpdateEndpoint(UserManager<ApplicationUser> userManager, IUserAuthentication userAuthentication)
+        public UpdateEndpoint(UserManager<ApplicationUser> userManager, IUserSession userAuthentication)
         {
             _userManager = userManager;
             _userAuthentication = userAuthentication;

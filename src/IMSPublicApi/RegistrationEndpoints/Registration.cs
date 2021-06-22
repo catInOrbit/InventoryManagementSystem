@@ -22,19 +22,22 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
         private readonly ITokenClaimsService _tokenClaimsService;
         private readonly IServiceProvider _serviceProvider;
         private readonly IAuthorizationService _authorizationService;
-        private IUserAuthentication _userAuthentication;
+        private IUserSession _userAuthentication;
 
         private UserRoleModificationService _userRoleModificationService;
         private IAsyncRepository<Notification> _notificationAsyncRepository;
 
+        private readonly INotificationService _notificationService;
+
         public ApplicationUser UserInfo { get; set; } = new ApplicationUser();
         public Registration(UserManager<ApplicationUser> userManager, ITokenClaimsService tokenClaimsService,
-            RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService , IUserAuthentication userAuthentication, IAsyncRepository<Notification> notificationAsyncRepository)
+            RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService , IUserSession userAuthentication, IAsyncRepository<Notification> notificationAsyncRepository, INotificationService notificationService)
         {
             _tokenClaimsService = tokenClaimsService;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
             _notificationAsyncRepository = notificationAsyncRepository;
+            _notificationService = notificationService;
             _userRoleModificationService = new UserRoleModificationService(roleManager, userManager);
         }
         
@@ -94,15 +97,13 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                                 response.Verbose = "Authorized";
                                 
                                 //Save user notification info such as channel
-                                var notification = new Notification
-                                {
-                                    Channel = request.RoleName,
-                                    UserId = user.Id,
-                                    CreatedDate = DateTime.Now,
-                                    UserName = user.Fullname
-                                };
-
-                                await _notificationAsyncRepository.AddAsync(notification);
+                                var currentUser = await _userAuthentication.GetCurrentSessionUser();
+                
+                                var messageNotification =
+                                    _notificationService.CreateMessage(currentUser.Fullname, "Create","New User", user.Id);
+                
+                                await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                                    currentUser.Id, messageNotification);
                             }
                         }
 

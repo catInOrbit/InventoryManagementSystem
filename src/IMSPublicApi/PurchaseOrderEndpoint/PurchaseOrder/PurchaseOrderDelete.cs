@@ -19,15 +19,17 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
-        private readonly IUserAuthentication _userAuthentication;
+        private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<PurchaseOrderSearchIndex> _poSearchRepos;
-
-        public PurchaseOrderDelete(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserAuthentication userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> poSearchRepos)
+        
+        private readonly INotificationService _notificationService;
+        public PurchaseOrderDelete(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> poSearchRepos, INotificationService notificationService)
         {
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
             _userAuthentication = userAuthentication;
             _poSearchRepos = poSearchRepos;
+            _notificationService = notificationService;
         }
         
         [HttpPut("api/purchaseorder/cancel/{Id}")]
@@ -49,6 +51,14 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             po.PurchaseOrderStatus = PurchaseOrderStatusType.POCanceled;
            await _asyncRepository.UpdateAsync(po,cancellationToken);
            await _poSearchRepos.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
+           
+           var currentUser = await _userAuthentication.GetCurrentSessionUser();
+                
+           var messageNotification =
+               _notificationService.CreateMessage(currentUser.Fullname, "Cancel","Purchase Order", po.Id);
+                
+           await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+               currentUser.Id, messageNotification);
 
            return Ok();
         }

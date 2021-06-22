@@ -17,11 +17,14 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<Supplier> _supplierAsyncRepository;
-
-        public SupplierCreate(IAsyncRepository<Supplier> supplierAsyncRepository, IAuthorizationService authorizationService)
+        private readonly IUserSession _userAuthentication;
+        private readonly INotificationService _notificationService;
+        public SupplierCreate(IAsyncRepository<Supplier> supplierAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, INotificationService notificationService)
         {
             _supplierAsyncRepository = supplierAsyncRepository;
             _authorizationService = authorizationService;
+            _userAuthentication = userAuthentication;
+            _notificationService = notificationService;
         }
     
         [HttpPost("api/supplier/create/")]
@@ -39,6 +42,14 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             await _supplierAsyncRepository.AddAsync(request.Supplier);
             await _supplierAsyncRepository.ElasticSaveSingleAsync(true, request.Supplier, ElasticIndexConstant.SUPPLIERS);
 
+            
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+                  
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Create","Supplier", request.Supplier.Id);
+                
+            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                currentUser.Id, messageNotification);
             return Ok();
         }
     }

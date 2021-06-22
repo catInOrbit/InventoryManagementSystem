@@ -25,15 +25,16 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
         private readonly IEmailSender _emailSender;
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
-        private readonly IUserAuthentication _userAuthentication;
+        private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
         
         private readonly IRedisRepository _redisRepository;
         private readonly IAsyncRepository<Notification> _notificationAsyncRepository;
         private IHubContext<NotificationHub> _hubContext;
 
-        
-        public PriceQuoteRequestSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserAuthentication userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, IRedisRepository redisRepository, IAsyncRepository<Notification> notificationAsyncRepository, IHubContext<NotificationHub> hubContext)
+        private INotificationService _notificationService;
+
+        public PriceQuoteRequestSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, IRedisRepository redisRepository, IAsyncRepository<Notification> notificationAsyncRepository, IHubContext<NotificationHub> hubContext, INotificationService notificationService)
         {
             _emailSender = emailSender;
             _authorizationService = authorizationService;
@@ -43,6 +44,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             _redisRepository = redisRepository;
             _notificationAsyncRepository = notificationAsyncRepository;
             _hubContext = hubContext;
+            _notificationService = notificationService;
         }
         
         [HttpPost("api/pricequote/submit")]
@@ -71,13 +73,14 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             await _emailSender.SendEmailAsync(message);
             await _asyncRepository.UpdateAsync(po);
             await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
-            //
-            // var notificationService = new NotificationService(_redisRepository, _notificationAsyncRepository, _hubContext);
-            //
-            // var currentUser = await _userAuthentication.GetCurrentSessionUser();
-            // var messageNotification = "User " + currentUser.Fullname + "created Price Quote Order ID: " + po.Id + "at " +
-            //               DateTime.Now.TimeOfDay;
-            // await notificationService.SendNotification(currentUser.UserName, currentUser.Id, messageNotification);
+            
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Submit","Price Quote", po.Id);
+                
+            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                currentUser.Id, messageNotification);
             return Ok();
         }
     }

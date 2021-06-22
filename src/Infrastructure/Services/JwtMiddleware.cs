@@ -24,7 +24,7 @@ namespace WebApi.Helpers
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, IUserAuthentication authentication, ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager)
+        public async Task Invoke(HttpContext context, IUserSession authentication, ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
@@ -34,18 +34,18 @@ namespace WebApi.Helpers
             await _next(context);
         }
 
-        private async Task attachUserToContext(HttpContext context, UserManager<ApplicationUser>  userManager, IUserAuthentication userAuthentication, ITokenClaimsService tokenClaimsService, string token)
+        private async Task attachUserToContext(HttpContext context, UserManager<ApplicationUser>  userManager, IUserSession userAuthentication, ITokenClaimsService tokenClaimsService, string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(AuthorizationConstants.JWT_SECRET_KEY);
             try
             {
                 ValidateToken(tokenHandler, token, key);
-                await userAuthentication.SaveUserAsync(await userManager.FindByIdAsync(userId));
+                var currentUser = await userManager.FindByIdAsync(userId);
+                await userAuthentication.SaveUserAsync(currentUser, (await userManager.GetRolesAsync(currentUser))[0]);
             }
             catch
             {
-
                 if (userAuthentication.GetCurrentSessionUser() != null)
                 {
                     context.Request.Headers.Remove("Authorization");

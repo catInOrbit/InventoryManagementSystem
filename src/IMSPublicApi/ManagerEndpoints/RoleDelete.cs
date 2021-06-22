@@ -20,11 +20,11 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
     {
         private readonly UserRoleModificationService _userRoleModificationService;
         public readonly RoleManager<IdentityRole> _roleManager;
-        private IUserAuthentication _userAuthentication;
+        private IUserSession _userAuthentication;
 
         private readonly IAuthorizationService _authorizationService;
 
-        public RoleDelete(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, SignInManager<ApplicationUser> signInManager, IUserAuthentication userAuthentication)
+        public RoleDelete(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, SignInManager<ApplicationUser> signInManager, IUserSession userAuthentication)
         {
             _roleManager = roleManager;
             _userRoleModificationService = new UserRoleModificationService(_roleManager);

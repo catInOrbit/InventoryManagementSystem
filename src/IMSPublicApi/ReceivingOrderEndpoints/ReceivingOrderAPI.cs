@@ -29,9 +29,12 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly IAsyncRepository<GoodsReceiptOrderSearchIndex> _recevingOrderSearchIndexRepository;
 
         private readonly IAsyncRepository<ProductVariant> _productRepository;
-        private readonly IUserAuthentication _userAuthentication;
+        private readonly IUserSession _userAuthentication;
+        
+        private readonly INotificationService _notificationService;
 
-        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IAsyncRepository<ProductVariant> productRepository, IUserAuthentication userAuthentication, IAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository, IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository)
+
+        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IAsyncRepository<ProductVariant> productRepository, IUserSession userAuthentication, IAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository, IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService)
         {
             _authorizationService = authorizationService;
             _recevingOrderRepository = recevingOrderRepository;
@@ -40,6 +43,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             _recevingOrderSearchIndexRepository = recevingOrderSearchIndexRepository;
             _poRepository = poRepository;
             _packageRepository = packageRepository;
+            _notificationService = notificationService;
         }
         
         [HttpPut("api/goodsreceipt/update")]
@@ -120,6 +124,14 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
 
             var response = new ROUpdateResponse();
             response.CreatedGoodsReceiptId = ro.Id;
+            
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Update","Goods Receipt", ro.Id);
+                
+            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                currentUser.Id, messageNotification);
             return Ok(response);
         }
     }
@@ -130,14 +142,17 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly IAsyncRepository<ProductSearchIndex> _poSearchIndexRepository;
 
         private readonly IAsyncRepository<ProductVariant> _productVariantRepository;
-        private readonly IUserAuthentication _userAuthentication;
+        private readonly IUserSession _userAuthentication;
 
-        public ReceivingOrderUpdateProductItem(IAuthorizationService authorizationService, IAsyncRepository<ProductSearchIndex> poSearchIndexRepository, IAsyncRepository<ProductVariant> productVariantRepository, IUserAuthentication userAuthentication)
+        private readonly INotificationService _notificationService;
+
+        public ReceivingOrderUpdateProductItem(IAuthorizationService authorizationService, IAsyncRepository<ProductSearchIndex> poSearchIndexRepository, IAsyncRepository<ProductVariant> productVariantRepository, IUserSession userAuthentication, INotificationService notificationService)
         {
             _authorizationService = authorizationService;
             _poSearchIndexRepository = poSearchIndexRepository;
             _productVariantRepository = productVariantRepository;
             _userAuthentication = userAuthentication;
+            _notificationService = notificationService;
         }
 
 
@@ -164,6 +179,14 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             //Update and indexing
             await _productVariantRepository.UpdateAsync(productVariant);
             await _poSearchIndexRepository.ElasticSaveSingleAsync(false,IndexingHelper.ProductSearchIndex(productVariant), ElasticIndexConstant.RECEIVING_ORDERS);
+            
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Update","Product Variant", productVariant.Id);
+                
+            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                currentUser.Id, messageNotification);
             return Ok();
         }
     }
@@ -174,13 +197,19 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private IAsyncRepository<PurchaseOrder> _poAsyncRepository;
         private IAsyncRepository<PurchaseOrderSearchIndex> _poSearchIndexAsyncRepository;
         private IAsyncRepository<GoodsReceiptOrderSearchIndex> _roSearchIndexAsyncRepository;
+        
+        private readonly INotificationService _notificationService;
+        private readonly IUserSession _userAuthentication;
 
-        public ReceivingOrderSubmit(IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<PurchaseOrder> poAsyncRepository, IAsyncRepository<PurchaseOrderSearchIndex> poSearchIndexAsyncRepository, IAsyncRepository<GoodsReceiptOrderSearchIndex> roSearchIndexAsyncRepository)
+
+        public ReceivingOrderSubmit(IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<PurchaseOrder> poAsyncRepository, IAsyncRepository<PurchaseOrderSearchIndex> poSearchIndexAsyncRepository, IAsyncRepository<GoodsReceiptOrderSearchIndex> roSearchIndexAsyncRepository, INotificationService notificationService, IUserSession userAuthentication)
         {
             _roAsyncRepository = roAsyncRepository;
             _poAsyncRepository = poAsyncRepository;
             _poSearchIndexAsyncRepository = poSearchIndexAsyncRepository;
             _roSearchIndexAsyncRepository = roSearchIndexAsyncRepository;
+            _notificationService = notificationService;
+            _userAuthentication = userAuthentication;
         }
 
         [HttpPost("api/goodsreceipt/submit")]
@@ -215,6 +244,15 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             await _roAsyncRepository.UpdateAsync(ro);
             await _poSearchIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po),ElasticIndexConstant.PURCHASE_ORDERS);
             await _roSearchIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.GoodsReceiptOrderSearchIndex(ro),ElasticIndexConstant.RECEIVING_ORDERS);
+            
+             
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Submit","Goods Receipt", ro.Id);
+                
+            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                currentUser.Id, messageNotification);
             
             if(!response.IncompleteVariantId.IsNullOrEmpty())
                 return Ok(response);

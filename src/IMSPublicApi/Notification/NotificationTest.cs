@@ -18,10 +18,10 @@ namespace InventoryManagementSystem.PublicApi
         private readonly IAsyncRepository<Notification> _notificationAsyncRepository;
         private IHubContext<NotificationHub> _hubContext;
 
-        private readonly IUserAuthentication _userAuthentication;
+        private readonly IUserSession _userAuthentication;
 
         
-        public NotificationTest(IRedisRepository redisRepository, IAsyncRepository<Notification> notificationAsyncRepository, IHubContext<NotificationHub> hubContext, IUserAuthentication userAuthentication)
+        public NotificationTest(IRedisRepository redisRepository, IAsyncRepository<Notification> notificationAsyncRepository, IHubContext<NotificationHub> hubContext, IUserSession userAuthentication)
         {
             _redisRepository = redisRepository;
             _notificationAsyncRepository = notificationAsyncRepository;
@@ -51,9 +51,9 @@ namespace InventoryManagementSystem.PublicApi
         private readonly IAsyncRepository<Notification> _notificationAsyncRepository;
         private IHubContext<NotificationHub> _hubContext;
 
-        private readonly IUserAuthentication _userAuthentication;
+        private readonly IUserSession _userAuthentication;
 
-        public NotificationGroupTest(IRedisRepository redisRepository, IAsyncRepository<Notification> notificationAsyncRepository, IHubContext<NotificationHub> hubContext, IUserAuthentication userAuthentication)
+        public NotificationGroupTest(IRedisRepository redisRepository, IAsyncRepository<Notification> notificationAsyncRepository, IHubContext<NotificationHub> hubContext, IUserSession userAuthentication)
         {
             _redisRepository = redisRepository;
             _notificationAsyncRepository = notificationAsyncRepository;

@@ -23,16 +23,18 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
     {
         private IAsyncRepository<ApplicationCore.Entities.Products.Product> _asyncRepository;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IUserAuthentication _userAuthentication;
+        private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
 
+        private INotificationService _notificationService;
 
-        public ProductCreate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserAuthentication userAuthentication, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos)
+        public ProductCreate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos, INotificationService notificationService)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
             _productIndexAsyncRepositoryRepos = productIndexAsyncRepositoryRepos;
+            _notificationService = notificationService;
         }
         
         [HttpPost("api/product/create")]
@@ -103,6 +105,14 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             
             await _asyncRepository.AddAsync(product);
             await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(true,IndexingHelper.ProductSearchIndex(product),ElasticIndexConstant.PRODUCT_INDICES);
+            
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Create", "Product", product.Id);
+                
+            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                currentUser.Id, messageNotification);
             return Ok();
         }
     }

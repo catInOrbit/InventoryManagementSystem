@@ -29,16 +29,19 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         private readonly IAsyncRepository<ProductVariant> _productVariantRepos;
         private readonly IAsyncRepository<PurchaseOrderSearchIndex> _poIndexAsyncRepositoryRepos;
 
-        private readonly IUserAuthentication _userAuthentication;
+        private readonly IUserSession _userAuthentication;
         private readonly IAuthorizationService _authorizationService;
 
-        public PurchaseOrderUpdate(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService,  IUserAuthentication userAuthentication, IAsyncRepository<ProductVariant> productVariantRepos, IAsyncRepository<PurchaseOrderSearchIndex> poIndexAsyncRepositoryRepos)
+        private readonly INotificationService _notificationService;
+
+        public PurchaseOrderUpdate(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService,  IUserSession userAuthentication, IAsyncRepository<ProductVariant> productVariantRepos, IAsyncRepository<PurchaseOrderSearchIndex> poIndexAsyncRepositoryRepos, INotificationService notificationService)
         {
             _purchaseOrderRepos = purchaseOrderRepos;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
             _productVariantRepos = productVariantRepos;
             _poIndexAsyncRepositoryRepos = poIndexAsyncRepositoryRepos;
+            _notificationService = notificationService;
         }
         
         [HttpPut("api/purchaseorder/update")]
@@ -76,6 +79,15 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             await _purchaseOrderRepos.UpdateAsync(po);
             await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false,IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
             response.PurchaseOrder = po;
+            
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+                
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Update","Purchase Order", po.Id);
+                
+            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                currentUser.Id, messageNotification);
+            
             return Ok(response);
         }
     }

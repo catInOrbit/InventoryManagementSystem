@@ -23,11 +23,11 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 
         private readonly UserRoleModificationService _userRoleModificationService;
         private readonly IAuthorizationService _authorizationService;
-        private IUserAuthentication _userAuthentication;
+        private IUserSession _userAuthentication;
 
         public ApplicationUser UserInfo { get; set; } = new ApplicationUser();
 
-        public RolePermissionUpdate(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, UserManager<ApplicationUser> userManager, IUserAuthentication userAuthentication)
+        public RolePermissionUpdate(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService, UserManager<ApplicationUser> userManager, IUserSession userAuthentication)
         {
             _roleManager = roleManager;
             _authorizationService = authorizationService;

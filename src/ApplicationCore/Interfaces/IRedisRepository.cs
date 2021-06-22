@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Notifications;
 
-namespace Infrastructure.Services
+namespace InventoryManagementSystem.ApplicationCore.Interfaces
 {
     public interface IRedisRepository
     {

@@ -7,8 +7,10 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace Infrastructure.Services
 {
-    public class NotificationService
+    public class NotificationService : INotificationService
     {
+        
+        
         private IHubContext<NotificationHub> _hubContext;
         private readonly IRedisRepository _redisRepository;
         private readonly IAsyncRepository<Notification> _notificationAsyncRepository;
@@ -18,6 +20,10 @@ namespace Infrastructure.Services
             _redisRepository = redisRepository;
             _notificationAsyncRepository = notificationAsyncRepository;
             _hubContext = hubContext;
+        }
+        
+        public NotificationService()
+        {
         }
 
 
@@ -69,6 +75,11 @@ namespace Infrastructure.Services
 
             else
                 throw new Exception();
+        }
+
+        public string CreateMessage(string fromUserFullname, string action, string page, string objectId)
+        {
+            return fromUserFullname + " " + action + " " + page + " with ID: " + objectId + ", at: " + DateTime.Now;
         }
     }
 }

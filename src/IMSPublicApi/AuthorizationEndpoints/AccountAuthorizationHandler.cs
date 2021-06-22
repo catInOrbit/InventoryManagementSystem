@@ -14,9 +14,9 @@ namespace InventoryManagementSystem.PublicApi.AuthorizationEndpoints
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private IUserAuthentication _userAuthentication;
+        private IUserSession _userAuthentication;
 
-        public AccountAuthorizationHandler(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IUserAuthentication userAuthentication) 
+        public AccountAuthorizationHandler(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IUserSession userAuthentication) 
         {
             _userManager = userManager;
             _roleManager = roleManager;

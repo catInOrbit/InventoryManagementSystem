@@ -12,30 +12,36 @@ using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
 {
      public class GoodsIssueCreate : BaseAsyncEndpoint.WithRequest<GiRequest>.WithResponse<GiResponse>
         {
-            private readonly IUserAuthentication _userAuthentication;
+            private readonly IUserSession _userAuthentication;
             private readonly IAsyncRepository<GoodsIssueOrder> _asyncRepository;
             private IAsyncRepository<GoodsReceiptOrder> _roAsyncRepository;
             private IAsyncRepository<GoodsReceiptOrderItem> _goOrderItemsAsyncRepository;
             private IAsyncRepository<Package> _packageAsyncRepository;
-
+            
+          
             private readonly IAuthorizationService _authorizationService;
-    
-            public GoodsIssueCreate(IUserAuthentication userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<GoodsReceiptOrderItem> goOrderItemsAsyncRepository, IAsyncRepository<Package> packageAsyncRepository)
+            
+            private INotificationService _notificationService;
+
+            public GoodsIssueCreate(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<GoodsReceiptOrderItem> goOrderItemsAsyncRepository, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, INotificationService notificationService)
             {
                 _userAuthentication = userAuthentication;
                 _asyncRepository = asyncRepository;
-                _authorizationService = authorizationService;
                 _roAsyncRepository = roAsyncRepository;
                 _goOrderItemsAsyncRepository = goOrderItemsAsyncRepository;
                 _packageAsyncRepository = packageAsyncRepository;
+                _authorizationService = authorizationService;
+                _notificationService = notificationService;
             }
-            
+
+
             [HttpPost("api/goodsissue/create")]
             [SwaggerOperation(
                 Summary = "Create Good issue order",
@@ -47,9 +53,9 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             {
                 if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSISSUE, UserOperations.Create))
                     return Unauthorized();
-                
+                //
                 var response = new GiResponse();
-    
+                
                 var gio = _asyncRepository.GetGoodsIssueOrderByNumber(request.IssueNumber);
                 gio.Transaction = new Transaction
                 {
@@ -65,31 +71,44 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 //-------------
                 ProductStrategyService productStrategyService =
                     new ProductStrategyService(_packageAsyncRepository);
-
+                
                 List<string> productVariantIds = new List<string>();
                 foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
                     productVariantIds.Add(gioGoodsIssueProduct.ProductVariantId);
-
+                
                 var packages = await productStrategyService.FIFOPackagesSuggestion(productVariantIds);
                 
                 response.Packages.AddRange(packages);
                 
                 await _asyncRepository.UpdateAsync(gio);
+
+                var currentUser = await _userAuthentication.GetCurrentSessionUser();
+                
+                var messageNotification =
+                    _notificationService.CreateMessage(currentUser.Fullname, "Create","Goods Issue", gio.Id);
+                
+                await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                    currentUser.Id, messageNotification);
+                
                 return Ok(response);
             }
         }
      
      public class GoodsIssueUpdate : BaseAsyncEndpoint.WithRequest<GiRequest>.WithResponse<GiResponse>
     {
-        private readonly IUserAuthentication _userAuthentication;
+        private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<GoodsIssueOrder> _asyncRepository;
         private readonly IAuthorizationService _authorizationService;
+        
+        private INotificationService _notificationService;
 
-        public GoodsIssueUpdate(IUserAuthentication userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService)
+
+        public GoodsIssueUpdate(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, INotificationService notificationService)
         {
             _userAuthentication = userAuthentication;
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
+            _notificationService = notificationService;
         }
 
         [HttpPost("api/goodsissue/update")]
@@ -101,7 +120,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
         ]
         public override async Task<ActionResult<GiResponse>> HandleAsync(GiRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "GoodsIssue", UserOperations.Update))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSISSUE, UserOperations.Update))
                 return Unauthorized();
             
             var gio = _asyncRepository.GetGoodsIssueOrderByNumber(request.IssueNumber);
@@ -119,8 +138,20 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             gio.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             await _asyncRepository.UpdateAsync(gio);
 
+            
+            
+            
             var response = new GiResponse();
             response.GoodsIssueOrder = gio;
+            
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Update", "Goods Issue", gio.Id);
+                
+            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                currentUser.Id, messageNotification);
+            
             return Ok(response);
         }
     }

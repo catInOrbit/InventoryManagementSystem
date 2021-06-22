@@ -23,12 +23,16 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
         private IAsyncRepository<ProductVariant> _poAsyncRepository;
 
         private readonly IAuthorizationService _authorizationService;
+        private readonly INotificationService _notificationService;
+        private readonly IUserSession _userAuthentication;
 
-        public StockTakeSubmit(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IAsyncRepository<ProductVariant> poAsyncRepository)
+        public StockTakeSubmit(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IAsyncRepository<ProductVariant> poAsyncRepository, INotificationService notificationService, IUserSession userAuthentication)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
             _poAsyncRepository = poAsyncRepository;
+            _notificationService = notificationService;
+            _userAuthentication = userAuthentication;
         }
 
         [HttpPut("api/stocktake/submit")]
@@ -46,6 +50,14 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
             var stockTakeOrder = await _asyncRepository.GetByIdAsync(request.Id);
             stockTakeOrder.StockTakeOrderType = StockTakeOrderType.Completed;
             await _asyncRepository.UpdateAsync(stockTakeOrder);
+            
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+                
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Submit","Stock Take", stockTakeOrder.Id);
+                
+            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                currentUser.Id, messageNotification);
 
             return Ok();
         }
@@ -57,14 +69,16 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
         private readonly IAsyncRepository<ProductVariant> _pvasyncRepository;
 
         private readonly IAuthorizationService _authorizationService;
-        private readonly IUserAuthentication _userAuthentication;
+        private readonly IUserSession _userAuthentication;
+        private readonly INotificationService _notificationService;
 
-        public StockTakeUpdate(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IUserAuthentication userAuthentication, IAsyncRepository<ProductVariant> pvasyncRepository)
+        public StockTakeUpdate(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductVariant> pvasyncRepository, INotificationService notificationService)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
             _pvasyncRepository = pvasyncRepository;
+            _notificationService = notificationService;
         }
 
         [HttpPut("api/stocktake/update")]
@@ -101,6 +115,14 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
             storder.Transaction.ModifiedDate = DateTime.Now;
             storder.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             await _asyncRepository.UpdateAsync(storder);
+            
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+                  
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Update","Stock Take", storder.Id);
+                
+            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                currentUser.Id, messageNotification);
             return Ok(response);
         }
     }
@@ -109,13 +131,16 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
      {
          private readonly IAsyncRepository<StockTakeOrder> _stAsyncRepository;
          private readonly IAsyncRepository<ProductVariant> _productAsyncRepository;
-         private readonly IUserAuthentication _userAuthentication;
+         private readonly IUserSession _userAuthentication;
 
-         public StockTakeAddProduct(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IUserAuthentication userAuthentication)
+         private readonly INotificationService _notificationService;
+
+         public StockTakeAddProduct(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IUserSession userAuthentication, INotificationService notificationService)
          {
              _stAsyncRepository = stAsyncRepository;
              _productAsyncRepository = productAsyncRepository;
              _userAuthentication = userAuthentication;
+             _notificationService = notificationService;
          }
         
          [HttpPut("api/stocktake/add")]
@@ -148,6 +173,14 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              stockTakeOrder.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
              await _stAsyncRepository.UpdateAsync(stockTakeOrder);
              response.StockTakeOrder = stockTakeOrder;
+             
+             var currentUser = await _userAuthentication.GetCurrentSessionUser();
+                  
+             var messageNotification =
+                 _notificationService.CreateMessage(currentUser.Fullname, "Add","Stock Take Item", stockTakeOrder.Id);
+                
+             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                 currentUser.Id, messageNotification);
              return Ok(response);
          }
      }
@@ -156,13 +189,15 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
      {
          private readonly IAuthorizationService _authorizationService;
          private readonly IAsyncRepository<StockTakeOrder> _asyncRepository;
-         private readonly IUserAuthentication _userAuthentication;
+         private readonly IUserSession _userAuthentication;
+         private readonly INotificationService _notificationService;
 
-         public StockTakeCreate(IAuthorizationService authorizationService, IAsyncRepository<StockTakeOrder> asyncRepository, IUserAuthentication userAuthentication)
+         public StockTakeCreate(IAuthorizationService authorizationService, IAsyncRepository<StockTakeOrder> asyncRepository, IUserSession userAuthentication, INotificationService notificationService)
          {
              _authorizationService = authorizationService;
              _asyncRepository = asyncRepository;
              _userAuthentication = userAuthentication;
+             _notificationService = notificationService;
          }
 
          [HttpPost("api/stocktake/create")]
@@ -193,6 +228,15 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              sto.StockTakeOrderType = StockTakeOrderType.Progressing;
              await _asyncRepository.AddAsync(sto);
              response.StockTakeOrder = sto;
+             
+               
+             var currentUser = await _userAuthentication.GetCurrentSessionUser();
+                  
+             var messageNotification =
+                 _notificationService.CreateMessage(currentUser.Fullname, "Create","Stock Take", sto.Id);
+                
+             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                 currentUser.Id, messageNotification);
              return Ok(response);
          }
      }
