@@ -41,8 +41,8 @@ namespace InventoryManagementSystem.PublicApi
         private const string CORS_POLICY = "CorsPolicy";
         public IConfiguration Configuration { get; set; }
 
-        private const string LOCAL_IDENTITY = "IdentityConnection";
-        private const string HEROKUSQL = "MSSQLHeroku";
+        // private const string LOCAL_IDENTITY = "IdentityConnection";
+        // private const string HEROKUSQL = "MSSQLHeroku";
 
         public Startup(IConfiguration configuration)
         {
@@ -65,7 +65,7 @@ namespace InventoryManagementSystem.PublicApi
             services.AddHostedService<RedisWorkerService>();
             
             services.AddDbContext<IdentityAndProductDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString(HEROKUSQL),  b => b.MigrationsAssembly("IMSPublicApi")));
+                options.UseSqlServer(Configuration.GetConnectionString(ConnectionPropertiesConstant.MAIN_CONNECTION_STRING),  b => b.MigrationsAssembly("IMSPublicApi")));
 
             services.AddCors(c =>
             {

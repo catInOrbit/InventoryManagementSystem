@@ -69,14 +69,17 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 var transaction = new Transaction
                 {
                     CreatedDate = DateTime.Now,
-                    Type = TransactionType.Purchase,
+                    Type = TransactionType.GoodsReceipt,
                     CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
-                    TransactionStatus = true
+                    TransactionStatus = true,
                 };
 
                 ro.Transaction = transaction;
             }
-
+            
+            ro.Transaction.ModifiedDate = DateTime.Now;
+            ro.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            
             var purhchaseOrder = await _poRepository.GetByIdAsync(request.PurchaseOrderNumber);
             ro.SupplierId = purhchaseOrder.SupplierId;
             ro.PurchaseOrderId = request.PurchaseOrderNumber;
@@ -124,7 +127,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
 
             var response = new ROUpdateResponse();
             response.CreatedGoodsReceiptId = ro.Id;
-            
+            response.TransactionId = ro.TransactionId;
+
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
 
             var messageNotification =

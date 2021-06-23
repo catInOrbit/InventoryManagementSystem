@@ -13,6 +13,7 @@ namespace Infrastructure
         {
             var index = new PurchaseOrderSearchIndex
             {
+                TransactionId = (po.Transaction!=null) ? po.Transaction.Id : "",
                 Id = po.Id,
                 SupplierName = (po.Supplier != null) ? po.Supplier.SupplierName : "",
                 Status = (po.PurchaseOrderStatus.GetStringValue() != null)
@@ -40,6 +41,7 @@ namespace Infrastructure
         {
             var index = new GoodsReceiptOrderSearchIndex
             {
+                TransactionId = (ro.Transaction!=null) ? ro.Transaction.Id : "",
                 Id = ro.Id,
                 PurchaseOrderId = (ro.PurchaseOrderId!=null) ? ro.PurchaseOrderId : "",
                 SupplierName = (ro.Supplier!=null) ? ro.Supplier.SupplierName : "",
@@ -54,6 +56,7 @@ namespace Infrastructure
         {
             var index = new GoodsIssueSearchIndex
             {
+                TransactionId = (gi.Transaction!=null) ? gi.Transaction.Id : "",
                 Id = gi.Id,
                 Status = gi.GoodsIssueType.ToString(),
                 CreatedByName = (gi.Transaction.CreatedBy!=null) ? gi.Transaction.CreatedBy.Fullname : "" ,
@@ -83,6 +86,7 @@ namespace Infrastructure
                 
                     index = new ProductSearchIndex
                     {
+                        TransactionId = (productVariant.Transaction!=null) ? productVariant.TransactionId : "" ,
                         Id = productVariant.Id,
                         Name = nameConcat,
                         ProductId = productVariant.ProductId,
@@ -112,6 +116,7 @@ namespace Infrastructure
             StockTakeSearchIndex index = null;
             index = new StockTakeSearchIndex
             {
+                TransactionId = (stockTake.Transaction!=null) ? stockTake.TransactionId : "",
                 Id = stockTake.Id,
                 Status = stockTake.StockTakeOrderType.ToString(),
                 CreatedDate = stockTake.Transaction.CreatedDate,
@@ -135,6 +140,7 @@ namespace Infrastructure
                 
                     index = new ProductSearchIndex
                     {
+                        TransactionId = (productVariant.Transaction!=null) ? productVariant.TransactionId : "",
                         Id = productVariant.Id,
                         Name = nameConcat,
                         ProductId = productVariant.ProductId,

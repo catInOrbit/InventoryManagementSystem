@@ -9,6 +9,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         {
             Id = Guid.NewGuid().ToString() + "-ignore-id";
         }
+        
+        public string  TransactionId { get; set; }
+
         public string PurchaseOrderId { get; set; }
         public DateTime CreatedDate { get; set; }
         public string SupplierName { get; set; }

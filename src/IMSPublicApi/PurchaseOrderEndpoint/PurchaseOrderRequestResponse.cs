@@ -119,10 +119,31 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
         public string Id { get; set; }
     }
     
-    public class RUpdateResponse : BaseResponse
+    public class RequisitionUpdateResponse : BaseResponse
     {
+        public string TransactionId { get; set; }
+        public string UpdatedRequisitionId { get; set; }
+    }
+    
+    public class RequisitionCreateResponse : BaseResponse
+    {
+        public string TransactionId { get; set; }
         public string CreatedRequisitionId { get; set; }
     }
+    
+    public class RequisitionCreateRequest
+    {
+        public DateTime Deadline { get; set; }
+        public List<OrderItem> OrderItems { get; set; }
+    }
+    
+    public class RequisitionUpdateRequest
+    {
+        public string RequisitionId { get; set; }
+        public DateTime Deadline { get; set; }
+        public List<OrderItem> OrderItems { get; set; }
+    }
+
     
    public class GetPriceQuoteRequest : BaseRequest
     {

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {

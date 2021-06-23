@@ -41,6 +41,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
     
     public class ROUpdateResponse : BaseRequest
     {
+        public string TransactionId { get; set; }
         public string CreatedGoodsReceiptId { get; set; }
     }
 

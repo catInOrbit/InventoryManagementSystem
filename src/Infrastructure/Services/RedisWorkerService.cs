@@ -2,9 +2,11 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure.Identity.DbContexts;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -14,10 +16,14 @@ namespace Infrastructure.Services
     {
         private readonly IRedisRepository _redisRepository;
         private readonly ILogger<RedisWorkerService> _logger;
-        public RedisWorkerService(IRedisRepository redisRepository, ILogger<RedisWorkerService> logger)
+        private readonly IServiceProvider _serviceProvider;
+        private  readonly IConfiguration _configuration;
+        public RedisWorkerService(IRedisRepository redisRepository, ILogger<RedisWorkerService> logger, IServiceProvider serviceProvider, IConfiguration configuration)
         {
             _redisRepository = redisRepository;
             _logger = logger;
+            _serviceProvider = serviceProvider;
+            _configuration = configuration;
         }
 
 
@@ -29,10 +35,13 @@ namespace Infrastructure.Services
                 _logger.LogInformation("Worker for redis running at: {0}", DateTimeOffset.Now);
                 if (data != null)
                 {
-                    await using (var dbContext = new IdentityAndProductDbContext(new DbContextOptions<IdentityAndProductDbContext>()))
+                    DbContextOptionsBuilder<IdentityAndProductDbContext> options =
+                        new DbContextOptionsBuilder<IdentityAndProductDbContext>(
+                        );
+                    options.UseSqlServer(_configuration.GetConnectionString(ConnectionPropertiesConstant.MAIN_CONNECTION_STRING));
+                    using(var dbContext = new IdentityAndProductDbContext(options.Options))
                     {
                         await dbContext.AddRangeAsync(data, stoppingToken);
-                        dbContext.Entry(data).State = EntityState.Added;
                         await dbContext.SaveChangesAsync(stoppingToken);
                     }
                 }

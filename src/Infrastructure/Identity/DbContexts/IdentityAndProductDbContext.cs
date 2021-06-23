@@ -16,6 +16,11 @@ namespace Infrastructure.Identity.DbContexts
         {
         }
 
+        public IdentityAndProductDbContext()
+        {
+            
+        }
+
         // public DbSet<Brand> Brand { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<Supplier> Supplier { get; set; }
@@ -46,6 +51,21 @@ namespace Infrastructure.Identity.DbContexts
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin");
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaim");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserToken");
+            
+            // builder.Entity<GoodsReceiptOrderItem>().HasOne(e => e.GoodsReceiptOrder).WithMany(e=>e.ReceivedOrderItems).OnDelete(DeleteBehavior.Restrict);
+            // builder.Entity<PurchaseOrder>().HasMany<OrderItem>().WithOne().OnDelete(DeleteBehavior.Restrict);
+            //
+            // builder.Entity<Transaction>().
+            //     HasOne(e => e.PurchaseOrder).WithOne(e => e.Transaction).OnDelete(DeleteBehavior.ClientCascade);
+            // builder.Entity<Transaction>().
+            //     HasOne(e => e.GoodsReceiptOrder).WithOne(e => e.Transaction).OnDelete(DeleteBehavior.ClientCascade);
+            // builder.Entity<Transaction>().
+            //     HasOne(e => e.GoodsIssueOrder).WithOne(e => e.Transaction).OnDelete(DeleteBehavior.ClientCascade);
+            // builder.Entity<Transaction>().
+            //     HasOne(e => e.StockTakeOrder).WithOne(e => e.Transaction).OnDelete(DeleteBehavior.ClientCascade);
+            // builder.Entity<Transaction>().
+            //     HasOne(e => e.Product).WithOne(e => e.Transaction).OnDelete(DeleteBehavior.ClientCascade);
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

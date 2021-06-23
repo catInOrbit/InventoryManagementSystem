@@ -56,7 +56,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
 
             var poData = _purchaseOrderRepos.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
             poData.PurchaseOrderStatus = PurchaseOrderStatusType.POCreated;
-     
+            poData.Transaction.Type = TransactionType.Purchase;
+
             poData.Transaction.ModifiedDate = DateTime.Now;
             poData.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
 

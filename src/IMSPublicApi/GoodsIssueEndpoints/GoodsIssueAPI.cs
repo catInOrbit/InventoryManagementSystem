@@ -60,7 +60,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 gio.Transaction = new Transaction
                 {
                     CreatedDate = DateTime.Now,
-                    Type = TransactionType.PriceQuote,
+                    Type = TransactionType.GoodsIssue,
                     CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
                     TransactionStatus = true
                 };

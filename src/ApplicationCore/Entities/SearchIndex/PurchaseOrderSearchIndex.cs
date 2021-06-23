@@ -13,6 +13,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
             Id = Guid.NewGuid().ToString() + "-ignore-id";
         }
         
+        public string  TransactionId { get; set; }
+
+        
         public string SupplierName { get; set; }
         public string SupplierId { get; set; }
         public string SupplierPhone { get; set; }

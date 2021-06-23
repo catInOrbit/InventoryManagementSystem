@@ -15,6 +15,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         {
             return false;
         }
+        
+        public string  TransactionId { get; set; }
+
         public string CreatedByName { get; set; }
         public string ModifiedByName { get; set; }
 
