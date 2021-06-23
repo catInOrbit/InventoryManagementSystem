@@ -18,7 +18,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public string BrandName { get; set; }
         public string CategoryId { get; set; }
         public string TransactionId { get; set; }
-
         [JsonIgnore]
         public virtual Transaction Transaction { get; set; }
         public string SellingStrategy { get; set; }

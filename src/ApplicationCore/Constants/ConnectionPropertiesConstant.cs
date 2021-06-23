@@ -4,6 +4,6 @@ namespace InventoryManagementSystem.ApplicationCore.Constants
     {
         public static readonly string LocalIdentity = "IdentityConnection";
         public static readonly string HEROKUSQL = "MSSQLHeroku";
-        public static readonly string MAIN_CONNECTION_STRING = LocalIdentity;
+        public static readonly string MAIN_CONNECTION_STRING = HEROKUSQL;
     }
 }

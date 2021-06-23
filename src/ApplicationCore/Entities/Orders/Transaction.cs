@@ -22,7 +22,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public virtual ApplicationUser ConfirmedBy { get; set; }
         public string ModifiedById { get; set; }
         public virtual ApplicationUser ModifiedBy { get; set; }
-
         public TransactionType Type { get; set; }
         public bool TransactionStatus { get; set; }
     }

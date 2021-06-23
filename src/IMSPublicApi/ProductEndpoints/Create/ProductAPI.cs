@@ -64,6 +64,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                 TransactionStatus = true
             };
 
+            product.TransactionId = product.Transaction.Id; 
+
             if (request.ProductVariants.Count > 0)
             {
                 product.IsVariantType = true;
