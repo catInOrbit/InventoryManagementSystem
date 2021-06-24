@@ -77,7 +77,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                         Name = productVairantRequestInfo.Name,
                         Sku = productVairantRequestInfo.Sku,
                         Unit = productVairantRequestInfo.Unit,
-                        StorageLocation = productVairantRequestInfo.StorageLocation,
                         StorageQuantity = productVairantRequestInfo.StorageQuantity,
                         IsVariantType = product.IsVariantType,
                         Transaction = new Transaction
