@@ -5,6 +5,12 @@ using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 
 namespace InventoryManagementSystem.PublicApi.ProductEndpoints
 {
+    public class ProductCreateResponse : BaseResponse
+    {
+        public string CreatedProductId { get; set; }
+    }
+
+
     public class ProductRequest : BaseRequest
     {
         public string Name { get; set; }
