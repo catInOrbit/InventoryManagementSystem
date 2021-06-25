@@ -15,6 +15,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         }
         public string ProductId { get; set; }
         public string Name { get; set; }
+        public string Barcode { get; set; }
         public decimal Price { get; set; }
         public decimal Cost { get; set; }
         public string Sku { get; set; }

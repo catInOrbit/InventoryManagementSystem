@@ -15,7 +15,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
     {
         public string Name { get; set; }
         public string BrandName { get; set; }
-        public string Barcode { get; set; }
         public string Unit { get; set; }
         public string CategoryId { get; set; }
         public List<ProductVairantRequestInfo> ProductVariants { get; set; }
@@ -25,10 +24,12 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
     {
         public string Name { get; set; }
         public decimal Price { get; set; }
+        public string Barcode { get; set; }
+
         public string Sku { get; set; }
         public string Unit { get; set; }
         public int StorageQuantity { get; set; }
-        public string StorageLocation { get; set; }
+        // public string StorageLocation { get; set; }
      
         public List<VariantValueRequestInfo> VariantValues { get; set; }
 

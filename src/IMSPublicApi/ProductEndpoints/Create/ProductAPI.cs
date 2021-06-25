@@ -80,6 +80,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                         Unit = productVairantRequestInfo.Unit,
                         StorageQuantity = productVairantRequestInfo.StorageQuantity,
                         IsVariantType = product.IsVariantType,
+                        Barcode = productVairantRequestInfo.Barcode,
                         Transaction = new Transaction
                         {
                             CreatedDate = DateTime.Now,
