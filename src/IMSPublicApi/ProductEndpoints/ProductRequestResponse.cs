@@ -31,7 +31,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
         public int StorageQuantity { get; set; }
         // public string StorageLocation { get; set; }
      
-        public List<VariantValueRequestInfo> VariantValues { get; set; }
+        // public List<VariantValueRequestInfo> VariantValues { get; set; }
 
     }
 

@@ -29,7 +29,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public virtual Product Product { get; set; }
         [Nest.PropertyName("variantValues")]
         [Nest.Nested]
-        public virtual ICollection<VariantValue> VariantValues { get; set; }
+        // public virtual ICollection<VariantValue> VariantValues { get; set; }
         public bool IsVariantType { get; set; }
         
         [JsonIgnore]

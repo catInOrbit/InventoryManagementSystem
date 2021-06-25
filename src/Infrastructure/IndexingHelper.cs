@@ -78,17 +78,17 @@ namespace Infrastructure
             {
                 try
                 {
-                    string nameConcat = productVariant.Name;
-                    foreach (var productVariantVariantValue in productVariant.VariantValues)
-                    {
-                        nameConcat += "-" + productVariantVariantValue.Value.Trim();
-                    }
+                    // string nameConcat = productVariant.Name;
+                    // foreach (var productVariantVariantValue in productVariant.VariantValues)
+                    // {
+                    //     nameConcat += "-" + productVariantVariantValue.Value.Trim();
+                    // }
                 
                     index = new ProductSearchIndex
                     {
                         TransactionId = (productVariant.Transaction!=null) ? productVariant.TransactionId : "" ,
                         Id = productVariant.Id,
-                        Name = nameConcat,
+                        Name = productVariant.Name,
                         ProductId = productVariant.ProductId,
                         VariantId = productVariant.Id,
                         Category = (product.Category != null) ? product.Category.CategoryName : "",
@@ -132,17 +132,17 @@ namespace Infrastructure
             ProductSearchIndex index = null; 
                 try
                 {
-                    string nameConcat = productVariant.Name;
-                    foreach (var productVariantVariantValue in productVariant.VariantValues)
-                    {
-                        nameConcat += "-" + productVariantVariantValue.Value.Trim();
-                    }
+                    // string nameConcat = productVariant.Name;
+                    // foreach (var productVariantVariantValue in productVariant.VariantValues)
+                    // {
+                    //     nameConcat += "-" + productVariantVariantValue.Value.Trim();
+                    // }
                 
                     index = new ProductSearchIndex
                     {
                         TransactionId = (productVariant.Transaction!=null) ? productVariant.TransactionId : "",
                         Id = productVariant.Id,
-                        Name = nameConcat,
+                        Name = productVariant.Name,
                         ProductId = productVariant.ProductId,
                         VariantId = productVariant.Id,
                         Category = (productVariant.Product.Category.CategoryName != null) ? productVariant.Product.Category.CategoryName : "",
@@ -154,8 +154,8 @@ namespace Infrastructure
                         Price = productVariant.Price,
                         Strategy = (productVariant.Product.SellingStrategy!= null) ? productVariant.Product.SellingStrategy : "",
                         CreatedDate = productVariant.Transaction.CreatedDate,
-                        CreatedByName = productVariant.Transaction.CreatedBy.Fullname,
-                        ModifiedByName = productVariant.Transaction.ModifiedBy.Fullname,
+                        CreatedByName = (productVariant.Transaction.CreatedBy) != null ? productVariant.Transaction.CreatedBy.Fullname : "",
+                        ModifiedByName = (productVariant.Transaction.ModifiedBy) != null ? productVariant.Transaction.ModifiedBy.Fullname : "",
                     };
                     index.FillSuggestion();
                 }

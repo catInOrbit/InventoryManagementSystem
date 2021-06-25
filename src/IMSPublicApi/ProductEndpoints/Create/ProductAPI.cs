@@ -26,7 +26,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
         private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
 
-        private INotificationService _notificationService;
+        private readonly INotificationService _notificationService;
 
         public ProductCreate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos, INotificationService notificationService)
         {
@@ -90,18 +90,18 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                         }
                     };
                     
-                    productVariant.VariantValues = new List<VariantValue>();
-                    foreach (var variantValueRequestInfo in productVairantRequestInfo.VariantValues)
-                    {
-                        var variantValue = new VariantValue
-                        {
-                            Attribute = variantValueRequestInfo.Attribute,
-                            Value = variantValueRequestInfo.Value,
-                            ProductVariantId = productVariant.Id,
-                        };
-
-                        productVariant.VariantValues.Add(variantValue);
-                    }
+                    // productVariant.VariantValues = new List<VariantValue>();
+                    // foreach (var variantValueRequestInfo in productVairantRequestInfo.VariantValues)
+                    // {
+                    //     var variantValue = new VariantValue
+                    //     {
+                    //         Attribute = variantValueRequestInfo.Attribute,
+                    //         Value = variantValueRequestInfo.Value,
+                    //         ProductVariantId = productVariant.Id,
+                    //     };
+                    //
+                    //     productVariant.VariantValues.Add(variantValue);
+                    // }
                     product.ProductVariants.Add(productVariant);
                 }
             }

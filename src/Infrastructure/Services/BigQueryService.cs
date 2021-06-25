@@ -42,7 +42,6 @@ namespace Infrastructure.Services
                 }
             }
             
-            
             List<BigQueryInsertRow> listRowInser = new List<BigQueryInsertRow>();
             Dictionary<string, object> columnValues = new Dictionary<string, object>();
             BigQueryInsertRow row = new BigQueryInsertRow();
