@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -30,7 +31,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
         ]
         public override async Task<ActionResult<GetProductResponse>> HandleAsync([FromRoute] GetProductRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Read))
                 return Unauthorized();
             
             var response = new GetProductResponse();

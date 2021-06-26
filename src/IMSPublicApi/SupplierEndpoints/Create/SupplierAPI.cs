@@ -77,7 +77,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
         ]
         public override async Task<ActionResult> HandleAsync(SupplierUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.SUPPLIER, UserOperations.Create))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.SUPPLIER, UserOperations.Update))
                 return Unauthorized();
             var supplier = await _supplierAsyncRepository.GetByIdAsync(request.SupplierId);
             supplier.City = request.Supplier.Id;
@@ -129,7 +129,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
         ]
         public override async Task<ActionResult> HandleAsync([FromRoute]SupplierDeleteRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.SUPPLIER, UserOperations.Create))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.SUPPLIER, UserOperations.Delete))
                 return Unauthorized();
 
             var supplierToDelete = await _supplierAsyncRepository.GetByIdAsync(request.Id); 

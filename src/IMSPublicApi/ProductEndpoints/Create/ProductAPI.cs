@@ -125,39 +125,4 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
         }
     }
     
-    //  public class ProductUpdate : BaseAsyncEndpoint.WithRequest<ProductRequest>.WithoutResponse
-    // {
-    //     private IAsyncRepository<ApplicationCore.Entities.Products.Product> _asyncRepository;
-    //     private readonly IAuthorizationService _authorizationService;
-    //     private readonly IUserAuthentication _userAuthentication;
-    //     private readonly IAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
-    //
-    //
-    //     public ProductUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserAuthentication userAuthentication, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos)
-    //     {
-    //         _asyncRepository = asyncRepository;
-    //         _authorizationService = authorizationService;
-    //         _userAuthentication = userAuthentication;
-    //         _productIndexAsyncRepositoryRepos = productIndexAsyncRepositoryRepos;
-    //     }
-    //     
-    //     [HttpPost("api/product/update")]
-    //     [SwaggerOperation(
-    //         Summary = "Update info of a product",
-    //         Description = "Update info of a product",
-    //         OperationId = "product.update",
-    //         Tags = new[] { "ProductEndpoints" })
-    //     ]
-    //     public override async Task<ActionResult> HandleAsync(ProductRequest request, CancellationToken cancellationToken = new CancellationToken())
-    //     {
-    //         // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Create))
-    //         //     return Unauthorized();
-    //         
-    //         var product = await _asyncRepository.GetByIdAsync(request.Id);
-    //         product = request.ProductUpdate;
-    //         await _asyncRepository.UpdateAsync(product);
-    //         await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(true,IndexingHelper.ProductSearchIndex(product));
-    //         return Ok();
-    //     }
-    // }
 }

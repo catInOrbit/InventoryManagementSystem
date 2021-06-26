@@ -57,7 +57,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             var response = new POUpdateResponse();
             
             // requires using ContactManager.Authorization;
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PurchaseOrder", UserOperations.Update))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER, UserOperations.Update))
                 return Unauthorized();
 
             var po =  _purchaseOrderRepos.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);

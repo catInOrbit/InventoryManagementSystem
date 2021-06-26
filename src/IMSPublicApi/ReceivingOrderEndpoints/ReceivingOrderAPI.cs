@@ -56,7 +56,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
 
         public override async Task<ActionResult<ROUpdateResponse>> HandleAsync(ROUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Update))
                 return Unauthorized();
             
             var ro = new GoodsReceiptOrder();
@@ -171,7 +171,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         public override async Task<ActionResult> HandleAsync(ROSingleProductUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
         
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Update))
                 return Unauthorized();
             
             //Get Product Variant

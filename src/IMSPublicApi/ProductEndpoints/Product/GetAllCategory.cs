@@ -37,7 +37,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
         ]
         public override async Task<ActionResult<GetAllCategoryResponse>> HandleAsync([FromQuery] GetCategoryRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Read))
                 return Unauthorized();
             
             var response = new GetAllCategoryResponse();

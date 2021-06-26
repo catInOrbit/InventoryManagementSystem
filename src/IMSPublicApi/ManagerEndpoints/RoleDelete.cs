@@ -41,6 +41,10 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
        ]
         public override async Task<ActionResult<RoleDeleteResponse>> HandleAsync(RoleDeleteRequest request, CancellationToken cancellationToken = default)
         {
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.ROLEPERMISSION, UserOperations.Delete))
+                return Unauthorized();
+
+            
             var response = new RoleDeleteResponse();
             
             var userGet = await _userAuthentication.GetCurrentSessionUser();

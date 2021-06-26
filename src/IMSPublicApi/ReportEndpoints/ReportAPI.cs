@@ -35,7 +35,7 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
         ]
         public override async Task<ActionResult<StockOnHandReportResponse>> HandleAsync([FromQuery]StockOnHandReportRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.REPORT, UserOperations.Create))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.REPORT, UserOperations.Read))
                return Unauthorized();
             
             var response = new StockOnHandReportResponse();
@@ -68,7 +68,7 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
         ]
         public override async Task<ActionResult<StockOnHandReportResponse>> HandleAsync([FromQuery]StockOnHandReportRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.REPORT, UserOperations.Create))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.REPORT, UserOperations.Read))
                 return Unauthorized();
             
             var response = new StockTakeReportResponse();

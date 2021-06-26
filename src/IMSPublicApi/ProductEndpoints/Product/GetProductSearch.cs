@@ -79,7 +79,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
 
         public override async Task<ActionResult<GetProductSearchResponse>> HandleAsync([FromQuery]GetProductSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Product", UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Read))
                 return Unauthorized();
             var response = new GetProductSearchResponse();
 

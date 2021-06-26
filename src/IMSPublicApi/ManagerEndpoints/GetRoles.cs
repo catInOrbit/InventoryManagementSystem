@@ -41,7 +41,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
                 return Unauthorized();
             
             //
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.USERDETAIL, UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.ROLEPERMISSION, UserOperations.Read))
                 return Unauthorized();
 
             PagingOption<IdentityRole> pagingOption =

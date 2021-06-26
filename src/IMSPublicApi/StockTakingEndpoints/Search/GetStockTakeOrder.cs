@@ -42,7 +42,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
 
         public override async Task<ActionResult<STSearchResponse>> HandleAsync([FromQuery] STSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "StockTakeOrder", UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.STOCKTAKEORDER, UserOperations.Read))
                 return Unauthorized();
             
             PagingOption<StockTakeSearchIndex> pagingOption = new PagingOption<StockTakeSearchIndex>(

@@ -4,6 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -13,9 +16,11 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
     public class GetRoleDetail : BaseAsyncEndpoint.WithRequest<GetSpecificRoleRequest>.WithResponse<GetSpecificRoleResponse>
     {
         private readonly UserRoleModificationService _userRoleService;
+        private readonly IAuthorizationService _authorizationService;
 
-        public GetRoleDetail(RoleManager<IdentityRole> roleManager)
+        public GetRoleDetail(RoleManager<IdentityRole> roleManager, IAuthorizationService authorizationService)
         {
+            _authorizationService = authorizationService;
             _userRoleService = new UserRoleModificationService(roleManager);
         }
 
@@ -28,6 +33,11 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         ]
         public override async Task<ActionResult<GetSpecificRoleResponse>> HandleAsync([FromRoute]GetSpecificRoleRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
+            
+             
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.ROLEPERMISSION, UserOperations.Read))
+                return Unauthorized();
+            
             var response = new GetSpecificRoleResponse();
             response.Role = await _userRoleService.RoleManager.FindByIdAsync(request.RoleId);
 

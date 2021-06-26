@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
@@ -30,7 +31,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
         ]
         public override async Task<ActionResult<GiSearchResponse>> HandleAsync([FromRoute] GiIdRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "GoodsIssue", UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSISSUE, UserOperations.Read))
                 return Unauthorized();
 
             var response = new GiSearchResponse();

@@ -5,6 +5,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public static string STOCKTAKEORDER = "StockTakeOrder";
         public static string GOODSISSUE = "GoodsIssue";
         public static string USERDETAIL = "UserDetail";
+        public static string ROLEPERMISSION = "RolePermissionUpdate";
+
         public static string PRODUCT = "Product";
         public static string PRICEQUOTEORDER = "PriceQuoteOrder";
         public static string PURCHASEORDER = "PurchaseOrder";

@@ -209,7 +209,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
          ]
          public override async Task<ActionResult<STCreateItemResponse>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
          {
-             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "StockTakeOrder", UserOperations.Create))
+             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.STOCKTAKEORDER, UserOperations.Create))
                  return Unauthorized();
 
              var response = new STCreateItemResponse();

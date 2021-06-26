@@ -5,6 +5,7 @@ using Ardalis.ApiEndpoints;
 using Infrastructure;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Constants;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
@@ -48,7 +49,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote.C
 
         public override async Task<ActionResult<PQCreateResponse>> HandleAsync([FromRoute]PQCreateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "PriceQuoteOrder", UserOperations.Create))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRICEQUOTEORDER, UserOperations.Create))
                 return Unauthorized();
             
             var response = new PQCreateResponse();

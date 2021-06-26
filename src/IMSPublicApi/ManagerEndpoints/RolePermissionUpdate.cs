@@ -48,41 +48,37 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             var userGet = await _userAuthentication.GetCurrentSessionUser();
             if(userGet == null)
                 return Unauthorized();
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.ROLEPERMISSION, UserOperations.Update))
+                return Unauthorized();
             
             var response = new RolePermissionResponse();
             var allRoles = _userRoleModificationService.RoleManager.Roles.ToList();
             UserInfo.OwnerID = userGet.Id.ToString();
-            // requires using ContactManager.Authorization;
-            var isAuthorized = await _authorizationService.AuthorizeAsync(
-                HttpContext.User, "RolePermissionUpdate",
-                UserOperations.Update);
+          
 
-            if (isAuthorized.Succeeded)
+            if(allRoles.Contains( new IdentityRole(request.Role.ToString())))
+                await _userRoleModificationService.RemoveAllClaimHelper(request.Role);
+
+            // page -- list<action>
+            foreach (var pageClaimKeyValuePair in request.PageClaimDictionary)
             {
-                if(allRoles.Contains( new IdentityRole(request.Role.ToString())))
-                    await _userRoleModificationService.RemoveAllClaimHelper(request.Role);
-
-                // page -- list<action>
-                foreach (var pageClaimKeyValuePair in request.PageClaimDictionary)
+                foreach (var pageClaim in pageClaimKeyValuePair.Value)
                 {
-                    foreach (var pageClaim in pageClaimKeyValuePair.Value)
-                    {
-                        var result =
-                           await _userRoleModificationService.ClaimCreatingHelper(request.Role, request.RoleDescription, new Claim(pageClaimKeyValuePair.Key, pageClaim));
+                    var result =
+                       await _userRoleModificationService.ClaimCreatingHelper(request.Role, request.RoleDescription, new Claim(pageClaimKeyValuePair.Key, pageClaim));
 
-                        if (!result.Succeeded)
-                        {
-                            response.Result = false;
-                            response.Verbose = "Error editing role, please try again";
-                        }
+                    if (!result.Succeeded)
+                    {
+                        response.Result = false;
+                        response.Verbose = "Error editing role, please try again";
                     }
                 }
-                
-                response.Result = true;
-                response.Verbose = "Success";
-                response.RoleChanged = request.Role;
-                return Ok(response);
-            } 
+            }
+            
+            response.Result = true;
+            response.Verbose = "Success";
+            response.RoleChanged = request.Role;
+            return Ok(response);
 
             return Unauthorized();
         }

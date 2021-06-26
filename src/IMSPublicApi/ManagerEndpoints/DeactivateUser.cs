@@ -32,7 +32,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         public override async Task<ActionResult> HandleAsync(DeactivateUserRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "UserDetail", UserOperations.Update))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.USERDETAIL, UserOperations.Update))
                 return Unauthorized();
             
             var userGet = await _userManager.FindByIdAsync(request.UserId);

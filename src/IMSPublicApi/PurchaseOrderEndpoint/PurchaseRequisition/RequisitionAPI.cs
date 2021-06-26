@@ -5,6 +5,7 @@ using Ardalis.ApiEndpoints;
 using Infrastructure;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Constants;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
@@ -45,7 +46,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
          ]
          public override async Task<ActionResult<RequisitionCreateResponse>> HandleAsync(RequisitionCreateRequest request, CancellationToken cancellationToken = new CancellationToken())
          {
-              if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Requisition", UserOperations.Create))
+              if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.REQUISITION, UserOperations.Create))
                  return Unauthorized();
               var po = new ApplicationCore.Entities.Orders.PurchaseOrder();
               po.Transaction = new Transaction
@@ -114,7 +115,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
         ]
         public override async Task<ActionResult> HandleAsync(RSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Requisition", UserOperations.Update))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.REQUISITION, UserOperations.Update))
                 return Unauthorized();
             
             var po = await _asyncRepository.GetByIdAsync(request.Id);
@@ -168,7 +169,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
 
         public override async Task<ActionResult<RequisitionUpdateResponse>> HandleAsync(RequisitionUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "Requisition", UserOperations.Update))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.REQUISITION, UserOperations.Update))
                 return Unauthorized();
                 
             var po = await _asyncRepository.GetByIdAsync(request.RequisitionId);

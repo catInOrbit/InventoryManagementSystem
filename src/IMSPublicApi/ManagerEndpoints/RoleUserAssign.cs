@@ -45,7 +45,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
                 return Unauthorized();
             
             var isAuthorized = await _authorizationService.AuthorizeAsync(
-                HttpContext.User, "RoleUserAssign",
+                HttpContext.User,  PageConstant.ROLEPERMISSION,
                 UserOperations.Update);
             IdentityResult result = new IdentityResult();
             if(isAuthorized.Succeeded)

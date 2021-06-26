@@ -18,49 +18,6 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
 {
-    // public class GetGoodsIssue : BaseAsyncEndpoint.WithRequest<GIAllRequest>.WithResponse<GiSearchResponse>
-    // {
-    //     private IAsyncRepository<GoodsIssueOrder> _asyncRepository;
-    //     private readonly IAuthorizationService _authorizationService;
-    //     private readonly IElasticClient _elasticClient;
-    //
-    //     public GetGoodsIssue(IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, IElasticClient elasticClient)
-    //     {
-    //         _asyncRepository = asyncRepository;
-    //         _authorizationService = authorizationService;
-    //         _elasticClient = elasticClient;
-    //     }
-    //
-    //     [SwaggerOperation(
-    //         Summary = "Get all good issue with status (requisition at 0)",
-    //         Description = "Get all good issue with status (requisition at 0)" +
-    //                       "\n {SearchQuery}: Querry to search, all to search all \n " +
-    //                       "{CurrentPage}: Current page to display \n" +
-    //                       "{SizePerPage}: Number of rows to display in a page",
-    //         OperationId = "gi.search",
-    //         Tags = new[] { "GoodsIssueEndpoints" })
-    //     ]
-    //     [HttpPost("api/goodsissue/all")]
-    //     public override async Task<ActionResult<GiSearchResponse>> HandleAsync(GIAllRequest request, CancellationToken cancellationToken = new CancellationToken())
-    //     {
-    //         if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "GoodsIssue", UserOperations.Read))
-    //             return Unauthorized();
-    //
-    //         var response = new GiSearchResponse();
-    //         PagingOption<GoodsIssueSearchIndex> pagingOption = new PagingOption<GoodsIssueSearchIndex>(
-    //             request.CurrentPage, request.SizePerPage);
-    //         response.IsForDisplay = true;
-    //
-    //         GISearchFilter searchFilter = new GISearchFilter();
-    //         searchFilter.Status = request.GiSearchFilter.Status;
-    //         var gisi = await _asyncRepository.GetGIForELIndexAsync(pagingOption, searchFilter, cancellationToken);
-    //         response.Paging = pagingOption;
-    //         
-    //         response.Paging = gisi;
-    //         return Ok(response);
-    //     }
-    // }
-    
     public class SearchGoodsIssue : BaseAsyncEndpoint.WithRequest<GISearchRequest>.WithResponse<GiSearchResponse>
     {
         private IAsyncRepository<GoodsIssueOrder> _asyncRepository;
@@ -86,7 +43,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
         [HttpGet("api/goodsissue/search")]
         public override async Task<ActionResult<GiSearchResponse>> HandleAsync([FromQuery]GISearchRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, "GoodsIssue", UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSISSUE, UserOperations.Read))
                 return Unauthorized();
 
             var response = new GiSearchResponse();
