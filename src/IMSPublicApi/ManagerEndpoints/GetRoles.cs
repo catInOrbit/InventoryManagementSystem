@@ -13,7 +13,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
-    public class GetRoles : BaseAsyncEndpoint.WithoutRequest.WithResponse<GetRoleResponse>
+    public class GetRoles : BaseAsyncEndpoint.WithoutRequest.WithResponse<GetAllRoleResponse>
     {        
         private IUserSession _userAuthentication;
 
@@ -34,7 +34,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             OperationId = "auth.registertest",
             Tags = new[] { "ManagerEndpoints" })
         ]
-        public override async Task<ActionResult<GetRoleResponse>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<GetAllRoleResponse>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             var userGet = await _userAuthentication.GetCurrentSessionUser();
             if(userGet == null)
@@ -47,7 +47,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 
             if (isAuthorized.Succeeded)
             {
-                var response = new GetRoleResponse();
+                var response = new GetAllRoleResponse();
                 var roleList =  _roleManager.Roles.ToList();
 
                 // List<string> roles = new List<string>();

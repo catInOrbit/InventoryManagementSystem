@@ -196,6 +196,12 @@ namespace Infrastructure.Services
             
             return claims;
         }
+        
+        public async Task<IList<Claim>> GetClaimOfSpecificRole(IdentityRole role)
+        {
+            var claims = await RoleManager.GetClaimsAsync(role);
+            return claims;
+        }
 
     }
 }
