@@ -6,4 +6,16 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
     {
         public Supplier Supplier { get; set; }
     }
+    
+    public class SupplierUpdateRequest : BaseRequest
+    {
+        public string SupplierId { get; set; }
+        
+        public Supplier Supplier { get; set; }
+    }
+    
+    public class SupplierDeleteRequest : BaseRequest
+    {
+        public string Id { get; set; }
+    }
 }

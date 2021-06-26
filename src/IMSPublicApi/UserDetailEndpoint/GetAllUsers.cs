@@ -45,8 +45,8 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
         public override async Task<ActionResult<UsersResponse>> HandleAsync([FromQuery]GetAllUserRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             
-            // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.USERDETAIL, UserOperations.Read))
-            //     return Unauthorized();
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.USERDETAIL, UserOperations.Read))
+                return Unauthorized();
             
             var response = new UsersResponse();
             

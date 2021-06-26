@@ -45,6 +45,8 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
 
         // Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default);
         Task<PagingOption<T>> ListAllAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default);
+        Task<PagingOption<StockOnhandReport>> GenerateOnHandReport(PagingOption<StockOnhandReport> pagingOption, CancellationToken cancellationToken = default);
+        Task<PagingOption<StockTakeReport>> GenerateStockTakeReport(PagingOption<StockTakeReport> pagingOption, CancellationToken cancellationToken = default);
 
         Task<IEnumerable<Product>> ListAllProductAsync(CancellationToken cancellationToken = default);
         Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);
@@ -61,6 +63,7 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         Task ElasticSaveSingleAsync(bool isSavingNew, T types, string index);
         Task ElasticSaveManyAsync(T[] types);
         Task ElasticSaveBulkAsync(T[] types, string index);
+        Task ElasticDeleteSingleAsync(T type, string index);
 
         Notification GetNotificationInfoFromUserId(string userId);
 

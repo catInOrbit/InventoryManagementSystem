@@ -390,6 +390,60 @@ namespace Infrastructure.Data
             return pagingOption;
         }
 
+        public async Task<PagingOption<StockOnhandReport>> GenerateOnHandReport(PagingOption<StockOnhandReport> pagingOption, CancellationToken cancellationToken = default)
+        {
+            var list = await _identityAndProductDbContext.Set<Package>().Skip(pagingOption.SkipValue)
+                .Take(pagingOption.SizePerPage).OrderByDescending(pac => pac.ImportedDate).ToListAsync();
+
+            foreach (var package in list)
+            {
+                try
+                {
+                    var stohReport = new StockOnhandReport
+                    {
+                        Value = (package.TotalImportPrice!= null && package.TotalImportQuantity != null) ?  package.TotalImportPrice * package.TotalImportQuantity : -1,
+                        Date = package.ImportedDate,
+                        ProductName = (package.ProductVariant != null) ? package.ProductVariant.Name : "",
+                        StorageQuantity = (package.ProductVariant != null) ? package.ProductVariant.StorageQuantity : -1
+                    };
+                
+                    pagingOption.ResultList.Add(stohReport);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(package.Id);
+                    throw;
+                }
+                
+            }
+
+            pagingOption.ExecuteResourcePaging(list.Count);
+            return pagingOption;
+        }
+
+        public async Task<PagingOption<StockTakeReport>> GenerateStockTakeReport(PagingOption<StockTakeReport> pagingOption, CancellationToken cancellationToken = default)
+        {
+            var list = await _identityAndProductDbContext.Set<StockTakeItem>().Skip(pagingOption.SkipValue)
+                .Take(pagingOption.SizePerPage).OrderByDescending(item =>  item.StockTakeOrder.Transaction.CreatedDate).ToListAsync();
+
+            foreach (var stockTakeItem in list)
+            {
+                var stockTakeReport = new StockTakeReport()
+                {
+                    StockTakeDate = stockTakeItem.StockTakeOrder.Transaction.CreatedDate,
+                    ProductName = stockTakeItem.ProductVariant.Name,
+                    StorageQuantity = stockTakeItem.ProductVariant.StorageQuantity,
+                    ActualQuantity = stockTakeItem.ActualQuantity,
+                    Value = stockTakeItem.ProductVariant.StorageQuantity * stockTakeItem.ProductVariant.Price
+                };
+                
+                pagingOption.ResultList.Add(stockTakeReport);
+            }
+
+            pagingOption.ExecuteResourcePaging(list.Count);
+            return pagingOption;
+        }
+
         public async Task<IEnumerable<Product>> ListAllProductAsync(CancellationToken cancellationToken = default)
         {
             var query =  await _identityAndProductDbContext.Set<Product>()
@@ -527,6 +581,15 @@ namespace Infrastructure.Data
                     throw new Exception();
                 }
             }
+        }
+        
+        public async Task ElasticDeleteSingleAsync(T type, string index)
+        {
+            var response = await _elasticClient.DeleteAsync<T>(type, u => u.Index(index));
+            Console.WriteLine("ElasticDeleteSingleAsync: Type: " + type.GetType() + " || Delete");
+
+            if (!response.IsValid)
+                throw new Exception();
         }
 
         public Notification GetNotificationInfoFromUserId(string userId)

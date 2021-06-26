@@ -13,6 +13,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public static string GOODSRECEIPT = "GoodsReceipt";
         public static string TRANSACTION = "Transaction";
         public static string REGISTRATION = "Registration";
-
+        public static string REPORT = "Report";
     }
 }
