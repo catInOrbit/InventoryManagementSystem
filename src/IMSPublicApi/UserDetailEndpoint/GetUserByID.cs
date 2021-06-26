@@ -49,19 +49,15 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
                 return Unauthorized();
             
             UserInfo.OwnerID = user.Id.ToString();
-            // requires using ContactManager.Authorization;
-            // var isAuthorized = await _authorizationService.AuthorizeAsync(
-            //     HttpContext.User, UserInfo,
-            //     UserOperations.Read);
-
             
             if (await _userManager.IsInRoleAsync(user, "Manager"))
             {
                 var userGet = await _userManager.FindByIdAsync(request.UserID);
                 if (userGet is null) return NotFound();
 
-                response.ImsUser = new List<ApplicationUser>();
-                response.ImsUser.Add(userGet);
+                var userAndRole = new UserAndRole();
+                userAndRole.ImsUser = userGet;
+                userAndRole.UserRole = (await _userManager.GetRolesAsync(user))[0];
                 return Ok(response);
             }
             return Unauthorized();

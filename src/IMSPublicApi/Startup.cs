@@ -78,7 +78,7 @@ namespace InventoryManagementSystem.PublicApi
                 DefaultLockoutTimeSpan = TimeSpan.FromMinutes(20),
                 MaxFailedAccessAttempts = 3
             };
-            
+
             services.AddIdentity<ApplicationUser, IdentityRole>(
                     options =>
                     {

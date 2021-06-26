@@ -5,9 +5,13 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Data;
 using Infrastructure.Identity.DbContexts;
+using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Constants;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,10 +22,12 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
     public class DeactivateTransaction : BaseAsyncEndpoint.WithRequest<DeleteTransactionRequest>.WithoutResponse
     {
         private IAsyncRepository<Transaction> _transactionRepository;
+        private readonly IAuthorizationService _authorizationService;
 
-        public DeactivateTransaction(IAsyncRepository<Transaction> transactionRepository)
+        public DeactivateTransaction(IAsyncRepository<Transaction> transactionRepository, IAuthorizationService authorizationService)
         {
             _transactionRepository = transactionRepository;
+            _authorizationService = authorizationService;
         }
 
         [HttpPut("api/transaction/{Id}")]
@@ -33,6 +39,9 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
         ]
         public override async Task<ActionResult> HandleAsync([FromRoute] DeleteTransactionRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.TRANSACTION, UserOperations.Delete))
+                return Unauthorized();
+            
             var trans = await _transactionRepository.GetByIdAsync(request.Id);
             trans.TransactionStatus = false;
 

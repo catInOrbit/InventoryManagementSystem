@@ -32,8 +32,6 @@ namespace Infrastructure
             };
             
             index.FillSuggestion();
-
-
             return index;
         }
 

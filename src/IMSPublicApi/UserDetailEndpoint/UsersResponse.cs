@@ -12,7 +12,12 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
         public UsersResponse()
         { }
 
-        public List<ApplicationUser> ImsUser { get; set; }
+        public List<UserAndRole> UserAndRoleList { get; set; }
+    }
+
+    public class UserAndRole
+    {
+        public ApplicationUser ImsUser { get; set; }
         public string UserRole { get; set; }
     }
 }

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MimeKit.Encodings;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -49,12 +50,17 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
                 return Unauthorized();
             
             UserInfo.OwnerID = user.Id.ToString();
-
+            response.UserAndRoleList = new List<UserAndRole>();
             if (await _userManager.IsInRoleAsync(user, "Manager"))
             {
-                var users = _userManager.Users.Where(user => user.IsActive == true);
-                response.UserRole = (await _userManager.GetRolesAsync(user))[0];
-                response.ImsUser = users.ToList();
+                var users = await _userManager.Users.Where(user => user.IsActive == true).ToListAsync();
+                foreach (var applicationUser in users)
+                {
+                    var userAndRole = new UserAndRole();
+                    userAndRole.ImsUser = applicationUser;
+                    userAndRole.UserRole = (await _userManager.GetRolesAsync(user))[0];
+                    response.UserAndRoleList.Add(userAndRole);
+                }
                 return Ok(response);
             }
             
