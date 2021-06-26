@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
@@ -16,7 +17,15 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         {
             
         }
-        public List<IdentityRole> Roles { get; set; }
+        // public List<IdentityRole> Roles { get; set; }
+        
+        public PagingOption<IdentityRole> Paging { get; set; }
+    }
+
+    public class GetAllRoleRequest : BaseRequest
+    {
+        public int CurrentPage { get; set; }
+        public int SizePerPage { get; set; }
     }
 
 

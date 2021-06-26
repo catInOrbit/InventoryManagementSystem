@@ -12,7 +12,8 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
         public UsersResponse()
         { }
 
-        public List<UserAndRole> UserAndRoleList { get; set; }
+        public PagingOption<UserAndRole> Paging { get; set; }
+
     }
 
     public class UserAndRole

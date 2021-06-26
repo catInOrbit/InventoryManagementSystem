@@ -6,6 +6,7 @@ using Ardalis.ApiEndpoints;
 using Infrastructure.Identity;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +19,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
 {
-    public class GetAllUsers : BaseAsyncEndpoint.WithoutRequest.WithResponse<UsersResponse>
+    public class GetAllUsers : BaseAsyncEndpoint.WithRequest<GetAllUserRequest>.WithResponse<UsersResponse>
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
@@ -41,8 +42,12 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
             OperationId = "users.GetAll",
             Tags = new[] { "ManagerEndpoints" })
         ]
-        public override async Task<ActionResult<UsersResponse>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<UsersResponse>> HandleAsync([FromQuery]GetAllUserRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
+            
+            // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.USERDETAIL, UserOperations.Read))
+            //     return Unauthorized();
+            
             var response = new UsersResponse();
             
             var user = await _userAuthentication.GetCurrentSessionUser();
@@ -50,7 +55,10 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
                 return Unauthorized();
             
             UserInfo.OwnerID = user.Id.ToString();
-            response.UserAndRoleList = new List<UserAndRole>();
+            
+            PagingOption<UserAndRole> pagingOption =
+                new PagingOption<UserAndRole>(request.CurrentPage, request.SizePerPage);
+            
             if (await _userManager.IsInRoleAsync(user, "Manager"))
             {
                 var users = await _userManager.Users.Where(user => user.IsActive == true).ToListAsync();
@@ -58,13 +66,17 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
                 {
                     var userAndRole = new UserAndRole();
                     userAndRole.ImsUser = applicationUser;
-                    userAndRole.UserRole = (await _userManager.GetRolesAsync(user))[0];
-                    response.UserAndRoleList.Add(userAndRole);
+                    userAndRole.UserRole = (await _userManager.GetRolesAsync(applicationUser))[0];
+                    pagingOption.ResultList.Add(userAndRole);
                 }
+                
+                response.Paging = pagingOption;
+                response.Paging.ExecuteResourcePaging();
                 return Ok(response);
             }
-            
+
             return Unauthorized();
+
         }
     }
 }

@@ -13,7 +13,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
-    public class GetRoles : BaseAsyncEndpoint.WithoutRequest.WithResponse<GetAllRoleResponse>
+    public class GetRoles : BaseAsyncEndpoint.WithRequest<GetAllRoleRequest>.WithResponse<GetAllRoleResponse>
     {        
         private IUserSession _userAuthentication;
 
@@ -34,34 +34,31 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             OperationId = "auth.registertest",
             Tags = new[] { "ManagerEndpoints" })
         ]
-        public override async Task<ActionResult<GetAllRoleResponse>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<GetAllRoleResponse>> HandleAsync([FromQuery]GetAllRoleRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var userGet = await _userAuthentication.GetCurrentSessionUser();
             if(userGet == null)
                 return Unauthorized();
             
-            var isAuthorized = await _authorizationService.AuthorizeAsync(
-                HttpContext.User, "Registration",
-                UserOperations.Read);
+            //
+            // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.USERDETAIL, UserOperations.Read))
+            //     return Unauthorized();
 
+            PagingOption<IdentityRole> pagingOption =
+                new PagingOption<IdentityRole>(request.CurrentPage, request.SizePerPage);
+            var response = new GetAllRoleResponse();
+            var roleList =  _roleManager.Roles.ToList();
 
-            if (isAuthorized.Succeeded)
-            {
-                var response = new GetAllRoleResponse();
-                var roleList =  _roleManager.Roles.ToList();
+            // List<string> roles = new List<string>();
+            // foreach (var role in roleList)
+            // {
+            //     roles.Add(role.Name);
+            // }
 
-                // List<string> roles = new List<string>();
-                // foreach (var role in roleList)
-                // {
-                //     roles.Add(role.Name);
-                // }
-
-                response.Roles = roleList;
-                return Ok(response);
-            }
-
-            return Unauthorized();
-
+            pagingOption.ResultList = roleList;
+            response.Paging = pagingOption;
+            response.Paging.ExecuteResourcePaging();
+            return Ok(response);
         }
     }
 }
