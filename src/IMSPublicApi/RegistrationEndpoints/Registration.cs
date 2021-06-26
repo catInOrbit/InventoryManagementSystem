@@ -67,54 +67,53 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
 
                 if (isAuthorized.Succeeded)
                 {
-                    var newUserID = await _userRoleModificationService.UserCreatingHelper(request.Password, request.Username, request.Email);
-                    if (newUserID != null)
+                    if (await _userRoleModificationService.CheckRoleNameExistsHelper(request.RoleName))
                     {
-                        if (await _userRoleModificationService.CheckRoleNameExistsHelper(request.RoleName))
+                        var newIMSUser = new ApplicationUser
                         {
-                            var result = await _userRoleModificationService.RoleCreatingHelper(newUserID, request.RoleName);
-                    
-                            var newIMSUser = new ApplicationUser
-                            {
-                                Id = newUserID,
-                                Fullname =  request.FullName,
-                                PhoneNumber =  request.PhoneNumber,
-                                Email = request.Email,
-                                UserName = request.FullName.Trim(),
-                                Address =  request.Address,
-                                IsActive =  true,
-                                DateOfBirth = request.DateOfBirth,
-                                DateOfBirthNormalizedString = string.Format("{0}-{1}-{2}", request.DateOfBirth.Month, request.DateOfBirth.Day, request.DateOfBirth.Year)
-                            };
-                    
-                            await _userRoleModificationService.UserManager.CreateAsync(newIMSUser, request.Password);
-                    
-                            response.Result = result.Succeeded;
-                            response.Username = request.FullName;
-                            if (result.Succeeded)
-                            {
-                                response.Token = await _tokenClaimsService.GetTokenAsync(request.Email);
-                                response.Verbose = "Authorized";
-                                
-                                //Save user notification info such as channel
-                                var currentUser = await _userAuthentication.GetCurrentSessionUser();
+                            Fullname =  request.FullName,
+                            PhoneNumber =  request.PhoneNumber,
+                            Email = request.Email,
+                            UserName = request.FullName.Trim(),
+                            Address =  request.Address,
+                            IsActive =  true,
+                            DateOfBirth = request.DateOfBirth,
+                            DateOfBirthNormalizedString = string.Format("{0}-{1}-{2}", request.DateOfBirth.Month, request.DateOfBirth.Day, request.DateOfBirth.Year)
+                        };
                 
-                                var messageNotification =
-                                    _notificationService.CreateMessage(currentUser.Fullname, "Create","New User", user.Id);
-                
-                                await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                                    currentUser.Id, messageNotification);
-                            }
+                        await _userRoleModificationService.UserManager.CreateAsync(newIMSUser, request.Password);
+                        var result = await _userRoleModificationService.RoleCreatingHelper(newIMSUser.Id, request.RoleName);
+                        
+                        response.Result = result.Succeeded;
+                        response.Username = request.FullName;
+                        if (result.Succeeded)
+                        {
+                            response.Token = await _tokenClaimsService.GetTokenAsync(request.Email);
+                            response.Verbose = "Authorized";
+                            
+                            //Save user notification info such as channel
+                            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+            
+                            var messageNotification =
+                                _notificationService.CreateMessage(currentUser.Fullname, "Create","New User", user.Id);
+            
+                            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                                currentUser.Id, messageNotification);
                         }
-
                         else
                         {
                             response.Result = false;
                             response.Verbose = "Role does not exist in DB";
                         }
                     }
+
                     else
-                        response.Verbose = "Duplicated Email or Incorrect Request";
+                    {
+                        response.Result = false;
+                        response.Verbose = "Error saving to DB";
+                    }
+
+                       
                 }
                 else
                     response.Verbose = "Not Authorized as Privileged User";
