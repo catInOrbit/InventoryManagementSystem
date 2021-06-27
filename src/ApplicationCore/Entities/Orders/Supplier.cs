@@ -16,17 +16,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         [StringLength(50)] [Required] public string SupplierName { get; set; }
 
          public string Description { get; set; }
-
-         public string Street { get; set; }
-         
-         public string District { get; set; }
-
-         public string City { get; set; }
-
-         public string Province { get; set; }
-
-         public string Country { get; set; }
-
+         public string Address { get; set; }
          public string SalePersonName { get; set; }
         public string PhoneNumber { get; set; }
 
