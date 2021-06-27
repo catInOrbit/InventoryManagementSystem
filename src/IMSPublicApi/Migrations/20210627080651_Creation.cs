@@ -57,11 +57,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SupplierName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Street = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    City = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    Province = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    SalePersonName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SalePersonName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -99,6 +96,20 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_SystemUser", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VariantValue",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProductVariantId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Attribute = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VariantValue", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -364,11 +375,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProductId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Barcode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Sku = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StorageQuantity = table.Column<int>(type: "int", nullable: false),
-                    StorageLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IsVariantType = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -490,26 +502,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "VariantValue",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProductVariantId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Attribute = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_VariantValue", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_VariantValue_ProductVariant_ProductVariantId",
-                        column: x => x.ProductVariantId,
-                        principalTable: "ProductVariant",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "GoodsReceiptOrderItems",
                 columns: table => new
                 {
@@ -623,7 +615,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Package_ProductVariantId",
                 table: "Package",
-                column: "ProductVariantId");
+                column: "ProductVariantId",
+                unique: true,
+                filter: "[ProductVariantId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_CategoryId",
@@ -723,11 +717,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "IX_UserRole_RoleId",
                 table: "UserRole",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_VariantValue_ProductVariantId",
-                table: "VariantValue",
-                column: "ProductVariantId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -772,13 +761,13 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "GoodsReceiptOrder");
 
             migrationBuilder.DropTable(
+                name: "ProductVariant");
+
+            migrationBuilder.DropTable(
                 name: "StockTakeOrder");
 
             migrationBuilder.DropTable(
                 name: "Role");
-
-            migrationBuilder.DropTable(
-                name: "ProductVariant");
 
             migrationBuilder.DropTable(
                 name: "PurchaseOrder");

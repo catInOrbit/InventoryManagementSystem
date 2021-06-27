@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210620063002_Creation")]
+    [Migration("20210627080651_Creation")]
     partial class Creation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -363,15 +363,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -382,19 +375,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Province")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
                     b.Property<string>("SalePersonName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SupplierName")
                         .IsRequired()
@@ -492,7 +474,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.HasIndex("GoodsReceiptOrderId");
 
-                    b.HasIndex("ProductVariantId");
+                    b.HasIndex("ProductVariantId")
+                        .IsUnique()
+                        .HasFilter("[ProductVariantId] IS NOT NULL");
 
                     b.ToTable("Package");
                 });
@@ -534,6 +518,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Barcode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Cost")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<bool>("IsVariantType")
                         .HasColumnType("bit");
 
@@ -547,9 +537,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Sku")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StorageLocation")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StorageQuantity")
@@ -579,14 +566,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProductVariantId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductVariantId");
 
                     b.ToTable("VariantValue");
                 });
@@ -811,11 +796,13 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .WithMany()
                         .HasForeignKey("ProductVariantId");
 
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", null)
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", "StockTakeOrder")
                         .WithMany("CheckItems")
                         .HasForeignKey("StockTakeOrderId");
 
                     b.Navigation("ProductVariant");
+
+                    b.Navigation("StockTakeOrder");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", b =>
@@ -855,8 +842,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasForeignKey("GoodsReceiptOrderId");
 
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", "ProductVariant")
-                        .WithMany()
-                        .HasForeignKey("ProductVariantId");
+                        .WithOne("Package")
+                        .HasForeignKey("InventoryManagementSystem.ApplicationCore.Entities.Products.Package", "ProductVariantId");
 
                     b.Navigation("GoodsReceiptOrder");
 
@@ -891,13 +878,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Transaction");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.VariantValue", b =>
-                {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", null)
-                        .WithMany("VariantValues")
-                        .HasForeignKey("ProductVariantId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -978,7 +958,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", b =>
                 {
-                    b.Navigation("VariantValues");
+                    b.Navigation("Package");
                 });
 #pragma warning restore 612, 618
         }

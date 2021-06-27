@@ -80,16 +80,12 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.SUPPLIER, UserOperations.Update))
                 return Unauthorized();
             var supplier = await _supplierAsyncRepository.GetByIdAsync(request.SupplierId);
-            supplier.City = request.Supplier.Id;
-            supplier.Country = request.Supplier.Country;
             supplier.Description = request.Supplier.Description;
             supplier.Email = request.Supplier.Email;
-            supplier.Province = request.Supplier.Province;
-            supplier.Street = request.Supplier.Street;
+            supplier.Address = request.Supplier.Address;
             supplier.PhoneNumber = request.Supplier.PhoneNumber;
             supplier.SupplierName = request.Supplier.SupplierName;
             supplier.SalePersonName = request.Supplier.SalePersonName;
-
             
             await _supplierAsyncRepository.UpdateAsync(supplier);
             await _supplierAsyncRepository.ElasticSaveSingleAsync(false, supplier, ElasticIndexConstant.SUPPLIERS);
