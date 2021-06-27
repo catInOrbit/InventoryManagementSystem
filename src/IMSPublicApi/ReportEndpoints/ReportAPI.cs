@@ -13,7 +13,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ReportEndpoints
 {
-    public class GenerateStockOnHandReport : BaseAsyncEndpoint.WithRequest<StockOnHandReportRequest>.WithResponse<StockOnHandReportResponse>
+    public class GenerateStockOnHandReport : BaseAsyncEndpoint.WithRequest<StockReportRequest>.WithResponse<StockOnHandReportResponse>
     {
         private IAsyncRepository<Package> _packageAsycnRepository;
         private readonly IAuthorizationService _authorizationService;
@@ -33,7 +33,7 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
             OperationId = "report.onhand",
             Tags = new[] { "ReportEndpoints" })
         ]
-        public override async Task<ActionResult<StockOnHandReportResponse>> HandleAsync([FromQuery]StockOnHandReportRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<StockOnHandReportResponse>> HandleAsync([FromQuery]StockReportRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.REPORT, UserOperations.Read))
                return Unauthorized();
@@ -46,7 +46,7 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
         }
     }
     
-    public class GenerateStockTakeReport : BaseAsyncEndpoint.WithRequest<StockOnHandReportRequest>.WithResponse<StockOnHandReportResponse>
+    public class GenerateStockTakeReport : BaseAsyncEndpoint.WithRequest<StockReportRequest>.WithResponse<StockTakeReportResponse>
     {
         private IAsyncRepository<Package> _packageAsycnRepository;
         private readonly IAuthorizationService _authorizationService;
@@ -66,7 +66,7 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
             OperationId = "report.stocktake",
             Tags = new[] { "ReportEndpoints" })
         ]
-        public override async Task<ActionResult<StockOnHandReportResponse>> HandleAsync([FromQuery]StockOnHandReportRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<StockTakeReportResponse>> HandleAsync([FromQuery]StockReportRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.REPORT, UserOperations.Read))
                 return Unauthorized();

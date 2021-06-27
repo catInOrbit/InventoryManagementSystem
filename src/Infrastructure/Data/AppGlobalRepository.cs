@@ -392,32 +392,54 @@ namespace Infrastructure.Data
 
         public async Task<PagingOption<StockOnhandReport>> GenerateOnHandReport(PagingOption<StockOnhandReport> pagingOption, CancellationToken cancellationToken = default)
         {
-            var list = await _identityAndProductDbContext.Set<Package>().Skip(pagingOption.SkipValue)
-                .Take(pagingOption.SizePerPage).OrderByDescending(pac => pac.ImportedDate).ToListAsync();
+            var productVariantList = await _identityAndProductDbContext.Set<ProductVariant>().Skip(pagingOption.SkipValue)
+                .Take(pagingOption.SizePerPage).OrderByDescending(pac => pac.Package.ImportedDate).ToListAsync();
+            
+            // var list = await _identityAndProductDbContext.Set<Package>().Skip(pagingOption.SkipValue)
+            //     .Take(pagingOption.SizePerPage).OrderByDescending(pac => pac.ImportedDate).ToListAsync();
 
-            foreach (var package in list)
+            foreach (var productVariant in productVariantList)
             {
                 try
                 {
-                    var stohReport = new StockOnhandReport
+                    var packageList = await _identityAndProductDbContext.Set<Package>()
+                        .Where(package => package.ProductVariantId == productVariant.Id).ToListAsync();
+
+                    var stohReport = new StockOnhandReport();
+                    stohReport.ProductVariantId = productVariant.Id;
+                    stohReport.ProductVariantName = productVariant.Name;
+                    if (packageList.Count == 0)
                     {
-                        Value = (package.TotalImportPrice!= null && package.TotalImportQuantity != null) ?  package.TotalImportPrice * package.TotalImportQuantity : -1,
-                        Date = package.ImportedDate,
-                        ProductName = (package.ProductVariant != null) ? package.ProductVariant.Name : "",
-                        StorageQuantity = (package.ProductVariant != null) ? package.ProductVariant.StorageQuantity : -1
-                    };
-                
+                        stohReport.DoesNotHavePackageInfo = true;
+                        stohReport.CreatedDate = productVariant.Transaction.CreatedDate;
+                        stohReport.StorageQuantity = productVariant.StorageQuantity;
+                        stohReport.Value = productVariant.Price * productVariant.StorageQuantity;
+                    }
+
+                    else
+                    {
+                        foreach (var package in packageList)
+                        {
+                            stohReport.StockImportPackageInfos.Add(new StockImportInfo
+                            {
+                                Date = package.ImportedDate,
+                                Value = package.TotalImportPrice,
+                                StorageQuantity = package.TotalImportQuantity
+                            });
+                        }
+                    }
+                    
                     pagingOption.ResultList.Add(stohReport);
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(package.Id);
+                    Console.WriteLine(productVariant.Id);
                     throw;
                 }
                 
             }
 
-            pagingOption.ExecuteResourcePaging(list.Count);
+            pagingOption.ExecuteResourcePaging(productVariantList.Count);
             return pagingOption;
         }
 

@@ -14,7 +14,7 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
         public PagingOption<StockTakeReport> Paging { get; set; }
     }
     
-    public class StockOnHandReportRequest
+    public class StockReportRequest
     {
         public int CurrentPage { get; set; }
         public int SizePerPage { get; set; }
