@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
@@ -65,46 +66,33 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                 TransactionStatus = true
             };
 
-            product.TransactionId = product.Transaction.Id; 
-
-            if (request.ProductVariants.Count > 0)
+            product.TransactionId = product.Transaction.Id;
+            product.IsVariantType = request.IsVariantType;
+            product.ProductVariants = new List<ProductVariant>();
+            foreach (var productVairantRequestInfo in request.ProductVariants)
             {
-                product.IsVariantType = true;
-                product.ProductVariants = new List<ProductVariant>();
-                foreach (var productVairantRequestInfo in request.ProductVariants)
+                var productVariant = new ProductVariant
                 {
-                    var productVariant = new ProductVariant
+                    Name = productVairantRequestInfo.Name,
+                    Sku = productVairantRequestInfo.Sku,
+                    Unit = productVairantRequestInfo.Unit,
+                    StorageQuantity = productVairantRequestInfo.StorageQuantity,
+                    IsVariantType = product.IsVariantType,
+                    Barcode = productVairantRequestInfo.Barcode,
+                    Transaction = new Transaction
                     {
-                        Name = productVairantRequestInfo.Name,
-                        Sku = productVairantRequestInfo.Sku,
-                        Unit = productVairantRequestInfo.Unit,
-                        StorageQuantity = productVairantRequestInfo.StorageQuantity,
-                        IsVariantType = product.IsVariantType,
-                        Barcode = productVairantRequestInfo.Barcode,
-                        Transaction = new Transaction
-                        {
-                            CreatedDate = DateTime.Now,
-                            Type = TransactionType.NewProduct,
-                            CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
-                            TransactionStatus = true
-                        }
-                    };
+                        CreatedDate = DateTime.Now,
+                        Type = TransactionType.NewProduct,
+                        CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
+                        TransactionStatus = true
+                    }
+                };
                     
-                    // productVariant.VariantValues = new List<VariantValue>();
-                    // foreach (var variantValueRequestInfo in productVairantRequestInfo.VariantValues)
-                    // {
-                    //     var variantValue = new VariantValue
-                    //     {
-                    //         Attribute = variantValueRequestInfo.Attribute,
-                    //         Value = variantValueRequestInfo.Value,
-                    //         ProductVariantId = productVariant.Id,
-                    //     };
-                    //
-                    //     productVariant.VariantValues.Add(variantValue);
-                    // }
-                    product.ProductVariants.Add(productVariant);
-                }
+                product.ProductVariants.Add(productVariant);
             }
+
+            if (!product.IsVariantType)
+                product.Name = product.ProductVariants.ToList()[0].Name;
             
             await _asyncRepository.AddAsync(product);
             await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(true,IndexingHelper.ProductSearchIndex(product),ElasticIndexConstant.PRODUCT_INDICES);

@@ -15,8 +15,9 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
     {
         public string Name { get; set; }
         public string BrandName { get; set; }
-        public string Unit { get; set; }
         public string CategoryId { get; set; }
+        public bool IsVariantType { get; set; }
+
         public List<ProductVairantRequestInfo> ProductVariants { get; set; }
     }
 
