@@ -47,6 +47,9 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         Task<PagingOption<T>> ListAllAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default);
         Task<PagingOption<StockOnhandReport>> GenerateOnHandReport(PagingOption<StockOnhandReport> pagingOption, CancellationToken cancellationToken = default);
         Task<PagingOption<StockTakeReport>> GenerateStockTakeReport(PagingOption<StockTakeReport> pagingOption, CancellationToken cancellationToken = default);
+        Task<PagingOption<ProductVariant>> GenerateTopSellingYearReport(PagingOption<ProductVariant> pagingOption, CancellationToken cancellationToken = default);
+        Task<PagingOption<ProductVariant>> GenerateTopSellingCurrentMonthReport(PagingOption<ProductVariant> pagingOption, CancellationToken cancellationToken = default);
+
 
         Task<IEnumerable<Product>> ListAllProductAsync(CancellationToken cancellationToken = default);
         Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec, CancellationToken cancellationToken = default);

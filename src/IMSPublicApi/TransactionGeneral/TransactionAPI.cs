@@ -31,11 +31,11 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
             _authorizationService = authorizationService;
         }
 
-        [HttpPut("api/transaction/{Id}")]
+        [HttpPut("api/transactionstatus/{Id}")]
         [SwaggerOperation(
-            Summary = "Deactivate a transaction (Change status to false)",
-            Description = "Deactivate a transaction (Change status to false)",
-            OperationId = "transac.deactivate",
+            Summary = "Change activation status of a transaction (Change status to false if true, vice versa)",
+            Description = "Change activation status of a transaction (Change status to false if true, vice versa)",
+            OperationId = "transac.changestatus",
             Tags = new[] { "TransactionEndpoints" })
         ]
         public override async Task<ActionResult> HandleAsync([FromRoute] DeleteTransactionRequest request, CancellationToken cancellationToken = new CancellationToken())
@@ -44,7 +44,10 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
                 return Unauthorized();
             
             var trans = await _transactionRepository.GetByIdAsync(request.Id);
-            trans.TransactionStatus = false;
+            if (trans.TransactionStatus == false)
+                trans.TransactionStatus = true;
+            else
+                trans.TransactionStatus = false;
 
             await _transactionRepository.UpdateAsync(trans);
             return Ok();

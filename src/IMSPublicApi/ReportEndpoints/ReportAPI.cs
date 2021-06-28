@@ -56,7 +56,6 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
             _packageAsycnRepository = packageAsycnRepository;
             _authorizationService = authorizationService;
         }
-
         
         [HttpGet]
         [Route("api/report/stocktake")]
@@ -77,6 +76,74 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
                 new PagingOption<StockTakeReport>(request.CurrentPage, request.SizePerPage);
             
             response.Paging = await _packageAsycnRepository.GenerateStockTakeReport(pagingOption, cancellationToken);
+            return Ok(response);
+        }
+    }
+    
+    public class GenerateTopSellingProductThisYear : BaseAsyncEndpoint.WithRequest<StockReportRequest>.WithResponse<TopSellingResponse>
+    {
+        private IAsyncRepository<Package> _packageAsycnRepository;
+        private readonly IAuthorizationService _authorizationService;
+
+        public GenerateTopSellingProductThisYear(IAsyncRepository<Package> packageAsycnRepository, IAuthorizationService authorizationService)
+        {
+            _packageAsycnRepository = packageAsycnRepository;
+            _authorizationService = authorizationService;
+        }
+        
+        [HttpGet]
+        [Route("api/report/topselling/currentyear")]
+        [SwaggerOperation(
+            Summary = "Create a stock take report",
+            Description = "Create a stock take report",
+            OperationId = "report.stocktake",
+            Tags = new[] { "ReportEndpoints" })
+        ]
+        public override async Task<ActionResult<TopSellingResponse>> HandleAsync([FromQuery]StockReportRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.REPORT, UserOperations.Read))
+                return Unauthorized();
+            
+            var response = new TopSellingResponse();
+            
+            PagingOption<ProductVariant> pagingOption =
+                new PagingOption<ProductVariant>(request.CurrentPage, request.SizePerPage);
+            
+            response.Paging = await _packageAsycnRepository.GenerateTopSellingYearReport(pagingOption, cancellationToken);
+            return Ok(response);
+        }
+    }
+    
+    public class GenerateTopSellingProductThisMonth : BaseAsyncEndpoint.WithRequest<StockReportRequest>.WithResponse<TopSellingResponse>
+    {
+        private IAsyncRepository<Package> _packageAsycnRepository;
+        private readonly IAuthorizationService _authorizationService;
+
+        public GenerateTopSellingProductThisMonth(IAsyncRepository<Package> packageAsycnRepository, IAuthorizationService authorizationService)
+        {
+            _packageAsycnRepository = packageAsycnRepository;
+            _authorizationService = authorizationService;
+        }
+        
+        [HttpGet]
+        [Route("api/report/topselling/currentmonth")]
+        [SwaggerOperation(
+            Summary = "Create a stock take report",
+            Description = "Create a stock take report",
+            OperationId = "report.stocktake",
+            Tags = new[] { "ReportEndpoints" })
+        ]
+        public override async Task<ActionResult<TopSellingResponse>> HandleAsync([FromQuery]StockReportRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.REPORT, UserOperations.Read))
+                return Unauthorized();
+            
+            var response = new TopSellingResponse();
+            
+            PagingOption<ProductVariant> pagingOption =
+                new PagingOption<ProductVariant>(request.CurrentPage, request.SizePerPage);
+            
+            response.Paging = await _packageAsycnRepository.GenerateTopSellingCurrentMonthReport(pagingOption, cancellationToken);
             return Ok(response);
         }
     }

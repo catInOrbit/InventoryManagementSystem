@@ -94,8 +94,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                 product.ProductVariants.Add(productVariant);
             }
 
-            if (!product.IsVariantType)
-                product.Name = product.ProductVariants.ToList()[0].Name;
+            // if (!product.IsVariantType)
+            //     product.Name = product.ProductVariants.ToList()[0].Name;
             
             await _asyncRepository.AddAsync(product);
             await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(true,IndexingHelper.ProductSearchIndex(product),ElasticIndexConstant.PRODUCT_INDICES);
@@ -115,5 +115,103 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             return Ok(response);
         }
     }
-    
+        public class ProductUpdate : BaseAsyncEndpoint.WithRequest<ProductUpdateRequest>.WithoutResponse
+    {
+        private IAsyncRepository<ApplicationCore.Entities.Products.Product> _asyncRepository;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly IUserSession _userAuthentication;
+        private readonly IAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
+
+        private readonly INotificationService _notificationService;
+
+        public ProductUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos, INotificationService notificationService)
+        {
+            _asyncRepository = asyncRepository;
+            _authorizationService = authorizationService;
+            _userAuthentication = userAuthentication;
+            _productIndexAsyncRepositoryRepos = productIndexAsyncRepositoryRepos;
+            _notificationService = notificationService;
+        }
+        
+        [HttpPut("api/product/update")]
+        [SwaggerOperation(
+            Summary = "Update a new product",
+            Description = "Update a new product",
+            OperationId = "product.create",
+            Tags = new[] { "ProductEndpoints" })
+        ]
+        public override async Task<ActionResult> HandleAsync(ProductUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+               if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Update))
+                return Unauthorized();
+
+               var product = await _asyncRepository.GetByIdAsync(request.Id);
+
+
+               product.Name = request.Name;
+               product.BrandName = request.BrandName;
+               product.CategoryId = request.CategoryId;
+            
+            product.Transaction.ModifiedDate = DateTime.Now;
+            product.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+
+            product.TransactionId = product.Transaction.Id;
+            product.IsVariantType = request.IsVariantType;
+            var listNewVariant = new List<ProductVairantUpdateRequestInfo>(request.ProductVariantsUpdate);
+            foreach (var productVairantRequestInfo in request.ProductVariantsUpdate)
+            {
+                foreach (var productProductVariant in product.ProductVariants)
+                {
+                    if (productProductVariant.Id != null && productProductVariant.Id == productVairantRequestInfo.Id)
+                    {
+                        productProductVariant.Name = productVairantRequestInfo.Name;
+                        productProductVariant.Sku = productVairantRequestInfo.Sku;
+                        productProductVariant.Unit = productVairantRequestInfo.Unit;
+                        productProductVariant.StorageQuantity = productVairantRequestInfo.StorageQuantity;
+                        productProductVariant.IsVariantType = product.IsVariantType;
+                        productProductVariant.Barcode = productVairantRequestInfo.Barcode;
+                        listNewVariant.Remove(productVairantRequestInfo);
+                    }
+                }
+            }
+
+            foreach (var productVairantUpdateRequestInfo in listNewVariant)
+            {
+                var productVariant = new ProductVariant
+                {
+                    Name = productVairantUpdateRequestInfo.Name,
+                    Sku = productVairantUpdateRequestInfo.Sku,
+                    Unit = productVairantUpdateRequestInfo.Unit,
+                    StorageQuantity = productVairantUpdateRequestInfo.StorageQuantity,
+                    IsVariantType = product.IsVariantType,
+                    Barcode = productVairantUpdateRequestInfo.Barcode,
+                    Transaction = new Transaction
+                    {
+                        CreatedDate = DateTime.Now,
+                        Type = TransactionType.NewProduct,
+                        CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
+                        TransactionStatus = true
+                    }
+                };
+
+                productVariant.Transaction.Name = "Created Product Variant" + productVariant.Id;
+
+                product.ProductVariants.Add(productVariant);
+            }
+            
+            await _asyncRepository.UpdateAsync(product);
+            await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false,IndexingHelper.ProductSearchIndex(product),ElasticIndexConstant.PRODUCT_INDICES);
+            
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Update", "Product", product.Id);
+                
+            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                currentUser.Id, messageNotification);
+
+            return Ok();
+        }
+    }
+
 }

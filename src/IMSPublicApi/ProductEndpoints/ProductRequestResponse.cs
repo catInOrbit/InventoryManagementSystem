@@ -10,6 +10,17 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
         public string CreatedProductId { get; set; }
     }
 
+    public class ProductUpdateRequest : BaseRequest
+    {
+        public string Id { get; set; }
+
+        public string Name { get; set; }
+        public string BrandName { get; set; }
+        public string CategoryId { get; set; }
+        public bool IsVariantType { get; set; }
+
+        public List<ProductVairantUpdateRequestInfo> ProductVariantsUpdate { get; set; }
+    }
 
     public class ProductRequest : BaseRequest
     {
@@ -35,18 +46,27 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
         // public List<VariantValueRequestInfo> VariantValues { get; set; }
 
     }
+    
+    public class ProductVairantUpdateRequestInfo
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public string Barcode { get; set; }
+
+        public string Sku { get; set; }
+        public string Unit { get; set; }
+        public int StorageQuantity { get; set; }
+        // public string StorageLocation { get; set; }
+     
+        // public List<VariantValueRequestInfo> VariantValues { get; set; }
+
+    }
 
     public class VariantValueRequestInfo
     {
         public string Attribute { get; set; }
         public string Value { get; set; }
-    }
-    
-    public class ProductUpdateRequest : BaseRequest
-    {
-        public string Id { get; set; }
-        public ApplicationCore.Entities.Products.Product ProductUpdate { get; set; }
-        
     }
     
     public class GetAllCategoryResponse : BaseResponse

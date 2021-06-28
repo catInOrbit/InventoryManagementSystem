@@ -13,6 +13,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string FromDeliveryDate { get; set; }
         public string ToDeliveryDate { get; set; }
     }
+
     
     public class POSearchFilter
     {

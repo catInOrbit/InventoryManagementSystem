@@ -14,6 +14,11 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
         public PagingOption<StockTakeReport> Paging { get; set; }
     }
     
+    public class TopSellingResponse
+    {
+        public PagingOption<ProductVariant> Paging { get; set; }
+    }
+    
     public class StockReportRequest
     {
         public int CurrentPage { get; set; }

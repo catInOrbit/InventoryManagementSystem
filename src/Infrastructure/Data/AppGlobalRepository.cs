@@ -471,6 +471,24 @@ namespace Infrastructure.Data
             return pagingOption;
         }
 
+        public async Task<PagingOption<ProductVariant>> GenerateTopSellingYearReport(PagingOption<ProductVariant> pagingOption, CancellationToken cancellationToken = default)
+        {
+            pagingOption.ResultList = await _identityAndProductDbContext.Set<ProductVariant>().Where(variant => variant.Package.ImportedDate.Year == DateTime.Now.Year).
+                OrderByDescending(item =>  item.StorageQuantity).Skip(pagingOption.SkipValue).Take(pagingOption.SizePerPage).ToListAsync();
+
+            pagingOption.ExecuteResourcePaging();
+            return pagingOption;
+        }
+
+        public async Task<PagingOption<ProductVariant>> GenerateTopSellingCurrentMonthReport(PagingOption<ProductVariant> pagingOption, CancellationToken cancellationToken = default)
+        {
+            pagingOption.ResultList = await _identityAndProductDbContext.Set<ProductVariant>().Where(variant => variant.Package.ImportedDate.Month == DateTime.Now.Month).
+                OrderByDescending(item =>  item.StorageQuantity).Skip(pagingOption.SkipValue).Take(pagingOption.SizePerPage).ToListAsync();
+
+            pagingOption.ExecuteResourcePaging();
+            return pagingOption;
+        }
+
         public async Task<IEnumerable<Product>> ListAllProductAsync(CancellationToken cancellationToken = default)
         {
             var query =  await _identityAndProductDbContext.Set<Product>()

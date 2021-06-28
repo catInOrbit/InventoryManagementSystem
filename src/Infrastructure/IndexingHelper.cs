@@ -68,7 +68,6 @@ namespace Infrastructure
             return index;
         }
         
-
         public static ProductSearchIndex ProductSearchIndex(Product product)
         {
             ProductSearchIndex index = null; 
@@ -76,12 +75,6 @@ namespace Infrastructure
             {
                 try
                 {
-                    // string nameConcat = productVariant.Name;
-                    // foreach (var productVariantVariantValue in productVariant.VariantValues)
-                    // {
-                    //     nameConcat += "-" + productVariantVariantValue.Value.Trim();
-                    // }
-                
                     index = new ProductSearchIndex
                     {
                         TransactionId = (productVariant.Transaction!=null) ? productVariant.TransactionId : "" ,
