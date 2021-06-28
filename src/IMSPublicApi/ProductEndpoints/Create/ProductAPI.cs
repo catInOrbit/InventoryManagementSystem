@@ -60,6 +60,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
 
             product.Transaction = new Transaction
             {
+                Name = "Created Product " + product.Id,
                 CreatedDate = DateTime.Now,
                 Type = TransactionType.NewProduct,
                 CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
@@ -87,7 +88,9 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                         TransactionStatus = true
                     }
                 };
-                    
+
+                productVariant.Transaction.Name = "Created Product Variant" + productVariant.Id;
+
                 product.ProductVariants.Add(productVariant);
             }
 

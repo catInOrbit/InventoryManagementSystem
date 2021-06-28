@@ -51,6 +51,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
               var po = new ApplicationCore.Entities.Orders.PurchaseOrder();
               po.Transaction = new Transaction
               {
+                  Name = "Created Requisition" + po.Id,
+
                   CreatedDate = DateTime.Now,
                   Type = TransactionType.Requisition,
                   CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,

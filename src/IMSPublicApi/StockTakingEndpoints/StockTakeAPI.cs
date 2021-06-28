@@ -225,6 +225,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                  }
              };
 
+             sto.Transaction.Name = "Created StockTake " + sto.Id;
+
              sto.StockTakeOrderType = StockTakeOrderType.Progressing;
              await _asyncRepository.AddAsync(sto);
              response.StockTakeOrder = sto;

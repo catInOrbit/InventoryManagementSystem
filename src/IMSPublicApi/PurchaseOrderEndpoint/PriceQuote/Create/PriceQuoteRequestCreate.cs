@@ -56,6 +56,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote.C
             var po = await _asyncRepository.GetByIdAsync(request.Id);
             var transaction = new Transaction
             {
+                Name = "Created Price Quote " + po.Id,
                 CreatedDate = DateTime.Now,
                 Type = TransactionType.PriceQuote,
                 CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,

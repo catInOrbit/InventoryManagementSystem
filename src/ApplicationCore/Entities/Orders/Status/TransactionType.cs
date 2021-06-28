@@ -8,6 +8,7 @@
         GoodsReceipt= 3,
         GoodsIssue= 4,
         StockTake= 5,
-        NewProduct = 5,
+        NewProduct = 6,
+        Deleted = -1
     }
 }

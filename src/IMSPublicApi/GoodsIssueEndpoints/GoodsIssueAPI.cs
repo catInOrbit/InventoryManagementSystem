@@ -59,6 +59,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 var gio = _asyncRepository.GetGoodsIssueOrderByNumber(request.IssueNumber);
                 gio.Transaction = new Transaction
                 {
+                    Name = "Created Goods Issue Order" + gio.Id,
                     CreatedDate = DateTime.Now,
                     Type = TransactionType.GoodsIssue,
                     CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,

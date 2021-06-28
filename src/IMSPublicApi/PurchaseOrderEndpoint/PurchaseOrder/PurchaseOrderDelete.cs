@@ -49,7 +49,18 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             po.Transaction.ModifiedDate = DateTime.Now;
             po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             po.Transaction.TransactionStatus = false;
-            po.PurchaseOrderStatus = PurchaseOrderStatusType.POCanceled;
+
+            if((int)po.PurchaseOrderStatus == 0)
+                po.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionCanceled;
+            
+            else if((int)po.PurchaseOrderStatus >=1 && (int)po.PurchaseOrderStatus <=2)
+                po.PurchaseOrderStatus = PurchaseOrderStatusType.PQCanceled;
+            
+            else if((int)po.PurchaseOrderStatus >=3 && (int)po.PurchaseOrderStatus <=5)
+                po.PurchaseOrderStatus = PurchaseOrderStatusType.POCanceled;
+            
+            if((int)po.PurchaseOrderStatus == 0)
+                po.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionCanceled;
            await _asyncRepository.UpdateAsync(po,cancellationToken);
            await _poSearchRepos.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
            
