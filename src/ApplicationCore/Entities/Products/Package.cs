@@ -13,8 +13,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public string ProductVariantId { get; set; }
         [JsonIgnore]
         public virtual ProductVariant  ProductVariant { get; set; }
-        public decimal TotalImportPrice { get; set; }
-        public int TotalImportQuantity { get; set; }
+        public decimal TotalPrice { get; set; }
+        public int Quantity { get; set; }
         public DateTime ImportedDate { get; set; }
         public string Location { get; set; }
 

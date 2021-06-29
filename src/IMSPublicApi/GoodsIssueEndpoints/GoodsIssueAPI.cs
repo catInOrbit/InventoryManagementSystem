@@ -100,16 +100,18 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
         private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<GoodsIssueOrder> _asyncRepository;
         private readonly IAuthorizationService _authorizationService;
-        
+        private IAsyncRepository<Package> _packageAsyncRepository;
+
         private INotificationService _notificationService;
 
 
-        public GoodsIssueUpdate(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, INotificationService notificationService)
+        public GoodsIssueUpdate(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository)
         {
             _userAuthentication = userAuthentication;
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
             _notificationService = notificationService;
+            _packageAsyncRepository = packageAsyncRepository;
         }
 
         [HttpPost("api/goodsissue/update")]
@@ -137,10 +139,35 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             gio.GoodsIssueType = GoodsIssueStatusType.Shipping;
             gio.Transaction.ModifiedDate = DateTime.Now;
             gio.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            
+            foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
+            {
+                var listPackages =
+                    await _asyncRepository.GetPackagesFromProductVariantId(gioGoodsIssueProduct.ProductVariantId);
+                List<int> listIndexPackageToRemove = new List<int>();
+                for (var i = 0; i < listPackages.Count; i++)
+                {
+                    var quantityToDeduceNextPackage = 0;
+                    if (listPackages[i].Quantity >= (gioGoodsIssueProduct.OrderQuantity+quantityToDeduceNextPackage))
+                    {
+                        listPackages[i].Quantity -= gioGoodsIssueProduct.OrderQuantity+quantityToDeduceNextPackage;
+                    }
+                    else
+                    {
+                        quantityToDeduceNextPackage = gioGoodsIssueProduct.OrderQuantity - listPackages[i].Quantity;
+                        listPackages[i].Quantity -= (gioGoodsIssueProduct.OrderQuantity - quantityToDeduceNextPackage);
+                    }
+                    
+                    if(listPackages[i].Quantity <= 0)
+                        listIndexPackageToRemove.Add(i);
+                }
+                
+                foreach (var i in listIndexPackageToRemove)
+                    listPackages.RemoveAt(i);
+            }
+            
             await _asyncRepository.UpdateAsync(gio);
 
-            
-            
             
             var response = new GiResponse();
             response.GoodsIssueOrder = gio;

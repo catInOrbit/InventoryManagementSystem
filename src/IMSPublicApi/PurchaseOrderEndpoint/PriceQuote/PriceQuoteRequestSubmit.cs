@@ -61,7 +61,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 return Unauthorized();
             
             var po = _asyncRepository.GetPurchaseOrderByNumber(request.OrderNumber);
-            po.PurchaseOrderStatus = PurchaseOrderStatusType.PQSent;
+            po.PurchaseOrderStatus = PurchaseOrderStatusType.POCreated;
             po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             po.Transaction.ModifiedDate = DateTime.Now;
             await _asyncRepository.UpdateAsync(po);

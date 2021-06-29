@@ -123,12 +123,6 @@ namespace Infrastructure
             ProductSearchIndex index = null; 
                 try
                 {
-                    // string nameConcat = productVariant.Name;
-                    // foreach (var productVariantVariantValue in productVariant.VariantValues)
-                    // {
-                    //     nameConcat += "-" + productVariantVariantValue.Value.Trim();
-                    // }
-                
                     index = new ProductSearchIndex
                     {
                         TransactionId = (productVariant.Transaction!=null) ? productVariant.TransactionId : "",

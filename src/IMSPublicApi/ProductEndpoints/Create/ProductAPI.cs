@@ -62,7 +62,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             {
                 Name = "Created Product " + product.Id,
                 CreatedDate = DateTime.Now,
-                Type = TransactionType.NewProduct,
+                Type = TransactionType.Product,
                 CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
                 TransactionStatus = true
             };
@@ -83,7 +83,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     Transaction = new Transaction
                     {
                         CreatedDate = DateTime.Now,
-                        Type = TransactionType.NewProduct,
+                        Type = TransactionType.ProductVariant,
                         CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
                         TransactionStatus = true
                     }
@@ -188,7 +188,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     Transaction = new Transaction
                     {
                         CreatedDate = DateTime.Now,
-                        Type = TransactionType.NewProduct,
+                        Type = TransactionType.ProductVariant,
                         CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
                         TransactionStatus = true
                     }

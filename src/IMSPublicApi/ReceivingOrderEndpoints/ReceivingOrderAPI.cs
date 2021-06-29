@@ -114,8 +114,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 package = new Package
                 {
                     ProductVariantId =  roi.ProductVariantId,
-                    TotalImportQuantity = roi.QuantityReceived,
-                    TotalImportPrice = roi.ProductVariant.Price * roi.QuantityReceived,
+                    Quantity = roi.QuantityReceived,
+                    TotalPrice = roi.ProductVariant.Price * roi.QuantityReceived,
                     Location = ro.StorageLocationReceipt,
                     ImportedDate = ro.ReceivedDate,
                     GoodsReceiptOrderId = ro.Id

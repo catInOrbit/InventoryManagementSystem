@@ -1,4 +1,4 @@
-using System;
+    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -46,7 +46,6 @@ namespace Infrastructure.Data
             {
                 try
                 {
-                 
                     var index = IndexingHelper.ProductSearchIndex(productVariant);
                     index.FillSuggestion();
                     pagingOption.ResultList.Add(index);
@@ -114,8 +113,14 @@ namespace Infrastructure.Data
         //         .ToListAsync(cancellationToken);
         //     return pos;
         // }
-        
-        
+
+
+        public async Task<List<Package>> GetPackagesFromProductVariantId(string productVariantId, CancellationToken cancellationToken = default)
+        {
+            return await _identityAndProductDbContext.Package.Where(package => package.ProductVariantId == productVariantId).OrderBy(package => package.ImportedDate)
+                .ToListAsync(cancellationToken: cancellationToken);
+        }
+
         public List<PurchaseOrderSearchIndex> PurchaseOrderIndexFiltering(List<PurchaseOrderSearchIndex> resource, POSearchFilter poSearchFilter, CancellationToken cancellationToken  = default)
         {
             var pos = resource.Where(po =>
@@ -428,8 +433,8 @@ namespace Infrastructure.Data
                             stohReport.StockImportPackageInfos.Add(new StockImportInfo
                             {
                                 Date = package.ImportedDate,
-                                Value = package.TotalImportPrice,
-                                StorageQuantity = package.TotalImportQuantity
+                                Value = package.TotalPrice,
+                                StorageQuantity = package.Quantity
                             });
                         }
                     }
