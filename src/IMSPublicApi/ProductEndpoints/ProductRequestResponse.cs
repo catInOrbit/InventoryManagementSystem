@@ -59,7 +59,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
 
         public string Sku { get; set; }
         public string Unit { get; set; }
-        public int StorageQuantity { get; set; }
         // public string StorageLocation { get; set; }
      
         // public List<VariantValueRequestInfo> VariantValues { get; set; }
