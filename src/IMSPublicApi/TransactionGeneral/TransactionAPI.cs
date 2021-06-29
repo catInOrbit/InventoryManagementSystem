@@ -56,23 +56,26 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
                 try
                 {
                     var trans =  dbContext.Transaction.FirstOrDefault(e => e.Id == request.Id);
-                    
                     if ((int)trans.Type == 7)
                     {
-                        var productVariant = await dbContext.ProductVariant.FirstOrDefaultAsync(e => e.TransactionId == trans.Id);
-                        if (trans.TransactionStatus)
+                        var productVariants = await dbContext.ProductVariant.Where(e => e.TransactionId == trans.Id).ToListAsync(cancellationToken: cancellationToken);
+                        foreach (var productVariant in productVariants)
                         {
-                            productVariant.Transaction.TransactionStatus = false;
-                            await _productVariantAsyncRepository.ElasticDeleteSingleAsync(
-                                IndexingHelper.ProductSearchIndex(productVariant), ElasticIndexConstant.PRODUCT_INDICES);    
-                        }
+                            if (trans.TransactionStatus)
+                            {
+                                productVariant.Transaction.TransactionStatus = false;
+                                await _productVariantAsyncRepository.ElasticDeleteSingleAsync(
+                                    IndexingHelper.ProductSearchIndex(productVariant), ElasticIndexConstant.PRODUCT_INDICES);    
+                            }
 
-                        else
-                        {
-                            productVariant.Transaction.TransactionStatus = true;
-                            await _productVariantAsyncRepository.ElasticSaveSingleAsync(true,
-                                IndexingHelper.ProductSearchIndex(productVariant), ElasticIndexConstant.PRODUCT_INDICES);    
+                            else
+                            {
+                                productVariant.Transaction.TransactionStatus = true;
+                                await _productVariantAsyncRepository.ElasticSaveSingleAsync(true,
+                                    IndexingHelper.ProductSearchIndex(productVariant), ElasticIndexConstant.PRODUCT_INDICES);    
+                            }
                         }
+                       
                     }
 
                     else if ((int)trans.Type == 8)
@@ -83,7 +86,7 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
                         else
                             category.Transaction.TransactionStatus = true;
                     }
-                    
+
                     response.Status = true;
                     response.Verbose = "Status changed";
                     await dbContext.SaveChangesAsync();
@@ -92,7 +95,7 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
                 catch (Exception e)
                 {
                     response.Status = false;
-                    response.Verbose = e.Message;
+                    response.Verbose = "Id of transaction not found or internal error";
                     return NotFound(response);
                 }
               

@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -24,13 +27,14 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             private IAsyncRepository<GoodsReceiptOrder> _roAsyncRepository;
             private IAsyncRepository<GoodsReceiptOrderItem> _goOrderItemsAsyncRepository;
             private IAsyncRepository<Package> _packageAsyncRepository;
-            
+            private readonly IAsyncRepository<GoodsIssueSearchIndex> _goodIssueasyncRepository;
+
           
             private readonly IAuthorizationService _authorizationService;
             
             private INotificationService _notificationService;
 
-            public GoodsIssueCreate(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<GoodsReceiptOrderItem> goOrderItemsAsyncRepository, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, INotificationService notificationService)
+            public GoodsIssueCreate(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<GoodsReceiptOrderItem> goOrderItemsAsyncRepository, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, INotificationService notificationService, IAsyncRepository<GoodsIssueSearchIndex> goodIssueasyncRepository)
             {
                 _userAuthentication = userAuthentication;
                 _asyncRepository = asyncRepository;
@@ -39,6 +43,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 _packageAsyncRepository = packageAsyncRepository;
                 _authorizationService = authorizationService;
                 _notificationService = notificationService;
+                _goodIssueasyncRepository = goodIssueasyncRepository;
             }
 
 
@@ -51,8 +56,8 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             ]
             public override async Task<ActionResult<GiResponse>> HandleAsync(GiRequest request, CancellationToken cancellationToken = new CancellationToken())
             {
-                if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSISSUE, UserOperations.Create))
-                    return Unauthorized();
+                // if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSISSUE, UserOperations.Create))
+                //     return Unauthorized();
                 //
                 var response = new GiResponse();
                 
@@ -82,6 +87,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 response.Packages.AddRange(packages);
                 
                 await _asyncRepository.UpdateAsync(gio);
+                await _goodIssueasyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.GoodsIssueSearchIndexHelper(gio), ElasticIndexConstant.GOODS_ISSUE_ORDERS);
 
                 var currentUser = await _userAuthentication.GetCurrentSessionUser();
                 
@@ -99,22 +105,28 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
     {
         private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<GoodsIssueOrder> _asyncRepository;
+        private readonly IAsyncRepository<ProductVariant> _productVariantAsyncRepository;
+
+        private readonly IAsyncRepository<GoodsIssueSearchIndex> _goodIssueasyncRepository;
+
         private readonly IAuthorizationService _authorizationService;
         private IAsyncRepository<Package> _packageAsyncRepository;
 
         private INotificationService _notificationService;
 
 
-        public GoodsIssueUpdate(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository)
+        public GoodsIssueUpdate(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAsyncRepository<GoodsIssueSearchIndex> goodIssueasyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository)
         {
             _userAuthentication = userAuthentication;
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
             _notificationService = notificationService;
             _packageAsyncRepository = packageAsyncRepository;
+            _goodIssueasyncRepository = goodIssueasyncRepository;
+            _productVariantAsyncRepository = productVariantAsyncRepository;
         }
 
-        [HttpPost("api/goodsissue/update")]
+        [HttpPut("api/goodsissue/update")]
         [SwaggerOperation(
             Summary = "Update Good issue order",
             Description = "Update Good issue order",
@@ -136,7 +148,6 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                     gio.GoodsIssueType = GoodsIssueStatusType.Completed;
                     break;
             }
-            gio.GoodsIssueType = GoodsIssueStatusType.Shipping;
             gio.Transaction.ModifiedDate = DateTime.Now;
             gio.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             
@@ -144,31 +155,48 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             {
                 var listPackages =
                     await _asyncRepository.GetPackagesFromProductVariantId(gioGoodsIssueProduct.ProductVariantId);
+                var productVariant =
+                    await _productVariantAsyncRepository.GetByIdAsync(gioGoodsIssueProduct.ProductVariantId);
                 List<int> listIndexPackageToRemove = new List<int>();
+                var quantityToDeduce = gioGoodsIssueProduct.OrderQuantity;
                 for (var i = 0; i < listPackages.Count; i++)
                 {
-                    var quantityToDeduceNextPackage = 0;
-                    if (listPackages[i].Quantity >= (gioGoodsIssueProduct.OrderQuantity+quantityToDeduceNextPackage))
+                    if (quantityToDeduce > 0)
                     {
-                        listPackages[i].Quantity -= gioGoodsIssueProduct.OrderQuantity+quantityToDeduceNextPackage;
+                        if (listPackages[i].Quantity >= quantityToDeduce)
+                        {
+                            listPackages[i].Quantity -= quantityToDeduce;
+                            
+                            //Remove aggregated quantity of product as well
+                            productVariant.StorageQuantity -= quantityToDeduce; 
+                        }
+                        else
+                        {
+                            quantityToDeduce -= listPackages[i].Quantity;
+                            listPackages[i].Quantity -= listPackages[i].Quantity;
+                            
+                            //Remove aggregated quantity of product as well
+                            productVariant.StorageQuantity -= quantityToDeduce; 
+                        }
                     }
-                    else
-                    {
-                        quantityToDeduceNextPackage = gioGoodsIssueProduct.OrderQuantity - listPackages[i].Quantity;
-                        listPackages[i].Quantity -= (gioGoodsIssueProduct.OrderQuantity - quantityToDeduceNextPackage);
-                    }
-                    
-                    if(listPackages[i].Quantity <= 0)
+
+
+                    if (listPackages[i].Quantity <= 0)
                         listIndexPackageToRemove.Add(i);
                 }
-                
+
+                await _productVariantAsyncRepository.UpdateAsync(productVariant);
+
                 foreach (var i in listIndexPackageToRemove)
+                {
                     listPackages.RemoveAt(i);
+                    await _packageAsyncRepository.DeleteAsync(listPackages[i]);
+                }
             }
             
             await _asyncRepository.UpdateAsync(gio);
+            await _goodIssueasyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.GoodsIssueSearchIndexHelper(gio), ElasticIndexConstant.GOODS_ISSUE_ORDERS);
 
-            
             var response = new GiResponse();
             response.GoodsIssueOrder = gio;
             

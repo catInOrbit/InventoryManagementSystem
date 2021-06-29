@@ -106,7 +106,17 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                     storderCheckItem.ActualQuantity = request.ActualQuantity;
 
                     var productVariant = await _pvasyncRepository.GetByIdAsync(storderCheckItem.ProductVariantId);
-                    if (request.ActualQuantity != productVariant.StorageQuantity)
+                    
+                    var packages = await _asyncRepository.GetPackagesFromProductVariantId(productVariant.Id);
+                    Console.WriteLine("Number of packages found: " + packages.Count);
+                    int totalQuantity = 0;
+                    
+                    foreach (var package in packages)
+                        totalQuantity += package.Quantity;
+
+                    Console.WriteLine("Total Quantity: " + totalQuantity);
+
+                    if (request.ActualQuantity != totalQuantity)
                         response.MismatchProductVariantId.Add(productVariant.Id);
                 }
             }
@@ -159,11 +169,15 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              {
                  
                  var productVariant = await _productAsyncRepository.GetByIdAsync(id);
+                 
                  var stockTakeItem = new StockTakeItem
                  {
                      Note = "",
-                     ProductVariantId = productVariant.Id
+                     ProductVariantId = productVariant.Id,
                  };
+                 
+                 // foreach (var package in packages)
+                 //     stockTakeItem.ActualQuantity += package.Quantity;
                  
                  stockTakeOrder.CheckItems.Add(stockTakeItem);
              }

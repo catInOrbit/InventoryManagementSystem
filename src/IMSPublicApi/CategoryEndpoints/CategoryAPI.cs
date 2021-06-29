@@ -127,11 +127,11 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
                           "\n{CurrentPage}: Current page to display \n" +
                           "{SizePerPage}: Number of rows to display in a page",
             OperationId = "product-category.getall",
-            Tags = new[] { "ProductEndpoints" })
+            Tags = new[] { "CategoryEndpoints" })
         ]
         public override async Task<ActionResult<GetAllCategoryResponse>> HandleAsync([FromQuery] GetCategoryRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.CATEGORY, UserOperations.Read))
                 return Unauthorized();
             
             var response = new GetAllCategoryResponse();

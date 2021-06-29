@@ -41,7 +41,7 @@ namespace Infrastructure.Data
         public async Task<PagingOption<ProductSearchIndex>> GetProductForELIndexAsync(PagingOption<ProductSearchIndex> pagingOption, CancellationToken cancellationToken = default)
         {
             var variants =  await _identityAndProductDbContext.ProductVariant.
-                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).ToListAsync(cancellationToken);
+                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderBy(e=>e.Transaction.CreatedDate).ToListAsync(cancellationToken);
             foreach (var productVariant in variants)
             {
                 try
@@ -65,7 +65,7 @@ namespace Infrastructure.Data
         {
 
             var pos = await _identityAndProductDbContext.PurchaseOrder.
-                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).ToListAsync();
+                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderBy(e=>e.Transaction.CreatedDate).ToListAsync();
             foreach (var po in pos)
             {
                 PurchaseOrderSearchIndex index; 
@@ -293,7 +293,7 @@ namespace Infrastructure.Data
         {
             
             var ros = await _identityAndProductDbContext.Set<GoodsReceiptOrder>().
-                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).ToListAsync(cancellationToken);
+                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderBy(e=>e.Transaction.CreatedDate).ToListAsync(cancellationToken);
 
             foreach (var ro in ros)
             {
@@ -316,7 +316,8 @@ namespace Infrastructure.Data
         public async Task<PagingOption<GoodsIssueSearchIndex>> GetGIForELIndexAsync(PagingOption<GoodsIssueSearchIndex> pagingOption,GISearchFilter searchFilter, CancellationToken cancellationToken = default)
         {
             var gis = await _identityAndProductDbContext.Set<GoodsIssueOrder>().
-                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).ToListAsync(cancellationToken);
+                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).
+                OrderBy(e=>e.Transaction.CreatedDate).ToListAsync(cancellationToken);
            
             foreach (var gi in gis)
             {
@@ -340,7 +341,7 @@ namespace Infrastructure.Data
         {
             
             var sts = await _identityAndProductDbContext.Set<StockTakeOrder>().
-                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).ToListAsync(cancellationToken);
+                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderBy(e=>e.Transaction.CreatedDate).ToListAsync(cancellationToken);
             
             foreach (var st in sts)
             {

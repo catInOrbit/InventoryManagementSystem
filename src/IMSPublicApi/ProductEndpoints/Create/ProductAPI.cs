@@ -77,9 +77,10 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     Name = productVairantRequestInfo.Name,
                     Sku = productVairantRequestInfo.Sku,
                     Unit = productVairantRequestInfo.Unit,
-                    StorageQuantity = productVairantRequestInfo.StorageQuantity,
                     IsVariantType = product.IsVariantType,
                     Barcode = productVairantRequestInfo.Barcode,
+                    Price = productVairantRequestInfo.Price,
+                    Cost = productVairantRequestInfo.SalePrice,
                     Transaction = new Transaction
                     {
                         CreatedDate = DateTime.Now,
@@ -88,6 +89,13 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                         TransactionStatus = true
                     }
                 };
+
+                var packages = await _asyncRepository.GetPackagesFromProductVariantId(productVariant.Id);
+
+                foreach (var package in packages)
+                {
+                    productVariant.StorageQuantity += package.Quantity;
+                }
 
                 productVariant.Transaction.Name = "Created Product Variant" + productVariant.Id;
 
@@ -148,9 +156,9 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                var product = await _asyncRepository.GetByIdAsync(request.Id);
 
 
-               product.Name = request.Name;
-               product.BrandName = request.BrandName;
-               product.CategoryId = request.CategoryId;
+           product.Name = request.Name;
+           product.BrandName = request.BrandName;
+           product.CategoryId = request.CategoryId;
             
             product.Transaction.ModifiedDate = DateTime.Now;
             product.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
@@ -185,6 +193,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     StorageQuantity = productVairantUpdateRequestInfo.StorageQuantity,
                     IsVariantType = product.IsVariantType,
                     Barcode = productVairantUpdateRequestInfo.Barcode,
+                    Price = productVairantUpdateRequestInfo.Price,
+                    Cost = productVairantUpdateRequestInfo.SalePrice,
                     Transaction = new Transaction
                     {
                         CreatedDate = DateTime.Now,
