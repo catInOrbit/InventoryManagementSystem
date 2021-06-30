@@ -4,6 +4,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
     public class GoodsIssueSearchIndex : BaseEntity
     {
+        public override string Id { get; set; }
+
         public GoodsIssueSearchIndex()
         {
             Id = Guid.NewGuid().ToString() + "-ignore-id";

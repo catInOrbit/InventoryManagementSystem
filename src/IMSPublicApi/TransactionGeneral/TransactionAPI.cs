@@ -21,12 +21,12 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
 {
     public class DeactivateTransaction : BaseAsyncEndpoint.WithRequest<DeleteTransactionRequest>.WithResponse<DeleteTransactionResponse>
     {
-        private readonly IAsyncRepository<ProductSearchIndex> _productVariantAsyncRepository;
+        private readonly IAsyncRepository<ProductVariantSearchIndex> _productVariantAsyncRepository;
         private  readonly IConfiguration _configuration;
 
         private readonly IAuthorizationService _authorizationService;
 
-        public DeactivateTransaction(IAsyncRepository<ProductSearchIndex> productVariantAsyncRepository, IConfiguration configuration, IAuthorizationService authorizationService)
+        public DeactivateTransaction(IAsyncRepository<ProductVariantSearchIndex> productVariantAsyncRepository, IConfiguration configuration, IAuthorizationService authorizationService)
         {
             _productVariantAsyncRepository = productVariantAsyncRepository;
             _configuration = configuration;
@@ -65,14 +65,14 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
                             {
                                 productVariant.Transaction.TransactionStatus = false;
                                 await _productVariantAsyncRepository.ElasticDeleteSingleAsync(
-                                    IndexingHelper.ProductSearchIndex(productVariant), ElasticIndexConstant.PRODUCT_INDICES);    
+                                    IndexingHelper.ProductVariantSearchIndex(productVariant), ElasticIndexConstant.PRODUCT_INDICES);    
                             }
 
                             else
                             {
                                 productVariant.Transaction.TransactionStatus = true;
                                 await _productVariantAsyncRepository.ElasticSaveSingleAsync(true,
-                                    IndexingHelper.ProductSearchIndex(productVariant), ElasticIndexConstant.PRODUCT_INDICES);    
+                                    IndexingHelper.ProductVariantSearchIndex(productVariant), ElasticIndexConstant.PRODUCT_INDICES);    
                             }
                         }
                     }

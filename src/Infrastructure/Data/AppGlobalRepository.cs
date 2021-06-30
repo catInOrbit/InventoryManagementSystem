@@ -24,7 +24,7 @@ namespace Infrastructure.Data
         private readonly IElasticClient _elasticClient;
 
         private List<T> _elasticCache = new List<T>();
-        private List<ProductSearchIndex> _elasticCacheProductSearchIndex = new List<ProductSearchIndex>();
+        private List<ProductVariantSearchIndex> _elasticCacheProductSearchIndex = new List<ProductVariantSearchIndex>();
 
         public AppGlobalRepository(IdentityAndProductDbContext identityAndProductDbContext, IElasticClient elasticClient)
         {
@@ -37,16 +37,44 @@ namespace Infrastructure.Data
             var keyValues = new object[] { id };
             return await _identityAndProductDbContext.Set<T>().FindAsync(keyValues, cancellationToken);
         }
-
+        
         public async Task<PagingOption<ProductSearchIndex>> GetProductForELIndexAsync(PagingOption<ProductSearchIndex> pagingOption, CancellationToken cancellationToken = default)
         {
+            var products =  await _identityAndProductDbContext.Product.
+                Where(product => product.Transaction.TransactionStatus!=false && product.Transaction.Type!=TransactionType.Deleted).
+                OrderByDescending(product=>product.Transaction.CreatedDate).ToListAsync(cancellationToken);
+            
+            foreach (var product in products)
+            {
+                if(product.Id == "05680")
+                    Console.WriteLine();
+                    
+                try
+                {
+                    var index = IndexingHelper.ProductSearchIndex(product);
+                    index.FillSuggestion();
+                    pagingOption.ResultList.Add(index);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(product.Id);
+                    Console.WriteLine(e);
+                    throw;
+                }
+            }            
+            pagingOption.ExecuteResourcePaging();
+            return pagingOption;
+        }
+
+        public async Task<PagingOption<ProductVariantSearchIndex>> GetProductVariantForELIndexAsync(PagingOption<ProductVariantSearchIndex> pagingOption, CancellationToken cancellationToken = default)
+        {
             var variants =  await _identityAndProductDbContext.ProductVariant.
-                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderBy(e=>e.Transaction.CreatedDate).ToListAsync(cancellationToken);
+                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderByDescending(e=>e.Transaction.CreatedDate).ToListAsync(cancellationToken);
             foreach (var productVariant in variants)
             {
                 try
                 {
-                    var index = IndexingHelper.ProductSearchIndex(productVariant);
+                    var index = IndexingHelper.ProductVariantSearchIndex(productVariant);
                     index.FillSuggestion();
                     pagingOption.ResultList.Add(index);
                 }
@@ -65,7 +93,7 @@ namespace Infrastructure.Data
         {
 
             var pos = await _identityAndProductDbContext.PurchaseOrder.
-                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderBy(e=>e.Transaction.CreatedDate).ToListAsync();
+                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderByDescending(e=>e.Transaction.CreatedDate).ToListAsync();
             foreach (var po in pos)
             {
                 PurchaseOrderSearchIndex index; 
@@ -117,7 +145,7 @@ namespace Infrastructure.Data
 
         public async Task<List<Package>> GetPackagesFromProductVariantId(string productVariantId, CancellationToken cancellationToken = default)
         {
-            return await _identityAndProductDbContext.Package.Where(package => package.ProductVariantId == productVariantId).OrderBy(package => package.ImportedDate)
+            return await _identityAndProductDbContext.Package.Where(package => package.ProductVariantId == productVariantId).OrderByDescending(package => package.ImportedDate)
                 .ToListAsync(cancellationToken: cancellationToken);
         }
 
@@ -210,7 +238,7 @@ namespace Infrastructure.Data
             return ros;
         }
 
-        public List<ProductSearchIndex> ProductIndexFiltering(List<ProductSearchIndex> resource, ProductSearchFilter productSearchFilter, CancellationToken cancellationToken)
+        public List<ProductVariantSearchIndex> ProductVariantIndexFiltering(List<ProductVariantSearchIndex> resource, ProductVariantSearchFilter productSearchFilter, CancellationToken cancellationToken)
         {
             var pos = resource.Where(product =>
                 ( 
@@ -249,6 +277,38 @@ namespace Infrastructure.Data
                 .ToList();
             return pos;
         }
+        
+        public List<ProductSearchIndex> ProductIndexFiltering(List<ProductSearchIndex> resource, ProductSearchFilter productSearchFilter, CancellationToken cancellationToken)
+        {
+            var pos = resource.Where(product =>
+                ( 
+                    (productSearchFilter.FromCreatedDate == null ||
+                     (product.CreatedDate >= DateTime.Parse(productSearchFilter.FromCreatedDate) &&
+                      product.CreatedDate <= DateTime.Parse(productSearchFilter.ToCreatedDate))) 
+                    &&
+                    (productSearchFilter.FromModifiedDate == null ||
+                     (product.ModifiedDate >= DateTime.Parse(productSearchFilter.FromModifiedDate) &&
+                      product.ModifiedDate <= DateTime.Parse(productSearchFilter.ToModifiedDate))) 
+                    &&
+                    (productSearchFilter.Category == null ||
+                     (product.Category == productSearchFilter.Category) 
+                    
+                     &&
+                     (productSearchFilter.Strategy == null ||
+                      (product.Strategy == productSearchFilter.Strategy) 
+                    
+                      &&
+                      (productSearchFilter.CreatedByName == null || product.CreatedByName == productSearchFilter.CreatedByName)
+                     
+                      &&
+                      (productSearchFilter.ModifiedByName == null || product.ModifiedByName == productSearchFilter.ModifiedByName)
+                      &&
+                      (productSearchFilter.Brand == null || product.Brand == productSearchFilter.Brand)
+                     ))))
+                .ToList();
+            return pos;
+        }
+        
 
         public List<StockTakeSearchIndex> StockTakeIndexFiltering(List<StockTakeSearchIndex> resource, STSearchFilter stSearchFilter, CancellationToken cancellationToken = default)
         {
@@ -293,7 +353,7 @@ namespace Infrastructure.Data
         {
             
             var ros = await _identityAndProductDbContext.Set<GoodsReceiptOrder>().
-                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderBy(e=>e.Transaction.CreatedDate).ToListAsync(cancellationToken);
+                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderByDescending(e=>e.Transaction.CreatedDate).ToListAsync(cancellationToken);
 
             foreach (var ro in ros)
             {
@@ -317,7 +377,7 @@ namespace Infrastructure.Data
         {
             var gis = await _identityAndProductDbContext.Set<GoodsIssueOrder>().
                 Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).
-                OrderBy(e=>e.Transaction.CreatedDate).ToListAsync(cancellationToken);
+                OrderByDescending(e=>e.Transaction.CreatedDate).ToListAsync(cancellationToken);
            
             foreach (var gi in gis)
             {
@@ -341,7 +401,7 @@ namespace Infrastructure.Data
         {
             
             var sts = await _identityAndProductDbContext.Set<StockTakeOrder>().
-                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderBy(e=>e.Transaction.CreatedDate).ToListAsync(cancellationToken);
+                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderByDescending(e=>e.Transaction.CreatedDate).ToListAsync(cancellationToken);
             
             foreach (var st in sts)
             {

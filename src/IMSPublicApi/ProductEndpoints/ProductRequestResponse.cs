@@ -98,7 +98,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
         public int SizePerPage { get; set; }
     }
     
-    public class GetProductSearchRequest
+    public class GetProductVariantSearchRequest
     {
         public string SearchQuery { get; set; }
         public int CurrentPage { get; set; }
@@ -115,6 +115,29 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
         public string FromPrice { get; set; }
         public string ToPrice { get; set; }
         public string Brand { get; set; }
+    }
+    
+    public class GetProductSearchRequest
+    {
+        public string SearchQuery { get; set; }
+        public int CurrentPage { get; set; }
+        public int SizePerPage { get; set; }
+        
+        public string Category { get; set; }
+        public string Strategy { get; set; }
+        public string FromCreatedDate { get; set; }
+        public string ToCreatedDate { get; set; }
+        public string FromModifiedDate { get; set; }
+        public string ToModifiedDate { get; set; }
+        public string CreatedByName { get; set; }
+        public string ModifiedByName { get; set; }
+        public string Brand { get; set; }
+    }
+    
+    
+    
+    public class GetProductVariantSearchResponse : BaseSearchResponse<ProductVariantSearchIndex>
+    {
     }
     
     public class GetProductSearchResponse : BaseSearchResponse<ProductSearchIndex>

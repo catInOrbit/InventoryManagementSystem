@@ -5,6 +5,7 @@ namespace InventoryManagementSystem.ApplicationCore.Constants
         public const string STOCK_TAKE_ORDERS = "stocktakeorders";
         public const string GOODS_ISSUE_ORDERS = "goodsissueorders";
         public const string PRODUCT_INDICES = "productindices";
+        public const string PRODUCT_VARIANT_INDICES = "productvariantindices";
         public const string PURCHASE_ORDERS = "purchaseorders";
         public const string RECEIVING_ORDERS = "receivingorders";
         public const string SUPPLIERS = "suppliers";

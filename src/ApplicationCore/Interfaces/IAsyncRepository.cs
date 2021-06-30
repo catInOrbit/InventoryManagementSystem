@@ -15,7 +15,9 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
     {
         Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default);
 
-        Task<PagingOption<ProductSearchIndex>> GetProductForELIndexAsync(PagingOption<ProductSearchIndex> pagingOption, CancellationToken cancellationToken = default);
+        Task<PagingOption<ProductSearchIndex>> GetProductForELIndexAsync(
+            PagingOption<ProductSearchIndex> pagingOption, CancellationToken cancellationToken = default);
+        Task<PagingOption<ProductVariantSearchIndex>> GetProductVariantForELIndexAsync(PagingOption<ProductVariantSearchIndex> pagingOption, CancellationToken cancellationToken = default);
         Task<PagingOption<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(PagingOption<PurchaseOrderSearchIndex> pagingOption,POSearchFilter poSearchFilter,CancellationToken cancellationToken = default);
         Task<PagingOption<GoodsReceiptOrderSearchIndex>> GetROForELIndexAsync(PagingOption<GoodsReceiptOrderSearchIndex> pagingOption, ROSearchFilter roSearchFilter, CancellationToken cancellationToken = default);
         
@@ -37,6 +39,9 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         
         List<GoodsIssueSearchIndex> GoodsIssueIndexFiltering(List<GoodsIssueSearchIndex> resource,
             GISearchFilter giSearchFilter, CancellationToken cancellationToken);
+        
+        List<ProductVariantSearchIndex> ProductVariantIndexFiltering(List<ProductVariantSearchIndex> resource,
+            ProductVariantSearchFilter productSearchFilter, CancellationToken cancellationToken);
         
         List<ProductSearchIndex> ProductIndexFiltering(List<ProductSearchIndex> resource,
             ProductSearchFilter productSearchFilter, CancellationToken cancellationToken);

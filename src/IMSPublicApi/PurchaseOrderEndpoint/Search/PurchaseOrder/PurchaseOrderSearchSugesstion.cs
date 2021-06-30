@@ -59,7 +59,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
 
         public override async Task<ActionResult<SearchSuggestionResponse>> HandleAsync([FromRoute]SearchSuggestionRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            var responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
+            var responseElastic = await _elasticClient.SearchAsync<ProductVariantSearchIndex>
             (
                 s => s.Index( ElasticIndexConstant.PRODUCT_INDICES).
                     Suggest(su 

@@ -56,7 +56,84 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
     //     }
     // }
     //
-    public class SearchProduct : BaseAsyncEndpoint.WithRequest<GetProductSearchRequest>.WithResponse<GetProductSearchResponse>
+    public class SearchProductVariant : BaseAsyncEndpoint.WithRequest<GetProductVariantSearchRequest>.WithResponse<GetProductVariantSearchResponse>
+    {
+        private readonly IElasticClient _elasticClient;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly IAsyncRepository<ApplicationCore.Entities.Products.Product> _asyncRepository;
+
+        public SearchProductVariant(IElasticClient elasticClient, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository)
+        {
+            _elasticClient = elasticClient;
+            _authorizationService = authorizationService;
+            _asyncRepository = asyncRepository;
+        }
+
+        [HttpGet("api/productvariant/search")]
+        [SwaggerOperation(
+            Summary = "Search Product Variant",
+            Description = "Search Product Variant",
+            OperationId = "product.searchvariants",
+            Tags = new[] { "ProductEndpoints" })
+        ]
+
+        public override async Task<ActionResult<GetProductVariantSearchResponse>> HandleAsync([FromQuery]GetProductVariantSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Read))
+                return Unauthorized();
+            var response = new GetProductVariantSearchResponse();
+
+            PagingOption<ProductVariantSearchIndex> pagingOption =
+                new PagingOption<ProductVariantSearchIndex>(request.CurrentPage, request.SizePerPage);
+            
+                response.IsDisplayingAll = true;
+                
+                var productSearchFilter = new ProductVariantSearchFilter()
+                {
+                    CreatedByName = request.CreatedByName,
+                    FromCreatedDate = request.FromCreatedDate,
+                    FromModifiedDate = request.FromModifiedDate,
+                    ToCreatedDate = request.ToCreatedDate,
+                    ToModifiedDate = request.ToModifiedDate,
+                    Brand = request.Brand,
+                    Category = request.Category,
+                    Strategy = request.Strategy,
+                    FromPrice = request.FromPrice,
+                    ToPrice = request.ToPrice,
+                    ModifiedByName = request.ModifiedByName
+                };
+
+                if (request.SearchQuery == null)
+                {
+                    response.Paging = await 
+                        _asyncRepository.GetProductVariantForELIndexAsync(pagingOption, cancellationToken);
+
+                    return Ok(response);
+                }
+
+
+            var responseElastic = await _elasticClient.SearchAsync<ProductVariantSearchIndex>
+            (
+                s => s.Size(2000).Index( ElasticIndexConstant.PRODUCT_VARIANT_INDICES).Query(q =>q.QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));
+        
+            pagingOption.ResultList = _asyncRepository.ProductVariantIndexFiltering(responseElastic.Documents.ToList(), productSearchFilter,
+                new CancellationToken());
+            
+            pagingOption.ExecuteResourcePaging();
+        
+            if (!responseElastic.IsValid)
+            {
+                Console.WriteLine("Invalid Response");
+                return Ok(new ApplicationCore.Entities.Products.Product[] { });
+            }
+
+            response.Paging = pagingOption;
+           
+            return Ok(response);
+        }
+    }
+    
+      public class SearchProduct : BaseAsyncEndpoint.WithRequest<GetProductSearchRequest>.WithResponse<GetProductSearchResponse>
     {
         private readonly IElasticClient _elasticClient;
         private readonly IAuthorizationService _authorizationService;
@@ -71,8 +148,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
 
         [HttpGet("api/product/search")]
         [SwaggerOperation(
-            Summary = "Search Product by Name",
-            Description = "Search Product by Id",
+            Summary = "Search Product",
+            Description = "Search Product",
             OperationId = "catalog-items.create",
             Tags = new[] { "ProductEndpoints" })
         ]
@@ -98,8 +175,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                     Brand = request.Brand,
                     Category = request.Category,
                     Strategy = request.Strategy,
-                    FromPrice = request.FromPrice,
-                    ToPrice = request.ToPrice,
                     ModifiedByName = request.ModifiedByName
                 };
 
@@ -110,7 +185,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
 
                     return Ok(response);
                 }
-
 
             var responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
             (

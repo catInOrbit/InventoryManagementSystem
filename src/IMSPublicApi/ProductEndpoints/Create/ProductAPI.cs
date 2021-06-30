@@ -25,11 +25,11 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
         private IAsyncRepository<ApplicationCore.Entities.Products.Product> _asyncRepository;
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserSession _userAuthentication;
-        private readonly IAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
+        private readonly IAsyncRepository<ProductVariantSearchIndex> _productIndexAsyncRepositoryRepos;
 
         private readonly INotificationService _notificationService;
 
-        public ProductCreate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos, INotificationService notificationService)
+        public ProductCreate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductVariantSearchIndex> productIndexAsyncRepositoryRepos, INotificationService notificationService)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
@@ -106,7 +106,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             //     product.Name = product.ProductVariants.ToList()[0].Name;
             
             await _asyncRepository.AddAsync(product);
-            await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(true,IndexingHelper.ProductSearchIndex(product),ElasticIndexConstant.PRODUCT_INDICES);
+            await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(true,IndexingHelper.ProductVariantSearchIndex(product),ElasticIndexConstant.PRODUCT_INDICES);
             
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
 
@@ -128,11 +128,11 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
         private IAsyncRepository<ApplicationCore.Entities.Products.Product> _asyncRepository;
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserSession _userAuthentication;
-        private readonly IAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
+        private readonly IAsyncRepository<ProductVariantSearchIndex> _productIndexAsyncRepositoryRepos;
 
         private readonly INotificationService _notificationService;
 
-        public ProductUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos, INotificationService notificationService)
+        public ProductUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductVariantSearchIndex> productIndexAsyncRepositoryRepos, INotificationService notificationService)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
@@ -197,6 +197,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                         Barcode = productVairantRequestInfo.Barcode,
                         Price = productVairantRequestInfo.Price,
                         Cost = productVairantRequestInfo.SalePrice,
+                        ProductId = product.Id,
                         Transaction = new Transaction
                         {
                             CreatedDate = DateTime.Now,
@@ -229,6 +230,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     Barcode = productVairantUpdateRequestInfo.Barcode,
                     Price = productVairantUpdateRequestInfo.Price,
                     Cost = productVairantUpdateRequestInfo.SalePrice,
+                    ProductId = product.Id, 
                     Transaction = new Transaction
                     {
                         CreatedDate = DateTime.Now,

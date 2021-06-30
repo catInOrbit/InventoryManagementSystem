@@ -48,19 +48,29 @@ namespace Infrastructure.Services
 
         private static async Task CreateIndex(IElasticClient client, string defaultIndexName)
         {
+            await client.Indices.DeleteAsync(ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
             await client.Indices.DeleteAsync(ElasticIndexConstant.PRODUCT_INDICES);
+
             await client.Indices.DeleteAsync(ElasticIndexConstant.PURCHASE_ORDERS);
             await client.Indices.DeleteAsync( ElasticIndexConstant.RECEIVING_ORDERS);
             await client.Indices.DeleteAsync( ElasticIndexConstant.GOODS_ISSUE_ORDERS);
             await client.Indices.DeleteAsync( ElasticIndexConstant.SUPPLIERS);
             await client.Indices.DeleteAsync( ElasticIndexConstant.CATEGORIES);
 
-            await client.Indices.CreateAsync( ElasticIndexConstant.PRODUCT_INDICES,
+            await client.Indices.CreateAsync( ElasticIndexConstant.PRODUCT_VARIANT_INDICES,
                 index 
-                    => index.Map<ProductSearchIndex>(x 
+                    => index.Map<ProductVariantSearchIndex>(x 
                     => x.AutoMap().Properties(ps 
                         => ps.Completion(c 
                             => c.Name(n => n.Suggest))))
+            );
+            
+            await client.Indices.CreateAsync( ElasticIndexConstant.PRODUCT_INDICES,
+                index 
+                    => index.Map<ProductSearchIndex>(x 
+                        => x.AutoMap().Properties(ps 
+                            => ps.Completion(c 
+                                => c.Name(n => n.Suggest))))
             );
             
             await client.Indices.CreateAsync(ElasticIndexConstant.PURCHASE_ORDERS,

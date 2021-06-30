@@ -144,14 +144,14 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
      public class ReceivingOrderUpdateProductItem : BaseAsyncEndpoint.WithRequest<ROSingleProductUpdateRequest>.WithoutResponse
     {
         private readonly IAuthorizationService _authorizationService;
-        private readonly IAsyncRepository<ProductSearchIndex> _poSearchIndexRepository;
+        private readonly IAsyncRepository<ProductVariantSearchIndex> _poSearchIndexRepository;
 
         private readonly IAsyncRepository<ProductVariant> _productVariantRepository;
         private readonly IUserSession _userAuthentication;
 
         private readonly INotificationService _notificationService;
 
-        public ReceivingOrderUpdateProductItem(IAuthorizationService authorizationService, IAsyncRepository<ProductSearchIndex> poSearchIndexRepository, IAsyncRepository<ProductVariant> productVariantRepository, IUserSession userAuthentication, INotificationService notificationService)
+        public ReceivingOrderUpdateProductItem(IAuthorizationService authorizationService, IAsyncRepository<ProductVariantSearchIndex> poSearchIndexRepository, IAsyncRepository<ProductVariant> productVariantRepository, IUserSession userAuthentication, INotificationService notificationService)
         {
             _authorizationService = authorizationService;
             _poSearchIndexRepository = poSearchIndexRepository;
@@ -183,7 +183,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             
             //Update and indexing
             await _productVariantRepository.UpdateAsync(productVariant);
-            await _poSearchIndexRepository.ElasticSaveSingleAsync(false,IndexingHelper.ProductSearchIndex(productVariant), ElasticIndexConstant.RECEIVING_ORDERS);
+            await _poSearchIndexRepository.ElasticSaveSingleAsync(false,IndexingHelper.ProductVariantSearchIndex(productVariant), ElasticIndexConstant.RECEIVING_ORDERS);
             
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
 

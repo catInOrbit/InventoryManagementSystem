@@ -8,6 +8,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
     public class PurchaseOrderSearchIndex : BaseEntity
     {
+        public override string Id { get; set; }
+
         public PurchaseOrderSearchIndex()
         {
             Id = Guid.NewGuid().ToString() + "-ignore-id";

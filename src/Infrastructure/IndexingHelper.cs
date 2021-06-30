@@ -68,20 +68,20 @@ namespace Infrastructure
             return index;
         }
         
-        public static ProductSearchIndex ProductSearchIndex(Product product)
+        public static ProductVariantSearchIndex ProductVariantSearchIndex(Product product)
         {
-            ProductSearchIndex index = null; 
+            ProductVariantSearchIndex index = null; 
             foreach (var productVariant in product.ProductVariants)
             {
                 try
                 {
-                    index = new ProductSearchIndex
+                    index = new ProductVariantSearchIndex
                     {
                         TransactionId = (productVariant.Transaction!=null) ? productVariant.TransactionId : "" ,
                         Id = productVariant.Id,
                         Name = productVariant.Name,
                         ProductId = productVariant.ProductId,
-                        VariantId = productVariant.Id,
+                        ProductVariantId = productVariant.Id,
                         Category = (product.Category != null) ? product.Category.CategoryName : "",
                         Quantity = productVariant.StorageQuantity,
                         ModifiedDate = productVariant.Transaction.ModifiedDate,
@@ -97,6 +97,44 @@ namespace Infrastructure
                     Console.WriteLine(e);
                     throw;
                 }
+            }
+
+            return index;
+        }
+        
+        public static ProductSearchIndex ProductSearchIndex(Product product)
+        {
+            ProductSearchIndex index = null; 
+            try
+            {
+                index = new ProductSearchIndex
+                {
+                    TransactionId = (product.Transaction!=null) ? product.TransactionId : "" ,
+                    Id = product.Id,
+                    Name = product.Name,
+                    ProductId = product.Id,
+                    Category = (product.Category != null) ? product.Category.CategoryName : "",
+                    ModifiedDate = product.Transaction.ModifiedDate,
+                    Brand = product.BrandName,
+                    Strategy = product.SellingStrategy,
+                    CreatedDate = product.Transaction.CreatedDate,
+                    CreatedByName = (product.Transaction.CreatedBy != null) ? product.Transaction.CreatedBy.Fullname : "",
+                    ModifiedByName =(product.Transaction.ModifiedBy != null) ? product.Transaction.ModifiedBy.Fullname : "",
+                };
+                
+                foreach (var productProductVariant in product.ProductVariants)
+                {
+                    index.VariantIds.Add(productProductVariant.Id);
+                }
+                
+                index.FillSuggestion();
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(product.Id);
+                Console.WriteLine(e);
+                throw;
             }
 
             return index;
@@ -118,18 +156,18 @@ namespace Infrastructure
             return index;
         }
         
-        public static ProductSearchIndex ProductSearchIndex(ProductVariant productVariant)
+        public static ProductVariantSearchIndex ProductVariantSearchIndex(ProductVariant productVariant)
         {
-            ProductSearchIndex index = null; 
+            ProductVariantSearchIndex index = null; 
                 try
                 {
-                    index = new ProductSearchIndex
+                    index = new ProductVariantSearchIndex
                     {
                         TransactionId = (productVariant.Transaction!=null) ? productVariant.TransactionId : "",
                         Id = productVariant.Id,
                         Name = productVariant.Name,
                         ProductId = productVariant.ProductId,
-                        VariantId = productVariant.Id,
+                        ProductVariantId = productVariant.Id,
                         Category = (productVariant.Product.Category.CategoryName != null) ? productVariant.Product.Category.CategoryName : "",
                         Quantity = productVariant.StorageQuantity,
                         ModifiedDate = productVariant.Transaction.ModifiedDate,

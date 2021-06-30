@@ -4,6 +4,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
     public class StockTakeSearchIndex : BaseEntity
     {
+        public override string Id { get; set; }
+
         public StockTakeSearchIndex()
         {
             Id = Guid.NewGuid().ToString() + "-ignore-id";
