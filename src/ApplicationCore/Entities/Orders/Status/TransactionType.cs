@@ -10,7 +10,8 @@
         StockTake= 5,
         Product = 6,
         ProductVariant = 7,
-        Category = 8,
+        Supplier = 8,
+        Category = 9,
         Deleted = -1
     }
 }

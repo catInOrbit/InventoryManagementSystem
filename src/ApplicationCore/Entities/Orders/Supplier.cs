@@ -19,8 +19,10 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
          public string Address { get; set; }
          public string SalePersonName { get; set; }
         public string PhoneNumber { get; set; }
-
         public string Email { get; set; }
+
+        public string TransactionId { get; set; }
+        public virtual Transaction  Transaction{ get; set; }
         //IBaseAddress
     }
 }

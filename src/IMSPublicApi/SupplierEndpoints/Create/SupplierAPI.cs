@@ -116,7 +116,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             _notificationService = notificationService;
         }
     
-        [HttpDelete("api/supplier/{Id}")]
+        [HttpPut("api/supplier/remove/{Id}")]
         [SwaggerOperation(
             Summary = "Edit supplier",
             Description = "Edit supplier",

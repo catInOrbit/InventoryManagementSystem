@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -5,6 +6,8 @@ using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
@@ -18,10 +21,14 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
     public class CategoryCreate : BaseAsyncEndpoint.WithRequest<CategoryCreateRequest>.WithoutResponse
     {
         private IAsyncRepository<Category> _categoryAsyncRepository;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly IUserSession _userSession;
 
-        public CategoryCreate(IAsyncRepository<Category> categoryAsyncRepository)
+        public CategoryCreate(IAsyncRepository<Category> categoryAsyncRepository, IAuthorizationService authorizationService, IUserSession userSession)
         {
             _categoryAsyncRepository = categoryAsyncRepository;
+            _authorizationService = authorizationService;
+            _userSession = userSession;
         }
         [HttpPost]
         [Route("api/category/create")]
@@ -33,6 +40,20 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
         ]
         public override async Task<ActionResult> HandleAsync(CategoryCreateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.CATEGORY, UserOperations.Create))
+                return Unauthorized();
+            
+            var category = request.Category;
+            category.Transaction = new Transaction
+            {
+                Name = "Created Category " + category.Id,
+                CreatedDate = DateTime.Now,
+                Type = TransactionType.ProductVariant,
+                CreatedById = (await _userSession.GetCurrentSessionUser()).Id,
+                TransactionStatus = true
+            };
+            
+            
             await _categoryAsyncRepository.AddAsync(request.Category);
             await _categoryAsyncRepository.ElasticSaveSingleAsync(true, request.Category,
                 ElasticIndexConstant.CATEGORIES);
@@ -43,10 +64,12 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
     public class CategoryUpdate : BaseAsyncEndpoint.WithRequest<CategoryUpdateRequest>.WithResponse<CategoryUpdateResponse>
     {
         private IAsyncRepository<Category> _categoryAsyncRepository;
+        private readonly IAuthorizationService _authorizationService;
 
-        public CategoryUpdate(IAsyncRepository<Category> categoryAsyncRepository)
+        public CategoryUpdate(IAsyncRepository<Category> categoryAsyncRepository, IAuthorizationService authorizationService)
         {
             _categoryAsyncRepository = categoryAsyncRepository;
+            _authorizationService = authorizationService;
         }
         [HttpPut]
         [Route("api/category/update")]
@@ -59,6 +82,8 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
 
         public override async Task<ActionResult<CategoryUpdateResponse>> HandleAsync(CategoryUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.CATEGORY, UserOperations.Create))
+                return Unauthorized();
             var category = await _categoryAsyncRepository.GetByIdAsync(request.CategoryId);
             CategoryUpdateResponse response = null;
             if (category == null)
@@ -71,7 +96,8 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
 
                 return NotFound(response);
             }
-
+            
+            category.Transaction.ModifiedDate = DateTime.Now;
             category.CategoryName = request.CategoryUpdateInfo.CategoryName;
             category.CategoryDescription = request.CategoryUpdateInfo.CategoryDescription;
             
