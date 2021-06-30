@@ -166,24 +166,60 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             product.TransactionId = product.Transaction.Id;
             product.IsVariantType = request.IsVariantType;
             var listNewVariant = new List<ProductVairantUpdateRequestInfo>(request.ProductVariantsUpdate);
-            foreach (var productVairantRequestInfo in request.ProductVariantsUpdate)
+            if (product.IsVariantType)
             {
-                foreach (var productProductVariant in product.ProductVariants)
+                foreach (var productVairantRequestInfo in request.ProductVariantsUpdate)
                 {
-                    if (productProductVariant.Id != null && productProductVariant.Id == productVairantRequestInfo.Id)
+                    foreach (var productVariantSystemList in product.ProductVariants)
                     {
-                        productProductVariant.Name = productVairantRequestInfo.Name;
-                        productProductVariant.Sku = productVairantRequestInfo.Sku;
-                        productProductVariant.Unit = productVairantRequestInfo.Unit;
-                        productProductVariant.IsVariantType = product.IsVariantType;
-                        productProductVariant.Barcode = productVairantRequestInfo.Barcode;
-                        listNewVariant.Remove(productVairantRequestInfo);
+                        if (productVariantSystemList.Id != null && productVariantSystemList.Id == productVairantRequestInfo.Id)
+                        {
+                            productVariantSystemList.Name = productVairantRequestInfo.Name;
+                            productVariantSystemList.Sku = productVairantRequestInfo.Sku;
+                            productVariantSystemList.Unit = productVairantRequestInfo.Unit;
+                            productVariantSystemList.IsVariantType = product.IsVariantType;
+                            productVariantSystemList.Barcode = productVairantRequestInfo.Barcode;
+                        }
+
+                        else if(productVariantSystemList.Id == null)
+                            listNewVariant.Remove(productVairantRequestInfo);
                     }
+                }
+
+                foreach (var productVairantRequestInfo in listNewVariant)
+                {
+                    var productVariant = new ProductVariant
+                    {
+                        Name = productVairantRequestInfo.Name,
+                        Sku = productVairantRequestInfo.Sku,
+                        Unit = productVairantRequestInfo.Unit,
+                        IsVariantType = product.IsVariantType,
+                        Barcode = productVairantRequestInfo.Barcode,
+                        Price = productVairantRequestInfo.Price,
+                        Cost = productVairantRequestInfo.SalePrice,
+                        Transaction = new Transaction
+                        {
+                            CreatedDate = DateTime.Now,
+                            Type = TransactionType.ProductVariant,
+                            CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
+                            TransactionStatus = true
+                        }
+                    };
+                        
+                    var packages = await _asyncRepository.GetPackagesFromProductVariantId(productVariant.Id);
+
+                    foreach (var package in packages)
+                        productVariant.StorageQuantity += package.Quantity;
+
+                    productVariant.Transaction.Name = "Created Product Variant" + productVariant.Id;
+                    product.ProductVariants.Add(productVariant);
                 }
             }
 
-            foreach (var productVairantUpdateRequestInfo in listNewVariant)
+            else
             {
+                product.ProductVariants.Clear();
+                var productVairantUpdateRequestInfo = request.ProductVariantsUpdate[0];
                 var productVariant = new ProductVariant
                 {
                     Name = productVairantUpdateRequestInfo.Name,
@@ -205,18 +241,18 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                 var packages = await _asyncRepository.GetPackagesFromProductVariantId(productVariant.Id);
 
                 foreach (var package in packages)
-                    productVariant.StorageQuantity += package.Quantity;
-
+                    productVariant.StorageQuantity += package.Quantity; 
+                
                 productVariant.Transaction.Name = "Created Product Variant" + productVariant.Id;
-
                 product.ProductVariants.Add(productVariant);
             }
             
             await _asyncRepository.UpdateAsync(product);
-            await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false,IndexingHelper.ProductSearchIndex(product),ElasticIndexConstant.PRODUCT_INDICES);
             
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
-
+            
+            // await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.ProductSearchIndex(product),ElasticIndexConstant.PRODUCT_INDICES);
+            
             var messageNotification =
                 _notificationService.CreateMessage(currentUser.Fullname, "Update", "Product", product.Id);
                 

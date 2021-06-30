@@ -48,7 +48,7 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
             {
                 Name = "Created Category " + category.Id,
                 CreatedDate = DateTime.Now,
-                Type = TransactionType.ProductVariant,
+                Type = TransactionType.Category,
                 CreatedById = (await _userSession.GetCurrentSessionUser()).Id,
                 TransactionStatus = true
             };
@@ -65,11 +65,13 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
     {
         private IAsyncRepository<Category> _categoryAsyncRepository;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IUserSession _userAuthentication;
 
-        public CategoryUpdate(IAsyncRepository<Category> categoryAsyncRepository, IAuthorizationService authorizationService)
+        public CategoryUpdate(IAsyncRepository<Category> categoryAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication)
         {
             _categoryAsyncRepository = categoryAsyncRepository;
             _authorizationService = authorizationService;
+            _userAuthentication = userAuthentication;
         }
         [HttpPut]
         [Route("api/category/update")]
@@ -97,7 +99,10 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
                 return NotFound(response);
             }
             
+            
             category.Transaction.ModifiedDate = DateTime.Now;
+            category.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            
             category.CategoryName = request.CategoryUpdateInfo.CategoryName;
             category.CategoryDescription = request.CategoryUpdateInfo.CategoryDescription;
             

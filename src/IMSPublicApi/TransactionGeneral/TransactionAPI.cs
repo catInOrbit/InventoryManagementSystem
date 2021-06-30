@@ -75,10 +75,9 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
                                     IndexingHelper.ProductSearchIndex(productVariant), ElasticIndexConstant.PRODUCT_INDICES);    
                             }
                         }
-                       
                     }
 
-                    else if ((int)trans.Type == 8)
+                    else if ((int)trans.Type == 9)
                     {
                         var category = await dbContext.Category.FirstOrDefaultAsync(e => e.Transaction.Id == trans.Id);
                         if (trans.TransactionStatus)
@@ -86,7 +85,23 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
                         else
                             category.Transaction.TransactionStatus = true;
                     }
+                    
+                    else if ((int)trans.Type == 8)
+                    {
+                        var supplier = await dbContext.Supplier.FirstOrDefaultAsync(e => e.Transaction.Id == trans.Id);
+                        if (trans.TransactionStatus)
+                            supplier.Transaction.TransactionStatus = false;
+                        else
+                            supplier.Transaction.TransactionStatus = true;
+                    }
 
+                    else
+                    {
+                        response.Status = false;
+                        response.Verbose = "Deactivation of this transaction is not supported or transaction not found";
+                        return Ok(response);
+                    }
+                    
                     response.Status = true;
                     response.Verbose = "Status changed";
                     await dbContext.SaveChangesAsync();
