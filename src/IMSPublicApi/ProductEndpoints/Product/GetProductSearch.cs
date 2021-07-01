@@ -238,6 +238,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
             PagingOption<Brand> pagingOption =
                 new PagingOption<Brand>(request.CurrentPage, request.SizePerPage);
 
+            response.IsDisplayingAll = true;
             response.Paging = await 
                 _brandAsyncRepository.ListAllAsync(pagingOption, cancellationToken);
 

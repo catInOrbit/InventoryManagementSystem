@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Products
 {
+    [Serializable]
     public class Package : BaseEntity
     {
         public Package()
@@ -14,7 +15,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         [JsonIgnore]
         public virtual ProductVariant  ProductVariant { get; set; }
 
-        [JsonIgnore]
         public virtual Supplier Supplier { get; set; }
         public string SupplierId { get; set; }
         public decimal Price { get; set; }

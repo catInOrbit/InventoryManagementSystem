@@ -2,11 +2,11 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders.Status
 {
     public enum UserTransactionActionType
     {
-        Create = 1,
-        Modify = 2,
-        Submit = 3,
-        Confirm = 4,
-        Reject = 5,
-        Delete = 5,
+        Create = 0,
+        Modify = 1,
+        Submit = 2,
+        Confirm = 3,
+        Reject = 4,
+        Delete = -1,
     }
 }

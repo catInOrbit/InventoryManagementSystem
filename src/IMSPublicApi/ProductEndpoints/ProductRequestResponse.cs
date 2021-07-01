@@ -74,9 +74,9 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
         public string Value { get; set; }
     }
     
-    public class GetAllCategoryResponse : BaseResponse
+    public class GetAllCategoryResponse : BaseSearchResponse<Category>
     {
-        public List<Category> Categories { get; set; } = new List<Category>();
+        // public List<Category> Categories { get; set; } = new List<Category>();
     }
     
     public class GetCategoryRequest : BaseRequest

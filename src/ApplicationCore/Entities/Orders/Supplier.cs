@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Nest;
 using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
@@ -23,6 +24,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 
         public string TransactionId { get; set; }
         [JsonIgnore]
+        [Ignore]
         public virtual Transaction  Transaction{ get; set; }
         //IBaseAddress
     }

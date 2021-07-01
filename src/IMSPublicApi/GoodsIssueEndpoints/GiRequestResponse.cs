@@ -70,8 +70,14 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
     {
         public GoodsIssueOrder GoodsIssueOrder { get; set; }
 
-        public Dictionary<int, Package> NumOfProductToGetInPackage { get; set; } =
-            new Dictionary<int, Package>();
+        public List<PackageSuggestion> NumOfProductToGetInPackage { get; set; } =
+            new List<PackageSuggestion>();
+    }
+
+    public class PackageSuggestion
+    {
+        public Package Package { get; set; }
+        public int NumberOfProductToGet { get; set; }
     }
 
     public class GoodsReceiptStrategySuggestion

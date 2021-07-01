@@ -157,11 +157,10 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
                 return Unauthorized();
             
             var response = new GetAllCategoryResponse();
+            response.IsDisplayingAll = true;
             PagingOption<Category> pagingOption = new PagingOption<Category>(
                 request.CurrentPage, request.SizePerPage);
-            
-            var list = (await _asyncRepository.ListAllAsync(pagingOption, cancellationToken));
-            response.Categories = list.ResultList.ToList();
+            response.Paging = (await _asyncRepository.ListAllAsync(pagingOption, cancellationToken));
             return Ok(response);
         }
     }

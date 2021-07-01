@@ -17,35 +17,37 @@ namespace Infrastructure.Services
             _packageAsyncRepository = packageAsyncRepository;
         }
         
-        //Dictionary<Number of product to get, in list of packages> in FIFO pattern
-        public async Task<Dictionary<int, Package>> FifoPackagesSuggestion(List<OrderItem> orderItems)
+        //Dictionary<Packge, Number of product to get> in FIFO pattern
+        public async Task<Dictionary<string, int>> FifoPackagesSuggestion(List<OrderItem> orderItems)
         {
-            Dictionary<int, Package> numProductInPackageFIFO = new Dictionary<int, Package>();
+            Dictionary<string, int> numProductInPackageFIFO = new Dictionary<string, int>();
             List<Package> packages = new List<Package>();
             foreach (var orderItem in orderItems)
             {
                 packages = (await _packageAsyncRepository.ListAllAsync(new PagingOption<Package>(0, 0))).ResultList
-                    .Where(package => package.ProductVariantId == orderItem.ProductVariantId).ToList();
+                    .Where(package => package.ProductVariantId == orderItem.ProductVariantId).OrderBy(package => package.ImportedDate).ToList();
+                var temPackages = new List<Package>(packages);
                 var quantityToDeduce = orderItem.OrderQuantity;
                 
-                for (var i = 0; i < packages.Count; i++)
+                for (var i = 0; i < temPackages.Count; i++)
                 {
                     if (quantityToDeduce > 0)
                     {
-                        if (packages[i].Quantity >= quantityToDeduce)
+                        if (temPackages[i].Quantity >= quantityToDeduce)
                         {
-                            packages[i].Quantity -= quantityToDeduce;
-                        
-                            //Remove aggregated quantity of product as well
-                            numProductInPackageFIFO.Add(quantityToDeduce, packages[i]);
+                            if (numProductInPackageFIFO.ContainsKey(packages[i].Id))
+                                numProductInPackageFIFO[packages[i].Id] = quantityToDeduce;
+                            else
+                                numProductInPackageFIFO.Add(packages[i].Id, quantityToDeduce);
                         }
                         
                         else
                         {
-                            quantityToDeduce -= packages[i].Quantity;
-                            packages[i].Quantity -= packages[i].Quantity;
-                        
-                            numProductInPackageFIFO.Add(packages[i].Quantity, packages[i]);
+                            quantityToDeduce -= temPackages[i].Quantity;
+                            if (numProductInPackageFIFO.ContainsKey(packages[i].Id))
+                                numProductInPackageFIFO[packages[i].Id] = temPackages[i].Quantity;
+                            else
+                              numProductInPackageFIFO.Add(packages[i].Id, temPackages[i].Quantity);
                         }
                     }
                 }

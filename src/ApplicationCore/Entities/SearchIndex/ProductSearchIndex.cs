@@ -26,6 +26,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string Brand { get; set; }
         public string ProductId { get; set; }
         public string ProductVariantId { get; set; }
+        public string SupplierName { get; set; }
         public string Name { get; set; }
         public string Sku { get; set; }
         public string Unit { get; set; }

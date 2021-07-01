@@ -31,8 +31,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         [Nest.Nested]
         // public virtual ICollection<VariantValue> VariantValues { get; set; }
         public bool IsVariantType { get; set; }
-        
-        [JsonIgnore]
         public virtual IList<Package> Packages { get; set; }
     }
 }
