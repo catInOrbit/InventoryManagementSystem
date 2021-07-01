@@ -96,7 +96,6 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             //Update and indexing
             await _recevingOrderRepository.AddAsync(ro);
             
-            
             foreach (var roi in ro.ReceivedOrderItems)
             {
                 var package = (await _packageRepository.ListAllAsync(new PagingOption<Package>(0, 0))).ResultList.FirstOrDefault(package => package.ProductVariantId == roi.ProductVariantId);
@@ -106,11 +105,13 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 {
                     ProductVariantId =  roi.ProductVariantId,
                     Quantity = roi.QuantityReceived,
-                    TotalPrice = roi.ProductVariant.Price * roi.QuantityReceived,
                     Location = ro.StorageLocationReceipt,
                     ImportedDate = ro.ReceivedDate,
-                    GoodsReceiptOrderId = ro.Id
+                    GoodsReceiptOrderId = ro.Id,
+                    Price = ro.PurchaseOrder.PurchaseOrderProduct.FirstOrDefault(item => item.ProductVariantId == roi.ProductVariantId).Price,
+                    SupplierId = ro.SupplierId,
                 };
+                package.TotalPrice = package.Price * package.Quantity;
                 
                 await _packageRepository.AddAsync(package);
             }

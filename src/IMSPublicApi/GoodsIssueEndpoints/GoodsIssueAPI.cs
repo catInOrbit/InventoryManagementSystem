@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
@@ -71,13 +72,13 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 ProductStrategyService productStrategyService =
                     new ProductStrategyService(_packageAsyncRepository);
                 
-                List<string> productVariantIds = new List<string>();
-                foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
-                    productVariantIds.Add(gioGoodsIssueProduct.ProductVariantId);
+                // List<string> productVariantIds = new List<string>();
+                // foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
+                //     productVariantIds.Add(gioGoodsIssueProduct.ProductVariantId);
                 
-                var packages = await productStrategyService.FIFOPackagesSuggestion(productVariantIds);
+                var nDictionary = await productStrategyService.FifoPackagesSuggestion(gio.GoodsIssueProducts.ToList());
                 
-                response.Packages.AddRange(packages);
+                response.NumOfProductToGetInPackage = nDictionary;
                 
                 await _asyncRepository.UpdateAsync(gio);
                 await _goodIssueasyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.GoodsIssueSearchIndexHelper(gio), ElasticIndexConstant.GOODS_ISSUE_ORDERS);
@@ -144,48 +145,72 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             gio.Transaction = TransactionUpdateHelper.UpdateTransaction(gio.Transaction, UserTransactionActionType.Modify, gio.Id,
                 (await _userAuthentication.GetCurrentSessionUser()).Id);
             
-            foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
+            
+            ProductStrategyService productStrategyService =
+                new ProductStrategyService(_packageAsyncRepository);
+            var nDictionary = await productStrategyService.FifoPackagesSuggestion(gio.GoodsIssueProducts.ToList());
+           
+            foreach (var productNumPackagePair in nDictionary)
             {
                 var listPackages =
-                    await _asyncRepository.GetPackagesFromProductVariantId(gioGoodsIssueProduct.ProductVariantId);
+                    await _asyncRepository.GetPackagesFromProductVariantId(productNumPackagePair.Value.ProductVariantId);
+                var listPackagesToBeDeleted = new List<Package>();
                 var productVariant =
-                    await _productVariantAsyncRepository.GetByIdAsync(gioGoodsIssueProduct.ProductVariantId);
-                List<int> listIndexPackageToRemove = new List<int>();
-                var quantityToDeduce = gioGoodsIssueProduct.OrderQuantity;
-                for (var i = 0; i < listPackages.Count; i++)
-                {
-                    if (quantityToDeduce > 0)
-                    {
-                        if (listPackages[i].Quantity >= quantityToDeduce)
-                        {
-                            listPackages[i].Quantity -= quantityToDeduce;
-                            
-                            //Remove aggregated quantity of product as well
-                            productVariant.StorageQuantity -= quantityToDeduce; 
-                        }
-                        else
-                        {
-                            quantityToDeduce -= listPackages[i].Quantity;
-                            listPackages[i].Quantity -= listPackages[i].Quantity;
-                            
-                            //Remove aggregated quantity of product as well
-                            productVariant.StorageQuantity -= quantityToDeduce; 
-                        }
-                    }
+                     await _productVariantAsyncRepository.GetByIdAsync(productNumPackagePair.Value.ProductVariantId);
+                productVariant.StorageQuantity -= productNumPackagePair.Key;
+                if (productNumPackagePair.Key == productNumPackagePair.Value.Quantity)
+                    listPackagesToBeDeleted.Add(listPackages.FirstOrDefault(package => package.Id == productNumPackagePair.Value.Id));
 
-
-                    if (listPackages[i].Quantity <= 0)
-                        listIndexPackageToRemove.Add(i);
-                }
-
+                else
+                    listPackages.FirstOrDefault(package => package.Id == productNumPackagePair.Value.Id).Quantity -=
+                        productNumPackagePair.Key;
+                
                 await _productVariantAsyncRepository.UpdateAsync(productVariant);
-
-                foreach (var i in listIndexPackageToRemove)
-                {
-                    listPackages.RemoveAt(i);
-                    await _packageAsyncRepository.DeleteAsync(listPackages[i]);
-                }
+                foreach (var package in listPackagesToBeDeleted)
+                    await _packageAsyncRepository.DeleteAsync(package);
             }
+            
+            // foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
+            // {
+            //     var listPackages =
+            //         await _asyncRepository.GetPackagesFromProductVariantId(gioGoodsIssueProduct.ProductVariantId);
+            //     var productVariant =
+            //         await _productVariantAsyncRepository.GetByIdAsync(gioGoodsIssueProduct.ProductVariantId);
+            //     List<int> listIndexPackageToRemove = new List<int>();
+            //     var quantityToDeduce = gioGoodsIssueProduct.OrderQuantity;
+            //     for (var i = 0; i < listPackages.Count; i++)
+            //     {
+            //         if (quantityToDeduce > 0)
+            //         {
+            //             if (listPackages[i].Quantity >= quantityToDeduce)
+            //             {
+            //                 listPackages[i].Quantity -= quantityToDeduce;
+            //                 
+            //                 //Remove aggregated quantity of product as well
+            //                 productVariant.StorageQuantity -= quantityToDeduce; 
+            //             }
+            //             else
+            //             {
+            //                 quantityToDeduce -= listPackages[i].Quantity;
+            //                 listPackages[i].Quantity -= listPackages[i].Quantity;
+            //                 
+            //                 //Remove aggregated quantity of product as well
+            //                 productVariant.StorageQuantity -= quantityToDeduce; 
+            //             }
+            //         }
+            //
+            //         if (listPackages[i].Quantity <= 0)
+            //             listIndexPackageToRemove.Add(i);
+            //     }
+            //
+            //     await _productVariantAsyncRepository.UpdateAsync(productVariant);
+            //
+            //     foreach (var i in listIndexPackageToRemove)
+            //     {
+            //         listPackages.RemoveAt(i);
+            //         await _packageAsyncRepository.DeleteAsync(listPackages[i]);
+            //     }
+            // }
             
             await _asyncRepository.UpdateAsync(gio);
             await _goodIssueasyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.GoodsIssueSearchIndexHelper(gio), ElasticIndexConstant.GOODS_ISSUE_ORDERS);

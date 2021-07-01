@@ -33,6 +33,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public bool IsVariantType { get; set; }
         
         [JsonIgnore]
-        public virtual Package Package { get; set; }
+        public virtual IList<Package> Packages { get; set; }
     }
 }

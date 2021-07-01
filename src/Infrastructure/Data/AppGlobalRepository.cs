@@ -40,9 +40,10 @@ namespace Infrastructure.Data
         
         public async Task<PagingOption<ProductSearchIndex>> GetProductForELIndexAsync(PagingOption<ProductSearchIndex> pagingOption, CancellationToken cancellationToken = default)
         {
+            
             var products =  await _identityAndProductDbContext.Product.
                 Where(product => product.Transaction.TransactionStatus!=false && product.Transaction.Type!=TransactionType.Deleted).
-                OrderByDescending(product=>product.Transaction.TransactionRecord[^1].Date).ToListAsync(cancellationToken);
+                OrderByDescending(product=>product.Transaction.TransactionRecord[product.Transaction.TransactionRecord.Count - 1].Date).ToListAsync(cancellationToken);
             
             foreach (var product in products)
             {
@@ -93,7 +94,8 @@ namespace Infrastructure.Data
         {
 
             var pos = await _identityAndProductDbContext.PurchaseOrder.
-                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderByDescending(e=>e.Transaction.TransactionRecord[^1].Date).ToListAsync();
+                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).
+                OrderByDescending(e=>e.Transaction.TransactionRecord[e.Transaction.TransactionRecord.Count - 1].Date).ToListAsync();
             foreach (var po in pos)
             {
                 PurchaseOrderSearchIndex index; 
@@ -353,7 +355,8 @@ namespace Infrastructure.Data
         {
             
             var ros = await _identityAndProductDbContext.Set<GoodsReceiptOrder>().
-                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderByDescending(e=>e.Transaction.TransactionRecord[^1].Date).ToListAsync(cancellationToken);
+                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).
+                OrderByDescending(e=>e.Transaction.TransactionRecord[e.Transaction.TransactionRecord.Count - 1].Date).ToListAsync(cancellationToken);
 
             foreach (var ro in ros)
             {
@@ -377,7 +380,7 @@ namespace Infrastructure.Data
         {
             var gis = await _identityAndProductDbContext.Set<GoodsIssueOrder>().
                 Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).
-                OrderByDescending(e=>e.Transaction.TransactionRecord[^1].Date).ToListAsync(cancellationToken);
+                OrderByDescending(e=>e.Transaction.TransactionRecord[e.Transaction.TransactionRecord.Count - 1]).ToListAsync(cancellationToken);
            
             foreach (var gi in gis)
             {
@@ -401,7 +404,7 @@ namespace Infrastructure.Data
         {
             
             var sts = await _identityAndProductDbContext.Set<StockTakeOrder>().
-                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderByDescending(e=>e.Transaction.TransactionRecord[^1].Date).ToListAsync(cancellationToken);
+                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderByDescending(e=>e.Transaction.TransactionRecord[e.Transaction.TransactionRecord.Count - 1]).ToListAsync(cancellationToken);
             
             foreach (var st in sts)
             {
@@ -464,7 +467,7 @@ namespace Infrastructure.Data
         public async Task<PagingOption<StockOnhandReport>> GenerateOnHandReport(PagingOption<StockOnhandReport> pagingOption, CancellationToken cancellationToken = default)
         {
             var productVariantList = await _identityAndProductDbContext.Set<ProductVariant>().Skip(pagingOption.SkipValue)
-                .Take(pagingOption.SizePerPage).OrderByDescending(pac => pac.Package.ImportedDate).ToListAsync();
+                .Take(pagingOption.SizePerPage).OrderByDescending(pac => pac.Packages[pac.Packages.Count - 1].ImportedDate).ToListAsync();
             
             // var list = await _identityAndProductDbContext.Set<Package>().Skip(pagingOption.SkipValue)
             //     .Take(pagingOption.SizePerPage).OrderByDescending(pac => pac.ImportedDate).ToListAsync();
@@ -517,7 +520,8 @@ namespace Infrastructure.Data
         public async Task<PagingOption<StockTakeReport>> GenerateStockTakeReport(PagingOption<StockTakeReport> pagingOption, CancellationToken cancellationToken = default)
         {
             var list = await _identityAndProductDbContext.Set<StockTakeItem>().Skip(pagingOption.SkipValue)
-                .Take(pagingOption.SizePerPage).OrderByDescending(item =>  item.StockTakeOrder.Transaction.TransactionRecord[^1].Date).ToListAsync();
+                .Take(pagingOption.SizePerPage).
+                OrderByDescending(item =>  item.StockTakeOrder.Transaction.TransactionRecord[item.StockTakeOrder.Transaction.TransactionRecord.Count - 1].Date).ToListAsync();
 
             foreach (var stockTakeItem in list)
             {
@@ -539,7 +543,7 @@ namespace Infrastructure.Data
 
         public async Task<PagingOption<ProductVariant>> GenerateTopSellingYearReport(PagingOption<ProductVariant> pagingOption, CancellationToken cancellationToken = default)
         {
-            pagingOption.ResultList = await _identityAndProductDbContext.Set<ProductVariant>().Where(variant => variant.Package.ImportedDate.Year == DateTime.Now.Year).
+            pagingOption.ResultList = await _identityAndProductDbContext.Set<ProductVariant>().Where(variant => variant.Packages[variant.Packages.Count-1].ImportedDate.Year == DateTime.Now.Year).
                 OrderByDescending(item =>  item.StorageQuantity).Skip(pagingOption.SkipValue).Take(pagingOption.SizePerPage).ToListAsync();
 
             pagingOption.ExecuteResourcePaging();
@@ -548,7 +552,7 @@ namespace Infrastructure.Data
 
         public async Task<PagingOption<ProductVariant>> GenerateTopSellingCurrentMonthReport(PagingOption<ProductVariant> pagingOption, CancellationToken cancellationToken = default)
         {
-            pagingOption.ResultList = await _identityAndProductDbContext.Set<ProductVariant>().Where(variant => variant.Package.ImportedDate.Month == DateTime.Now.Month).
+            pagingOption.ResultList = await _identityAndProductDbContext.Set<ProductVariant>().Where(variant => variant.Packages[variant.Packages.Count-1].ImportedDate.Month == DateTime.Now.Month).
                 OrderByDescending(item =>  item.StorageQuantity).Skip(pagingOption.SkipValue).Take(pagingOption.SizePerPage).ToListAsync();
 
             pagingOption.ExecuteResourcePaging();

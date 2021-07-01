@@ -17,6 +17,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         [JsonIgnore]
         public virtual Supplier Supplier { get; set; }
         public string SupplierId { get; set; }
+        public decimal Price { get; set; }
         public decimal TotalPrice { get; set; }
         public int Quantity { get; set; }
         public DateTime ImportedDate { get; set; }

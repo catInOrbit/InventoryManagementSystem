@@ -46,16 +46,21 @@ namespace Infrastructure.Services
             Dictionary<string, object> columnValues = new Dictionary<string, object>();
             BigQueryInsertRow row = new BigQueryInsertRow();
             
-            columnValues.Add("productsk", latestRecordNumber);
-            columnValues.Add("productvariantid", productVariant.Id);
-            columnValues.Add("productcategory", productVariant.Product.Category);
-            columnValues.Add("price", Convert.ToSingle(productVariant.Price));
-            columnValues.Add("storagelocation", productVariant.Package.Location);
-            columnValues.Add("date", DateTime.Now);
-            columnValues.Add("cost", productVariant.Cost);
-            columnValues.Add("quantityavailable", productVariant.StorageQuantity);
-            columnValues.Add("quantitysold", quantitySold);
-            columnValues.Add("transactiontype", productVariant.Transaction.Type);
+            
+            foreach (var productVariantPackage in productVariant.Packages)
+            {
+                columnValues.Add("productsk", latestRecordNumber);
+                columnValues.Add("productvariantid", productVariantPackage.ProductVariant.Id);
+                columnValues.Add("productcategory", productVariantPackage.ProductVariant.Product.Category.CategoryName);
+                columnValues.Add("price", Convert.ToSingle(productVariantPackage.Price));
+                columnValues.Add("storagelocation", productVariantPackage.Location);
+                columnValues.Add("date", DateTime.Now);
+                columnValues.Add("cost", productVariantPackage.ProductVariant.Cost);
+                columnValues.Add("quantityavailable", productVariantPackage.Quantity);
+                columnValues.Add("quantitysold", quantitySold);
+                columnValues.Add("transactiontype", productVariantPackage.ProductVariant.Transaction.Type);
+            }
+       
             
             row.Add(columnValues);
             listRowInser.Add(row);

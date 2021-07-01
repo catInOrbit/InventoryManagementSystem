@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210627080651_Creation")]
+    [Migration("20210701150216_Creation")]
     partial class Creation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -383,7 +383,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TransactionId");
 
                     b.ToTable("Supplier");
                 });
@@ -393,20 +398,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ConfirmedById")
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CreatedById")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ModifiedById")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -417,18 +410,35 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ValidUntil")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("UserTransactionActionType")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ConfirmedById");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("ModifiedById");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Transaction");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.TransactionRecord", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OrderId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TransactionId");
+
+                    b.ToTable("TransactionRecord");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Category", b =>
@@ -442,7 +452,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("CategoryName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TransactionId");
 
                     b.ToTable("Category");
                 });
@@ -461,22 +476,28 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("ProductVariantId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<decimal>("TotalImportPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("TotalImportQuantity")
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
+
+                    b.Property<string>("SupplierId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GoodsReceiptOrderId");
 
-                    b.HasIndex("ProductVariantId")
-                        .IsUnique()
-                        .HasFilter("[ProductVariantId] IS NOT NULL");
+                    b.HasIndex("ProductVariantId");
+
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("Package");
                 });
@@ -555,25 +576,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.HasIndex("TransactionId");
 
                     b.ToTable("ProductVariant");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.VariantValue", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Attribute")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductVariantId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("VariantValue");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -814,25 +816,40 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("Transaction");
                 });
 
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", "Transaction")
+                        .WithMany()
+                        .HasForeignKey("TransactionId");
+
+                    b.Navigation("Transaction");
+                });
+
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", b =>
                 {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.ApplicationUser", "ConfirmedBy")
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ConfirmedById");
+                        .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.ApplicationUser", "CreatedBy")
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.TransactionRecord", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", "Transaction")
+                        .WithMany("TransactionRecord")
+                        .HasForeignKey("TransactionId");
+
+                    b.Navigation("Transaction");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Category", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", "Transaction")
                         .WithMany()
-                        .HasForeignKey("CreatedById");
+                        .HasForeignKey("TransactionId");
 
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.ApplicationUser", "ModifiedBy")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById");
-
-                    b.Navigation("ConfirmedBy");
-
-                    b.Navigation("CreatedBy");
-
-                    b.Navigation("ModifiedBy");
+                    b.Navigation("Transaction");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Package", b =>
@@ -842,12 +859,18 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasForeignKey("GoodsReceiptOrderId");
 
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", "ProductVariant")
-                        .WithOne("Package")
-                        .HasForeignKey("InventoryManagementSystem.ApplicationCore.Entities.Products.Package", "ProductVariantId");
+                        .WithMany("Packages")
+                        .HasForeignKey("ProductVariantId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId");
 
                     b.Navigation("GoodsReceiptOrder");
 
                     b.Navigation("ProductVariant");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
@@ -951,6 +974,11 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("CheckItems");
                 });
 
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", b =>
+                {
+                    b.Navigation("TransactionRecord");
+                });
+
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
                 {
                     b.Navigation("ProductVariants");
@@ -958,7 +986,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", b =>
                 {
-                    b.Navigation("Package");
+                    b.Navigation("Packages");
                 });
 #pragma warning restore 612, 618
         }

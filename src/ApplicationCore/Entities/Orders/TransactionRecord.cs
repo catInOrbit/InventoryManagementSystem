@@ -11,7 +11,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 
         public DateTime Date { get; set; }
         public string TransactionId { get; set; }
-        public Transaction Transaction { get; set; }
+        public virtual Transaction Transaction { get; set; }
         public string OrderId { get; set; }
     }
 }
