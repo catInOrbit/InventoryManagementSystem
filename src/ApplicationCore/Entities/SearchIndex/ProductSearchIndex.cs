@@ -64,6 +64,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         }
         
         public string  TransactionId { get; set; }
+
         public string Name { get; set; }
         public string CreatedByName { get; set; }
         public string ModifiedByName { get; set; }
@@ -71,8 +72,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string Strategy { get; set; }
         public string Brand { get; set; }
         public string ProductId { get; set; }
-
-        public List<string> VariantIds { get; set; } = new List<string>();
+        public bool  IsVariantType { get; set; }
+        public List<ProductVariantSearchIndex> Variants { get; set; } = new List<ProductVariantSearchIndex>();
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public CompletionField Suggest { get; set; }

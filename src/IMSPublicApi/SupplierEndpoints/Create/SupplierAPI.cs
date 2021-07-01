@@ -41,7 +41,16 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.SUPPLIER, UserOperations.Create))
                 return Unauthorized();
 
-            var supplier = request.Supplier;
+            var supplier = new Supplier
+            {
+                Address = request.Address,
+                Description = request.Description,
+                Email = request.Email,
+                PhoneNumber = request.PhoneNumber,
+                SalePersonName = request.SalePersonName,
+                SupplierName = request.SupplierName
+            };
+            
             supplier.Transaction = new Transaction
             {
                 Name = "Created New Supplier: " + supplier.Id,
@@ -51,14 +60,14 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
                 CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
                 TransactionStatus = true
             };
-            await _supplierAsyncRepository.AddAsync(request.Supplier);
-            await _supplierAsyncRepository.ElasticSaveSingleAsync(true, request.Supplier, ElasticIndexConstant.SUPPLIERS);
+            await _supplierAsyncRepository.AddAsync(supplier);
+            await _supplierAsyncRepository.ElasticSaveSingleAsync(true, supplier, ElasticIndexConstant.SUPPLIERS);
 
             
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
                   
             var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Create","Supplier", request.Supplier.Id);
+                _notificationService.CreateMessage(currentUser.Fullname, "Create","Supplier", supplier.Id);
                 
             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
                 currentUser.Id, messageNotification);
@@ -98,12 +107,13 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             supplier.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             supplier.Transaction.Name = "Updated Supplier: " + supplier.Id;
 
-            supplier.Description = request.Supplier.Description;
-            supplier.Email = request.Supplier.Email;
-            supplier.Address = request.Supplier.Address;
-            supplier.PhoneNumber = request.Supplier.PhoneNumber;
-            supplier.SupplierName = request.Supplier.SupplierName;
-            supplier.SalePersonName = request.Supplier.SalePersonName;
+            supplier.Description = request.Description;
+            supplier.Email = request.Email;
+            supplier.Address = request.Address;
+            supplier.PhoneNumber = request.PhoneNumber;
+            supplier.SupplierName = request.SupplierName;
+            supplier.SalePersonName = request.SalePersonName;
+            supplier.SupplierName = request.SupplierName;
             
             await _supplierAsyncRepository.UpdateAsync(supplier);
             await _supplierAsyncRepository.ElasticSaveSingleAsync(false, supplier, ElasticIndexConstant.SUPPLIERS);
@@ -111,7 +121,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
                   
             var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Update","Supplier", request.Supplier.Id);
+                _notificationService.CreateMessage(currentUser.Fullname, "Update","Supplier", supplier.Id);
                 
             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
                 currentUser.Id, messageNotification);

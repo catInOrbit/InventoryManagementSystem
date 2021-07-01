@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
@@ -60,7 +61,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
               };
 
               po.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionCreated;
-            
+              po.SupplierId = request.SupplierId;
+              
               foreach (var requestOrderItem in request.OrderItems)
               {
                   requestOrderItem.OrderId = po.Id;
@@ -145,13 +147,15 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
         private readonly IAsyncRepository<ProductVariant> _pvasyncRepository;
+        private readonly IAsyncRepository<OrderItem> _orderItemAsyncRepository;
+
         private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
 
         
         private readonly INotificationService _notificationService;
 
-        public RequisitionUpdate(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, IAsyncRepository<ProductVariant> pvasyncRepository, INotificationService notificationService)
+        public RequisitionUpdate(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, IAsyncRepository<ProductVariant> pvasyncRepository, INotificationService notificationService, IAsyncRepository<OrderItem> orderItemAsyncRepository)
         {
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
@@ -159,6 +163,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             _indexAsyncRepository = indexAsyncRepository;
             _pvasyncRepository = pvasyncRepository;
             _notificationService = notificationService;
+            _orderItemAsyncRepository = orderItemAsyncRepository;
         }
 
         [HttpPut("api/requisition/update")]
@@ -178,13 +183,17 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             po.Transaction.ModifiedDate = DateTime.Now;
             po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
 
+          
+
             foreach (var requestOrderItem in request.OrderItems)
             {
                 requestOrderItem.OrderId = po.Id;
                 requestOrderItem.ProductVariant = await _pvasyncRepository.GetByIdAsync(requestOrderItem.ProductVariantId);
                 requestOrderItem.TotalAmount = requestOrderItem.OrderQuantity * requestOrderItem.Price;
-                requestOrderItem.Unit = requestOrderItem.Unit;
             }
+
+            var oldOrderItems = new List<OrderItem>(po.PurchaseOrderProduct);
+           
             
             po.PurchaseOrderProduct.Clear();
             po.PurchaseOrderProduct = request.OrderItems;
@@ -193,9 +202,14 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
             po.Deadline = request.Deadline;
             
+            po.SupplierId = request.SupplierId;
             
             await _asyncRepository.UpdateAsync(po);
+
             await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
+            
+            foreach (var oldOrderItem in oldOrderItems)
+                await _orderItemAsyncRepository.DeleteAsync(oldOrderItem);
             
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
                 

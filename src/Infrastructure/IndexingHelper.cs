@@ -120,12 +120,11 @@ namespace Infrastructure
                     CreatedDate = product.Transaction.CreatedDate,
                     CreatedByName = (product.Transaction.CreatedBy != null) ? product.Transaction.CreatedBy.Fullname : "",
                     ModifiedByName =(product.Transaction.ModifiedBy != null) ? product.Transaction.ModifiedBy.Fullname : "",
+                    IsVariantType = product.IsVariantType,
                 };
                 
                 foreach (var productProductVariant in product.ProductVariants)
-                {
-                    index.VariantIds.Add(productProductVariant.Id);
-                }
+                    index.Variants.Add(ProductVariantSearchIndex(productProductVariant));
                 
                 index.FillSuggestion();
                 
