@@ -456,7 +456,7 @@ namespace Infrastructure.Data
             return _identityAndProductDbContext.GoodsIssueOrder.Where(go => go.Id == goodsIssueOrderId).
                 SingleOrDefault(po => po.Id == goodsIssueOrderId);
         }
-
+        
         public async Task<PagingOption<T>> ListAllAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default)
         {
             pagingOption.ResultList = await _identityAndProductDbContext.Set<T>().ToListAsync(cancellationToken);

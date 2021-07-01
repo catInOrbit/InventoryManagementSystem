@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210701150216_Creation")]
+    [Migration("20210701171716_Creation")]
     partial class Creation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -441,6 +441,22 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.ToTable("TransactionRecord");
                 });
 
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Brand", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("BrandDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BrandName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Brand");
+                });
+
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Category", b =>
                 {
                     b.Property<string>("Id")
@@ -507,8 +523,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("BrandName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("BrandId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CategoryId")
                         .HasColumnType("nvarchar(450)");
@@ -526,6 +542,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
 
                     b.HasIndex("CategoryId");
 
@@ -875,6 +893,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
                 {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Brand", "Brand")
+                        .WithMany("Products")
+                        .HasForeignKey("BrandId");
+
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId");
@@ -882,6 +904,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", "Transaction")
                         .WithMany()
                         .HasForeignKey("TransactionId");
+
+                    b.Navigation("Brand");
 
                     b.Navigation("Category");
 
@@ -977,6 +1001,11 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", b =>
                 {
                     b.Navigation("TransactionRecord");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Brand", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>

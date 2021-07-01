@@ -90,7 +90,7 @@ namespace Infrastructure
                         Quantity = productVariant.StorageQuantity,
                         ModifiedDate = productVariant.Transaction.TransactionRecord[^1].Date,
                         Sku = productVariant.Sku,
-                        Brand = product.BrandName,
+                        Brand = (product.Brand!=null) ? product.Brand.BrandName : "",
                     };
                     index.FillSuggestion();
                     
@@ -120,7 +120,7 @@ namespace Infrastructure
                     ProductId = product.Id,
                     Category = (product.Category != null) ? product.Category.CategoryName : "",
                     ModifiedDate = product.Transaction.TransactionRecord[^1].Date,
-                    Brand = product.BrandName,
+                    Brand = (product.Brand!=null) ? product.Brand.BrandName : "",
                     Strategy = product.SellingStrategy,
                     CreatedDate = product.Transaction.TransactionRecord[0].Date,
                     CreatedByName = (product.Transaction.ApplicationUser != null) ? product.Transaction.ApplicationUser.Fullname : "",
@@ -181,7 +181,7 @@ namespace Infrastructure
                         ModifiedDate = productVariant.Transaction.TransactionRecord[^1].Date,
                         Sku = productVariant.Sku,
                         Unit = productVariant.Unit,
-                        Brand = (productVariant.Product.BrandName != null) ? productVariant.Product.BrandName : "",
+                        Brand = (productVariant.Product.Brand != null) ? productVariant.Product.Brand.BrandName : "",
                         Price = productVariant.Price,
                         Strategy = (productVariant.Product.SellingStrategy!= null) ? productVariant.Product.SellingStrategy : "",
                         CreatedDate = productVariant.Transaction.TransactionRecord[0].Date,
@@ -199,5 +199,32 @@ namespace Infrastructure
             return index;
         }
 
+        public static BrandSearchIndex ProductVariantSearchIndex(Brand brand)
+        {
+            try
+            {
+                var brandSearchIndex = new BrandSearchIndex
+                {
+                    BrandId = brand.Id,
+                    BrandName = brand.BrandName,
+                };
+                
+                foreach (var brandProduct in brand.Products)
+                {
+                    brandSearchIndex.BrandProductIndexInfos.Add(new BrandProductIndexInfo
+                    {
+                        ProductId = brandProduct.Id,
+                        ProductName = brandProduct.Name
+                    });
+                }
+
+                return brandSearchIndex;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
     }
 }

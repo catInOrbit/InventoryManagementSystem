@@ -7,5 +7,6 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         public string Role { get; set; }
         public string RoleDescription { get; set; }
         public Dictionary<string, List<string>> PageClaimDictionary { get; set; }
+        // public List<PagePermissions> PagePermissions { get; set; } = new List<PagePermissions>();
     }
 }

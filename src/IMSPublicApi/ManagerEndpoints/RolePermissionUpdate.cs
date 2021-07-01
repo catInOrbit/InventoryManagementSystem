@@ -54,23 +54,38 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             var response = new RolePermissionResponse();
             var allRoles = _userRoleModificationService.RoleManager.Roles.ToList();
             UserInfo.OwnerID = userGet.Id.ToString();
-          
+            
 
             if(allRoles.Contains( new IdentityRole(request.Role.ToString())))
                 await _userRoleModificationService.RemoveAllClaimHelper(request.Role);
 
+            // foreach (var requestPagePermission in request.PagePermissions)
+            // {
+            //     foreach (var permission in requestPagePermission.Permissions)
+            //     {
+            //         var result =
+            //            await _userRoleModificationService.ClaimCreatingHelper(request.Role, request.RoleDescription, new Claim(requestPagePermission.PageName, permission));
+            //         if (!result.Succeeded)
+            //         {
+            //             response.Result = false;
+            //             response.Verbose = "Error editing role, please try again";
+            //             return Ok(response);
+            //         }
+            //     }
+            // }
             // page -- list<action>
             foreach (var pageClaimKeyValuePair in request.PageClaimDictionary)
             {
                 foreach (var pageClaim in pageClaimKeyValuePair.Value)
-                {
+                { 
                     var result =
                        await _userRoleModificationService.ClaimCreatingHelper(request.Role, request.RoleDescription, new Claim(pageClaimKeyValuePair.Key, pageClaim));
-
+            
                     if (!result.Succeeded)
                     {
                         response.Result = false;
                         response.Verbose = "Error editing role, please try again";
+                        return Ok(response);
                     }
                 }
             }

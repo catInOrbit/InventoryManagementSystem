@@ -15,7 +15,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         //TODO:JSON IGNORE NOT WORKING
         
         public string Name { get; set; }
-        public string BrandName { get; set; }
+        public string BrandId { get; set; }
+        public virtual Brand Brand { get; set; }
         public string CategoryId { get; set; }
         public string TransactionId { get; set; }
         [JsonIgnore]

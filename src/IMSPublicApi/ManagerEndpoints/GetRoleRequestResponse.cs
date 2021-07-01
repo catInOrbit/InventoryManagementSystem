@@ -38,6 +38,16 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
     {
         public IdentityRole Role { get; set; }
         public Dictionary<string, List<string>> PagePermissions { get; set; } = new Dictionary<string, List<string>>();
+        
+        
+        // private List<Dictionary<string, List<string>>> PagePermissions = new List<Dictionary<string, List<string>>>();
+        // public List<PagePermissions> PagePermissions { get; set; } = new List<PagePermissions>();
+    }
+
+    public class PagePermissions
+    {
+        public string PageName { get; set; }
+        public List<String> Permissions { get; set; }
     }
     
     public class PermissionInfo

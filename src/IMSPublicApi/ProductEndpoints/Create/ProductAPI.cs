@@ -54,7 +54,11 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             ApplicationCore.Entities.Products.Product product = new ApplicationCore.Entities.Products.Product
             {
                 Name = request.Name,
-                BrandName = request.BrandName,
+                Brand = new Brand
+                {
+                    BrandDescription = request.BrandDescription,
+                    BrandName = request.BrandName
+                },
                 CategoryId = request.CategoryId,
             };
 
@@ -142,14 +146,14 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
         ]
         public override async Task<ActionResult> HandleAsync(ProductUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-               if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Update))
-                return Unauthorized();
+           if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Update))
+            return Unauthorized();
 
-               var product = await _asyncRepository.GetByIdAsync(request.Id);
-
-
+           var product = await _asyncRepository.GetByIdAsync(request.Id);
+               
            product.Name = request.Name;
-           product.BrandName = request.BrandName;
+           product.Brand.BrandName = request.BrandName;
+           product.Brand.BrandDescription = request.BrandDescription;
            product.CategoryId = request.CategoryId;
             
            product.Transaction = TransactionUpdateHelper.UpdateTransaction(product.Transaction,UserTransactionActionType.Modify, product.Id,

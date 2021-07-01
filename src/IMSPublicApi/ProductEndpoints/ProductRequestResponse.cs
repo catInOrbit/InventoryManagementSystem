@@ -16,6 +16,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
 
         public string Name { get; set; }
         public string BrandName { get; set; }
+        public string BrandDescription { get; set; }
         public string CategoryId { get; set; }
         public bool IsVariantType { get; set; }
 
@@ -26,6 +27,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
     {
         public string Name { get; set; }
         public string BrandName { get; set; }
+        public string BrandDescription { get; set; }
+
         public string CategoryId { get; set; }
         public bool IsVariantType { get; set; }
 
@@ -134,6 +137,13 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
         public string Brand { get; set; }
     }
     
+    public class GetBrandRequest
+    {
+        public int CurrentPage { get; set; }
+        public int SizePerPage { get; set; }
+        
+    }
+    
     
     
     public class GetProductVariantSearchResponse : BaseSearchResponse<ProductVariantSearchIndex>
@@ -141,6 +151,10 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
     }
     
     public class GetProductSearchResponse : BaseSearchResponse<ProductSearchIndex>
+    {
+    }
+    
+    public class GetBrandResponse : BaseSearchResponse<Brand>
     {
     }
     

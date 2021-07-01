@@ -21,7 +21,7 @@ namespace Infrastructure.Identity.DbContexts
             
         }
 
-        // public DbSet<Brand> Brand { get; set; }
+        public DbSet<Brand> Brand { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<Supplier> Supplier { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrder { get; set; }

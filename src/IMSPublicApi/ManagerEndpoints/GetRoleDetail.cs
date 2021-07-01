@@ -54,6 +54,25 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
                 response.PagePermissions[claim.Type].Add(claim.Value);
              
             }
+            // Dictionary<string, List<string>> pagePermissions = new Dictionary<string, List<string>>();
+            // foreach (var claim in claims)
+            // {
+            //     if (!pagePermissions.ContainsKey(claim.Type))
+            //     {
+            //         pagePermissions.Add(claim.Type, new List<string>());
+            //     }
+            //     pagePermissions[claim.Type].Add(claim.Value);
+            // }
+            //
+            // foreach (var keyValuePair in pagePermissions)
+            // {
+            //     response.PagePermissions.Add(new PagePermissions
+            //     {
+            //         Permissions = keyValuePair.Value,
+            //         PageName = keyValuePair.Key
+            //     });
+            //
+            // }
             return Ok(response);
         }
     }

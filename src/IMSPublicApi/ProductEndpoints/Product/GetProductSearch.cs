@@ -8,6 +8,7 @@ using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
@@ -203,6 +204,43 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
 
             response.Paging = pagingOption;
            
+            return Ok(response);
+        }
+    }
+      
+    public class GetProductBrands : BaseAsyncEndpoint.WithRequest<GetBrandRequest>.WithResponse<GetBrandResponse>
+    {
+        private readonly IElasticClient _elasticClient;
+        private readonly IAuthorizationService _authorizationService;
+        private IAsyncRepository<Brand> _brandAsyncRepository;
+
+        public GetProductBrands(IAsyncRepository<Brand> brandAsyncRepository, IAuthorizationService authorizationService, IElasticClient elasticClient)
+        {
+            _brandAsyncRepository = brandAsyncRepository;
+            _authorizationService = authorizationService;
+            _elasticClient = elasticClient;
+        }
+
+        [HttpGet("api/product/brands")]
+        [SwaggerOperation(
+            Summary = "Get Brands of product",
+            Description = "Get Brands of product",
+            OperationId = "product.getbrands",
+            Tags = new[] { "ProductEndpoints" })
+        ]
+
+        public override async Task<ActionResult<GetBrandResponse>> HandleAsync([FromQuery]GetBrandRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Read))
+                return Unauthorized();
+            var response = new GetBrandResponse();
+
+            PagingOption<Brand> pagingOption =
+                new PagingOption<Brand>(request.CurrentPage, request.SizePerPage);
+
+            response.Paging = await 
+                _brandAsyncRepository.ListAllAsync(pagingOption, cancellationToken);
+
             return Ok(response);
         }
     }
