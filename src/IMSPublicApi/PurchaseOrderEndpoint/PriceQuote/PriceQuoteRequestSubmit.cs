@@ -62,8 +62,10 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             
             var po = _asyncRepository.GetPurchaseOrderByNumber(request.OrderNumber);
             po.PurchaseOrderStatus = PurchaseOrderStatusType.POCreated;
-            po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
-            po.Transaction.ModifiedDate = DateTime.Now;
+            
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit, po.Id,
+                (await _userAuthentication.GetCurrentSessionUser()).Id);
+
             await _asyncRepository.UpdateAsync(po);
             
             var subject = "REQUEST FOR QUOTATION-" + DateTime.Now.ToString("dd/MM//yyyy") + " FROM IMS Inventory";

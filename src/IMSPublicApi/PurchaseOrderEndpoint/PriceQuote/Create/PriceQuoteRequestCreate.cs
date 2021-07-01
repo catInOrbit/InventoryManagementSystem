@@ -54,17 +54,10 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote.C
             
             var response = new PQCreateResponse();
             var po = await _asyncRepository.GetByIdAsync(request.Id);
-            var transaction = new Transaction
-            {
-                Name = "Created Price Quote " + po.Id,
-                CreatedDate = DateTime.Now,
-                Type = TransactionType.PriceQuote,
-                CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
-                TransactionStatus = true
-            };
-
+            
+            po.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Purchase, po.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
+            
             po.PurchaseOrderStatus = PurchaseOrderStatusType.PQCreated;
-            po.Transaction = transaction;
             response.PurchaseOrderPQ = po;
             await _asyncRepository.UpdateAsync(po);
             await _indexAsyncRepository.ElasticSaveSingleAsync(false,IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);

@@ -51,15 +51,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
                 SupplierName = request.SupplierName
             };
             
-            supplier.Transaction = new Transaction
-            {
-                Name = "Created New Supplier: " + supplier.Id,
-
-                CreatedDate = DateTime.Now,
-                Type = TransactionType.Supplier,
-                CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
-                TransactionStatus = true
-            };
+            supplier.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Supplier, supplier.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
             await _supplierAsyncRepository.AddAsync(supplier);
             await _supplierAsyncRepository.ElasticSaveSingleAsync(true, supplier, ElasticIndexConstant.SUPPLIERS);
 
@@ -103,8 +95,10 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             
             var supplier = await _supplierAsyncRepository.GetByIdAsync(request.SupplierId);
 
-            supplier.Transaction.ModifiedDate = DateTime.Now;
-            supplier.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+                                            
+            supplier.Transaction = TransactionUpdateHelper.UpdateTransaction(supplier.Transaction,UserTransactionActionType.Modify, supplier.Id,
+                (await _userAuthentication.GetCurrentSessionUser()).Id);
+
             supplier.Transaction.Name = "Updated Supplier: " + supplier.Id;
 
             supplier.Description = request.Description;

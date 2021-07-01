@@ -62,14 +62,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 var response = new GiResponse();
                 
                 var gio = _asyncRepository.GetGoodsIssueOrderByNumber(request.IssueNumber);
-                gio.Transaction = new Transaction
-                {
-                    Name = "Created Goods Issue Order" + gio.Id,
-                    CreatedDate = DateTime.Now,
-                    Type = TransactionType.GoodsIssue,
-                    CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
-                    TransactionStatus = true
-                };
+                gio.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.GoodsIssue, gio.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
                 
                 gio.GoodsIssueType = GoodsIssueStatusType.Packing;
                 response.GoodsIssueOrder = gio;
@@ -148,8 +141,8 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                     gio.GoodsIssueType = GoodsIssueStatusType.Completed;
                     break;
             }
-            gio.Transaction.ModifiedDate = DateTime.Now;
-            gio.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            gio.Transaction = TransactionUpdateHelper.UpdateTransaction(gio.Transaction, UserTransactionActionType.Modify, gio.Id,
+                (await _userAuthentication.GetCurrentSessionUser()).Id);
             
             foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
             {

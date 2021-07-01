@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
@@ -22,7 +22,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public string Email { get; set; }
 
         public string TransactionId { get; set; }
-        
         [JsonIgnore]
         public virtual Transaction  Transaction{ get; set; }
         //IBaseAddress

@@ -44,15 +44,7 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
                 return Unauthorized();
             
             var category = request.Category;
-            category.Transaction = new Transaction
-            {
-                Name = "Created Category " + category.Id,
-                CreatedDate = DateTime.Now,
-                Type = TransactionType.Category,
-                CreatedById = (await _userSession.GetCurrentSessionUser()).Id,
-                TransactionStatus = true
-            };
-            
+            category.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Category, category.Id, (await _userSession.GetCurrentSessionUser()).Id);
             
             await _categoryAsyncRepository.AddAsync(request.Category);
             await _categoryAsyncRepository.ElasticSaveSingleAsync(true, request.Category,
@@ -98,10 +90,9 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
 
                 return NotFound(response);
             }
-            
-            
-            category.Transaction.ModifiedDate = DateTime.Now;
-            category.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+
+            category.Transaction = TransactionUpdateHelper.UpdateTransaction(category.Transaction,UserTransactionActionType.Modify ,category.Id,
+                (await _userAuthentication.GetCurrentSessionUser()).Id);
             
             category.CategoryName = request.CategoryUpdateInfo.CategoryName;
             category.CategoryDescription = request.CategoryUpdateInfo.CategoryDescription;

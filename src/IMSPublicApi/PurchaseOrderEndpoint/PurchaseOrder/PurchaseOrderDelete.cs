@@ -46,8 +46,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 return Unauthorized();
 
             var po = await _asyncRepository.GetByIdAsync(request.Id);
-            po.Transaction.ModifiedDate = DateTime.Now;
-            po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Reject, po.Id,
+                (await _userAuthentication.GetCurrentSessionUser()).Id);
             po.Transaction.TransactionStatus = false;
 
             if((int)po.PurchaseOrderStatus == 0)

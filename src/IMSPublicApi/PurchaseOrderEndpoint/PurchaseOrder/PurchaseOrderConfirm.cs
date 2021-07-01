@@ -53,6 +53,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             await _purchaseOrderRepos.UpdateAsync(po);
             await _poSearchRepos.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
 
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Confirm, po.Id,
+                (await _userAuthentication.GetCurrentSessionUser()).Id);
+            
             
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
                 

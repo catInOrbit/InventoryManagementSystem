@@ -49,6 +49,10 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
 
             var stockTakeOrder = await _asyncRepository.GetByIdAsync(request.Id);
             stockTakeOrder.StockTakeOrderType = StockTakeOrderType.Completed;
+            stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Submit, stockTakeOrder.Id,
+                (await _userAuthentication.GetCurrentSessionUser()).Id);
+            
+            
             await _asyncRepository.UpdateAsync(stockTakeOrder);
             
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
@@ -122,8 +126,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
             }
             
             storder.StockTakeOrderType = StockTakeOrderType.Progressing;
-            storder.Transaction.ModifiedDate = DateTime.Now;
-            storder.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            storder.Transaction = TransactionUpdateHelper.UpdateTransaction(storder.Transaction,UserTransactionActionType.Modify, storder.Id,
+                (await _userAuthentication.GetCurrentSessionUser()).Id);
             await _asyncRepository.UpdateAsync(storder);
             
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
@@ -183,8 +187,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              }
 
              stockTakeOrder.StockTakeOrderType = StockTakeOrderType.Progressing;
-             stockTakeOrder.Transaction.ModifiedDate = DateTime.Now;
-             stockTakeOrder.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+             stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Modify, stockTakeOrder.Id,
+                 (await _userAuthentication.GetCurrentSessionUser()).Id);
              await _stAsyncRepository.UpdateAsync(stockTakeOrder);
              response.StockTakeOrder = stockTakeOrder;
              
@@ -228,16 +232,9 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
 
              var response = new STCreateItemResponse();
 
-             var sto = new StockTakeOrder
-             {
-                 Transaction = new Transaction
-                 {
-                     CreatedDate = DateTime.Now,
-                     Type = TransactionType.StockTake,
-                     CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
-                     TransactionStatus = true
-                 }
-             };
+             var sto = new StockTakeOrder();
+           
+             sto.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.StockTake, sto.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
 
              sto.Transaction.Name = "Created StockTake " + sto.Id;
 

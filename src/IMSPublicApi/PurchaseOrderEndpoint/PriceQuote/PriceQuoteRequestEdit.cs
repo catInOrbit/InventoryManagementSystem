@@ -8,6 +8,7 @@ using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
@@ -52,8 +53,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 return Unauthorized();
 
             var po = _asyncRepository.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
-            po.Transaction.ModifiedDate = DateTime.Now;
-            po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction, UserTransactionActionType.Modify, po.Id,
+                (await _userAuthentication.GetCurrentSessionUser()).Id);
             
             po.PurchaseOrderProduct.Clear();
             po.TotalOrderAmount = 0;

@@ -13,6 +13,10 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public string ProductVariantId { get; set; }
         [JsonIgnore]
         public virtual ProductVariant  ProductVariant { get; set; }
+
+        [JsonIgnore]
+        public virtual Supplier Supplier { get; set; }
+        public string SupplierId { get; set; }
         public decimal TotalPrice { get; set; }
         public int Quantity { get; set; }
         public DateTime ImportedDate { get; set; }

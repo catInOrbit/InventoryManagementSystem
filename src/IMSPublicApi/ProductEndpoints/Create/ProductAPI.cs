@@ -58,14 +58,10 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                 CategoryId = request.CategoryId,
             };
 
-            product.Transaction = new Transaction
-            {
-                Name = "Created Product " + product.Id,
-                CreatedDate = DateTime.Now,
-                Type = TransactionType.Product,
-                CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
-                TransactionStatus = true
-            };
+           
+            product.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Product,
+                product.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
+
 
             product.TransactionId = product.Transaction.Id;
             product.IsVariantType = request.IsVariantType;
@@ -81,14 +77,10 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     Barcode = productVairantRequestInfo.Barcode,
                     Price = productVairantRequestInfo.Price,
                     Cost = productVairantRequestInfo.SalePrice,
-                    Transaction = new Transaction
-                    {
-                        CreatedDate = DateTime.Now,
-                        Type = TransactionType.ProductVariant,
-                        CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
-                        TransactionStatus = true
-                    }
+                    
                 };
+                productVariant.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.ProductVariant, productVariant.Id, 
+                    (await _userAuthentication.GetCurrentSessionUser()).Id);
 
                 var packages = await _asyncRepository.GetPackagesFromProductVariantId(productVariant.Id);
 
@@ -160,8 +152,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
            product.BrandName = request.BrandName;
            product.CategoryId = request.CategoryId;
             
-            product.Transaction.ModifiedDate = DateTime.Now;
-            product.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+           product.Transaction = TransactionUpdateHelper.UpdateTransaction(product.Transaction,UserTransactionActionType.Modify, product.Id,
+                (await _userAuthentication.GetCurrentSessionUser()).Id);
 
             product.TransactionId = product.Transaction.Id;
             product.IsVariantType = request.IsVariantType;
@@ -198,14 +190,10 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                         Price = productVairantRequestInfo.Price,
                         Cost = productVairantRequestInfo.SalePrice,
                         ProductId = product.Id,
-                        Transaction = new Transaction
-                        {
-                            CreatedDate = DateTime.Now,
-                            Type = TransactionType.ProductVariant,
-                            CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
-                            TransactionStatus = true
-                        }
                     };
+                    
+                    productVariant.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.ProductVariant, productVariant.Id, 
+                        (await _userAuthentication.GetCurrentSessionUser()).Id);
                         
                     var packages = await _asyncRepository.GetPackagesFromProductVariantId(productVariant.Id);
 
@@ -230,15 +218,12 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     Barcode = productVairantUpdateRequestInfo.Barcode,
                     Price = productVairantUpdateRequestInfo.Price,
                     Cost = productVairantUpdateRequestInfo.SalePrice,
-                    ProductId = product.Id, 
-                    Transaction = new Transaction
-                    {
-                        CreatedDate = DateTime.Now,
-                        Type = TransactionType.ProductVariant,
-                        CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
-                        TransactionStatus = true
-                    }
+                    ProductId = product.Id
                 };
+                
+                productVariant.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.ProductVariant, productVariant.Id, 
+                    (await _userAuthentication.GetCurrentSessionUser()).Id);
+
                 
                 var packages = await _asyncRepository.GetPackagesFromProductVariantId(productVariant.Id);
 

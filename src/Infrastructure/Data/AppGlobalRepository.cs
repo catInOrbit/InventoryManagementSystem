@@ -42,7 +42,7 @@ namespace Infrastructure.Data
         {
             var products =  await _identityAndProductDbContext.Product.
                 Where(product => product.Transaction.TransactionStatus!=false && product.Transaction.Type!=TransactionType.Deleted).
-                OrderByDescending(product=>product.Transaction.CreatedDate).ToListAsync(cancellationToken);
+                OrderByDescending(product=>product.Transaction.TransactionRecord[^1].Date).ToListAsync(cancellationToken);
             
             foreach (var product in products)
             {
@@ -69,7 +69,7 @@ namespace Infrastructure.Data
         public async Task<PagingOption<ProductVariantSearchIndex>> GetProductVariantForELIndexAsync(PagingOption<ProductVariantSearchIndex> pagingOption, CancellationToken cancellationToken = default)
         {
             var variants =  await _identityAndProductDbContext.ProductVariant.
-                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderByDescending(e=>e.Transaction.CreatedDate).ToListAsync(cancellationToken);
+                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderByDescending(e=>e.Transaction.TransactionRecord[-1].Date).ToListAsync(cancellationToken);
             foreach (var productVariant in variants)
             {
                 try
@@ -93,7 +93,7 @@ namespace Infrastructure.Data
         {
 
             var pos = await _identityAndProductDbContext.PurchaseOrder.
-                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderByDescending(e=>e.Transaction.CreatedDate).ToListAsync();
+                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderByDescending(e=>e.Transaction.TransactionRecord[^1].Date).ToListAsync();
             foreach (var po in pos)
             {
                 PurchaseOrderSearchIndex index; 
@@ -353,7 +353,7 @@ namespace Infrastructure.Data
         {
             
             var ros = await _identityAndProductDbContext.Set<GoodsReceiptOrder>().
-                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderByDescending(e=>e.Transaction.CreatedDate).ToListAsync(cancellationToken);
+                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderByDescending(e=>e.Transaction.TransactionRecord[^1].Date).ToListAsync(cancellationToken);
 
             foreach (var ro in ros)
             {
@@ -377,7 +377,7 @@ namespace Infrastructure.Data
         {
             var gis = await _identityAndProductDbContext.Set<GoodsIssueOrder>().
                 Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).
-                OrderByDescending(e=>e.Transaction.CreatedDate).ToListAsync(cancellationToken);
+                OrderByDescending(e=>e.Transaction.TransactionRecord[^1].Date).ToListAsync(cancellationToken);
            
             foreach (var gi in gis)
             {
@@ -401,7 +401,7 @@ namespace Infrastructure.Data
         {
             
             var sts = await _identityAndProductDbContext.Set<StockTakeOrder>().
-                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderByDescending(e=>e.Transaction.CreatedDate).ToListAsync(cancellationToken);
+                Where(variant => variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).OrderByDescending(e=>e.Transaction.TransactionRecord[^1].Date).ToListAsync(cancellationToken);
             
             foreach (var st in sts)
             {
@@ -411,10 +411,10 @@ namespace Infrastructure.Data
                     index = new StockTakeSearchIndex
                     {
                         Id = st.Id,
-                        CreatedByName = st.Transaction.CreatedBy.Fullname,
+                        CreatedByName = st.Transaction.ApplicationUser.Fullname,
                         Status = st.StockTakeOrderType.ToString(),
-                        CreatedDate = st.Transaction.CreatedDate,
-                        ModifiedDate = st.Transaction.ModifiedDate
+                        CreatedDate = st.Transaction.TransactionRecord[0].Date,
+                        ModifiedDate = st.Transaction.TransactionRecord[^1].Date
                     };
                     pagingOption.ResultList.Add(index);
                 }
@@ -482,7 +482,7 @@ namespace Infrastructure.Data
                     if (packageList.Count == 0)
                     {
                         stohReport.DoesNotHavePackageInfo = true;
-                        stohReport.CreatedDate = productVariant.Transaction.CreatedDate;
+                        stohReport.CreatedDate = productVariant.Transaction.TransactionRecord[0].Date;
                         stohReport.StorageQuantity = productVariant.StorageQuantity;
                         stohReport.Value = productVariant.Price * productVariant.StorageQuantity;
                     }
@@ -517,13 +517,13 @@ namespace Infrastructure.Data
         public async Task<PagingOption<StockTakeReport>> GenerateStockTakeReport(PagingOption<StockTakeReport> pagingOption, CancellationToken cancellationToken = default)
         {
             var list = await _identityAndProductDbContext.Set<StockTakeItem>().Skip(pagingOption.SkipValue)
-                .Take(pagingOption.SizePerPage).OrderByDescending(item =>  item.StockTakeOrder.Transaction.CreatedDate).ToListAsync();
+                .Take(pagingOption.SizePerPage).OrderByDescending(item =>  item.StockTakeOrder.Transaction.TransactionRecord[^1].Date).ToListAsync();
 
             foreach (var stockTakeItem in list)
             {
                 var stockTakeReport = new StockTakeReport()
                 {
-                    StockTakeDate = stockTakeItem.StockTakeOrder.Transaction.CreatedDate,
+                    StockTakeDate = stockTakeItem.StockTakeOrder.Transaction.TransactionRecord[0].Date,
                     ProductName = stockTakeItem.ProductVariant.Name,
                     StorageQuantity = stockTakeItem.ProductVariant.StorageQuantity,
                     ActualQuantity = stockTakeItem.ActualQuantity,

@@ -50,15 +50,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
               if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.REQUISITION, UserOperations.Create))
                  return Unauthorized();
               var po = new ApplicationCore.Entities.Orders.PurchaseOrder();
-              po.Transaction = new Transaction
-              {
-                  Name = "Created Requisition" + po.Id,
-
-                  CreatedDate = DateTime.Now,
-                  Type = TransactionType.Requisition,
-                  CreatedById = (await _userAuthentication.GetCurrentSessionUser()).Id,
-                  TransactionStatus = true
-              };
+              po.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Requisition, po.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
 
               po.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionCreated;
               po.SupplierId = request.SupplierId;
@@ -124,8 +116,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             
             var po = await _asyncRepository.GetByIdAsync(request.Id);
 
-            po.Transaction.ModifiedDate = DateTime.Now;
-            po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit, po.Id,
+                (await _userAuthentication.GetCurrentSessionUser()).Id);
+
             po.PurchaseOrderStatus = PurchaseOrderStatusType.PQCreated;
 
             await _asyncRepository.UpdateAsync(po);
@@ -180,8 +173,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
                 return Unauthorized();
                 
             var po = await _asyncRepository.GetByIdAsync(request.RequisitionId);
-            po.Transaction.ModifiedDate = DateTime.Now;
-            po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            
 
           
 
@@ -198,8 +190,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             po.PurchaseOrderProduct.Clear();
             po.PurchaseOrderProduct = request.OrderItems;
             
-            po.Transaction.ModifiedDate = DateTime.Now;
-            po.Transaction.ModifiedById = (await _userAuthentication.GetCurrentSessionUser()).Id;
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Modify, po.Id,
+                (await _userAuthentication.GetCurrentSessionUser()).Id);
             po.Deadline = request.Deadline;
             
             po.SupplierId = request.SupplierId;

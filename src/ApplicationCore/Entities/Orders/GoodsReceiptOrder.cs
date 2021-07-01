@@ -19,15 +19,13 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public virtual PurchaseOrder PurchaseOrder { get; set; }
         public string StorageLocationReceipt { get; set; }
         public DateTime ReceivedDate { get; set; }
-        
-        [JsonIgnore]
         public string SupplierId { get; set; }
-        public virtual  Supplier Supplier { get; set; }
+        public virtual Supplier Supplier { get; set; }
         
         public string SupplierInvoice { get; set; }
         public virtual List<GoodsReceiptOrderItem> ReceivedOrderItems { get; set; } = new List<GoodsReceiptOrderItem>();
-        [JsonIgnore]
         public string TransactionId { get; set; }
+        [JsonIgnore]
         public virtual Transaction Transaction { get; set; }
         
     }
