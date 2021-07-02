@@ -7,6 +7,6 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
     public class RoleDeleteRequest : BaseRequest
     {
-        public string Role { get; set; }
+        public string RoleId { get; set; }
     }
 }

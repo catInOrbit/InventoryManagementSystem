@@ -11,11 +11,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
             Id = Guid.NewGuid().ToString() + "-ignore-id";
         }
 
-        public bool ShouldSerializeId()
-        {
-            return false;
-        }
-        
         public string  TransactionId { get; set; }
 
         public string CreatedByName { get; set; }
@@ -54,16 +49,13 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
     
     public class ProductSearchIndex : BaseEntity
     {
+        public override string Id { get; set; }
+
         public ProductSearchIndex()
         {
             Id = Guid.NewGuid().ToString() + "-ignore-id";
         }
 
-        public bool ShouldSerializeId()
-        {
-            return false;
-        }
-        
         public string  TransactionId { get; set; }
 
         public string Name { get; set; }
@@ -74,7 +66,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string Brand { get; set; }
         public string ProductId { get; set; }
         public bool  IsVariantType { get; set; }
-        public List<ProductVariantSearchIndex> Variants { get; set; } = new List<ProductVariantSearchIndex>();
+        public List<string> VariantIds { get; set; } = new List<string>();
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public CompletionField Suggest { get; set; }

@@ -58,10 +58,12 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             IdentityResult result;
             if (isAuthorized.Succeeded)
             {
-                result = await _userRoleModificationService.RoleDeletingHelper(request.Role);
+                var role =  await _userRoleModificationService.RoleManager.FindByIdAsync(request.RoleId);
+                result = await _userRoleModificationService.RoleDeletingHelper(role);
+                
                 response.Result = true;
                 response.Verbose = "Success";
-                response.Role = request.Role;
+                response.Role = role.Name;
                 return Ok(response);
             }
 

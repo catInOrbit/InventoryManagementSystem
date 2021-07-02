@@ -121,7 +121,7 @@ namespace Infrastructure.Services
             return result;
         }
 
-        public async Task<IdentityResult> RoleDeletingHelper(string role)
+        public async Task<IdentityResult> RoleDeletingHelper(IdentityRole role)
         {
             IdentityResult result = null;
             // var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
@@ -131,14 +131,14 @@ namespace Infrastructure.Services
                 throw new Exception("roleManager null");
             }
 
-            if (await RoleManager.RoleExistsAsync(role))
+            if (await RoleManager.RoleExistsAsync(role.Name))
             {
                 await RemoveAllClaimHelper(role);
                 var allRoles =  RoleManager.Roles.ToList();
 
                 foreach (var roleToDelete in allRoles)
                 {
-                    if (roleToDelete.Name == role)
+                    if (roleToDelete.Name == role.Name)
                     {
                         result = await RoleManager.DeleteAsync(roleToDelete);
                     }
@@ -148,7 +148,7 @@ namespace Infrastructure.Services
             return result;
         }
 
-        public async Task<IdentityResult> RemoveAllClaimHelper(string role)
+        public async Task<IdentityResult> RemoveAllClaimHelper(IdentityRole role)
         {
             IdentityResult result = new IdentityResult();
             // var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
@@ -156,7 +156,7 @@ namespace Infrastructure.Services
             if (RoleManager == null)
                 throw new Exception("roleManager null");
 
-            var getRole = await RoleManager.FindByNameAsync(role);
+            var getRole = role;
             var roleClaims = await RoleManager.GetClaimsAsync(getRole);
 
             foreach (var roleClaim in roleClaims)
@@ -164,7 +164,7 @@ namespace Infrastructure.Services
             return result;
         }
 
-        public async Task<IdentityResult> ClaimCreatingHelper(string roleName, string roleDescription, Claim authorizationOperation)
+        public async Task<IdentityResult> ClaimCreatingHelper(string roleName, Claim authorizationOperation)
         {
             var getRole = await RoleManager.FindByNameAsync(roleName);
             IdentityResult result = new IdentityResult();

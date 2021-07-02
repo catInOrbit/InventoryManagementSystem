@@ -163,7 +163,6 @@ namespace Infrastructure
                     Strategy = product.SellingStrategy,
                     CreatedDate =(product.Transaction.TransactionRecord.Count > 0) ? product.Transaction.TransactionRecord[0].Date : DateTime.MinValue,
                     
-                    
                     IsVariantType = product.IsVariantType,
                 };
 
@@ -188,7 +187,7 @@ namespace Infrastructure
                 
                 
                 foreach (var productProductVariant in product.ProductVariants)
-                    index.Variants.Add(ProductVariantSearchIndex(productProductVariant));
+                    index.VariantIds.Add(productProductVariant.Id);
                 
                 index.FillSuggestion();
                 
