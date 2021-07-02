@@ -13,6 +13,7 @@ namespace Infrastructure
     {
         public static PurchaseOrderSearchIndex PurchaseOrderSearchIndex(PurchaseOrder po)
         {
+        
             var index = new PurchaseOrderSearchIndex
             {
                 TransactionId = (po.Transaction!=null) ? po.Transaction.Id : "",
@@ -25,19 +26,43 @@ namespace Infrastructure
                 ModifiedDate = (po.Transaction.TransactionRecord.Count > 0) ? po.Transaction.TransactionRecord[^1].Date : DateTime.MinValue,
                 DeliveryDate = po.DeliveryDate,
                 TotalPrice = (po.TotalOrderAmount != null) ? po.TotalOrderAmount : 0,
-                ConfirmedByName = (po.Transaction.TransactionRecord.Count > 0) ? po.Transaction.TransactionRecord.
-                    FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Confirm).ApplicationUser
-                    .Fullname : "",
+                
+             
                 SupplierEmail = (po.Supplier != null) ? po.Supplier.Email : "",
                 SupplierId = (po.Supplier != null) ? po.Supplier.Id : "",
                 SupplierPhone = (po.Supplier != null) ? po.Supplier.PhoneNumber : "",
-                CanceledByName =(po.Transaction.TransactionRecord.Count > 0) ? po.Transaction.TransactionRecord.
-                    FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Reject).ApplicationUser
-                    .Fullname: "",
-                CreatedByName = (po.Transaction.TransactionRecord.Count > 0) ? po.Transaction.TransactionRecord.
-                    FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create).ApplicationUser
-                    .Fullname: "",
+          
             };
+
+            index.CanceledByName =
+                (po.Transaction.TransactionRecord.Count > 0 &&
+                 po.Transaction.TransactionRecord.FirstOrDefault(t =>
+                     t.UserTransactionActionType == UserTransactionActionType.Reject) != null)
+                    ? po.Transaction.TransactionRecord
+                        .FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Reject)
+                        .ApplicationUser
+                        .Fullname
+                    : "";
+            index.CreatedByName =
+                (po.Transaction.TransactionRecord.Count > 0 &&
+                 po.Transaction.TransactionRecord.FirstOrDefault(t =>
+                     t.UserTransactionActionType == UserTransactionActionType.Create) != null)
+                    ? po.Transaction.TransactionRecord
+                        .FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create)
+                        .ApplicationUser
+                        .Fullname
+                    : "";
+
+            index.ConfirmedByName =
+                (po.Transaction.TransactionRecord.Count > 0 &&
+                 po.Transaction.TransactionRecord.FirstOrDefault(t =>
+                     t.UserTransactionActionType == UserTransactionActionType.Confirm) != null)
+                    ? po.Transaction.TransactionRecord
+                        .FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Confirm)
+                        .ApplicationUser
+                        .Fullname
+                    : "";
+            
             
             index.FillSuggestion();
             return index;
@@ -52,7 +77,8 @@ namespace Infrastructure
                 Id = ro.Id,
                 PurchaseOrderId = (ro.PurchaseOrderId!=null) ? ro.PurchaseOrderId : "",
                 SupplierName = (ro.Supplier!=null) ? ro.Supplier.SupplierName : "",
-                CreatedBy = (ro.Transaction.TransactionRecord.Count > 0) ? ro.Transaction.TransactionRecord.
+                CreatedBy =  (ro.Transaction.TransactionRecord.Count > 0 && ro.Transaction.TransactionRecord.
+                    FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create) != null) ? ro.Transaction.TransactionRecord.
                     FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create).ApplicationUser
                     .Fullname: "",
                 CreatedDate = (ro.Transaction.TransactionRecord.Count > 0) ? ro.Transaction.TransactionRecord[0].Date : DateTime.MinValue
@@ -69,7 +95,8 @@ namespace Infrastructure
                 TransactionId = (gi.Transaction!=null) ? gi.Transaction.Id : "",
                 Id = gi.Id,
                 Status = gi.GoodsIssueType.ToString(),
-                CreatedByName = (gi.Transaction.TransactionRecord.Count > 0) ? gi.Transaction.TransactionRecord.
+                CreatedByName = (gi.Transaction.TransactionRecord.Count > 0 && gi.Transaction.TransactionRecord.
+                    FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create) != null)  ? gi.Transaction.TransactionRecord.
                     FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create).ApplicationUser
                     .Fullname: "",
                 CreatedDate =  (gi.Transaction.TransactionRecord.Count > 0) ? gi.Transaction.TransactionRecord[0].Date : DateTime.MinValue,
@@ -120,6 +147,7 @@ namespace Infrastructure
         public static ProductSearchIndex ProductSearchIndex(Product product)
         {
             ProductSearchIndex index = null; 
+        
             try
             {
                 Debug.Assert(product.Transaction != null, "product.Transaction != null");
@@ -134,14 +162,30 @@ namespace Infrastructure
                     Brand = (product.Brand!=null) ? product.Brand.BrandName : "",
                     Strategy = product.SellingStrategy,
                     CreatedDate =(product.Transaction.TransactionRecord.Count > 0) ? product.Transaction.TransactionRecord[0].Date : DateTime.MinValue,
-                    CreatedByName = (product.Transaction.TransactionRecord.Count > 0) ? product.Transaction.TransactionRecord.
-                        FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create).ApplicationUser
-                        .Fullname: "",
-                    ModifiedByName =(product.Transaction.TransactionRecord.Count > 0) ? product.Transaction.TransactionRecord.
-                        FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Modify).ApplicationUser
-                        .Fullname: "",
+                    
+                    
                     IsVariantType = product.IsVariantType,
                 };
+
+
+                index.CreatedByName =
+                    (product.Transaction.TransactionRecord.Count > 0 &&
+                     product.Transaction.TransactionRecord.FirstOrDefault(t =>
+                         t.UserTransactionActionType == UserTransactionActionType.Create) != null)
+                        ? product.Transaction.TransactionRecord
+                            .FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create)
+                            .ApplicationUser
+                            .Fullname
+                        : "";
+                index.ModifiedByName = (product.Transaction.TransactionRecord.Count > 0 &&
+                                        product.Transaction.TransactionRecord.FirstOrDefault(t =>
+                                            t.UserTransactionActionType == UserTransactionActionType.Modify) != null)
+                    ? product.Transaction.TransactionRecord
+                        .FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Modify)
+                        .ApplicationUser
+                        .Fullname
+                    : "";
+                
                 
                 foreach (var productProductVariant in product.ProductVariants)
                     index.Variants.Add(ProductVariantSearchIndex(productProductVariant));
@@ -170,7 +214,8 @@ namespace Infrastructure
                     Status = stockTake.StockTakeOrderType.ToString(),
                     CreatedDate = stockTake.Transaction.TransactionRecord[0].Date,
                     ModifiedDate = stockTake.Transaction.TransactionRecord[^1].Date,
-                    CreatedByName =(stockTake.Transaction.TransactionRecord.Count > 0) ? stockTake.Transaction.TransactionRecord.
+                    CreatedByName =(stockTake.Transaction.TransactionRecord.Count > 0 && stockTake.Transaction.TransactionRecord.
+                        FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create) != null) ? stockTake.Transaction.TransactionRecord.
                         FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Modify).ApplicationUser
                         .Fullname: "",
                 };
@@ -184,30 +229,30 @@ namespace Infrastructure
                 try
                 {
                     Debug.Assert(productVariant.Transaction != null, "productVariant.Transaction != null");
-                    index = new ProductVariantSearchIndex
-                    {
-                        TransactionId = (productVariant.Transaction!=null) ? productVariant.TransactionId : "",
-                        Id = productVariant.Id,
-                        Name = productVariant.Name,
-                        ProductId = productVariant.ProductId,
-                        ProductVariantId = productVariant.Id,
-                        Category = (productVariant.Product.Category.CategoryName != null) ? productVariant.Product.Category.CategoryName : "",
-                        Quantity = productVariant.StorageQuantity,
+                    index = new ProductVariantSearchIndex();
+                    index.TransactionId = (productVariant.Transaction != null) ? productVariant.TransactionId : "";
+                        index.Id = productVariant.Id;
+                        index.Name = productVariant.Name;
+                        index.ProductId = productVariant.ProductId;
+                        index.ProductVariantId = productVariant.Id;
+                        index.Category = (productVariant.Product.Category.CategoryName != null) ? productVariant.Product.Category.CategoryName : "";
+                        index.Quantity = productVariant.StorageQuantity;
                         // ModifiedDate = (productVariant.Transaction.TransactionRecord.Count > 0) ? productVariant.Transaction.TransactionRecord[^1].Date : DateTime.MinValue,
-                        Sku = productVariant.Sku,
-                        Unit = productVariant.Unit,
-                        Brand = (productVariant.Product.Brand != null) ? productVariant.Product.Brand.BrandName : "",
-                        Price = productVariant.Price,
-                        Strategy = (productVariant.Product.SellingStrategy!= null) ? productVariant.Product.SellingStrategy : "",
+                        index.Sku = productVariant.Sku;
+                        index.Unit = productVariant.Unit;
+                        index.Brand = (productVariant.Product.Brand != null) ? productVariant.Product.Brand.BrandName : "";
+                        index.Price = productVariant.Price;
+                        index.Strategy = (productVariant.Product.SellingStrategy!= null) ? productVariant.Product.SellingStrategy : "";
                         // CreatedDate =  (productVariant.Transaction.TransactionRecord.Count > 0) ? productVariant.Transaction.TransactionRecord[0].Date : DateTime.MinValue,
-                        CreatedByName =(productVariant.Transaction.TransactionRecord.Count > 0) ? productVariant.Transaction.TransactionRecord.
+                        index.CreatedByName =(productVariant.Transaction.TransactionRecord.Count > 0 && productVariant.Transaction.TransactionRecord.
+                            FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create) != null) ? productVariant.Transaction.TransactionRecord.
                             FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create).ApplicationUser
-                            .Fullname: "",
-                        ModifiedByName = (productVariant.Transaction.TransactionRecord.Count > 0) ? productVariant.Transaction.TransactionRecord.
+                            .Fullname : "";
+                        index.ModifiedByName = (productVariant.Transaction.TransactionRecord.Count > 0 && productVariant.Transaction.TransactionRecord.
+                            FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Modify) != null) ? productVariant.Transaction.TransactionRecord.
                             FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Modify).ApplicationUser
-                            .Fullname: "",
+                            .Fullname: "";
                         // SupplierName = productVariant.Packages[^1].Supplier.SupplierName
-                    };
 
                
                     index.ModifiedDate = (productVariant.Transaction.TransactionRecord.Count > 0)
