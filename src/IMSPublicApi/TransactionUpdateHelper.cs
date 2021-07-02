@@ -13,11 +13,8 @@ namespace InventoryManagementSystem.PublicApi
 
             var transaction = new Transaction
             {
-                Name = actionName,
                 Type = transactionType,
-                ApplicationUserId = userId,
                 TransactionStatus = true,
-                UserTransactionActionType = UserTransactionActionType.Create,
                 TransactionRecord = new List<TransactionRecord>()
             };
             
@@ -27,7 +24,10 @@ namespace InventoryManagementSystem.PublicApi
                 Date = DateTime.Now,
                 Transaction = transaction,
                 OrderId = objectId,
-                TransactionId = transaction.Id
+                TransactionId = transaction.Id,
+                Name = actionName,
+                ApplicationUserId =  userId,
+                UserTransactionActionType = UserTransactionActionType.Create
             });
 
             return transaction;
@@ -40,17 +40,16 @@ namespace InventoryManagementSystem.PublicApi
             
             string actionName = String.Format("Update {0}, ID: {1}",latestRecord.Transaction.Type.ToString(),objectId);
 
-            transaction.Name = actionName;
-            transaction.ApplicationUserId = userId;
-            transaction.UserTransactionActionType = userTransactionActionType;
-            
             transaction.TransactionRecord.Add(new 
                 TransactionRecord
                 {
                     Date = DateTime.Now,
                     Transaction = transaction,
                     OrderId = objectId,
-                    TransactionId = transaction.Id
+                    TransactionId = transaction.Id,
+                    Name = actionName,
+                    ApplicationUserId = userId,
+                    UserTransactionActionType = userTransactionActionType
                 });
             
             return transaction;

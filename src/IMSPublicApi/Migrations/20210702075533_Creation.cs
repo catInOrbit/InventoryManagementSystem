@@ -82,6 +82,19 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Transaction",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    TransactionStatus = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transaction", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "RoleClaim",
                 columns: table => new
                 {
@@ -100,28 +113,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         principalTable: "Role",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Transaction",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UserTransactionActionType = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false),
-                    TransactionStatus = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Transaction", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Transaction_SystemUser_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "SystemUser",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -279,11 +270,20 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    OrderId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    OrderId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserTransactionActionType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TransactionRecord", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TransactionRecord_SystemUser_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "SystemUser",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_TransactionRecord_Transaction_TransactionId",
                         column: x => x.TransactionId,
@@ -738,8 +738,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transaction_ApplicationUserId",
-                table: "Transaction",
+                name: "IX_TransactionRecord_ApplicationUserId",
+                table: "TransactionRecord",
                 column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
@@ -814,6 +814,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "Role");
 
             migrationBuilder.DropTable(
+                name: "SystemUser");
+
+            migrationBuilder.DropTable(
                 name: "PurchaseOrder");
 
             migrationBuilder.DropTable(
@@ -830,9 +833,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Transaction");
-
-            migrationBuilder.DropTable(
-                name: "SystemUser");
         }
     }
 }

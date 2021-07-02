@@ -93,8 +93,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     productVariant.StorageQuantity += package.Quantity;
                 }
 
-                productVariant.Transaction.Name = "Created Product Variant" + productVariant.Id;
-
                 product.ProductVariants.Add(productVariant);
             }
 
@@ -204,7 +202,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     foreach (var package in packages)
                         productVariant.StorageQuantity += package.Quantity;
 
-                    productVariant.Transaction.Name = "Created Product Variant" + productVariant.Id;
+                    productVariant.Transaction.TransactionRecord[^1].Name = "Created Product Variant" + productVariant.Id;
                     product.ProductVariants.Add(productVariant);
                 }
             }
@@ -234,7 +232,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                 foreach (var package in packages)
                     productVariant.StorageQuantity += package.Quantity; 
                 
-                productVariant.Transaction.Name = "Created Product Variant" + productVariant.Id;
                 product.ProductVariants.Add(productVariant);
             }
             

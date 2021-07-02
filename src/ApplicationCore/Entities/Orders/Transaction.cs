@@ -14,10 +14,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
             Id = DateTime.Now.Date.ToString("ddMMyyyy") + "-"+Guid.NewGuid();
         }
         
-        public string Name { get; set; }
-        public string ApplicationUserId { get; set; }
-        public virtual ApplicationUser ApplicationUser { get; set; }
-        public UserTransactionActionType UserTransactionActionType { get; set; }
+      
         public TransactionType Type { get; set; }
         public bool TransactionStatus { get; set; }
         

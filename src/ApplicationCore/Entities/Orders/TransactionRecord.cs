@@ -1,4 +1,5 @@
 using System;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
@@ -13,5 +14,10 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public string TransactionId { get; set; }
         public virtual Transaction Transaction { get; set; }
         public string OrderId { get; set; }
+        
+        public string Name { get; set; }
+        public string ApplicationUserId { get; set; }
+        public virtual ApplicationUser ApplicationUser { get; set; }
+        public UserTransactionActionType UserTransactionActionType { get; set; }
     }
 }

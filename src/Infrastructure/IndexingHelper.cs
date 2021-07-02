@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using Elasticsearch.Net;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
@@ -24,12 +25,18 @@ namespace Infrastructure
                 ModifiedDate = (po.Transaction.TransactionRecord.Count > 0) ? po.Transaction.TransactionRecord[^1].Date : DateTime.MinValue,
                 DeliveryDate = po.DeliveryDate,
                 TotalPrice = (po.TotalOrderAmount != null) ? po.TotalOrderAmount : 0,
-                ConfirmedByName = (po.Transaction.ApplicationUser != null) ? po.Transaction.ApplicationUser.Fullname : "",
+                ConfirmedByName = (po.Transaction.TransactionRecord.Count > 0) ? po.Transaction.TransactionRecord.
+                    FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Confirm).ApplicationUser
+                    .Fullname : "",
                 SupplierEmail = (po.Supplier != null) ? po.Supplier.Email : "",
                 SupplierId = (po.Supplier != null) ? po.Supplier.Id : "",
                 SupplierPhone = (po.Supplier != null) ? po.Supplier.PhoneNumber : "",
-                CanceledByName = (po.Transaction.ApplicationUser != null) ? po.Transaction.ApplicationUser.Fullname : "",
-                CreatedByName = (po.Transaction.ApplicationUser != null) ? po.Transaction.ApplicationUser.Fullname : ""
+                CanceledByName =(po.Transaction.TransactionRecord.Count > 0) ? po.Transaction.TransactionRecord.
+                    FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Reject).ApplicationUser
+                    .Fullname: "",
+                CreatedByName = (po.Transaction.TransactionRecord.Count > 0) ? po.Transaction.TransactionRecord.
+                    FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create).ApplicationUser
+                    .Fullname: "",
             };
             
             index.FillSuggestion();
@@ -45,7 +52,9 @@ namespace Infrastructure
                 Id = ro.Id,
                 PurchaseOrderId = (ro.PurchaseOrderId!=null) ? ro.PurchaseOrderId : "",
                 SupplierName = (ro.Supplier!=null) ? ro.Supplier.SupplierName : "",
-                CreatedBy = (ro.Transaction.ApplicationUser!=null) ? ro.Transaction.ApplicationUser.Fullname : "" ,
+                CreatedBy = (ro.Transaction.TransactionRecord.Count > 0) ? ro.Transaction.TransactionRecord.
+                    FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create).ApplicationUser
+                    .Fullname: "",
                 CreatedDate = (ro.Transaction.TransactionRecord.Count > 0) ? ro.Transaction.TransactionRecord[0].Date : DateTime.MinValue
             };
 
@@ -60,7 +69,9 @@ namespace Infrastructure
                 TransactionId = (gi.Transaction!=null) ? gi.Transaction.Id : "",
                 Id = gi.Id,
                 Status = gi.GoodsIssueType.ToString(),
-                CreatedByName = (gi.Transaction.ApplicationUser!=null) ? gi.Transaction.ApplicationUser.Fullname : "" ,
+                CreatedByName = (gi.Transaction.TransactionRecord.Count > 0) ? gi.Transaction.TransactionRecord.
+                    FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create).ApplicationUser
+                    .Fullname: "",
                 CreatedDate =  (gi.Transaction.TransactionRecord.Count > 0) ? gi.Transaction.TransactionRecord[0].Date : DateTime.MinValue,
                 DeliveryDate = gi.DeliveryDate,
                 DeliveryMethod = gi.DeliveryMethod,
@@ -123,8 +134,12 @@ namespace Infrastructure
                     Brand = (product.Brand!=null) ? product.Brand.BrandName : "",
                     Strategy = product.SellingStrategy,
                     CreatedDate =(product.Transaction.TransactionRecord.Count > 0) ? product.Transaction.TransactionRecord[0].Date : DateTime.MinValue,
-                    CreatedByName = (product.Transaction.ApplicationUser != null) ? product.Transaction.ApplicationUser.Fullname : "",
-                    ModifiedByName =(product.Transaction.ApplicationUser != null) ? product.Transaction.ApplicationUser.Fullname : "",
+                    CreatedByName = (product.Transaction.TransactionRecord.Count > 0) ? product.Transaction.TransactionRecord.
+                        FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create).ApplicationUser
+                        .Fullname: "",
+                    ModifiedByName =(product.Transaction.TransactionRecord.Count > 0) ? product.Transaction.TransactionRecord.
+                        FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Modify).ApplicationUser
+                        .Fullname: "",
                     IsVariantType = product.IsVariantType,
                 };
                 
@@ -155,9 +170,9 @@ namespace Infrastructure
                     Status = stockTake.StockTakeOrderType.ToString(),
                     CreatedDate = stockTake.Transaction.TransactionRecord[0].Date,
                     ModifiedDate = stockTake.Transaction.TransactionRecord[^1].Date,
-                    CreatedByName = (stockTake.Transaction.ApplicationUser != null)
-                        ? stockTake.Transaction.ApplicationUser.Fullname
-                        : ""
+                    CreatedByName =(stockTake.Transaction.TransactionRecord.Count > 0) ? stockTake.Transaction.TransactionRecord.
+                        FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Modify).ApplicationUser
+                        .Fullname: "",
                 };
 
             return index;
@@ -185,8 +200,12 @@ namespace Infrastructure
                         Price = productVariant.Price,
                         Strategy = (productVariant.Product.SellingStrategy!= null) ? productVariant.Product.SellingStrategy : "",
                         // CreatedDate =  (productVariant.Transaction.TransactionRecord.Count > 0) ? productVariant.Transaction.TransactionRecord[0].Date : DateTime.MinValue,
-                        CreatedByName = (productVariant.Transaction.ApplicationUser) != null ? productVariant.Transaction.ApplicationUser.Fullname : "",
-                        ModifiedByName = (productVariant.Transaction.ApplicationUser) != null ? productVariant.Transaction.ApplicationUser.Fullname : "",
+                        CreatedByName =(productVariant.Transaction.TransactionRecord.Count > 0) ? productVariant.Transaction.TransactionRecord.
+                            FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create).ApplicationUser
+                            .Fullname: "",
+                        ModifiedByName = (productVariant.Transaction.TransactionRecord.Count > 0) ? productVariant.Transaction.TransactionRecord.
+                            FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Modify).ApplicationUser
+                            .Fullname: "",
                         // SupplierName = productVariant.Packages[^1].Supplier.SupplierName
                     };
 

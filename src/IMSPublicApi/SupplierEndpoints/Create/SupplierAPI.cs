@@ -99,8 +99,6 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             supplier.Transaction = TransactionUpdateHelper.UpdateTransaction(supplier.Transaction,UserTransactionActionType.Modify, supplier.Id,
                 (await _userAuthentication.GetCurrentSessionUser()).Id);
 
-            supplier.Transaction.Name = "Updated Supplier: " + supplier.Id;
-
             supplier.Description = request.Description;
             supplier.Email = request.Email;
             supplier.Address = request.Address;

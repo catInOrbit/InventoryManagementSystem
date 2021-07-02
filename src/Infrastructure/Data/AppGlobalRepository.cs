@@ -426,7 +426,7 @@ namespace Infrastructure.Data
                     index = new StockTakeSearchIndex
                     {
                         Id = st.Id,
-                        CreatedByName = st.Transaction.ApplicationUser.Fullname,
+                        CreatedByName = (st.Transaction.TransactionRecord.Count > 0) ? st.Transaction.TransactionRecord[^1].ApplicationUser.Fullname : "",
                         Status = st.StockTakeOrderType.ToString(),
                         CreatedDate = st.Transaction.TransactionRecord[0].Date,
                         ModifiedDate = st.Transaction.TransactionRecord[^1].Date

@@ -236,8 +236,6 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
            
              sto.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.StockTake, sto.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
 
-             sto.Transaction.Name = "Created StockTake " + sto.Id;
-
              sto.StockTakeOrderType = StockTakeOrderType.Progressing;
              await _asyncRepository.AddAsync(sto);
              response.StockTakeOrder = sto;

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210701171716_Creation")]
+    [Migration("20210702075533_Creation")]
     partial class Creation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -398,24 +398,13 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool>("TransactionStatus")
                         .HasColumnType("bit");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserTransactionActionType")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Transaction");
                 });
@@ -425,8 +414,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(max)");
@@ -434,7 +429,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("TransactionId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("UserTransactionActionType")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("TransactionId");
 
@@ -843,20 +843,17 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("Transaction");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", b =>
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.TransactionRecord", b =>
                 {
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId");
 
-                    b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.TransactionRecord", b =>
-                {
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", "Transaction")
                         .WithMany("TransactionRecord")
                         .HasForeignKey("TransactionId");
+
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Transaction");
                 });
