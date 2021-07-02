@@ -43,11 +43,15 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.CATEGORY, UserOperations.Create))
                 return Unauthorized();
             
-            var category = request.Category;
+            var category = new Category
+            {
+                CategoryName = request.CategoryName,
+                CategoryDescription = request.CategoryDescription
+            };
             category.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Category, category.Id, (await _userSession.GetCurrentSessionUser()).Id);
             
-            await _categoryAsyncRepository.AddAsync(request.Category);
-            await _categoryAsyncRepository.ElasticSaveSingleAsync(true, request.Category,
+            await _categoryAsyncRepository.AddAsync(category);
+            await _categoryAsyncRepository.ElasticSaveSingleAsync(true, category,
                 ElasticIndexConstant.CATEGORIES);
             return Ok();
         }
@@ -94,8 +98,8 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
             category.Transaction = TransactionUpdateHelper.UpdateTransaction(category.Transaction,UserTransactionActionType.Modify ,category.Id,
                 (await _userAuthentication.GetCurrentSessionUser()).Id);
             
-            category.CategoryName = request.CategoryUpdateInfo.CategoryName;
-            category.CategoryDescription = request.CategoryUpdateInfo.CategoryDescription;
+            category.CategoryName = request.CategoryName;
+            category.CategoryDescription = request.CategoryDescription;
             
             await _categoryAsyncRepository.UpdateAsync(category);
             await _categoryAsyncRepository.ElasticSaveSingleAsync(false, category,

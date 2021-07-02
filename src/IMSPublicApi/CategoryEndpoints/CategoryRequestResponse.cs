@@ -4,13 +4,15 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
 {
     public class CategoryCreateRequest
     {
-        public Category Category { get; set; }
+        public string CategoryName { get; set; }
+        public string CategoryDescription { get; set; }
     }
     
     public class CategoryUpdateRequest
     {
         public string CategoryId { get; set; }
-        public Category CategoryUpdateInfo { get; set; }
+        public string CategoryName { get; set; }
+        public string CategoryDescription { get; set; }
     }
     
     public class CategorySearchIdRequest
