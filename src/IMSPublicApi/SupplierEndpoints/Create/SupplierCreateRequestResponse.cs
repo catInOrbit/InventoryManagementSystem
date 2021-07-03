@@ -28,6 +28,11 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
 
     }
     
+    public class SupplierResponse : BaseResponse
+    {
+        public string ModifiedSupplierId { get; set; }
+    }
+    
     public class SupplierDeleteRequest : BaseRequest
     {
         public string Id { get; set; }

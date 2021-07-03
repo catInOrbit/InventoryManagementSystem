@@ -15,7 +15,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
 {
-    public class SupplierCreate: BaseAsyncEndpoint.WithRequest<SupplierCreateRequest>.WithoutResponse
+    public class SupplierCreate: BaseAsyncEndpoint.WithRequest<SupplierCreateRequest>.WithResponse<SupplierResponse>
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<Supplier> _supplierAsyncRepository;
@@ -36,7 +36,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             OperationId = "sup.create",
             Tags = new[] { "SupplierEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync(SupplierCreateRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<SupplierResponse>> HandleAsync(SupplierCreateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.SUPPLIER, UserOperations.Create))
                 return Unauthorized();
@@ -63,11 +63,14 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
                 
             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
                 currentUser.Id, messageNotification);
-            return Ok();
+
+            var response = new SupplierResponse();
+            response.ModifiedSupplierId = supplier.Id;
+            return Ok(response);
         }
     }
     
-    public class SupplierEdit: BaseAsyncEndpoint.WithRequest<SupplierUpdateRequest>.WithoutResponse
+    public class SupplierEdit: BaseAsyncEndpoint.WithRequest<SupplierUpdateRequest>.WithResponse<SupplierResponse>
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<Supplier> _supplierAsyncRepository;
@@ -88,7 +91,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             OperationId = "sup.edit",
             Tags = new[] { "SupplierEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync(SupplierUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<SupplierResponse>> HandleAsync(SupplierUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.SUPPLIER, UserOperations.Update))
                 return Unauthorized();
@@ -117,7 +120,10 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
                 
             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
                 currentUser.Id, messageNotification);
-            return Ok();
+            
+            var response = new SupplierResponse();
+            response.ModifiedSupplierId = supplier.Id;
+            return Ok(response);
         }
     }
     

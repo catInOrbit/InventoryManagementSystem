@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
@@ -88,11 +89,36 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
     public class GetProductRequest : BaseRequest
     {
         public string ProductId { get; set; }
+        
+
+    }
+    
+    public class GetProductVariantRequest : BaseRequest
+    {
+        public string ProductVariantId { get; set; }
     }
     
     public class GetProductResponse : BaseResponse
     {
         public ApplicationCore.Entities.Products.Product Product { get; set; }
+        public ProductVariant ProductVariant { get; set; }
+        
+        [JsonIgnore]
+        public bool IsGettingVariant { get; set; }
+
+        public bool ShouldSerializeProductVariant()
+        {
+            if (IsGettingVariant)
+                return true;
+            return false;
+        }
+        
+        public bool ShouldSerializeProduct()
+        {
+            if (IsGettingVariant)
+                return false;
+            return true;
+        }
     }
     
     public class GetProductAllRequest
