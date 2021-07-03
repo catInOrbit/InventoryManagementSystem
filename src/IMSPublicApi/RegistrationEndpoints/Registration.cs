@@ -59,30 +59,49 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
             var user = userGet;
             if (user != null)
             {
-                UserInfo.OwnerID = user.Id.ToString();
+                try
+                {
+                    UserInfo.OwnerID = user.Id.ToString();
                 // requires using ContactManager.Authorization;
                 var isAuthorized = await _authorizationService.AuthorizeAsync(
                     HttpContext.User, "Registration",
                     UserOperations.Create);
-
+        
+                var role = await _userRoleModificationService.RoleManager.FindByIdAsync(request.RoleId);
+                if (role == null)
+                {
+                    response.Result = false;
+                    response.Verbose = "Role does not exist in DB";
+                    return Ok(response);
+                }
                 if (isAuthorized.Succeeded)
                 {
-                    if (await _userRoleModificationService.CheckRoleNameExistsHelper(request.RoleName))
+                    if (await _userRoleModificationService.CheckRoleNameExistsHelper(role.Name))
                     {
                         var newIMSUser = new ApplicationUser
                         {
                             Fullname =  request.FullName,
                             PhoneNumber =  request.PhoneNumber,
                             Email = request.Email,
-                            UserName = request.FullName.Trim(),
+                            UserName = request.FullName.Replace(" ",""),
                             Address =  request.Address,
                             IsActive =  true,
                             DateOfBirth = request.DateOfBirth,
                             DateOfBirthNormalizedString = string.Format("{0}-{1}-{2}", request.DateOfBirth.Month, request.DateOfBirth.Day, request.DateOfBirth.Year)
                         };
-                
-                        await _userRoleModificationService.UserManager.CreateAsync(newIMSUser, request.Password);
-                        var result = await _userRoleModificationService.RoleCreatingHelper(newIMSUser.Id, request.RoleName);
+
+                        var resultCreate = await _userRoleModificationService.UserManager.CreateAsync(newIMSUser, request.Password);
+                        if (!resultCreate.Succeeded)
+                        {
+                            foreach (var resultCreateError in resultCreate.Errors)
+                            {
+                                response.Verbose += resultCreateError.Description;
+                            }
+
+                            response.Result = false;
+                            return Ok(response);
+                        }
+                        var result = await _userRoleModificationService.RoleCreatingHelper(newIMSUser.Id, role.Name);
                         
                         response.Result = result.Succeeded;
                         response.Username = request.FullName;
@@ -99,11 +118,14 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
             
                             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
                                 currentUser.Id, messageNotification);
+                            return Ok(response);
                         }
                         else
                         {
                             response.Result = false;
                             response.Verbose = "Role does not exist in DB";
+                            return Ok(response);
+
                         }
                     }
 
@@ -111,12 +133,19 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                     {
                         response.Result = false;
                         response.Verbose = "Error saving to DB";
-                    }
+                        return Ok(response);
 
-                       
+                    }
                 }
                 else
                     response.Verbose = "Not Authorized as Privileged User";
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
             }
             else
             {
@@ -124,8 +153,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                 return Unauthorized();
             }
 
-            
-            return Ok(response);
+            return NotFound();
         }
 
 

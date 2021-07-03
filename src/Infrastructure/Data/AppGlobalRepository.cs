@@ -153,6 +153,15 @@ namespace Infrastructure.Data
         // }
 
 
+        public async Task<PagingOption<Category>> GetCategory(PagingOption<Category> pagingOption, CancellationToken cancellationToken = default)
+        {
+            var listCategory = await _identityAndProductDbContext.Category.Where( ca => ca.Transaction.TransactionRecord.Count > 0 ).ToListAsync();
+            pagingOption.ResultList = listCategory.OrderByDescending(ca =>
+                ca.Transaction.TransactionRecord[ca.Transaction.TransactionRecord.Count - 1].Date).ToList();
+            pagingOption.ExecuteResourcePaging();
+            return pagingOption;
+        }
+
         public async Task<List<Package>> GetPackagesFromProductVariantId(string productVariantId, CancellationToken cancellationToken = default)
         {
             return await _identityAndProductDbContext.Package.Where(package => package.ProductVariantId == productVariantId).OrderByDescending(package => package.ImportedDate)

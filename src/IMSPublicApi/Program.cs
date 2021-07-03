@@ -50,7 +50,7 @@ namespace InventoryManagementSystem.PublicApi
                     await elasticGiRepos.ElasticSaveBulkAsync((await elasticGiRepos.GetGIForELIndexAsync(new PagingOption<GoodsIssueSearchIndex>(0,0), new GISearchFilter())).ResultList.ToArray(),  ElasticIndexConstant.GOODS_ISSUE_ORDERS);
                     await elasticStRepos.ElasticSaveBulkAsync((await elasticStRepos.GetSTForELIndexAsync(new PagingOption<StockTakeSearchIndex>(0,0), new STSearchFilter())).ResultList.ToArray(),  ElasticIndexConstant.STOCK_TAKE_ORDERS);
                     await elasticSupRepos.ElasticSaveBulkAsync((await elasticSupRepos.ListAllAsync(new PagingOption<Supplier>(0,0))).ResultList.ToArray(),    ElasticIndexConstant.SUPPLIERS);
-                    
+                    //
                     await SeedRole.Initialize(services, "test@12345Aha");
                     
                     // BigQueryService bigQueryService = new BigQueryService();

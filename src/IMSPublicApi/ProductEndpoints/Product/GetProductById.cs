@@ -34,8 +34,10 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Read))
                 return Unauthorized();
             
+            
             var response = new GetProductResponse();
             response.Product = await _asyncRepository.GetByIdAsync(request.ProductId, cancellationToken);
+            response.Product.Brand.IsShowingProducts = false;
             
             return Ok(response);
         }

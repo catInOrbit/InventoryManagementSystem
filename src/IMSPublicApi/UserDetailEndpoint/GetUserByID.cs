@@ -22,15 +22,18 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
         .WithResponse<UsersResponse>
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+
         private readonly IAuthorizationService _authorizationService;
         private IUserSession _userAuthentication;
 
         public ApplicationUser UserInfo { get; set; } = new ApplicationUser();
-        public GetUserByID( UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService, IUserSession userAuthentication)
+        public GetUserByID( UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService, IUserSession userAuthentication, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
+            _roleManager = roleManager;
         }
         
         [SwaggerOperation(
@@ -58,6 +61,9 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
                 var userAndRole = new UserAndRole();
                 userAndRole.ImsUser = userGet;
                 userAndRole.UserRole = (await _userManager.GetRolesAsync(user))[0];
+                userAndRole.RoleID = (await _roleManager.FindByNameAsync(userAndRole.UserRole)).Id;
+                
+                response.UserAndRole = userAndRole; 
                 return Ok(response);
             }
             return Unauthorized();

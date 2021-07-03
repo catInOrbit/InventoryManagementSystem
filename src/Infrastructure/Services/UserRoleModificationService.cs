@@ -79,7 +79,6 @@ namespace Infrastructure.Services
             }
             
             result = await UserManager.AddToRoleAsync(user, role);
-
             return result;
         }
         

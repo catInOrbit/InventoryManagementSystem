@@ -281,6 +281,7 @@ namespace Infrastructure
             {
                 var brandSearchIndex = new BrandSearchIndex
                 {
+                    Id = brand.Id,
                     BrandId = brand.Id,
                     BrandName = brand.BrandName,
                 };
@@ -302,5 +303,43 @@ namespace Infrastructure
                 throw;
             }
         }
+
+        public static CategorySearchIndex CategorySearchIndex(Category category)
+        {
+            try
+            {
+                var categoryIndex = new CategorySearchIndex
+                {
+                    Id = category.Id,
+                    CategoryName = category.CategoryName,
+                    CategoryDescription = category.CategoryDescription,
+                    TransactionId = (category.Transaction!=null) ? category.TransactionId: "",
+                };
+                
+                categoryIndex.CreatedBy =(category.Transaction.TransactionRecord.Count > 0 && category.Transaction.TransactionRecord.
+                    FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create) != null) ? category.Transaction.TransactionRecord.
+                    FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create).ApplicationUser
+                    .Fullname : "";
+                categoryIndex.ModifiedBy = (category.Transaction.TransactionRecord.Count > 0 && category.Transaction.TransactionRecord.
+                    FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Modify) != null) ? category.Transaction.TransactionRecord.
+                    FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Modify).ApplicationUser
+                    .Fullname: "";
+                
+                categoryIndex.ModifiedDate = (category.Transaction.TransactionRecord.Count > 0)
+                    ? category.Transaction.TransactionRecord[^1].Date
+                    : DateTime.MinValue;
+                categoryIndex.CreatedDate = (category.Transaction.TransactionRecord.Count > 0)
+                    ? category.Transaction.TransactionRecord[0].Date
+                    : DateTime.MinValue;
+                
+                return categoryIndex;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+        }
     }
+    
 }

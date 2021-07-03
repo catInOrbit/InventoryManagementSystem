@@ -29,6 +29,8 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         PurchaseOrder GetPurchaseOrderByNumber(string purchaseOrderId,  CancellationToken cancellationToken = default);
         GoodsReceiptOrder GetReceivingOrderByNumber(string receiveOrderId,  CancellationToken cancellationToken = default);
         GoodsIssueOrder GetGoodsIssueOrderByNumber(string goodsIssueOrderId,  CancellationToken cancellationToken = default);
+        Task<PagingOption<Category>> GetCategory(PagingOption<Category> pagingOption, CancellationToken cancellationToken = default);
+
         Task<List<Package>> GetPackagesFromProductVariantId(string productVariantId,  CancellationToken cancellationToken = default);
 
         List<PurchaseOrderSearchIndex> PurchaseOrderIndexFiltering(List<PurchaseOrderSearchIndex> resource,
