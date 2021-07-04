@@ -45,9 +45,13 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         List<ProductVariantSearchIndex> ProductVariantIndexFiltering(List<ProductVariantSearchIndex> resource,
             ProductVariantSearchFilter productSearchFilter, CancellationToken cancellationToken);
         
+        List<Package> PackageIndexFiltering(List<Package> resource,
+            PackageSearchFilter packageSearchFilter, CancellationToken cancellationToken);
+        
         List<ProductSearchIndex> ProductIndexFiltering(List<ProductSearchIndex> resource,
             ProductSearchFilter productSearchFilter, CancellationToken cancellationToken);
-        
+
+        Task<PagingOption<Package>> GetPackages(PagingOption<Package> pagingOption,CancellationToken cancellationToken);
         List<StockTakeSearchIndex> StockTakeIndexFiltering(List<StockTakeSearchIndex> resource,
             STSearchFilter stSearchFilter, CancellationToken cancellationToken);
 

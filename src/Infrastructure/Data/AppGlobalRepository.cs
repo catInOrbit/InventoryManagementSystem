@@ -296,7 +296,44 @@ namespace Infrastructure.Data
                 .ToList();
             return pos;
         }
+
+        public List<Package> PackageIndexFiltering(List<Package> resource, PackageSearchFilter packageSearchFilter,
+            CancellationToken cancellationToken)
+        {
+            var packages = resource.Where(package =>
+                ( 
+                    (packageSearchFilter.FromImportedDate == null ||
+                     (package.ImportedDate >= DateTime.Parse(packageSearchFilter.FromImportedDate) &&
+                      package.ImportedDate <= DateTime.Parse(packageSearchFilter.ToImportedDate))) 
+                    
+                    &&
+                    (packageSearchFilter.FromPrice == null ||
+                     (package.Price >= Decimal.Parse(packageSearchFilter.FromPrice) &&
+                      package.Price <= Decimal.Parse(packageSearchFilter.ToPrice))) 
+                    
+                    &&
+                    (packageSearchFilter.FromTotalPrice == null ||
+                     (package.TotalPrice >= Decimal.Parse(packageSearchFilter.FromTotalPrice) &&
+                      package.TotalPrice <= Decimal.Parse(packageSearchFilter.ToTotalPrice))) 
+                    
+                    &&
+                    (packageSearchFilter.FromQuantity == null ||
+                     (package.Quantity >= int.Parse(packageSearchFilter.FromQuantity) &&
+                      package.Quantity <= int.Parse(packageSearchFilter.ToQuantity))) 
+                    
+                    &&
+                    (packageSearchFilter.Location == null ||
+                     (package.Location == packageSearchFilter.Location) 
+                    
+                     &&
+                     (packageSearchFilter.ProductVariantID == null ||
+                      (package.ProductVariantId == packageSearchFilter.ProductVariantID) 
         
+                     ))))
+                .ToList();
+            return packages;
+        }
+
         public List<ProductSearchIndex> ProductIndexFiltering(List<ProductSearchIndex> resource, ProductSearchFilter productSearchFilter, CancellationToken cancellationToken)
         {
             var pos = resource.Where(product =>
@@ -476,6 +513,13 @@ namespace Infrastructure.Data
         {
             return _identityAndProductDbContext.GoodsIssueOrder.Where(go => go.Id == goodsIssueOrderId).
                 SingleOrDefault(po => po.Id == goodsIssueOrderId);
+        }
+        
+        public async Task<PagingOption<Package>> GetPackages(PagingOption<Package> pagingOption, CancellationToken cancellationToken = default)
+        {
+            pagingOption.ResultList = await _identityAndProductDbContext.Package.OrderByDescending(pa => pa.ImportedDate).ToListAsync();
+            pagingOption.ExecuteResourcePaging();
+            return pagingOption;
         }
         
         public async Task<PagingOption<T>> ListAllAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default)

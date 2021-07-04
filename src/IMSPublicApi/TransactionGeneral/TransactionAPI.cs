@@ -22,15 +22,18 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
     public class DeactivateTransaction : BaseAsyncEndpoint.WithRequest<DeleteTransactionRequest>.WithResponse<DeleteTransactionResponse>
     {
         private readonly IAsyncRepository<ProductVariantSearchIndex> _productVariantAsyncRepository;
+        private readonly IAsyncRepository<ProductSearchIndex> _productAsyncRepository;
+
         private  readonly IConfiguration _configuration;
 
         private readonly IAuthorizationService _authorizationService;
 
-        public DeactivateTransaction(IAsyncRepository<ProductVariantSearchIndex> productVariantAsyncRepository, IConfiguration configuration, IAuthorizationService authorizationService)
+        public DeactivateTransaction(IAsyncRepository<ProductVariantSearchIndex> productVariantAsyncRepository, IConfiguration configuration, IAuthorizationService authorizationService, IAsyncRepository<ProductSearchIndex> productAsyncRepository)
         {
             _productVariantAsyncRepository = productVariantAsyncRepository;
             _configuration = configuration;
             _authorizationService = authorizationService;
+            _productAsyncRepository = productAsyncRepository;
         }
 
 
@@ -65,15 +68,32 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
                             {
                                 productVariant.Transaction.TransactionStatus = false;
                                 await _productVariantAsyncRepository.ElasticDeleteSingleAsync(
-                                    IndexingHelper.ProductVariantSearchIndex(productVariant), ElasticIndexConstant.PRODUCT_INDICES);    
+                                    IndexingHelper.ProductVariantSearchIndex(productVariant), ElasticIndexConstant.PRODUCT_VARIANT_INDICES);    
                             }
 
                             else
                             {
                                 productVariant.Transaction.TransactionStatus = true;
                                 await _productVariantAsyncRepository.ElasticSaveSingleAsync(true,
-                                    IndexingHelper.ProductVariantSearchIndex(productVariant), ElasticIndexConstant.PRODUCT_INDICES);    
+                                    IndexingHelper.ProductVariantSearchIndex(productVariant), ElasticIndexConstant.PRODUCT_VARIANT_INDICES);    
                             }
+                        }
+                    }
+                    
+                    else if ((int)trans.Type == 6)
+                    {
+                        var product = await dbContext.Product.FirstOrDefaultAsync(e => e.Transaction.Id == trans.Id);
+                        if (trans.TransactionStatus)
+                        {
+                            product.Transaction.TransactionStatus = false;
+                            await _productAsyncRepository.ElasticDeleteSingleAsync(
+                                IndexingHelper.ProductSearchIndex(product), ElasticIndexConstant.PRODUCT_INDICES);   
+                        }
+                        else
+                        {
+                            await _productAsyncRepository.ElasticSaveSingleAsync(true,
+                                IndexingHelper.ProductSearchIndex(product), ElasticIndexConstant.PRODUCT_INDICES);
+                            product.Transaction.TransactionStatus = true;
                         }
                     }
 

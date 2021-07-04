@@ -55,6 +55,8 @@ namespace Infrastructure.Services
             await client.Indices.DeleteAsync( ElasticIndexConstant.RECEIVING_ORDERS);
             await client.Indices.DeleteAsync( ElasticIndexConstant.GOODS_ISSUE_ORDERS);
             await client.Indices.DeleteAsync( ElasticIndexConstant.SUPPLIERS);
+            await client.Indices.DeleteAsync( ElasticIndexConstant.PACKAGES);
+
             await client.Indices.DeleteAsync( ElasticIndexConstant.CATEGORIES);
 
             await client.Indices.CreateAsync( ElasticIndexConstant.PRODUCT_VARIANT_INDICES,
@@ -97,7 +99,11 @@ namespace Infrastructure.Services
             );
             
             await client.Indices.CreateAsync( ElasticIndexConstant.CATEGORIES,
-                index => index.Map<Supplier>(x => x.AutoMap())
+                index => index.Map<Category>(x => x.AutoMap())
+            );
+            
+            await client.Indices.CreateAsync( ElasticIndexConstant.PACKAGES,
+                index => index.Map<Package>(x => x.AutoMap())
             );
 
             // client.Indices.Create(indexName, i => i

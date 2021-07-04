@@ -9,6 +9,7 @@ namespace InventoryManagementSystem.ApplicationCore.Constants
         public const string PURCHASE_ORDERS = "purchaseorders";
         public const string RECEIVING_ORDERS = "receivingorders";
         public const string SUPPLIERS = "suppliers";
+        public const string PACKAGES = "packages"; 
         public const string CATEGORIES = "categories"; 
     }
 }

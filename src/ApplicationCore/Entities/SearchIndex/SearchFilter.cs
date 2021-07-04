@@ -73,6 +73,21 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string Brand { get; set; }
     }
     
+    public class PackageSearchFilter
+    {
+        public string FromImportedDate { get; set; }
+        public string ToImportedDate { get; set; }
+        public string ProductVariantID { get; set; }
+        public string FromTotalPrice { get; set; }
+        public string ToTotalPrice { get; set; }
+        public string FromPrice { get; set; }
+        public string ToPrice { get; set; }
+        public string Location { get; set; }
+        public string FromQuantity { get; set; }
+        public string ToQuantity { get; set; }
+
+    }
+    
     public class ProductSearchFilter
     {
         public string Category { get; set; }
