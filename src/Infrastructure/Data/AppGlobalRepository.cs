@@ -96,12 +96,21 @@ namespace Infrastructure.Data
             return pagingOption;
         }
 
-        public async Task<PagingOption<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(PagingOption<PurchaseOrderSearchIndex> pagingOption, POSearchFilter poSearchFilter,  CancellationToken cancellationToken = default)
+        public async Task<PagingOption<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(bool hideMergeStatus, PagingOption<PurchaseOrderSearchIndex> pagingOption, POSearchFilter poSearchFilter,  CancellationToken cancellationToken = default)
         {
-
-            var pos = await _identityAndProductDbContext.PurchaseOrder.
-                Where(variant => variant.Transaction.TransactionRecord.Count > 0 && variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).ToListAsync();
-            
+            List<PurchaseOrder> pos;
+            if(hideMergeStatus)
+                pos = await _identityAndProductDbContext.PurchaseOrder.
+                    Where(variant => variant.Transaction.TransactionRecord.Count > 0 && variant.Transaction.TransactionStatus!=false 
+                        && variant.Transaction.Type!=TransactionType.Deleted
+                        && variant.PurchaseOrderStatus != PurchaseOrderStatusType.RequisitionMerge
+                        ).ToListAsync();
+            else
+                pos = await _identityAndProductDbContext.PurchaseOrder.
+                    Where(variant => variant.Transaction.TransactionRecord.Count > 0 && variant.Transaction.TransactionStatus!=false 
+                        && variant.Transaction.Type!=TransactionType.Deleted
+                    ).ToListAsync();
+                
             pos = pos.OrderByDescending(e =>
                 e.Transaction.TransactionRecord[e.Transaction.TransactionRecord.Count - 1].Date).ToList();
             foreach (var po in pos)
@@ -323,7 +332,7 @@ namespace Infrastructure.Data
                     
                     &&
                     (packageSearchFilter.Location == null ||
-                     (package.Location == packageSearchFilter.Location) 
+                     (package.Location.LocationName == packageSearchFilter.Location) 
                     
                      &&
                      (packageSearchFilter.ProductVariantID == null ||

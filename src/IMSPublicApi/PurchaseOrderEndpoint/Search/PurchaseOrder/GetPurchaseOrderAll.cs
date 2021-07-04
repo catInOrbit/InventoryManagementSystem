@@ -70,13 +70,16 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
 
         private readonly IAuthorizationService _authorizationService;
+        private readonly IUserSession _userSession;
+
         private readonly IElasticClient _elasticClient;
 
-        public SearchPurchaseOrder(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IAuthorizationService authorizationService, IElasticClient elasticClient)
+        public SearchPurchaseOrder(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IAuthorizationService authorizationService, IElasticClient elasticClient, IUserSession userSession)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
             _elasticClient = elasticClient;
+            _userSession = userSession;
         }
 
         [HttpGet]
@@ -101,7 +104,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             PagingOption<PurchaseOrderSearchIndex> pagingOption =
                 new PagingOption<PurchaseOrderSearchIndex>(request.CurrentPage, request.SizePerPage);
             response.IsDisplayingAll = true;
-            var requestUri = Microsoft.AspNetCore.Http.Extensions.UriHelper.GetDisplayUrl(Request);
 
             var poSearchFilter = new POSearchFilter
             {
@@ -124,7 +126,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             if (request.SearchQuery == null)
             {
                 var posi = await 
-                    _asyncRepository.GetPOForELIndexAsync(pagingOption, poSearchFilter, cancellationToken);
+                    _asyncRepository.GetPOForELIndexAsync(request.HideMerged, pagingOption, poSearchFilter, cancellationToken);
             
                 response.Paging = posi;
                 return Ok(response);

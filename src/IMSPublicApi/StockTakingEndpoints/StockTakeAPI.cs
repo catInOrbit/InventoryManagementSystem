@@ -171,7 +171,6 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              stockTakeOrder.CheckItems = new List<StockTakeItem>();
              foreach (var id in request.ProductIds)
              {
-                 
                  var productVariant = await _productAsyncRepository.GetByIdAsync(id);
                  
                  var stockTakeItem = new StockTakeItem

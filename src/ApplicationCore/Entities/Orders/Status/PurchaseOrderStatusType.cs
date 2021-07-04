@@ -3,11 +3,12 @@
     public enum PurchaseOrderStatusType
     {
         RequisitionCreated = 0,
-        PQCreated = 1,
-        POCreated = 2,
-        POWaitingConfirmation = 3,
-        POConfirm = 4,
-        Done = 5,
+        RequisitionMerge = 1,
+        PQCreated = 2,
+        POCreated = 3,
+        POWaitingConfirmation = 4,
+        POConfirm = 5,
+        Done = 6,
         PQCanceled = -1,
         RequisitionCanceled = -2,
         POCanceled = -3,

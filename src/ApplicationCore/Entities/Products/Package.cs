@@ -24,7 +24,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public decimal TotalPrice { get; set; }
         public int Quantity { get; set; }
         public DateTime ImportedDate { get; set; }
-        public string Location { get; set; }
+        
+        public string LocationId { get; set; }
+        public virtual Location Location { get; set; }
         
         public string TransactionId { get; set; }        
         public Transaction Transaction { get; set; }

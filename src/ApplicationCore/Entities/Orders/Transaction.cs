@@ -13,8 +13,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         {
             Id = DateTime.Now.Date.ToString("ddMMyyyy") + "-"+Guid.NewGuid();
         }
-        
-      
         public TransactionType Type { get; set; }
         public bool TransactionStatus { get; set; }
         

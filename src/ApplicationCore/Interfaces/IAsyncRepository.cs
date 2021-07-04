@@ -18,7 +18,7 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         Task<PagingOption<ProductSearchIndex>> GetProductForELIndexAsync(
             PagingOption<ProductSearchIndex> pagingOption, CancellationToken cancellationToken = default);
         Task<PagingOption<ProductVariantSearchIndex>> GetProductVariantForELIndexAsync(PagingOption<ProductVariantSearchIndex> pagingOption, CancellationToken cancellationToken = default);
-        Task<PagingOption<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(PagingOption<PurchaseOrderSearchIndex> pagingOption,POSearchFilter poSearchFilter,CancellationToken cancellationToken = default);
+        Task<PagingOption<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(bool hideMergeStatus, PagingOption<PurchaseOrderSearchIndex> pagingOption,POSearchFilter poSearchFilter,CancellationToken cancellationToken = default);
         Task<PagingOption<GoodsReceiptOrderSearchIndex>> GetROForELIndexAsync(PagingOption<GoodsReceiptOrderSearchIndex> pagingOption, ROSearchFilter roSearchFilter, CancellationToken cancellationToken = default);
         
         Task<PagingOption<GoodsIssueSearchIndex>> GetGIForELIndexAsync(PagingOption<GoodsIssueSearchIndex> pagingOption, GISearchFilter searchFilter, CancellationToken cancellationToken = default);

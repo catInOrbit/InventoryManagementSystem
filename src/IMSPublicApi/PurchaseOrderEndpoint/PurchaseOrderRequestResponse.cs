@@ -134,6 +134,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
     public class RequisitionCreateRequest
     {
         public string SupplierId { get; set; }
+        public List<string> MergedRequisitionIds { get; set; }
         public DateTime Deadline { get; set; }
         public List<OrderItem> OrderItems { get; set; }
     }
@@ -219,6 +220,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
       
       public string FromStatus { get; set; }
       public string ToStatus { get; set; }
+      public bool HideMerged { get; set; }
 
       public string SupplierId { get; set; }
       public string FromTotalOrderPrice { get; set; }
