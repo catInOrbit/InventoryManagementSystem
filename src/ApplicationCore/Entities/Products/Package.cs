@@ -25,6 +25,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public int Quantity { get; set; }
         public DateTime ImportedDate { get; set; }
         public string Location { get; set; }
+        
+        public string TransactionId { get; set; }        
+        public Transaction Transaction { get; set; }
         public string GoodsReceiptOrderId { get; set; }
         [Ignore]
         public virtual GoodsReceiptOrder GoodsReceiptOrder { get; set; }
