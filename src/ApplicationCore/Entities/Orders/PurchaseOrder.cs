@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
+using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
@@ -34,6 +35,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public virtual ICollection<OrderItem> PurchaseOrderProduct { get; set; } = new List<OrderItem>();
         public string TransactionId { get; set; }
         public DateTime Deadline { get; set; }
+        
         public virtual Transaction Transaction { get; set; }
         public bool HasBeenModified { get; set; }
 

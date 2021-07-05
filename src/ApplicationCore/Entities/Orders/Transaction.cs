@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
@@ -15,6 +15,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         }
         public TransactionType Type { get; set; }
         public bool TransactionStatus { get; set; }
+        
+        [JsonIgnore]
         public virtual IList<TransactionRecord> TransactionRecord { get; set; }
     }
 }

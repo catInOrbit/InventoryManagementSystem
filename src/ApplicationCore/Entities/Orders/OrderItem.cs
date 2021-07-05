@@ -1,8 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
-using Newtonsoft.Json;
+using Nest;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
@@ -22,5 +23,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public decimal SalePrice { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal TotalAmount { get; set; }
+
     }
 }
