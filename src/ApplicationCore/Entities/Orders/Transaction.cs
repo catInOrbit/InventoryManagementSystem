@@ -15,7 +15,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         }
         public TransactionType Type { get; set; }
         public bool TransactionStatus { get; set; }
-        
         public virtual IList<TransactionRecord> TransactionRecord { get; set; }
     }
 }

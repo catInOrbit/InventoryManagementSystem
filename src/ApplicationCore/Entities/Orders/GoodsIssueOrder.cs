@@ -25,9 +25,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public string TransactionId { get; set; }
         public virtual Transaction Transaction { get; set; }
         public GoodsIssueStatusType GoodsIssueType { get; set; }
-        
         public virtual ICollection<OrderItem> GoodsIssueProducts { get; set; }
-        
         public DateTime DeliveryDate { get; set; }
     }
 }

@@ -25,6 +25,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LocationBarcode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LocationName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -285,7 +286,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     OrderId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UserTransactionActionType = table.Column<int>(type: "int", nullable: false)
+                    UserTransactionActionType = table.Column<int>(type: "int", nullable: false),
+                    HasBeenModified = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -377,6 +379,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeliveryAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MergedWithPurchaseOrderId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MailDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SupplierId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     WarehouseLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -487,6 +490,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     OrderQuantity = table.Column<int>(type: "int", nullable: false),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    SalePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DiscountAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     GoodsIssueOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),

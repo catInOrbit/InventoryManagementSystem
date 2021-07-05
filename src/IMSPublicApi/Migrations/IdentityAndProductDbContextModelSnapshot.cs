@@ -253,6 +253,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("PurchaseOrderId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<decimal>("SalePrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
 
@@ -285,6 +288,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("MailDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MergedWithPurchaseOrderId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PurchaseOrderStatus")
@@ -420,6 +426,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("HasBeenModified")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -482,6 +491,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LocationBarcode")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LocationName")
                         .HasColumnType("nvarchar(max)");

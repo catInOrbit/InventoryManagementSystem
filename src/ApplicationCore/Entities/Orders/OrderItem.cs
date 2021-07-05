@@ -20,6 +20,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public int OrderQuantity { get; set; }
         public string Unit { get; set; }
         public decimal Price { get; set; }
+        public decimal SalePrice { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal TotalAmount { get; set; }
     }

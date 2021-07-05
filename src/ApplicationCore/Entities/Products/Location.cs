@@ -6,8 +6,11 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
     {
         public Location()
         {
-            Id = "LOC" + Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
+            Id =  Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
+            LocationBarcode = "LC" + Id;
         }
+        
+        public string LocationBarcode { get; set; }
         public string LocationName { get; set; }
     }
 }

@@ -23,6 +23,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         
         public DateTime DeliveryDate { get; set; }
         public string DeliveryAddress { get; set; }
+        public string MergedWithPurchaseOrderId { get; set; }
         public string MailDescription { get; set; }
         public string SupplierId { get; set; }
         public virtual Supplier Supplier { get; set; }
