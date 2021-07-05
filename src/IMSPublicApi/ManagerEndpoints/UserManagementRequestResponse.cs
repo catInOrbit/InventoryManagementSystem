@@ -1,4 +1,5 @@
 using System;
+using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
@@ -19,5 +20,8 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
     {
         public bool Status { get; set; }
         public string Verbose { get; set; }
+        
+        public ApplicationUser UserUpdated { get; set; }
+
     }
 }

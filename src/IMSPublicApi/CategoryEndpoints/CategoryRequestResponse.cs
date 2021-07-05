@@ -29,5 +29,8 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
     {
         public bool Status { get; set; }
         public string Verbose { get; set; }
+        
+        public Category UpdatedCategory { get; set; }
+
     }
 }

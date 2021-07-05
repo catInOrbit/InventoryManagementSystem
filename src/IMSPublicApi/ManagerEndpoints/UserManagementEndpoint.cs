@@ -80,6 +80,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             {
                 response.Status = true;
                 response.Verbose = "User updated";
+                response.UserUpdated = user;
                 return Ok(response);
             }
             

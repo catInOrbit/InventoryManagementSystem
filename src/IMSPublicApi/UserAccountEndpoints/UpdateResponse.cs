@@ -1,4 +1,5 @@
 using System;
+using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
 {
@@ -13,7 +14,8 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
         }
         
         public bool Result { get; set; } = false;
-        
         public string Verbose { get; set; }
+        
+        public ApplicationUser ApplicationUser { get; set; }
     }
 }

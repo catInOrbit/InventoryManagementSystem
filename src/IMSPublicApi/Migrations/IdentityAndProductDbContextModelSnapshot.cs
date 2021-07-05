@@ -170,14 +170,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("LocationId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("PurchaseOrderId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ReceivedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("StorageLocationReceipt")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SupplierId")
                         .HasColumnType("nvarchar(450)");
@@ -189,6 +189,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
 
                     b.HasIndex("PurchaseOrderId");
 
@@ -476,6 +478,19 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.ToTable("Category");
                 });
 
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Location", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LocationName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Location");
+                });
+
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Package", b =>
                 {
                     b.Property<string>("Id")
@@ -487,8 +502,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<DateTime>("ImportedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("LocationId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -505,13 +520,20 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("TransactionId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("GoodsReceiptOrderId");
 
+                    b.HasIndex("LocationId");
+
                     b.HasIndex("ProductVariantId");
 
                     b.HasIndex("SupplierId");
+
+                    b.HasIndex("TransactionId");
 
                     b.ToTable("Package");
                 });
@@ -742,6 +764,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsReceiptOrder", b =>
                 {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId");
+
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", "PurchaseOrder")
                         .WithMany()
                         .HasForeignKey("PurchaseOrderId");
@@ -753,6 +779,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", "Transaction")
                         .WithMany()
                         .HasForeignKey("TransactionId");
+
+                    b.Navigation("Location");
 
                     b.Navigation("PurchaseOrder");
 
@@ -871,6 +899,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .WithMany()
                         .HasForeignKey("GoodsReceiptOrderId");
 
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId");
+
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", "ProductVariant")
                         .WithMany("Packages")
                         .HasForeignKey("ProductVariantId");
@@ -879,11 +911,19 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .WithMany()
                         .HasForeignKey("SupplierId");
 
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", "Transaction")
+                        .WithMany()
+                        .HasForeignKey("TransactionId");
+
                     b.Navigation("GoodsReceiptOrder");
+
+                    b.Navigation("Location");
 
                     b.Navigation("ProductVariant");
 
                     b.Navigation("Supplier");
+
+                    b.Navigation("Transaction");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>

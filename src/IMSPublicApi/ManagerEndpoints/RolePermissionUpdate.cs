@@ -80,7 +80,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             
             response.Result = true;
             response.Verbose = "Success";
-            response.RoleChanged = oldRole.Name;
+            response.RoleChanged = oldRole;
             return Ok(response);
 
             return Unauthorized();
@@ -147,7 +147,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             
             response.Result = true;
             response.Verbose = "Success";
-            response.RoleChanged = newRole.Name;
+            response.RoleChanged = newRole;
             return Ok(response);
             return Unauthorized();
         }

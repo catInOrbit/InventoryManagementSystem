@@ -69,7 +69,7 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
 
                 response.Result = true;
                 response.Verbose = "Done updating";
-
+                response.ApplicationUser = userInfoGet;
                 return Ok(response);
             }
         }

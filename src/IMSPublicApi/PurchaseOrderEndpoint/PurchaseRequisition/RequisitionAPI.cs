@@ -62,7 +62,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
                   requestOrderItem.TotalAmount = requestOrderItem.OrderQuantity * requestOrderItem.Price;
                   requestOrderItem.Unit = requestOrderItem.Unit;
               }
-            
+              
               po.PurchaseOrderProduct = request.OrderItems;
               po.Deadline = request.Deadline;
               

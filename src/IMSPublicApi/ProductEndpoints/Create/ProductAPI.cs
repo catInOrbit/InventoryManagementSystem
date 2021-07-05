@@ -117,7 +117,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             return Ok(response);
         }
     }
-        public class ProductUpdate : BaseAsyncEndpoint.WithRequest<ProductUpdateRequest>.WithoutResponse
+        public class ProductUpdate : BaseAsyncEndpoint.WithRequest<ProductUpdateRequest>.WithResponse<ProductUpdateResponse>
     {
         private IAsyncRepository<ApplicationCore.Entities.Products.Product> _asyncRepository;
         private readonly IAuthorizationService _authorizationService;
@@ -142,7 +142,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             OperationId = "product.create",
             Tags = new[] { "ProductEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync(ProductUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<ProductUpdateResponse>> HandleAsync(ProductUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Update))
             return Unauthorized();
@@ -247,7 +247,9 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
                 currentUser.Id, messageNotification);
 
-            return Ok();
+            var response = new ProductUpdateResponse();
+            response.Product = product;
+            return Ok(response);
         }
     }
 

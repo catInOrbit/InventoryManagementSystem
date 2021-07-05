@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
@@ -12,6 +13,6 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 
         public bool Result { get; set; } = false;
         public string Verbose { get; set; }
-        public string RoleChanged { get; set; }
+        public IdentityRole RoleChanged { get; set; }
     }
 }

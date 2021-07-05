@@ -24,6 +24,13 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
         public List<ProductVairantUpdateRequestInfo> ProductVariantsUpdate { get; set; }
     }
 
+    public class ProductUpdateResponse : BaseResponse
+    {
+        public ApplicationCore.Entities.Products.Product Product { get; set; }
+    }
+
+    
+
     public class ProductRequest : BaseRequest
     {
         public string Name { get; set; }

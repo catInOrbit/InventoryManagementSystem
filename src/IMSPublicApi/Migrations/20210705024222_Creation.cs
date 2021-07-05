@@ -21,6 +21,18 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Location",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LocationName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Location", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Notification",
                 columns: table => new
                 {
@@ -430,7 +442,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PurchaseOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    StorageLocationReceipt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LocationId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ReceivedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SupplierId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     SupplierInvoice = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -439,6 +451,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GoodsReceiptOrder", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GoodsReceiptOrder_Location_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Location",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_GoodsReceiptOrder_PurchaseOrder_PurchaseOrderId",
                         column: x => x.PurchaseOrderId,
@@ -562,7 +580,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     ImportedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LocationId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     GoodsReceiptOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -575,6 +594,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_Package_Location_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Location",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Package_ProductVariant_ProductVariantId",
                         column: x => x.ProductVariantId,
                         principalTable: "ProductVariant",
@@ -584,6 +609,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         name: "FK_Package_Supplier_SupplierId",
                         column: x => x.SupplierId,
                         principalTable: "Supplier",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Package_Transaction_TransactionId",
+                        column: x => x.TransactionId,
+                        principalTable: "Transaction",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -602,6 +633,11 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "IX_GoodsIssueOrder_TransactionId",
                 table: "GoodsIssueOrder",
                 column: "TransactionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GoodsReceiptOrder_LocationId",
+                table: "GoodsReceiptOrder",
+                column: "LocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GoodsReceiptOrder_PurchaseOrderId",
@@ -649,6 +685,11 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 column: "GoodsReceiptOrderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Package_LocationId",
+                table: "Package",
+                column: "LocationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Package_ProductVariantId",
                 table: "Package",
                 column: "ProductVariantId");
@@ -657,6 +698,11 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "IX_Package_SupplierId",
                 table: "Package",
                 column: "SupplierId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Package_TransactionId",
+                table: "Package",
+                column: "TransactionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Product_BrandId",
@@ -815,6 +861,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "SystemUser");
+
+            migrationBuilder.DropTable(
+                name: "Location");
 
             migrationBuilder.DropTable(
                 name: "PurchaseOrder");

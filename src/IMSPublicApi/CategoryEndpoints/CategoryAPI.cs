@@ -104,6 +104,8 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
 
                 return NotFound(response);
             }
+            
+            
 
             category.Transaction = TransactionUpdateHelper.UpdateTransaction(category.Transaction,UserTransactionActionType.Modify ,category.Id,
                 (await _userAuthentication.GetCurrentSessionUser()).Id);
@@ -114,9 +116,14 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
             await _categoryAsyncRepository.UpdateAsync(category);
             // await _categoryIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.CategorySearchIndex(category),
             //     ElasticIndexConstant.CATEGORIES);
+            response = new CategoryUpdateResponse
+            {
+                Status = true,
+                Verbose = "Updated category",
+                UpdatedCategory = category
+            };
             
-            
-            return Ok();
+            return Ok(response);
         }
     }
     
