@@ -24,6 +24,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string SupplierEmail { get; set; }
         public string CreatedByName { get; set; }
         public string CanceledByName { get; set; }
+        public bool HasBeenModified { get; set; }
 
         public string ConfirmedByName { get; set; }
         public string Status { get; set; }

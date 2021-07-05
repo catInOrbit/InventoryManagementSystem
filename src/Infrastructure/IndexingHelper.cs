@@ -26,12 +26,10 @@ namespace Infrastructure
                 ModifiedDate = (po.Transaction.TransactionRecord.Count > 0) ? po.Transaction.TransactionRecord[^1].Date : DateTime.MinValue,
                 DeliveryDate = po.DeliveryDate,
                 TotalPrice = (po.TotalOrderAmount != null) ? po.TotalOrderAmount : 0,
-                
-             
                 SupplierEmail = (po.Supplier != null) ? po.Supplier.Email : "",
                 SupplierId = (po.Supplier != null) ? po.Supplier.Id : "",
                 SupplierPhone = (po.Supplier != null) ? po.Supplier.PhoneNumber : "",
-          
+                HasBeenModified = po.HasBeenModified
             };
 
             index.CanceledByName =

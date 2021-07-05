@@ -58,7 +58,11 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote.C
             po.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Purchase, po.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
             
             po.PurchaseOrderStatus = PurchaseOrderStatusType.PQCreated;
+            po.HasBeenModified = true;
+            
             response.PurchaseOrderPQ = po;
+            Console.WriteLine(po.ToString());
+            
             await _asyncRepository.UpdateAsync(po);
             await _indexAsyncRepository.ElasticSaveSingleAsync(false,IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
             

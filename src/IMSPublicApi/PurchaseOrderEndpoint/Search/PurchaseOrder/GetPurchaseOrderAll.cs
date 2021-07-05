@@ -122,6 +122,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
                 ToModifiedDate = request.ToModifiedDate,
                 FromTotalOrderPrice = request.FromTotalOrderPrice,
                 ToTotalOrderPrice = request.ToTotalOrderPrice,
+                HideMerged = request.HideMerged
             };
             if (request.SearchQuery == null)
             {

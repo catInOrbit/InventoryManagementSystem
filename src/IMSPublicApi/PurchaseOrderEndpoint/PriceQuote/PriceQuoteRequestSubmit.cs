@@ -62,6 +62,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             
             var po = _asyncRepository.GetPurchaseOrderByNumber(request.OrderNumber);
             po.PurchaseOrderStatus = PurchaseOrderStatusType.POCreated;
+            po.HasBeenModified = true;
             
             po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit, po.Id,
                 (await _userAuthentication.GetCurrentSessionUser()).Id);

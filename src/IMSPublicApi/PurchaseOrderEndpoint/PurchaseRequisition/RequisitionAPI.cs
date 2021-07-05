@@ -66,14 +66,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
               po.PurchaseOrderProduct = request.OrderItems;
               po.Deadline = request.Deadline;
               
-              //Merge multiple requisitions by ID
-              foreach (var requestMergedRequisitionId in request.MergedRequisitionIds)
-              {
-                  var requisitionToBeMerged = await _asyncRepository.GetByIdAsync(requestMergedRequisitionId);
-                  requisitionToBeMerged.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionMerge;
-                  await _asyncRepository.UpdateAsync(requisitionToBeMerged);
-              }
-            
               await _asyncRepository.AddAsync(po);
               await _indexAsyncRepository.ElasticSaveSingleAsync(true, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
             

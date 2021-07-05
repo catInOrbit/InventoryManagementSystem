@@ -103,7 +103,7 @@ namespace Infrastructure.Data
                 pos = await _identityAndProductDbContext.PurchaseOrder.
                     Where(variant => variant.Transaction.TransactionRecord.Count > 0 && variant.Transaction.TransactionStatus!=false 
                         && variant.Transaction.Type!=TransactionType.Deleted
-                        && variant.PurchaseOrderStatus != PurchaseOrderStatusType.RequisitionMerge
+                        && variant.PurchaseOrderStatus != PurchaseOrderStatusType.RequisitionMerged
                         ).ToListAsync();
             else
                 pos = await _identityAndProductDbContext.PurchaseOrder.

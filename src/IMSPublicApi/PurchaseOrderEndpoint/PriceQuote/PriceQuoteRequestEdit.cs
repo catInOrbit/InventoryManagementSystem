@@ -56,7 +56,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             
             po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction, UserTransactionActionType.Modify, po.Id,
                 (await _userAuthentication.GetCurrentSessionUser()).Id);
-            
+            po.HasBeenModified = true;
+
             po.PurchaseOrderProduct.Clear();
             po.TotalOrderAmount = 0;
             foreach (var requestOrderItemInfo in request.OrderItemInfos)
@@ -66,6 +67,17 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 requestOrderItemInfo.TotalAmount = requestOrderItemInfo.Price * requestOrderItemInfo.OrderQuantity;
                 po.TotalOrderAmount += requestOrderItemInfo.TotalAmount;
                 po.PurchaseOrderProduct.Add(requestOrderItemInfo);
+            }
+            
+            Console.WriteLine(po.ToString());
+            
+            foreach (var requestMergedRequisitionId in request.MergedRequisitionIds)
+            {
+                var poMerged = await _asyncRepository.GetByIdAsync(requestMergedRequisitionId);
+                poMerged.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionMerged;
+                poMerged.MergedWithPurchaseOrderId = po.Id;
+                await _asyncRepository.UpdateAsync(poMerged);
+                await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(poMerged), ElasticIndexConstant.PURCHASE_ORDERS);
             }
             
             po.MailDescription = request.MailDescription;

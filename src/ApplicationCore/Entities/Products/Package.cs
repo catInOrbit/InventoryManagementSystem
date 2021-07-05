@@ -28,7 +28,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public string LocationId { get; set; }
         public virtual Location Location { get; set; }
         
-        public string TransactionId { get; set; }        
+        public string TransactionId { get; set; }
+        [Ignore]
         public virtual Transaction Transaction { get; set; }
         public string GoodsReceiptOrderId { get; set; }
         [Ignore]

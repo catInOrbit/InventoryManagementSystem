@@ -18,6 +18,5 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public string ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
         public UserTransactionActionType UserTransactionActionType { get; set; }
-        public bool HasBeenModified { get; set; }
     }
 }

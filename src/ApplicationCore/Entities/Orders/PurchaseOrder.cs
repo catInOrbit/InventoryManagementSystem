@@ -35,6 +35,11 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public string TransactionId { get; set; }
         public DateTime Deadline { get; set; }
         public virtual Transaction Transaction { get; set; }
-        
+        public bool HasBeenModified { get; set; }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
     }
 }

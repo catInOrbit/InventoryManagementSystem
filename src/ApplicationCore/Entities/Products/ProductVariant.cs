@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
-using Nest;
 using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Products
@@ -27,10 +25,17 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public virtual Transaction Transaction { get; set; }
         [JsonIgnore]
         public virtual Product Product { get; set; }
-        [Nest.PropertyName("variantValues")]
-        [Nest.Nested]
         // public virtual ICollection<VariantValue> VariantValues { get; set; }
         public bool IsVariantType { get; set; }
         public virtual IList<Package> Packages { get; set; }
+        public bool ShouldSerializeTransaction()
+        {
+            return false;
+        }
+        
+        public bool ShouldSerializeProduct()
+        {
+            return false;
+        }
     }
 }

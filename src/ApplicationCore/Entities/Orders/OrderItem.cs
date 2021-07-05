@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
@@ -15,7 +15,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         [JsonIgnore]
         public string OrderId { get; set; }
         public string ProductVariantId { get; set; }
-        [JsonIgnore]
         public virtual ProductVariant ProductVariant { get; set; }
         public int OrderQuantity { get; set; }
         public string Unit { get; set; }

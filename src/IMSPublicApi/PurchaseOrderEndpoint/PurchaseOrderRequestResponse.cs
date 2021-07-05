@@ -23,6 +23,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
         
         public string PurchaseOrderNumber { get; set; }
         public string SupplierId { get; set; }
+        public List<string> MergedRequisitionIds { get; set; }
         public DateTime Deadline { get; set; }
         public string MailDescription { get; set; }
         public ICollection<OrderItem> OrderItemInfos  { get; set; }
@@ -134,7 +135,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
     public class RequisitionCreateRequest
     {
         public string SupplierId { get; set; }
-        public List<string> MergedRequisitionIds { get; set; }
         public DateTime Deadline { get; set; }
         public List<OrderItem> OrderItems { get; set; }
     }
