@@ -149,8 +149,8 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                     gio.GoodsIssueType = GoodsIssueStatusType.Completed;
                     break;
             }
-            gio.Transaction = TransactionUpdateHelper.UpdateTransaction(gio.Transaction, UserTransactionActionType.Modify, gio.Id,
-                (await _userAuthentication.GetCurrentSessionUser()).Id);
+            gio.Transaction = TransactionUpdateHelper.UpdateTransaction(gio.Transaction, UserTransactionActionType.Modify,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, gio.Id, "");
             
             
             // ProductStrategyService productStrategyService =
@@ -230,6 +230,62 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 currentUser.Id, messageNotification);
             
             return Ok(response);
+        }
+    }
+     
+      public class GoodsIssueCancel : BaseAsyncEndpoint.WithRequest<GiCancel>.WithoutResponse
+    {
+        private readonly IUserSession _userAuthentication;
+        private readonly IAsyncRepository<GoodsIssueOrder> _asyncRepository;
+        private readonly IAsyncRepository<ProductVariant> _productVariantAsyncRepository;
+
+        private readonly IAsyncRepository<GoodsIssueSearchIndex> _goodIssueasyncRepository;
+
+        private readonly IAuthorizationService _authorizationService;
+        private IAsyncRepository<Package> _packageAsyncRepository;
+
+        private INotificationService _notificationService;
+
+
+        public GoodsIssueCancel(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAsyncRepository<GoodsIssueSearchIndex> goodIssueasyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository)
+        {
+            _userAuthentication = userAuthentication;
+            _asyncRepository = asyncRepository;
+            _authorizationService = authorizationService;
+            _notificationService = notificationService;
+            _packageAsyncRepository = packageAsyncRepository;
+            _goodIssueasyncRepository = goodIssueasyncRepository;
+            _productVariantAsyncRepository = productVariantAsyncRepository;
+        }
+
+        [HttpPut("api/goodsissue/reject")]
+        [SwaggerOperation(
+            Summary = "Reject a goodsisssue",
+            Description = "Reject a goodsisssue",
+            OperationId = "gio.cancel",
+            Tags = new[] { "GoodsIssueEndpoints" })
+        ]
+        public override async Task<ActionResult> HandleAsync(GiCancel request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSISSUE, UserOperations.Update))
+                return Unauthorized();
+            
+            var gio = _asyncRepository.GetGoodsIssueOrderByNumber(request.IssueNumber);
+            gio.GoodsIssueType = GoodsIssueStatusType.Cancel;
+        
+            gio.Transaction = TransactionUpdateHelper.UpdateTransaction(gio.Transaction, UserTransactionActionType.Reject,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, gio.Id, request.CancelReason);
+
+            await _asyncRepository.UpdateAsync(gio);
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Cancel", "Goods Issue", gio.Id);
+                
+            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                currentUser.Id, messageNotification);
+            
+            return Ok();
         }
     }
 }

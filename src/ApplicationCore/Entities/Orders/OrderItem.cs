@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using Nest;
@@ -24,5 +25,10 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public decimal DiscountAmount { get; set; }
         public decimal TotalAmount { get; set; }
 
+        [OnSerializing]
+        public void FormatProductVariantResponse(StreamingContext context)
+        {
+            ProductVariant.IsShowingTransaction = false;
+        }
     }
 }

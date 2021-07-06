@@ -26,7 +26,6 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
 
         public int CurrentPage { get; set; }
         public int SizePerPage { get; set; }
-        
         public string FromStatus { get; set; }
         public string ToStatus { get; set; }
         public string FromCreatedDate { get; set; }
@@ -61,6 +60,12 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
     public class STAdjustRequest : BaseRequest
     {
         public string StockTakeId { get; set; }
+    }
+    
+    public class STCancelRequest : BaseRequest
+    {
+        public string StockTakeId { get; set; }
+        public string CancelReason { get; set; }
     }
     
     public class STSingleUpdateRequest : BaseRequest

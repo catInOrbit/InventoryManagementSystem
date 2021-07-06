@@ -49,8 +49,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
 
             var stockTakeOrder = await _asyncRepository.GetByIdAsync(request.Id);
             stockTakeOrder.StockTakeOrderType = StockTakeOrderType.Completed;
-            stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Submit, stockTakeOrder.Id,
-                (await _userAuthentication.GetCurrentSessionUser()).Id);
+            stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Submit,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, stockTakeOrder.Id, "");
             
             
             await _asyncRepository.UpdateAsync(stockTakeOrder);
@@ -87,8 +87,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
 
         [HttpPut("api/stocktake/updatesingle")]
         [SwaggerOperation(
-            Summary = "Update stock taking file",
-            Description = "Update stock taking file",
+            Summary = "Update a single line of a stock take",
+            Description = "Update a single line of a stock take",
             OperationId = "st.update",
             Tags = new[] { "StockTakingEndpoints" })
         ]
@@ -116,20 +116,18 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                     var packages = await _asyncRepository.GetPackagesFromProductVariantId(productVariant.Id);
                     Console.WriteLine("Number of packages found: " + packages.Count);
                     int totalQuantity = 0;
-                    
+
                     foreach (var package in packages)
-                        totalQuantity += package.Quantity;
-
-                    Console.WriteLine("Total Quantity: " + totalQuantity);
-
-                    if (request.ActualQuantity != totalQuantity)
-                        response.MismatchQuantityPackageIds.Add(productVariant.Id);
+                    {
+                        if (request.ActualQuantity != package.Quantity)
+                            response.MismatchQuantityPackageIds.Add(package.Id);
+                    }
                 }
             }
             
             storder.StockTakeOrderType = StockTakeOrderType.Progressing;
-            storder.Transaction = TransactionUpdateHelper.UpdateTransaction(storder.Transaction,UserTransactionActionType.Modify, storder.Id,
-                (await _userAuthentication.GetCurrentSessionUser()).Id);
+            storder.Transaction = TransactionUpdateHelper.UpdateTransaction(storder.Transaction,UserTransactionActionType.Modify,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, storder.Id, "");
             await _asyncRepository.UpdateAsync(storder);
             
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
@@ -149,13 +147,14 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
          private readonly IAsyncRepository<ProductVariant> _productAsyncRepository;
          private readonly IAsyncRepository<Location> _locationAsyncRepository;
          private readonly IAsyncRepository<Package> _packageAsyncRepository;
+         private readonly IAuthorizationService _authorizationService;
 
          
          private readonly IUserSession _userAuthentication;
 
          private readonly INotificationService _notificationService;
 
-         public StockTakeAddProduct(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository)
+         public StockTakeAddProduct(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService)
          {
              _stAsyncRepository = stAsyncRepository;
              _productAsyncRepository = productAsyncRepository;
@@ -163,6 +162,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              _userAuthentication = userAuthentication;
              _notificationService = notificationService;
              _packageAsyncRepository = packageAsyncRepository;
+             _authorizationService = authorizationService;
          }
 
 
@@ -175,6 +175,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
          ]
          public override async Task<ActionResult<STCreateItemResponse>> HandleAsync(STAddRequest request, CancellationToken cancellationToken = new CancellationToken())
          {
+             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.STOCKTAKEORDER, UserOperations.Update))
+                 return Unauthorized();
              var response = new STCreateItemResponse();
              StockTakeOrder stockTakeOrder = null;
              bool isNewStockTake = false;
@@ -199,7 +201,6 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                      return NotFound(response);
                  }
                  
-                
                  stockTakeOrder.GroupLocations.Add(stockTakeGroupLocation);
              }
              
@@ -207,8 +208,9 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              {
                  foreach (var stockTakeItem in stockTakeGroupLocation.CheckItems)
                  {
-                     if (stockTakeItem.ActualQuantity != stockTakeItem.Package.Quantity)
-                         response.MismatchQuantityPackageIds.Add(stockTakeItem.Package.ProductVariantId);
+                     var package = await _packageAsyncRepository.GetByIdAsync(stockTakeItem.PackageId);
+                     if (stockTakeItem.ActualQuantity != package.Quantity)
+                         response.MismatchQuantityPackageIds.Add(package.Id);
                  }
              }
              
@@ -235,8 +237,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                  stockTakeOrder.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.StockTake,stockTakeOrder.Id,
                      (await _userAuthentication.GetCurrentSessionUser()).Id);
              else
-                 stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Modify, stockTakeOrder.Id,
-                     (await _userAuthentication.GetCurrentSessionUser()).Id);
+                 stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Modify,
+                     (await _userAuthentication.GetCurrentSessionUser()).Id, stockTakeOrder.Id, "");
              try
              {
                  if(isNewStockTake)
@@ -272,13 +274,13 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
          private readonly IAsyncRepository<ProductVariant> _productAsyncRepository;
          private readonly IAsyncRepository<Location> _locationAsyncRepository;
          private readonly IAsyncRepository<Package> _packageAsyncRepository;
+         private readonly IAuthorizationService _authorizationService;
 
-         
          private readonly IUserSession _userAuthentication;
 
          private readonly INotificationService _notificationService;
 
-         public StockTakeAdjust(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository)
+         public StockTakeAdjust(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService)
          {
              _stAsyncRepository = stAsyncRepository;
              _productAsyncRepository = productAsyncRepository;
@@ -286,6 +288,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              _userAuthentication = userAuthentication;
              _notificationService = notificationService;
              _packageAsyncRepository = packageAsyncRepository;
+             _authorizationService = authorizationService;
          }
 
 
@@ -296,8 +299,13 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              OperationId = "st.add",
              Tags = new[] { "StockTakingEndpoints" })
          ]
+         
+         
          public override async Task<ActionResult> HandleAsync(STAdjustRequest request, CancellationToken cancellationToken = new CancellationToken())
          {
+             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.STOCKTAKEORDER, UserOperations.Update))
+                 return Unauthorized();
+             
              Dictionary<ProductVariant, int> quantityUpdateProductDict = new Dictionary<ProductVariant, int>();
              var stockTakeOrder = await _stAsyncRepository.GetByIdAsync(request.StockTakeId);
              foreach (var stockTakeGroupLocation in stockTakeOrder.GroupLocations)
@@ -326,10 +334,65 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
             
              stockTakeOrder.StockTakeOrderType = StockTakeOrderType.Adjusted;
              
-             stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Modify, stockTakeOrder.Id,
-                 (await _userAuthentication.GetCurrentSessionUser()).Id);
+             stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Modify,
+                 (await _userAuthentication.GetCurrentSessionUser()).Id, stockTakeOrder.Id, "");
              
              
+             var currentUser = await _userAuthentication.GetCurrentSessionUser();
+                  
+             var messageNotification =
+                 _notificationService.CreateMessage(currentUser.Fullname, "Add","Stock Take Item", stockTakeOrder.Id);
+                
+             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                 currentUser.Id, messageNotification);
+             return Ok();
+         }
+     }
+      
+       public class StockTakeCancel : BaseAsyncEndpoint.WithRequest<STCancelRequest>.WithoutResponse
+     {
+         private readonly IAsyncRepository<StockTakeOrder> _stAsyncRepository;
+         private readonly IAsyncRepository<ProductVariant> _productAsyncRepository;
+         private readonly IAsyncRepository<Location> _locationAsyncRepository;
+         private readonly IAsyncRepository<Package> _packageAsyncRepository;
+         private readonly IAuthorizationService _authorizationService;
+
+         private readonly IUserSession _userAuthentication;
+
+         private readonly INotificationService _notificationService;
+
+         public StockTakeCancel(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService)
+         {
+             _stAsyncRepository = stAsyncRepository;
+             _productAsyncRepository = productAsyncRepository;
+             _locationAsyncRepository = locationAsyncRepository;
+             _userAuthentication = userAuthentication;
+             _notificationService = notificationService;
+             _packageAsyncRepository = packageAsyncRepository;
+             _authorizationService = authorizationService;
+         }
+
+
+         [HttpPut("api/stocktake/reject")]
+         [SwaggerOperation(
+             Summary = "Reject a stocktake",
+             Description = "Reject a stocktake",
+             OperationId = "st.cancel",
+             Tags = new[] { "StockTakingEndpoints" })
+         ]
+         public override async Task<ActionResult> HandleAsync(STCancelRequest request, CancellationToken cancellationToken = new CancellationToken())
+         {
+             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.STOCKTAKEORDER, UserOperations.Update))
+                 return Unauthorized();
+             
+             var stockTakeOrder = await _stAsyncRepository.GetByIdAsync(request.StockTakeId);
+           
+             stockTakeOrder.StockTakeOrderType = StockTakeOrderType.Cancel;
+
+             stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Reject,
+                 (await _userAuthentication.GetCurrentSessionUser()).Id, stockTakeOrder.Id, request.CancelReason);
+             
+             await _stAsyncRepository.UpdateAsync(stockTakeOrder);
              var currentUser = await _userAuthentication.GetCurrentSessionUser();
                   
              var messageNotification =

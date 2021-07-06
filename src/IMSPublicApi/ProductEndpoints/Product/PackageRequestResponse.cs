@@ -13,6 +13,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
         public string SearchQuery { get; set; }
         public int CurrentPage { get; set; }
         public int SizePerPage { get; set; }
+        
+        public bool IsLocationOnly { get; set; }
     }
     
     public class PackageResponse

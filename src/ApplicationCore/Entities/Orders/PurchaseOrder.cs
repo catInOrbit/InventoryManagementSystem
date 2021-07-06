@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
@@ -38,6 +40,18 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         
         public virtual Transaction Transaction { get; set; }
         public bool HasBeenModified { get; set; }
+        
+          
+        [OnSerializing]
+        public void FormatProductVariantResponse(StreamingContext context)
+        {
+            foreach (var orderItem in PurchaseOrderProduct)
+            {
+                orderItem.ProductVariant.IsShowingTransaction = false;
+                foreach (var productVariantPackage in orderItem.ProductVariant.Packages)
+                    productVariantPackage.IsShowingTransaction = false;
+            }
+        }
 
         public override string ToString()
         {

@@ -116,8 +116,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             
             var po = await _asyncRepository.GetByIdAsync(request.Id);
 
-            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit, po.Id,
-                (await _userAuthentication.GetCurrentSessionUser()).Id);
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
 
             po.PurchaseOrderStatus = PurchaseOrderStatusType.PQCreated;
 
@@ -190,8 +190,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             po.PurchaseOrderProduct.Clear();
             po.PurchaseOrderProduct = request.OrderItems;
             
-            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Modify, po.Id,
-                (await _userAuthentication.GetCurrentSessionUser()).Id);
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Modify,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
             po.Deadline = request.Deadline;
             
             po.SupplierId = request.SupplierId;

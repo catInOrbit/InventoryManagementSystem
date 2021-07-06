@@ -83,7 +83,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string ToTotalPrice { get; set; }
         public string FromPrice { get; set; }
         public string ToPrice { get; set; }
-        public string Location { get; set; }
+        public string LocationId { get; set; }
         public string FromQuantity { get; set; }
         public string ToQuantity { get; set; }
 

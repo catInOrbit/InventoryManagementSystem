@@ -64,8 +64,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             po.PurchaseOrderStatus = PurchaseOrderStatusType.POCreated;
             po.HasBeenModified = true;
             
-            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit, po.Id,
-                (await _userAuthentication.GetCurrentSessionUser()).Id);
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
             
             
             await _asyncRepository.UpdateAsync(po);

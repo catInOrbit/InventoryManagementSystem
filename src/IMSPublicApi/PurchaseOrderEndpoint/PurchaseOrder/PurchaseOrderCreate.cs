@@ -58,8 +58,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             poData.PurchaseOrderStatus = PurchaseOrderStatusType.POWaitingConfirmation;
             poData.Transaction.Type = TransactionType.Purchase;
 
-            poData.Transaction = TransactionUpdateHelper.UpdateTransaction(poData.Transaction,UserTransactionActionType.Modify, poData.Id,
-                (await _userAuthentication.GetCurrentSessionUser()).Id);
+            poData.Transaction = TransactionUpdateHelper.UpdateTransaction(poData.Transaction,UserTransactionActionType.Modify,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, poData.Id, "");
 
             response.PurchaseOrder = poData;
             await _purchaseOrderRepos.UpdateAsync(poData);

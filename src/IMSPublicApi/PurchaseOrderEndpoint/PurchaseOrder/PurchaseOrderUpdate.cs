@@ -61,8 +61,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 return Unauthorized();
 
             var po =  _purchaseOrderRepos.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
-            po .Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction, UserTransactionActionType.Modify,po.Id,
-                (await _userAuthentication.GetCurrentSessionUser()).Id);
+            po .Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction, UserTransactionActionType.Modify,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
             
             po.PurchaseOrderProduct.Clear();
             foreach (var requestOrderItemInfo in request.OrderItemInfos)

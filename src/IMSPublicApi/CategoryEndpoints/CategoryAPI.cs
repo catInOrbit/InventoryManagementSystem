@@ -107,8 +107,8 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
             
             
 
-            category.Transaction = TransactionUpdateHelper.UpdateTransaction(category.Transaction,UserTransactionActionType.Modify ,category.Id,
-                (await _userAuthentication.GetCurrentSessionUser()).Id);
+            category.Transaction = TransactionUpdateHelper.UpdateTransaction(category.Transaction,UserTransactionActionType.Modify,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, category.Id, "");
             
             category.CategoryName = request.CategoryName;
             category.CategoryDescription = request.CategoryDescription;

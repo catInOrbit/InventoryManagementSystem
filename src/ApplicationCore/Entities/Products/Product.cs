@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using Newtonsoft.Json;
 
@@ -26,5 +27,12 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public virtual Category Category { get; set; }
         public virtual ICollection<ProductVariant> ProductVariants { get; set; }
         public bool IsVariantType { get; set; }
+        
+        [OnSerializing]
+        public void FormatProductVariantResponse(StreamingContext context)
+        {
+            foreach (var productVariant in ProductVariants)
+                productVariant.IsShowingTransaction = true;
+        }
     }
 }

@@ -97,4 +97,11 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
         public string ChangeStatusTo { get; set; }
 
     }
+    
+    public class GiCancel : BaseRequest
+    {
+        public string IssueNumber { get; set; }
+        public string CancelReason { get; set; }
+
+    }
 }

@@ -69,8 +69,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 ro.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.GoodsReceipt, ro.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
             
                                           
-            ro.Transaction = TransactionUpdateHelper.UpdateTransaction(ro.Transaction,UserTransactionActionType.Modify, ro.Id,
-                (await _userAuthentication.GetCurrentSessionUser()).Id);
+            ro.Transaction = TransactionUpdateHelper.UpdateTransaction(ro.Transaction,UserTransactionActionType.Modify,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, ro.Id, "");
             
             var purhchaseOrder = await _poRepository.GetByIdAsync(request.PurchaseOrderNumber);
             ro.SupplierId = purhchaseOrder.SupplierId;
@@ -235,8 +235,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         {
             var ro = await _roAsyncRepository.GetByIdAsync(request.ReceivingOrderId);
             var po = await _poAsyncRepository.GetByIdAsync(ro.PurchaseOrderId);
-            ro.Transaction = TransactionUpdateHelper.UpdateTransaction(ro.Transaction,UserTransactionActionType.Submit, ro.Id,
-                (await _userAuthentication.GetCurrentSessionUser()).Id);
+            ro.Transaction = TransactionUpdateHelper.UpdateTransaction(ro.Transaction,UserTransactionActionType.Submit,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, ro.Id, "");
 
             var response = new ROSubmitResponse();
             foreach (var goodsReceiptOrderItem in ro.ReceivedOrderItems)
@@ -272,6 +272,4 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             return Ok();
         }
     }
-    
-    
 }

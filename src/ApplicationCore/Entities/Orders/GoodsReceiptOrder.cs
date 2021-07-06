@@ -27,9 +27,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public string SupplierInvoice { get; set; }
         public virtual List<GoodsReceiptOrderItem> ReceivedOrderItems { get; set; } = new List<GoodsReceiptOrderItem>();
         public string TransactionId { get; set; }
-        [JsonIgnore]
         public virtual Transaction Transaction { get; set; }
-        
     }
 
 }

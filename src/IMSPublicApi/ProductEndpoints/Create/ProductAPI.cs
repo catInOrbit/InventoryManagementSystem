@@ -156,8 +156,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
            product.Brand.BrandDescription = request.BrandDescription;
            product.CategoryId = request.CategoryId;
             
-           product.Transaction = TransactionUpdateHelper.UpdateTransaction(product.Transaction,UserTransactionActionType.Modify, product.Id,
-                (await _userAuthentication.GetCurrentSessionUser()).Id);
+           product.Transaction = TransactionUpdateHelper.UpdateTransaction(product.Transaction,UserTransactionActionType.Modify,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, product.Id, "");
 
             product.TransactionId = product.Transaction.Id;
             product.IsVariantType = request.IsVariantType;
@@ -209,8 +209,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
 
                     productVariant.Transaction.TransactionRecord[^1].Name = "Created Product Variant" + productVariant.Id;
                     product.ProductVariants.Add(productVariant);
-
-
                 }
             }
 
@@ -229,6 +227,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     Cost = productVairantUpdateRequestInfo.SalePrice,
                     ProductId = product.Id
                 };
+
                 
                 productVariant.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.ProductVariant, productVariant.Id, 
                     (await _userAuthentication.GetCurrentSessionUser()).Id);

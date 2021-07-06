@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using Newtonsoft.Json;
@@ -16,7 +18,12 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public TransactionType Type { get; set; }
         public bool TransactionStatus { get; set; }
         
-        [JsonIgnore]
         public virtual IList<TransactionRecord> TransactionRecord { get; set; }
+
+        [OnSerialized]
+        public void FormatTransactionResponse(StreamingContext context)
+        {
+            TransactionRecord = TransactionRecord.GroupBy(e => e.UserTransactionActionType).Select(g => g.LastOrDefault()).ToList();
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using Nest;
 using Newtonsoft.Json;
@@ -14,7 +15,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
             Id = Guid.NewGuid().ToString();
         }
         public string ProductVariantId { get; set; }
-        [Ignore]
+        // [Ignore]
         public virtual ProductVariant  ProductVariant { get; set; }
 
         [Ignore]
@@ -34,6 +35,11 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public string GoodsReceiptOrderId { get; set; }
         [Ignore]
         public virtual GoodsReceiptOrder GoodsReceiptOrder { get; set; }
+        
+        [JsonIgnore]
+        [Ignore]
+        [NotMapped]
+        public bool IsShowingTransaction { get; set; }
 
         [JsonIgnore]
         [Ignore]
@@ -54,11 +60,19 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
             return false;
         }
         
-        public bool ShouldSerializeProductVariant()
+
+        public bool ShouldSerializeTransaction()
         {
-            if (IsDisplayingDetail)
+            if (IsShowingTransaction)
                 return true;
             return false;
+        }
+        
+        [OnSerializing]
+        public void FormatProductVariantResponse(StreamingContext context)
+        {
+            if(ProductVariant != null)
+                ProductVariant.IsShowingTransaction = false;
         }
     }
 }

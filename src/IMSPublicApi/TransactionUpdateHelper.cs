@@ -34,12 +34,16 @@ namespace InventoryManagementSystem.PublicApi
         }
         
         
-        public static Transaction UpdateTransaction(Transaction transaction, UserTransactionActionType userTransactionActionType, string objectId, string userId)
+        public static Transaction UpdateTransaction(Transaction transaction,
+            UserTransactionActionType userTransactionActionType, string userId, string objectId, string reason)
         {
             var latestRecord = transaction.TransactionRecord[^1];
             
-            string actionName = String.Format("Update {0}, ID: {1}",latestRecord.Transaction.Type.ToString(),objectId);
-
+            
+            string actionName = String.Format("{0} {1}, ID: {2}",userTransactionActionType.ToString() ,latestRecord.Transaction.Type.ToString(),objectId);
+            if (userTransactionActionType == UserTransactionActionType.Reject)
+                actionName += "Reason: " + reason;
+            
             transaction.TransactionRecord.Add(new 
                 TransactionRecord
                 {

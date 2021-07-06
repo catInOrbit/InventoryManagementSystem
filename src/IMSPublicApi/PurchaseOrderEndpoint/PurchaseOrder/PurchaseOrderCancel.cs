@@ -33,21 +33,20 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             _notificationService = notificationService;
         }
         
-        [HttpPut("api/purchaseorder/cancel/{Id}")]
+        [HttpPut("api/purchaseorder/reject")]
         [SwaggerOperation(
             Summary = "Create purchase order",
             Description = "Create purchase order",
             OperationId = "po.create",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync([FromRoute] PODeleteRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult> HandleAsync(PODeleteRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER, UserOperations.Reject))
                 return Unauthorized();
 
             var po = await _asyncRepository.GetByIdAsync(request.Id);
-            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Reject, po.Id,
-                (await _userAuthentication.GetCurrentSessionUser()).Id);
+            
             po.Transaction.TransactionStatus = false;
 
             if((int)po.PurchaseOrderStatus == 0)
@@ -61,6 +60,10 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             
             if((int)po.PurchaseOrderStatus == 0)
                 po.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionCanceled;
+            
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Reject,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, request.CancelReason);
+            
            await _asyncRepository.UpdateAsync(po,cancellationToken);
            await _poSearchRepos.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
            

@@ -1,6 +1,6 @@
 using System;
-using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
@@ -11,7 +11,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
             Id = Guid.NewGuid().ToString();
         }
         public string PackageId { get; set; }
-        [JsonIgnore]
         public virtual Package Package { get; set; }
         public int ActualQuantity { get; set; }
         public string Note { get; set; }

@@ -77,6 +77,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
     public class PODeleteRequest : BaseRequest
     {
         public string Id { get; set; }
+        public string CancelReason { get; set; }
     }
     
     public class POSubmitRequest : BaseRequest

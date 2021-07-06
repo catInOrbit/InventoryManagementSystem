@@ -331,8 +331,8 @@ namespace Infrastructure.Data
                       package.Quantity <= int.Parse(packageSearchFilter.ToQuantity))) 
                     
                     &&
-                    (packageSearchFilter.Location == null ||
-                     (package.Location.LocationName == packageSearchFilter.Location) 
+                    (packageSearchFilter.LocationId == null ||
+                     (package.Location.Id == packageSearchFilter.LocationId) 
                     
                      &&
                      (packageSearchFilter.ProductVariantID == null ||

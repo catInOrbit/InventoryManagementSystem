@@ -88,9 +88,31 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                 return Ok(response);
             }
             
-            var responseElastic = await _elasticClient.SearchAsync<Package>
-            (
-                s => s.Size(2000).Index( ElasticIndexConstant.PACKAGES).Query(q =>q.QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));
+            
+            ISearchResponse<Package> responseElastic;
+
+            if (!request.IsLocationOnly)
+            {
+                responseElastic = await _elasticClient.SearchAsync<Package>
+                (
+                    s => s.Size(2000).Index( ElasticIndexConstant.PACKAGES).
+                        Query(q =>q.
+                            QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));    
+            }
+
+            else
+            {
+                responseElastic = await _elasticClient.SearchAsync<Package>
+                (
+                    s => s.Size(2000).Index( ElasticIndexConstant.PACKAGES).
+                        Source(
+                            source => source.Includes(
+                                    fi => fi.Field(package => package.Location)
+                                )
+                        ).
+                        Query(q =>q.
+                            QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));
+            }
             
             pagingOption.ResultList = _packageAsyncRepository.PackageIndexFiltering(responseElastic.Documents.ToList(), request,
                 new CancellationToken());

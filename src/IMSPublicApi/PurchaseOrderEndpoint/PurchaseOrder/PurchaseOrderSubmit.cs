@@ -58,8 +58,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             {
                 var po = _asyncRepository.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
                 // po.PurchaseOrderStatus = PurchaseOrderStatusType.POConfirm;
-                po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit, po.Id,
-                    (await _userAuthentication.GetCurrentSessionUser()).Id);
+                po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,
+                    (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
                 
                 await _asyncRepository.UpdateAsync(po);
                 var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();

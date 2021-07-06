@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
-using Newtonsoft.Json;
+using Nest;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Products
 {
@@ -22,14 +24,25 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public string TransactionId { get; set; }
         
         [JsonIgnore]
+        [Ignore]
         public virtual Transaction Transaction { get; set; }
         [JsonIgnore]
+        [Ignore]
         public virtual Product Product { get; set; }
         // public virtual ICollection<VariantValue> VariantValues { get; set; }
         public bool IsVariantType { get; set; }
+        [Ignore]
         public virtual IList<Package> Packages { get; set; }
+
+        [Ignore]
+        [JsonIgnore]
+        [NotMapped]
+        public bool IsShowingTransaction { get; set; }
+        
         public bool ShouldSerializeTransaction()
         {
+            if(IsShowingTransaction)
+                return true;
             return false;
         }
         

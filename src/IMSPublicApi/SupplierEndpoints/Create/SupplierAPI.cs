@@ -99,8 +99,8 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             var supplier = await _supplierAsyncRepository.GetByIdAsync(request.SupplierId);
 
                                             
-            supplier.Transaction = TransactionUpdateHelper.UpdateTransaction(supplier.Transaction,UserTransactionActionType.Modify, supplier.Id,
-                (await _userAuthentication.GetCurrentSessionUser()).Id);
+            supplier.Transaction = TransactionUpdateHelper.UpdateTransaction(supplier.Transaction,UserTransactionActionType.Modify,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, supplier.Id, "");
 
             supplier.Description = request.Description;
             supplier.Email = request.Email;

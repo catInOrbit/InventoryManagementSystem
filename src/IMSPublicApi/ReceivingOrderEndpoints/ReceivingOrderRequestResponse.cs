@@ -26,6 +26,13 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         public string ReceivingOrderId { get; set; }
     }
     
+    public class ROCancelRequest : BaseRequest
+    {
+        public string ReceivingOrderId { get; set; }
+        public string CancelReason { get; set; }
+
+    }
+    
     public class ROSubmitResponse : BaseRequest
     {
         public string IncompletePurchaseOrderId { get; set; }
