@@ -602,10 +602,10 @@ namespace Infrastructure.Data
                 var stockTakeReport = new StockTakeReport()
                 {
                     StockTakeDate = stockTakeItem.StockTakeOrder.Transaction.TransactionRecord[0].Date,
-                    ProductName = stockTakeItem.ProductVariant.Name,
-                    StorageQuantity = stockTakeItem.ProductVariant.StorageQuantity,
+                    ProductName = stockTakeItem.Package.ProductVariant.Name,
+                    StorageQuantity = stockTakeItem.Package.ProductVariant.StorageQuantity,
                     ActualQuantity = stockTakeItem.ActualQuantity,
-                    Value = stockTakeItem.ProductVariant.StorageQuantity * stockTakeItem.ProductVariant.Price
+                    Value = stockTakeItem.Package.ProductVariant.StorageQuantity * stockTakeItem.Package.ProductVariant.Price
                 };
                 
                 pagingOption.ResultList.Add(stockTakeReport);

@@ -10,7 +10,11 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
         public bool Status { get; set; }
         public string Verbose { get; set; }
         public StockTakeOrder StockTakeOrder { get; set; }
+        
+        public List<string> MismatchQuantityPackageIds { get; set; } = new List<string>();
     }
+    
+    
     
     public class STIdRequest : BaseRequest
     {
@@ -54,6 +58,11 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
         public string StockTakeId { get; set; }
     }
     
+    public class STAdjustRequest : BaseRequest
+    {
+        public string StockTakeId { get; set; }
+    }
+    
     public class STSingleUpdateRequest : BaseRequest
     {
         public string StockTakeId { get; set; }
@@ -64,6 +73,6 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
 
     public class STUpdateResponse : BaseResponse
     {
-        public List<string> MismatchProductVariantId { get; set; } = new List<string>();
+        public List<string> MismatchQuantityPackageIds { get; set; } = new List<string>();
     }
 }

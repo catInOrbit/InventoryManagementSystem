@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
-using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {

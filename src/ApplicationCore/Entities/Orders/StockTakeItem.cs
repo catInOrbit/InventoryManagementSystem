@@ -10,9 +10,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         {
             Id = Guid.NewGuid().ToString();
         }
-        public string ProductVariantId { get; set; }
+        public string PackageId { get; set; }
         [JsonIgnore]
-        public virtual ProductVariant ProductVariant { get; set; }
+        public virtual Package Package { get; set; }
         public int ActualQuantity { get; set; }
         public string Note { get; set; }
 

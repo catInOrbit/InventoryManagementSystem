@@ -12,7 +12,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         {
             Id = "ST"+Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
         }
-        public virtual ICollection<StockTakeGroupLocation> GroupLocations { get; set; }
+
+        public virtual ICollection<StockTakeGroupLocation> GroupLocations { get; set; } =
+            new List<StockTakeGroupLocation>();
         
         public string TransactionId { get; set; }
         public virtual Transaction Transaction { get; set; }
