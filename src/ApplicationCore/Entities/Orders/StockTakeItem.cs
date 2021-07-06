@@ -16,6 +16,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public int ActualQuantity { get; set; }
         public string Note { get; set; }
 
+        [JsonIgnore]
         public string StockTakeOrderId { get; set; }
         [JsonIgnore]
         public virtual StockTakeOrder StockTakeOrder { get; set; }
