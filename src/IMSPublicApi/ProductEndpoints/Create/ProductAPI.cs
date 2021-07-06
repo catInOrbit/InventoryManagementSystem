@@ -123,16 +123,18 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<ProductVariantSearchIndex> _productIndexAsyncRepositoryRepos;
+        private readonly IRedisRepository _redisRepository;
 
         private readonly INotificationService _notificationService;
 
-        public ProductUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductVariantSearchIndex> productIndexAsyncRepositoryRepos, INotificationService notificationService)
+        public ProductUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductVariantSearchIndex> productIndexAsyncRepositoryRepos, INotificationService notificationService, IRedisRepository redisRepository)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
             _productIndexAsyncRepositoryRepos = productIndexAsyncRepositoryRepos;
             _notificationService = notificationService;
+            _redisRepository = redisRepository;
         }
         
         [HttpPut("api/product/update")]
@@ -160,6 +162,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             product.TransactionId = product.Transaction.Id;
             product.IsVariantType = request.IsVariantType;
             var listNewVariant = new List<ProductVairantUpdateRequestInfo>(request.ProductVariantsUpdate);
+            
+
             if (product.IsVariantType)
             {
                 foreach (var productVairantRequestInfo in request.ProductVariantsUpdate)
@@ -173,11 +177,12 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                             productVariantSystemList.Unit = productVairantRequestInfo.Unit;
                             productVariantSystemList.IsVariantType = product.IsVariantType;
                             productVariantSystemList.Barcode = productVairantRequestInfo.Barcode;
+                            
                         }
-
                         else if(productVariantSystemList.Id == null)
                             listNewVariant.Remove(productVairantRequestInfo);
                     }
+                    await _redisRepository.RemoveProductUpdateMessage("ProductUpdateMessage", productVairantRequestInfo.Id);
                 }
 
                 foreach (var productVairantRequestInfo in listNewVariant)
@@ -204,6 +209,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
 
                     productVariant.Transaction.TransactionRecord[^1].Name = "Created Product Variant" + productVariant.Id;
                     product.ProductVariants.Add(productVariant);
+
+
                 }
             }
 
@@ -233,7 +240,9 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     productVariant.StorageQuantity += package.Quantity; 
                 
                 product.ProductVariants.Add(productVariant);
+                await _redisRepository.RemoveProductUpdateMessage("ProductUpdateMessage", productVariant.Id);
             }
+            
             
             await _asyncRepository.UpdateAsync(product);
             

@@ -11,6 +11,7 @@ using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Entities.RedisMessages;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
@@ -146,18 +147,20 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly IUserSession _userAuthentication;
 
         private readonly INotificationService _notificationService;
+        private readonly IRedisRepository _redisRepository;
 
-        public ReceivingOrderUpdateProductItem(IAuthorizationService authorizationService, IAsyncRepository<ProductVariantSearchIndex> poSearchIndexRepository, IAsyncRepository<ProductVariant> productVariantRepository, IUserSession userAuthentication, INotificationService notificationService)
+        public ReceivingOrderUpdateProductItem(IAuthorizationService authorizationService, IAsyncRepository<ProductVariantSearchIndex> poSearchIndexRepository, IAsyncRepository<ProductVariant> productVariantRepository, IUserSession userAuthentication, INotificationService notificationService, IRedisRepository redisRepository)
         {
             _authorizationService = authorizationService;
             _poSearchIndexRepository = poSearchIndexRepository;
             _productVariantRepository = productVariantRepository;
             _userAuthentication = userAuthentication;
             _notificationService = notificationService;
+            _redisRepository = redisRepository;
         }
 
 
-        [HttpPut("api/goodsreceipt/updateitem")]
+        [HttpPost("api/goodsreceipt/productinfoupdate")]
         [SwaggerOperation(
             Summary = "Update Receiving Order",
             Description = "Update Receiving Order",
@@ -169,25 +172,33 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Update))
                 return Unauthorized();
+
+
+            await _redisRepository.AddProductUpdateMessage("ProductUpdateMessage", new ProductUpdateMessage
+            {
+                Barcode = request.Barcode,
+                Sku = request.Sku,
+                ProductVariantId = request.ProductVariantId
+            });
             
             //Get Product Variant
-            var productVariant = await _productVariantRepository.GetByIdAsync(request.ProductVariantId);
-            
-            //Update SKU, LOCATION, PRICE
-            productVariant.Sku = request.Sku;
-            productVariant.Price = request.SalePrice;
+            // var productVariant = await _productVariantRepository.GetByIdAsync(request.ProductVariantId);
+            //
+            // //Update SKU, LOCATION, PRICE
+            // productVariant.Sku = request.Sku;
+            // productVariant.Barcode = request.Barcode;
             
             //Update and indexing
-            await _productVariantRepository.UpdateAsync(productVariant);
-            await _poSearchIndexRepository.ElasticSaveSingleAsync(false,IndexingHelper.ProductVariantSearchIndex(productVariant), ElasticIndexConstant.RECEIVING_ORDERS);
+            // await _productVariantRepository.UpdateAsync(productVariant);
+            // await _poSearchIndexRepository.ElasticSaveSingleAsync(false,IndexingHelper.ProductVariantSearchIndex(productVariant), ElasticIndexConstant.RECEIVING_ORDERS);
             
-            var currentUser = await _userAuthentication.GetCurrentSessionUser();
-
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Update","Product Variant", productVariant.Id);
-                
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
+            // var currentUser = await _userAuthentication.GetCurrentSessionUser();
+            //
+            // var messageNotification =
+            //     _notificationService.CreateMessage(currentUser.Fullname, "Update","Product Variant", request.ProductVariantId);
+            //     
+            // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+            //     currentUser.Id, messageNotification);
             return Ok();
         }
     }

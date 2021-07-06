@@ -55,7 +55,9 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
     {
         public string ProductVariantId { get; set; }
         public string Sku { get; set; }
-        public decimal SalePrice { get; set; }
+        
+        public string Barcode { get; set; }
+
     }
 
 }

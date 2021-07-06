@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Entities.RedisMessages;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 
 namespace InventoryManagementSystem.PublicApi.ProductEndpoints
@@ -189,6 +190,11 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
     
     public class GetBrandResponse : BaseSearchResponse<Brand>
     {
+    }
+
+    public class ProductUpdateMessageResponse
+    {
+        public List<ProductUpdateMessage> ProductUpdateMessages { get; set; }
     }
     
 }

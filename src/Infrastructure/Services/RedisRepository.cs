@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Notifications;
+using InventoryManagementSystem.ApplicationCore.Entities.RedisMessages;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using StackExchange.Redis;
 
@@ -98,6 +100,58 @@ namespace Infrastructure.Services
 
             var notifications_manager = JsonSerializer.Deserialize<GroupNotifications>(data);
             return notifications_manager.Notifications;
+        }
+
+        public async Task<bool> AddProductUpdateMessage(string keyId, ProductUpdateMessage productUpdateMessage)
+        {
+            var data = await database.StringGetAsync(keyId);
+
+            if (data.IsNullOrEmpty)
+            {
+                var productMessageGroup = new ProductMessageGroup
+                {
+                    Id = keyId,
+                    ModifiedDate = DateTime.Now,
+                    ProductUpdateMessages =  new List<ProductUpdateMessage>()
+                };
+                
+                await database.StringSetAsync(keyId, JsonSerializer.Serialize(productMessageGroup));
+            }
+            
+            data = await database.StringGetAsync(keyId);
+
+            var productGroup = JsonSerializer.Deserialize<ProductMessageGroup>(data);
+            productGroup.ProductUpdateMessages.Add(productUpdateMessage);
+
+
+            //var isDone = await database.StringSetAsync(group.Id.ToString(), JsonSerializer.Serialize(group));
+            //return isDone;
+            return await database.StringSetAsync(keyId, JsonSerializer.Serialize(productGroup));
+            await database.StringSetAsync(keyId, JsonSerializer.Serialize(productUpdateMessage));
+        }
+
+        public async Task<bool> RemoveProductUpdateMessage(string keyId, string productVariantId)
+        {
+            var data = await database.StringGetAsync(keyId);
+            if (data.IsNullOrEmpty)
+                throw new Exception("Unable to find redis key : " + keyId + ". Key may not exist");
+            
+            var productGroupMessage = JsonSerializer.Deserialize<ProductMessageGroup>(data);
+            var itemToRemove =
+                productGroupMessage.ProductUpdateMessages
+                    .FirstOrDefault(p => p.ProductVariantId == productVariantId);
+            productGroupMessage.ProductUpdateMessages.Remove(itemToRemove);
+            return await database.StringSetAsync(keyId, JsonSerializer.Serialize(productGroupMessage));
+        }
+
+        public async Task<List<ProductUpdateMessage>> GetProductUpdateMessage(string keyId)
+        {
+            
+            var data = await database.StringGetAsync(keyId);
+
+            var productGroupMessage = JsonSerializer.Deserialize<ProductMessageGroup>(data);
+            return productGroupMessage.ProductUpdateMessages;
+        
         }
     }
 
