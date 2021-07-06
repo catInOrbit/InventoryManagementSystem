@@ -7,6 +7,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
 {
     public class STCreateItemResponse : BaseResponse
     {
+        public bool Status { get; set; }
+        public string Verbose { get; set; }
         public StockTakeOrder StockTakeOrder { get; set; }
     }
     
@@ -48,7 +50,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
     
     public class STAddRequest : BaseRequest
     {
-        public List<string> ProductIds { get; set; }
+        public List<StockTakeGroupLocation> StockTakeGroupLocation { get; set; }
         public string StockTakeId { get; set; }
     }
     
