@@ -37,9 +37,13 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
             
             var response = new STIdResponse();
             var order = await _asyncRepository.GetByIdAsync(request.Id);
+            foreach (var stockTakeGroupLocation in order.GroupLocations)
+            {
+                foreach (var stockTakeItem in stockTakeGroupLocation.CheckItems)
+                    stockTakeItem.IsShowingPackageDetail = true;
+            }
             response.IsDisplayingAll = false;
             response.SingleResult = order;
-
             return Ok(response);
         }
     }

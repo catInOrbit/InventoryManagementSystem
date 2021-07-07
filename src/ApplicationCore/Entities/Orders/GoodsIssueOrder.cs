@@ -13,9 +13,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         {
             Id = "GO"+Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
         }
-        
         public string RequestId { get; set; }
-        
         public string DeliveryMethod { get; set; }
         public string CustomerName { get; set; }
         public string CustomerPhoneNumber { get; set; }

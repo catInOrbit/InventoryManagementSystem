@@ -290,8 +290,6 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              _packageAsyncRepository = packageAsyncRepository;
              _authorizationService = authorizationService;
          }
-
-
          [HttpPost("api/stocktake/adjust")]
          [SwaggerOperation(
              Summary = "Add product to check to stock take order",
@@ -299,8 +297,6 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              OperationId = "st.add",
              Tags = new[] { "StockTakingEndpoints" })
          ]
-         
-         
          public override async Task<ActionResult> HandleAsync(STAdjustRequest request, CancellationToken cancellationToken = new CancellationToken())
          {
              if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.STOCKTAKEORDER, UserOperations.Update))
@@ -403,53 +399,4 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              return Ok();
          }
      }
-     
-     // public class StockTakeCreate : BaseAsyncEndpoint.WithoutRequest.WithResponse<STCreateItemResponse>
-     // {
-     //     private readonly IAuthorizationService _authorizationService;
-     //     private readonly IAsyncRepository<StockTakeOrder> _asyncRepository;
-     //     private readonly IUserSession _userAuthentication;
-     //     private readonly INotificationService _notificationService;
-     //
-     //     public StockTakeCreate(IAuthorizationService authorizationService, IAsyncRepository<StockTakeOrder> asyncRepository, IUserSession userAuthentication, INotificationService notificationService)
-     //     {
-     //         _authorizationService = authorizationService;
-     //         _asyncRepository = asyncRepository;
-     //         _userAuthentication = userAuthentication;
-     //         _notificationService = notificationService;
-     //     }
-     //
-     //     [HttpPost("api/stocktake/create")]
-     //     [SwaggerOperation(
-     //         Summary = "Create a stock take order",
-     //         Description = "Create a stock take order",
-     //         OperationId = "st.create",
-     //         Tags = new[] { "StockTakingEndpoints" })
-     //     ]
-     //     public override async Task<ActionResult<STCreateItemResponse>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
-     //     {
-     //         if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.STOCKTAKEORDER, UserOperations.Create))
-     //             return Unauthorized();
-     //
-     //         var response = new STCreateItemResponse();
-     //
-     //         var sto = new StockTakeOrder();
-     //       
-     //         sto.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.StockTake, sto.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
-     //
-     //         sto.StockTakeOrderType = StockTakeOrderType.Progressing;
-     //         await _asyncRepository.AddAsync(sto);
-     //         response.StockTakeOrder = sto;
-     //         
-     //           
-     //         var currentUser = await _userAuthentication.GetCurrentSessionUser();
-     //              
-     //         var messageNotification =
-     //             _notificationService.CreateMessage(currentUser.Fullname, "Create","Stock Take", sto.Id);
-     //            
-     //         await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-     //             currentUser.Id, messageNotification);
-     //         return Ok(response);
-     //     }
-     // }
 }

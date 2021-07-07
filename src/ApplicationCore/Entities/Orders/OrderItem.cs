@@ -29,6 +29,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public void FormatProductVariantResponse(StreamingContext context)
         {
             ProductVariant.IsShowingTransaction = false;
+            ProductVariant.IsShowingPackage = false;
         }
     }
 }

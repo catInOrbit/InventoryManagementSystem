@@ -309,9 +309,23 @@ namespace Infrastructure.Data
         public List<Package> PackageIndexFiltering(List<Package> resource, PackageSearchFilter packageSearchFilter,
             CancellationToken cancellationToken)
         {
+            foreach (var package in resource)
+            {
+                if(package.Location == null)
+                    Console.WriteLine(package.Id);
+                if(package.ProductVariant == null)
+                    Console.WriteLine(package.Id);
+                if(package.ProductVariantId == null)
+                    Console.WriteLine(package.Id);
+            }
+            
             var packages = resource.Where(package =>
                 ( 
-                    (packageSearchFilter.FromImportedDate == null ||
+                    package.Location!=null 
+                    && 
+                    package.ProductVariantId != null
+                    &&
+                    ((packageSearchFilter.FromImportedDate == null)  ||
                      (package.ImportedDate >= DateTime.Parse(packageSearchFilter.FromImportedDate) &&
                       package.ImportedDate <= DateTime.Parse(packageSearchFilter.ToImportedDate))) 
                     
@@ -331,11 +345,11 @@ namespace Infrastructure.Data
                       package.Quantity <= int.Parse(packageSearchFilter.ToQuantity))) 
                     
                     &&
-                    (packageSearchFilter.LocationId == null ||
+                    (packageSearchFilter.LocationId == null  ||
                      (package.Location.Id == packageSearchFilter.LocationId) 
                     
                      &&
-                     (packageSearchFilter.ProductVariantID == null ||
+                     ((packageSearchFilter.ProductVariantID == null ) ||
                       (package.ProductVariantId == packageSearchFilter.ProductVariantID) 
         
                      ))))

@@ -83,8 +83,13 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
             
             if (request.SearchQuery == null)
             {
-                response.Paging = await 
-                    _packageAsyncRepository.GetPackages(pagingOption, cancellationToken);
+                var packages = await 
+                    _packageAsyncRepository.GetPackages(new PagingOption<Package>(0,0), cancellationToken);
+                
+                pagingOption.ResultList = _packageAsyncRepository.PackageIndexFiltering(packages.ResultList.ToList(), request,
+                    new CancellationToken());
+                pagingOption.ExecuteResourcePaging();
+                response.Paging = pagingOption;
                 return Ok(response);
             }
             

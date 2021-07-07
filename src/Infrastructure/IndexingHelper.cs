@@ -231,16 +231,16 @@ namespace Infrastructure
                     index.TransactionId = (productVariant.Transaction != null) ? productVariant.TransactionId : "";
                         index.Id = productVariant.Id;
                         index.Name = productVariant.Name;
-                        index.ProductId = productVariant.ProductId;
+                        index.ProductId = (productVariant.ProductId != null) ? productVariant.ProductId : "";
                         index.ProductVariantId = productVariant.Id;
-                        index.Category = (productVariant.Product.Category.CategoryName != null) ? productVariant.Product.Category.CategoryName : "";
+                        index.Category = (productVariant.Product!=null && productVariant.Product.Category.CategoryName != null) ? productVariant.Product.Category.CategoryName : "";
                         index.Quantity = productVariant.StorageQuantity;
                         // ModifiedDate = (productVariant.Transaction.TransactionRecord.Count > 0) ? productVariant.Transaction.TransactionRecord[^1].Date : DateTime.MinValue,
                         index.Sku = productVariant.Sku;
                         index.Unit = productVariant.Unit;
-                        index.Brand = (productVariant.Product.Brand != null) ? productVariant.Product.Brand.BrandName : "";
+                        index.Brand = (productVariant.Product != null && productVariant.Product.Brand != null) ? productVariant.Product.Brand.BrandName : "";
                         index.Price = productVariant.Price;
-                        index.Strategy = (productVariant.Product.SellingStrategy!= null) ? productVariant.Product.SellingStrategy : "";
+                        index.Strategy = (productVariant.Product != null && productVariant.Product.SellingStrategy!= null) ? productVariant.Product.SellingStrategy : "";
                         // CreatedDate =  (productVariant.Transaction.TransactionRecord.Count > 0) ? productVariant.Transaction.TransactionRecord[0].Date : DateTime.MinValue,
                         index.CreatedByName =(productVariant.Transaction.TransactionRecord.Count > 0 && productVariant.Transaction.TransactionRecord.
                             FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create) != null) ? productVariant.Transaction.TransactionRecord.
@@ -260,9 +260,15 @@ namespace Infrastructure
                         ? productVariant.Transaction.TransactionRecord[0].Date
                         : DateTime.MinValue;
 
-                    index.SupplierName = (productVariant.Packages.Count > 0)
-                        ? productVariant.Packages[^1].Supplier.SupplierName
-                        : "";
+                    Supplier supplier = null;
+                    if ((productVariant.Packages.Count > 0))
+                    {
+                        if(productVariant.Packages[^1].Supplier == null)
+                            supplier = null;
+                        else
+                            supplier = productVariant.Packages[^1].Supplier;
+                    }
+                    index.SupplierName = supplier!=null ? supplier.SupplierName : "";
                     index.FillSuggestion();
                 }
                 catch (Exception e)

@@ -21,11 +21,10 @@ namespace Infrastructure.Services
             var priceQuoteIndex = configuration["elasticsearch:priceQuoteIndex"];
 
             var settings = new ConnectionSettings(new Uri(url))
-                .DefaultIndex(defaultIndex).BasicAuthentication("elastic", "LDBFEOTonZjDL1jueHMlKXcC");;
+                .DefaultIndex(defaultIndex).BasicAuthentication("elastic", "LDBFEOTonZjDL1jueHMlKXcC").DisableDirectStreaming();;
             AddDefaultMappings(defaultIndex, settings);
 
             var client = new ElasticClient(settings);
-
             services.AddSingleton<IElasticClient>(client);
             
             try
