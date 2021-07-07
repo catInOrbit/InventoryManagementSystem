@@ -61,6 +61,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     BrandName = request.BrandName
                 },
                 CategoryId = request.CategoryId,
+                Unit = request.Unit
             };
 
            
@@ -77,7 +78,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                 {
                     Name = productVairantRequestInfo.Name,
                     Sku = productVairantRequestInfo.Sku,
-                    Unit = productVairantRequestInfo.Unit,
                     IsVariantType = product.IsVariantType,
                     Barcode = productVairantRequestInfo.Barcode,
                     Price = productVairantRequestInfo.Price,
@@ -179,7 +179,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                         {
                             productVariantSystemList.Name = productVairantRequestInfo.Name;
                             productVariantSystemList.Sku = productVairantRequestInfo.Sku;
-                            productVariantSystemList.Unit = productVairantRequestInfo.Unit;
                             productVariantSystemList.IsVariantType = product.IsVariantType;
                             productVariantSystemList.Barcode = productVairantRequestInfo.Barcode;
                             productVariantSystemList.Price = productVairantRequestInfo.Price;
@@ -198,7 +197,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     {
                         Name = productVairantRequestInfo.Name,
                         Sku = productVairantRequestInfo.Sku,    
-                        Unit = productVairantRequestInfo.Unit,
                         IsVariantType = product.IsVariantType,
                         Barcode = productVairantRequestInfo.Barcode,
                         Price = productVairantRequestInfo.Price,
@@ -232,18 +230,18 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     productProductVariant.Transaction.TransactionStatus = false;
                     productProductVariant.Transaction.Type = TransactionType.Deleted;
                     await _productVariantAsyncRepository.UpdateAsync(productProductVariant);
-                    // await _productVariantIndexAsyncRepositoryRepos.ElasticDeleteSingleAsync(IndexingHelper.ProductVariantSearchIndex(productProductVariant),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+                    
+                    if(productProductVariant.Transaction.Type != TransactionType.Deleted)
+                        await _productVariantIndexAsyncRepositoryRepos.ElasticDeleteSingleAsync(IndexingHelper.ProductVariantSearchIndex(productProductVariant),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
                 }
-                
                 product.ProductVariants.Clear();
                 
-                
                 var productVairantUpdateRequestInfo = request.ProductVariantsUpdate[0];
+                
                 var productVariant = new ProductVariant
                 {
                     Name = productVairantUpdateRequestInfo.Name,
                     Sku = productVairantUpdateRequestInfo.Sku,
-                    Unit = productVairantUpdateRequestInfo.Unit,
                     IsVariantType = product.IsVariantType,
                     Barcode = productVairantUpdateRequestInfo.Barcode,
                     Price = productVairantUpdateRequestInfo.Price,
@@ -327,7 +325,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
            product.Brand.BrandName = request.BrandName;
            product.Brand.BrandDescription = request.BrandDescription;
            product.CategoryId = request.CategoryId;
-            
+           product.Unit = request.Unit;
+           
            product.Transaction = TransactionUpdateHelper.UpdateTransaction(product.Transaction,UserTransactionActionType.Modify,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, product.Id, "");
 

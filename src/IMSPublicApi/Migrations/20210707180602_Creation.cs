@@ -286,8 +286,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     OrderId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    UserTransactionActionType = table.Column<int>(type: "int", nullable: false),
-                    HasBeenModified = table.Column<bool>(type: "bit", nullable: false)
+                    UserTransactionActionType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -313,6 +312,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BrandId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     SellingStrategy = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -337,6 +337,31 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         name: "FK_Product_Transaction_TransactionId",
                         column: x => x.TransactionId,
                         principalTable: "Transaction",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StockTakeGroupLocation",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LocationId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    StockTakeOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StockTakeGroupLocation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StockTakeGroupLocation_Location_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Location",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StockTakeGroupLocation_StockTakeOrder_StockTakeOrderId",
+                        column: x => x.StockTakeOrderId,
+                        principalTable: "StockTakeOrder",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -387,7 +412,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     TotalDiscountAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TotalOrderAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Deadline = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    HasBeenModified = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -417,7 +443,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Sku = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StorageQuantity = table.Column<int>(type: "int", nullable: false),
                     TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IsVariantType = table.Column<bool>(type: "bit", nullable: false)
@@ -520,33 +545,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StockTakeItem",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProductVariantId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ActualQuantity = table.Column<int>(type: "int", nullable: false),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StockTakeOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StockTakeItem", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_StockTakeItem_ProductVariant_ProductVariantId",
-                        column: x => x.ProductVariantId,
-                        principalTable: "ProductVariant",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_StockTakeItem_StockTakeOrder_StockTakeOrderId",
-                        column: x => x.StockTakeOrderId,
-                        principalTable: "StockTakeOrder",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "GoodsReceiptOrderItems",
                 columns: table => new
                 {
@@ -619,6 +617,40 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         name: "FK_Package_Transaction_TransactionId",
                         column: x => x.TransactionId,
                         principalTable: "Transaction",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StockTakeItem",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PackageId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ActualQuantity = table.Column<int>(type: "int", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StockTakeOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    StockTakeGroupLocationId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StockTakeItem", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StockTakeItem_Package_PackageId",
+                        column: x => x.PackageId,
+                        principalTable: "Package",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StockTakeItem_StockTakeGroupLocation_StockTakeGroupLocationId",
+                        column: x => x.StockTakeGroupLocationId,
+                        principalTable: "StockTakeGroupLocation",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_StockTakeItem_StockTakeOrder_StockTakeOrderId",
+                        column: x => x.StockTakeOrderId,
+                        principalTable: "StockTakeOrder",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -756,9 +788,24 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StockTakeItem_ProductVariantId",
+                name: "IX_StockTakeGroupLocation_LocationId",
+                table: "StockTakeGroupLocation",
+                column: "LocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StockTakeGroupLocation_StockTakeOrderId",
+                table: "StockTakeGroupLocation",
+                column: "StockTakeOrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StockTakeItem_PackageId",
                 table: "StockTakeItem",
-                column: "ProductVariantId");
+                column: "PackageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StockTakeItem_StockTakeGroupLocationId",
+                table: "StockTakeItem",
+                column: "StockTakeGroupLocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StockTakeItem_StockTakeOrderId",
@@ -825,9 +872,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "OrderItem");
 
             migrationBuilder.DropTable(
-                name: "Package");
-
-            migrationBuilder.DropTable(
                 name: "RoleClaim");
 
             migrationBuilder.DropTable(
@@ -852,6 +896,18 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "GoodsIssueOrder");
 
             migrationBuilder.DropTable(
+                name: "Package");
+
+            migrationBuilder.DropTable(
+                name: "StockTakeGroupLocation");
+
+            migrationBuilder.DropTable(
+                name: "Role");
+
+            migrationBuilder.DropTable(
+                name: "SystemUser");
+
+            migrationBuilder.DropTable(
                 name: "GoodsReceiptOrder");
 
             migrationBuilder.DropTable(
@@ -859,12 +915,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "StockTakeOrder");
-
-            migrationBuilder.DropTable(
-                name: "Role");
-
-            migrationBuilder.DropTable(
-                name: "SystemUser");
 
             migrationBuilder.DropTable(
                 name: "Location");

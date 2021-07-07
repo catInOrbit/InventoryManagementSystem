@@ -287,6 +287,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<DateTime>("DeliveryDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("HasBeenModified")
+                        .HasColumnType("bit");
+
                     b.Property<string>("MailDescription")
                         .HasColumnType("nvarchar(max)");
 
@@ -320,6 +323,26 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.ToTable("PurchaseOrder");
                 });
 
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeGroupLocation", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("LocationId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("StockTakeOrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
+
+                    b.HasIndex("StockTakeOrderId");
+
+                    b.ToTable("StockTakeGroupLocation");
+                });
+
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeItem", b =>
                 {
                     b.Property<string>("Id")
@@ -331,7 +354,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProductVariantId")
+                    b.Property<string>("PackageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("StockTakeGroupLocationId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("StockTakeOrderId")
@@ -339,7 +365,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductVariantId");
+                    b.HasIndex("PackageId");
+
+                    b.HasIndex("StockTakeGroupLocationId");
 
                     b.HasIndex("StockTakeOrderId");
 
@@ -425,9 +453,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("HasBeenModified")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -573,6 +598,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("TransactionId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Unit")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("BrandId");
@@ -615,9 +643,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.Property<string>("TransactionId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Unit")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -848,17 +873,34 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("Transaction");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeItem", b =>
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeGroupLocation", b =>
                 {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", "ProductVariant")
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Location", "Location")
                         .WithMany()
-                        .HasForeignKey("ProductVariantId");
+                        .HasForeignKey("LocationId");
 
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", "StockTakeOrder")
-                        .WithMany("CheckItems")
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", null)
+                        .WithMany("GroupLocations")
                         .HasForeignKey("StockTakeOrderId");
 
-                    b.Navigation("ProductVariant");
+                    b.Navigation("Location");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeItem", b =>
+                {
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Package", "Package")
+                        .WithMany()
+                        .HasForeignKey("PackageId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeGroupLocation", null)
+                        .WithMany("CheckItems")
+                        .HasForeignKey("StockTakeGroupLocationId");
+
+                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", "StockTakeOrder")
+                        .WithMany()
+                        .HasForeignKey("StockTakeOrderId");
+
+                    b.Navigation("Package");
 
                     b.Navigation("StockTakeOrder");
                 });
@@ -1040,9 +1082,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Navigation("PurchaseOrderProduct");
                 });
 
-            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", b =>
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeGroupLocation", b =>
                 {
                     b.Navigation("CheckItems");
+                });
+
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", b =>
+                {
+                    b.Navigation("GroupLocations");
                 });
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", b =>

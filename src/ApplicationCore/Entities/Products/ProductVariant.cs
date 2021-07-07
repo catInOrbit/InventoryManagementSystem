@@ -19,7 +19,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public decimal Price { get; set; }
         public decimal Cost { get; set; }
         public string Sku { get; set; }
-        public string Unit { get; set; }
         public int StorageQuantity { get; set; }
         public string TransactionId { get; set; }
         

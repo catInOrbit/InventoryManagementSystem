@@ -237,7 +237,7 @@ namespace Infrastructure
                         index.Quantity = productVariant.StorageQuantity;
                         // ModifiedDate = (productVariant.Transaction.TransactionRecord.Count > 0) ? productVariant.Transaction.TransactionRecord[^1].Date : DateTime.MinValue,
                         index.Sku = productVariant.Sku;
-                        index.Unit = productVariant.Unit;
+                        index.Unit = productVariant.Product.Unit;
                         index.Brand = (productVariant.Product != null && productVariant.Product.Brand != null) ? productVariant.Product.Brand.BrandName : "";
                         index.Price = productVariant.Price;
                         index.Strategy = (productVariant.Product != null && productVariant.Product.SellingStrategy!= null) ? productVariant.Product.SellingStrategy : "";

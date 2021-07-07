@@ -792,7 +792,7 @@ namespace Infrastructure.Data
             Console.WriteLine("ElasticDeleteSingleAsync: Type: " + type.GetType() + " || Delete");
 
             if (!response.IsValid)
-                throw new Exception();
+                throw new Exception(response.Result.ToString());
         }
 
         public Notification GetNotificationInfoFromUserId(string userId)
