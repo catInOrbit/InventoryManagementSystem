@@ -38,6 +38,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             response.IsDisplayingAll = false;
 
             response.PurchaseOrder = await _purchaseAsyncRepository.GetByIdAsync(request.Id);
+            foreach (var orderItem in response.PurchaseOrder.PurchaseOrderProduct)
+                orderItem.IsShowingProductVariantDetail = true;
         
             return Ok(response);
         }
