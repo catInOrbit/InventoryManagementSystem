@@ -1,4 +1,6 @@
 ﻿using System;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Products
 {
@@ -12,5 +14,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         
         public string LocationBarcode { get; set; }
         public string LocationName { get; set; }
+
+        [JsonIgnore]
+        public Transaction Transaction { get; set; }
     }
 }

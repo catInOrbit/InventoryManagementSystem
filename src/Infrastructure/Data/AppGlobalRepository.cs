@@ -50,9 +50,7 @@ namespace Infrastructure.Data
             
             foreach (var product in products)
             {
-                if(product.Id == "05680")
-                    Console.WriteLine();
-                    
+              
                 try
                 {
                     var index = IndexingHelper.ProductSearchIndex(product);
@@ -215,7 +213,10 @@ namespace Infrastructure.Data
                       po.ConfirmedDate <= DateTime.Parse(poSearchFilter.ToConfirmedDate)))
                     &&
                     (poSearchFilter.ConfirmedByName == null || po.ConfirmedByName == poSearchFilter.ConfirmedByName)
-                ))
+                    &&
+                    (poSearchFilter.IgnoreOrderIds == null || !poSearchFilter.IgnoreOrderIds.Contains(po.Id)
+                    
+                )))
                 .ToList();
             return pos;
         }
@@ -322,8 +323,6 @@ namespace Infrastructure.Data
             var packages = resource.Where(package =>
                 ( 
                     package.Location!=null 
-                    && 
-                    package.ProductVariantId != null
                     &&
                     ((packageSearchFilter.FromImportedDate == null)  ||
                      (package.ImportedDate >= DateTime.Parse(packageSearchFilter.FromImportedDate) &&

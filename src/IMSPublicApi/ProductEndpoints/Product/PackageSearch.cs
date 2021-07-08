@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -75,34 +76,52 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Read))
                 return Unauthorized();
-            var response = new PackageSearchResponse();
             
-            PagingOption<Package> pagingOption =
+            PagingOption<Package> pagingOptionPackage =
                 new PagingOption<Package>(request.CurrentPage, request.SizePerPage);
-            response.IsDisplayingAll = true;
             
-            if (request.SearchQuery == null)
-            {
-                var packages = await 
-                    _packageAsyncRepository.GetPackages(new PagingOption<Package>(0,0), cancellationToken);
-                
-                pagingOption.ResultList = _packageAsyncRepository.PackageIndexFiltering(packages.ResultList.ToList(), request,
-                    new CancellationToken());
-                pagingOption.ExecuteResourcePaging();
-                response.Paging = pagingOption;
-                return Ok(response);
-            }
+            PagingOption<Location> pagingOptionLocation =
+                new PagingOption<Location>(request.CurrentPage, request.SizePerPage);
             
             
             ISearchResponse<Package> responseElastic;
 
+            List<Package> resource;
+
             if (!request.IsLocationOnly)
             {
-                responseElastic = await _elasticClient.SearchAsync<Package>
-                (
-                    s => s.Size(2000).Index( ElasticIndexConstant.PACKAGES).
-                        Query(q =>q.
-                            QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));    
+                
+                var response = new PackageSearchResponse();
+                response.IsDisplayingAll = true;
+
+                if (request.SearchQuery == null)
+                {
+                    var packages = await 
+                        _packageAsyncRepository.GetPackages(new PagingOption<Package>(0,0), cancellationToken);
+
+                    resource = packages.ResultList.ToList();
+                    
+                }
+                
+
+                else
+                {
+                    responseElastic = await _elasticClient.SearchAsync<Package>
+                    (
+                        s => s.Size(2000).Index( ElasticIndexConstant.PACKAGES).
+                            Query(q =>q.
+                                QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));
+
+                    resource = responseElastic.Documents.ToList();
+                }
+                
+                 
+                pagingOptionPackage.ResultList = _packageAsyncRepository.PackageIndexFiltering(resource, request,
+                    new CancellationToken());
+            
+                pagingOptionPackage.ExecuteResourcePaging();
+                response.Paging = pagingOptionPackage;
+                return Ok(response);
             }
 
             else
@@ -112,19 +131,32 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                     s => s.Size(2000).Index( ElasticIndexConstant.PACKAGES).
                         Source(
                             source => source.Includes(
-                                    fi => fi.Field(package => package.Location)
-                                )
+                                fi => fi.Field(package => package.Location)
+                            )
                         ).
                         Query(q =>q.
                             QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));
+                
+                var locations = responseElastic.Documents.Where(x => x.Location!= null).Select(x => x.Location).ToList();
+                
+                locations = locations.GroupBy(x => x.Id).Select(x => x.FirstOrDefault()).ToList();
+                pagingOptionLocation.ResultList = locations;
+                pagingOptionLocation.ExecuteResourcePaging(pagingOptionLocation.ResultList.Count);
+                
+                var response = new LocationSearchResponse();
+                response.IsDisplayingAll = true;
+
+                response.Paging = pagingOptionLocation;
+                return Ok(response);
             }
             
-            pagingOption.ResultList = _packageAsyncRepository.PackageIndexFiltering(responseElastic.Documents.ToList(), request,
-                new CancellationToken());
+           
             
-            pagingOption.ExecuteResourcePaging();
-            response.Paging = pagingOption;
-            return Ok(response);
+           
+            
+            
+
+
         }
     }
     

@@ -4,7 +4,7 @@ BEGIN
         [MigrationId] nvarchar(150) NOT NULL,
         [ProductVersion] nvarchar(32) NOT NULL,
         CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
-    )
+    );
 END;
 GO
 
@@ -458,7 +458,7 @@ CREATE INDEX [IX_UserRole_RoleId] ON [UserRole] ([RoleId]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20210707180602_Creation', N'5.0.5');
+VALUES (N'20210708075755_Creation', N'5.0.5');
 GO
 
 COMMIT;

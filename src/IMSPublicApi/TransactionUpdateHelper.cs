@@ -42,7 +42,7 @@ namespace InventoryManagementSystem.PublicApi
             
             string actionName = String.Format("{0} {1}, ID: {2}",userTransactionActionType.ToString() ,latestRecord.Transaction.Type.ToString(),objectId);
             if (userTransactionActionType == UserTransactionActionType.Reject)
-                actionName += "Reason: " + reason;
+                actionName += ".Reason: " + reason;
             
             transaction.TransactionRecord.Add(new 
                 TransactionRecord

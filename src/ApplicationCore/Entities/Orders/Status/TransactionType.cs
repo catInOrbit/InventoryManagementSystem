@@ -12,6 +12,7 @@
         ProductVariant = 7,
         Supplier = 8,
         Category = 9,
+        Location = 10,
         Deleted = -1
     }
 }

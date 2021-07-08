@@ -238,7 +238,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
       public string FromModifiedDate { get; set; }
       public string ToModifiedDate { get; set; }
       public string CreatedByName { get; set; }
-
+      
+      public string[] IgnoreOrderID { get; set; }
   }
   
   public class POResponse : BaseResponse

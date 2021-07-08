@@ -81,8 +81,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     IsVariantType = product.IsVariantType,
                     Barcode = productVairantRequestInfo.Barcode,
                     Price = productVairantRequestInfo.Price,
-                    Cost = productVairantRequestInfo.SalePrice,
-                    
+                    Cost = productVairantRequestInfo.SalePrice,  
+                    // Unit = product.Unit
                 };
                 productVariant.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.ProductVariant, productVariant.Id, 
                     (await _userAuthentication.GetCurrentSessionUser()).Id);
@@ -326,6 +326,9 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
            product.Brand.BrandDescription = request.BrandDescription;
            product.CategoryId = request.CategoryId;
            product.Unit = request.Unit;
+           
+           // foreach (var productProductVariant in product.ProductVariants)
+           //     productProductVariant.Unit = product.Unit;
            
            product.Transaction = TransactionUpdateHelper.UpdateTransaction(product.Transaction,UserTransactionActionType.Modify,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, product.Id, "");

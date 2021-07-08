@@ -27,18 +27,26 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
 
             SkipValue = (CurrentPage - 1) * SizePerPage;
         }
-        public void ExecuteResourcePaging()
+        public void ExecuteResourcePaging() 
         {
-            RowCountTotal = ResultList.Count;            
-            PageCount = (int) Math.Ceiling((double)RowCountTotal / SizePerPage);
+            RowCountTotal = ResultList.Count;
+            if (CurrentPage == 0 && SizePerPage == 0)
+                PageCount = 1;
+            else
+                PageCount = (int) Math.Ceiling((double)RowCountTotal / SizePerPage);
+            
             if (!(CurrentPage == 0 && SizePerPage == 0))
                 ResultList = ResultList.Skip(SkipValue).Take(SizePerPage).ToList();
         }
         
         public void ExecuteResourcePaging(int overideRowCountTotalNumber)
         {
-            RowCountTotal = overideRowCountTotalNumber;            
-            PageCount = (int) Math.Ceiling((double)RowCountTotal / SizePerPage);
+            RowCountTotal = overideRowCountTotalNumber;
+            if (CurrentPage == 0 && SizePerPage == 0)
+                PageCount = 1;
+            else
+                PageCount = (int) Math.Ceiling((double)RowCountTotal / SizePerPage);
+            
             if (!(CurrentPage == 0 && SizePerPage == 0))
                 ResultList = ResultList.Skip(SkipValue).Take(SizePerPage).ToList();
         }

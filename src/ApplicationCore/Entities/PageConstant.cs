@@ -8,6 +8,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public static string ROLEPERMISSION = "RolePermissionUpdate";
 
         public static string PRODUCT = "Product";
+        public static string PRODUCT_LOCATION = "Product_Location";
+
         public static string PRICEQUOTEORDER = "PriceQuoteOrder";
         public static string PURCHASEORDER = "PurchaseOrder";
         public static string REQUISITION = "Requisition";

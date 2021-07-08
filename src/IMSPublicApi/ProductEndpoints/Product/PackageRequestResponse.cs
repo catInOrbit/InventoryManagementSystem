@@ -25,4 +25,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
     public class PackageSearchResponse : BaseSearchResponse<Package>
     {
     }
+    
+    public class LocationSearchResponse : BaseSearchResponse<Location>
+    {
+    }
 }

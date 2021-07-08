@@ -60,7 +60,12 @@ namespace Infrastructure.Services
 
             await client.Indices.CreateAsync( ElasticIndexConstant.PRODUCT_VARIANT_INDICES,
                 index 
-                    => index.Map<ProductVariantSearchIndex>(x 
+                    => index.Settings(s=> s.Analysis(
+                            a => a.Tokenizers(
+                                t => t.Pattern("hyphen_tokenizer", descriptor => descriptor.Pattern(".*-.*"))
+                                )
+                            ))
+                        .Map<ProductVariantSearchIndex>(x 
                     => x.AutoMap().Properties(ps 
                         => ps.Completion(c 
                             => c.Name(n => n.Suggest))))
