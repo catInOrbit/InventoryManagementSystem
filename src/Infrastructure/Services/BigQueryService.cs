@@ -66,5 +66,21 @@ namespace Infrastructure.Services
             listRowInser.Add(row);
             _bigQueryClient.InsertRows(productTable.Reference, listRowInser);
         }
+
+        public BigQueryResults Get3LinesData()
+        {
+            var dataset = _bigQueryClient.ListDatasets(GCC_PROJECTID, new ListDatasetsOptions());
+            BigQueryTable productTable = null;
+            BigQueryTable factTable = null;
+            
+            string query = @"SELECT productname,date,quantitysold,cost, transactiontype, quantitysold*cost as totalvaluesold, quantityavailable * price as onhandvalue
+                            FROM `imswarehouse.IMSWH01.mock2`
+                            GROUP BY productname, date, quantitysold, cost,transactiontype, onhandvalue
+                            ORDER BY date DESC";
+            
+            var result = _bigQueryClient.ExecuteQuery(query, parameters: null);
+            
+            return result;
+        }
     }
 }

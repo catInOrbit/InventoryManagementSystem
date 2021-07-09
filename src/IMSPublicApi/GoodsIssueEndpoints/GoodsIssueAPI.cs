@@ -21,7 +21,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
 {
-     public class GoodsIssueCreate : BaseAsyncEndpoint.WithRequest<GiRequest>.WithResponse<GiResponse>
+     public class GoodsIssueCreate : BaseAsyncEndpoint.WithRequest<GiCreateRequest>.WithResponse<GiResponse>
         {
             private readonly IUserSession _userAuthentication;
             private readonly IAsyncRepository<GoodsIssueOrder> _asyncRepository;
@@ -55,7 +55,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 OperationId = "gio.create",
                 Tags = new[] { "GoodsIssueEndpoints" })
             ]
-            public override async Task<ActionResult<GiResponse>> HandleAsync(GiRequest request, CancellationToken cancellationToken = new CancellationToken())
+            public override async Task<ActionResult<GiResponse>> HandleAsync(GiCreateRequest request, CancellationToken cancellationToken = new CancellationToken())
             {
                 if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSISSUE, UserOperations.Create))
                     return Unauthorized();
@@ -102,7 +102,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             }
         }
      
-     public class GoodsIssueUpdate : BaseAsyncEndpoint.WithRequest<GiRequest>.WithResponse<GiResponse>
+     public class GoodsIssueUpdate : BaseAsyncEndpoint.WithRequest<GiUpdateRequest>.WithResponse<GiResponse>
     {
         private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<GoodsIssueOrder> _asyncRepository;
@@ -134,7 +134,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             OperationId = "gio.update",
             Tags = new[] { "GoodsIssueEndpoints" })
         ]
-        public override async Task<ActionResult<GiResponse>> HandleAsync(GiRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<GiResponse>> HandleAsync(GiUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSISSUE, UserOperations.Update))
                 return Unauthorized();
@@ -176,44 +176,48 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             //     foreach (var package in listPackagesToBeDeleted)
             //         await _packageAsyncRepository.DeleteAsync(package);
             // }
-            
-            foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
+
+            if (gio.GoodsIssueType == GoodsIssueStatusType.Shipping)
             {
-                var listPackages =
-                    await _asyncRepository.GetPackagesFromProductVariantId(gioGoodsIssueProduct.ProductVariantId);
-                var productVariant =
-                    await _productVariantAsyncRepository.GetByIdAsync(gioGoodsIssueProduct.ProductVariantId);
-                List<int> listIndexPackageToRemove = new List<int>();
-                var quantityToDeduce = gioGoodsIssueProduct.OrderQuantity;
-                for (var i = 0; i < listPackages.Count; i++)
+                foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
                 {
-                    if (quantityToDeduce > 0)
+                    var listPackages =
+                        await _asyncRepository.GetPackagesFromProductVariantId(gioGoodsIssueProduct.ProductVariantId);
+                    var productVariant =
+                        await _productVariantAsyncRepository.GetByIdAsync(gioGoodsIssueProduct.ProductVariantId);
+                    List<int> listIndexPackageToRemove = new List<int>();
+                    var quantityToDeduce = gioGoodsIssueProduct.OrderQuantity;
+                    for (var i = 0; i < listPackages.Count; i++)
                     {
-                        if (listPackages[i].Quantity >= quantityToDeduce)
+                        if (quantityToDeduce > 0)
                         {
-                            listPackages[i].Quantity -= quantityToDeduce;
-                            //Remove aggregated quantity of product as well
-                            productVariant.StorageQuantity -= quantityToDeduce; 
-                        }
-                        else
-                        {
-                            quantityToDeduce -= listPackages[i].Quantity;
-                            listPackages[i].Quantity -= listPackages[i].Quantity;
+                            if (listPackages[i].Quantity >= quantityToDeduce)
+                            {
+                                listPackages[i].Quantity -= quantityToDeduce;
+                                //Remove aggregated quantity of product as well
+                                productVariant.StorageQuantity -= quantityToDeduce; 
+                            }
+                            else
+                            {
+                                quantityToDeduce -= listPackages[i].Quantity;
+                                listPackages[i].Quantity -= listPackages[i].Quantity;
                             
-                            //Remove aggregated quantity of product as well
-                            productVariant.StorageQuantity -= quantityToDeduce; 
+                                //Remove aggregated quantity of product as well
+                                productVariant.StorageQuantity -= quantityToDeduce; 
+                            }
                         }
+            
+                        if (listPackages[i].Quantity <= 0)
+                            listIndexPackageToRemove.Add(i);
                     }
             
-                    if (listPackages[i].Quantity <= 0)
-                        listIndexPackageToRemove.Add(i);
+                    await _productVariantAsyncRepository.UpdateAsync(productVariant);
+            
+                    foreach (var i in listIndexPackageToRemove)
+                        await _packageAsyncRepository.DeleteAsync(listPackages[i]);
                 }
-            
-                await _productVariantAsyncRepository.UpdateAsync(productVariant);
-            
-                foreach (var i in listIndexPackageToRemove)
-                    await _packageAsyncRepository.DeleteAsync(listPackages[i]);
             }
+           
             
             await _asyncRepository.UpdateAsync(gio);
             await _goodIssueasyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.GoodsIssueSearchIndexHelper(gio), ElasticIndexConstant.GOODS_ISSUE_ORDERS);

@@ -1,7 +1,10 @@
 using System.Drawing.Text;
+using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Google.Cloud.BigQuery.V2;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
@@ -147,4 +150,48 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
             return Ok(response);
         }
     }
+    
+    // public class GenerateMainSummary : BaseAsyncEndpoint.WithRequest<StockReportRequest>.WithResponse<TopSellingResponse>
+    // {
+    //     private IAsyncRepository<Package> _packageAsycnRepository;
+    //     private readonly IAuthorizationService _authorizationService;
+    //
+    //     public GenerateMainSummary(IAsyncRepository<Package> packageAsycnRepository, IAuthorizationService authorizationService)
+    //     {
+    //         _packageAsycnRepository = packageAsycnRepository;
+    //         _authorizationService = authorizationService;
+    //     }
+    //     
+    //     [HttpGet]
+    //     [Route("api/report/mainsum")]
+    //     [SwaggerOperation(
+    //         Summary = "Create a main summary",
+    //         Description = "Create a main summary",
+    //         OperationId = "report.stocktake",
+    //         Tags = new[] { "ReportEndpoints" })
+    //     ]
+    //     public override async Task<ActionResult<TopSellingResponse>> HandleAsync([FromQuery]StockReportRequest request, CancellationToken cancellationToken = new CancellationToken())
+    //     {
+    //         if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.REPORT, UserOperations.Read))
+    //             return Unauthorized();
+    //         
+    //         var response = new TopSellingResponse();
+    //
+    //         BigQueryService bigQueryService = new BigQueryService();
+    //         var result = bigQueryService.Get3LinesData();
+    //         // foreach (var bigQueryResult in result)
+    //         // {
+    //         //     bigQueryResult.
+    //         // }
+    //         //
+    //         // var stream = new MemoryStream(Encoding.ASCII.GetBytes())
+    //       
+    //         
+    //         return Ok(response);
+    //     }
+    // }
+    //
+    
+    
+    
 }

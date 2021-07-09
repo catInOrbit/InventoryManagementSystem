@@ -1,5 +1,6 @@
 ﻿using System;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using Nest;
 using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Products
@@ -16,6 +17,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public string LocationName { get; set; }
 
         [JsonIgnore]
-        public Transaction Transaction { get; set; }
+        [Ignore]
+        public virtual Transaction Transaction { get; set; }
     }
 }

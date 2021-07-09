@@ -57,7 +57,7 @@ namespace InventoryManagementSystem.PublicApi
                     await SeedRole.Initialize(services, "test@12345Aha");
                     
                     // BigQueryService bigQueryService = new BigQueryService();
-                    // bigQueryService.InsertProductRowToAPI(null);
+                    // bigQueryService.Get3LinesData();
 
                 }
                 catch (Exception ex)

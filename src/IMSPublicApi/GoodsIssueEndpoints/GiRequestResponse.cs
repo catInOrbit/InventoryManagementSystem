@@ -90,8 +90,15 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
     {
         public string IssueId { get; set; }
     }
+
+    public class GiCreateRequest : BaseRequest
+    {
+        public string IssueNumber { get; set; }
+        
+    }
     
-    public class GiRequest : BaseRequest
+    
+    public class GiUpdateRequest : BaseRequest
     {
         public string IssueNumber { get; set; }
         public string ChangeStatusTo { get; set; }

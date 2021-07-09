@@ -37,6 +37,12 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
             var response = new GiSearchResponse();
             response.IsForDisplay = false;
             response.GoodsIssueOrder = await _asyncRepository.GetByIdAsync(request.IssueId);
+            foreach (var goodsIssueProduct in response.GoodsIssueOrder.GoodsIssueProducts)
+            {
+                goodsIssueProduct.IsShowingProductVariant = true;
+                goodsIssueProduct.IsShowingProductVariantDetail = true;
+            }
+            
             return Ok(response);
         }
     }

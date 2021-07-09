@@ -28,12 +28,13 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public decimal TotalAmount { get; set; }
 
 
+        [NotMapped] [Ignore] [JsonIgnore] public bool IsShowingProductVariant { get; set; } = false;
         [NotMapped] [Ignore] [JsonIgnore] public bool IsShowingProductVariantDetail { get; set; } = false;
 
 
         public bool ShouldSerializeProductVariant()
         {
-            if (IsShowingProductVariantDetail)
+            if (IsShowingProductVariant)
                 return true;
             return false;
         }
@@ -41,8 +42,18 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         [OnSerializing]
         public void FormatProductVariantResponse(StreamingContext context)
         {
-            ProductVariant.IsShowingTransaction = false;
-            ProductVariant.IsShowingPackage = false;
+            if (!IsShowingProductVariantDetail)
+            {
+                ProductVariant.IsShowingTransaction = false;
+                ProductVariant.IsShowingPackage = false;
+            }
+
+            else
+            {
+                ProductVariant.IsShowingTransaction = false;
+                ProductVariant.IsShowingPackage = true;
+            }
+                
         }
     }
 }

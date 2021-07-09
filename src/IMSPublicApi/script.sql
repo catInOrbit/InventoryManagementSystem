@@ -4,7 +4,7 @@ BEGIN
         [MigrationId] nvarchar(150) NOT NULL,
         [ProductVersion] nvarchar(32) NOT NULL,
         CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
-    );
+    )
 END;
 GO
 
@@ -16,14 +16,6 @@ CREATE TABLE [Brand] (
     [BrandName] nvarchar(max) NULL,
     [BrandDescription] nvarchar(max) NULL,
     CONSTRAINT [PK_Brand] PRIMARY KEY ([Id])
-);
-GO
-
-CREATE TABLE [Location] (
-    [Id] nvarchar(450) NOT NULL,
-    [LocationBarcode] nvarchar(max) NULL,
-    [LocationName] nvarchar(max) NULL,
-    CONSTRAINT [PK_Location] PRIMARY KEY ([Id])
 );
 GO
 
@@ -137,6 +129,16 @@ CREATE TABLE [Category] (
     [TransactionId] nvarchar(450) NULL,
     CONSTRAINT [PK_Category] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_Category_Transaction_TransactionId] FOREIGN KEY ([TransactionId]) REFERENCES [Transaction] ([Id]) ON DELETE NO ACTION
+);
+GO
+
+CREATE TABLE [Location] (
+    [Id] nvarchar(450) NOT NULL,
+    [LocationBarcode] nvarchar(max) NULL,
+    [LocationName] nvarchar(max) NULL,
+    [TransactionId] nvarchar(450) NULL,
+    CONSTRAINT [PK_Location] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_Location_Transaction_TransactionId] FOREIGN KEY ([TransactionId]) REFERENCES [Transaction] ([Id]) ON DELETE NO ACTION
 );
 GO
 
@@ -364,6 +366,9 @@ GO
 CREATE INDEX [IX_GoodsReceiptOrderItems_ProductVariantId] ON [GoodsReceiptOrderItems] ([ProductVariantId]);
 GO
 
+CREATE INDEX [IX_Location_TransactionId] ON [Location] ([TransactionId]);
+GO
+
 CREATE INDEX [IX_OrderItem_GoodsIssueOrderId] ON [OrderItem] ([GoodsIssueOrderId]);
 GO
 
@@ -458,7 +463,7 @@ CREATE INDEX [IX_UserRole_RoleId] ON [UserRole] ([RoleId]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20210708075755_Creation', N'5.0.5');
+VALUES (N'20210709063444_Creation', N'5.0.5');
 GO
 
 COMMIT;
