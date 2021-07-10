@@ -486,6 +486,8 @@ namespace Infrastructure.Data
             
             sts = sts.OrderByDescending(e =>
                 e.Transaction.TransactionRecord[e.Transaction.TransactionRecord.Count - 1].Date).ToList();
+            
+            
             foreach (var st in sts)
             {
                 StockTakeSearchIndex index; 
@@ -499,6 +501,10 @@ namespace Infrastructure.Data
                         CreatedDate = st.Transaction.TransactionRecord[0].Date,
                         ModifiedDate = st.Transaction.TransactionRecord[^1].Date
                     };
+                    
+                    Console.WriteLine(index.CreatedDate);
+                    Console.WriteLine(index.ModifiedDate);
+
                     pagingOption.ResultList.Add(index);
                 }
                 catch (Exception e)

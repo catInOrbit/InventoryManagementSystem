@@ -214,6 +214,12 @@ namespace InventoryManagementSystem.PublicApi
                 });
             });
             
+            services.AddLogging(config =>
+            {
+                config.AddDebug();
+                config.AddConsole();
+            });
+            
            
             services.AddControllers()
                 .AddNewtonsoftJson(options =>

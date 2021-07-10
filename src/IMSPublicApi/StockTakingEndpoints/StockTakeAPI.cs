@@ -256,7 +256,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              response.Status = true;
              response.Verbose = "Update Stock Take Order";
              response.StockTakeOrder = stockTakeOrder;
-             
+             response.StockTakeOrderId = stockTakeOrder.Id;
              var currentUser = await _userAuthentication.GetCurrentSessionUser();
                   
              var messageNotification =
@@ -268,7 +268,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
          }
      }
      
-      public class StockTakeAdjust : BaseAsyncEndpoint.WithRequest<STAdjustRequest>.WithoutResponse
+      public class StockTakeAdjust : BaseAsyncEndpoint.WithRequest<STAdjustRequest>.WithResponse<STResponse>
      {
          private readonly IAsyncRepository<StockTakeOrder> _stAsyncRepository;
          private readonly IAsyncRepository<ProductVariant> _productAsyncRepository;
@@ -297,7 +297,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              OperationId = "st.add",
              Tags = new[] { "StockTakingEndpoints" })
          ]
-         public override async Task<ActionResult> HandleAsync(STAdjustRequest request, CancellationToken cancellationToken = new CancellationToken())
+         public override async Task<ActionResult<STResponse>> HandleAsync(STAdjustRequest request, CancellationToken cancellationToken = new CancellationToken())
          {
              if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.STOCKTAKEORDER, UserOperations.Update))
                  return Unauthorized();
@@ -306,7 +306,6 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              var stockTakeOrder = await _stAsyncRepository.GetByIdAsync(request.StockTakeId);
              foreach (var stockTakeGroupLocation in stockTakeOrder.GroupLocations)
              {
-                 
                  foreach (var stockTakeItem in stockTakeGroupLocation.CheckItems)
                  {
                      var package = await _packageAsyncRepository.GetByIdAsync(stockTakeItem.PackageId);
@@ -341,11 +340,14 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                 
              await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
                  currentUser.Id, messageNotification);
-             return Ok();
+
+             var response = new STResponse();
+             response.UpdatedId = stockTakeOrder.Id;
+             return Ok(response);
          }
      }
       
-       public class StockTakeCancel : BaseAsyncEndpoint.WithRequest<STCancelRequest>.WithoutResponse
+       public class StockTakeCancel : BaseAsyncEndpoint.WithRequest<STCancelRequest>.WithResponse<STResponse>
      {
          private readonly IAsyncRepository<StockTakeOrder> _stAsyncRepository;
          private readonly IAsyncRepository<ProductVariant> _productAsyncRepository;
@@ -376,7 +378,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              OperationId = "st.cancel",
              Tags = new[] { "StockTakingEndpoints" })
          ]
-         public override async Task<ActionResult> HandleAsync(STCancelRequest request, CancellationToken cancellationToken = new CancellationToken())
+         public override async Task<ActionResult<STResponse>> HandleAsync(STCancelRequest request, CancellationToken cancellationToken = new CancellationToken())
          {
              if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.STOCKTAKEORDER, UserOperations.Update))
                  return Unauthorized();
@@ -396,7 +398,10 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                 
              await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
                  currentUser.Id, messageNotification);
-             return Ok();
+
+             var response = new STResponse();
+             response.UpdatedId = stockTakeOrder.Id;
+             return Ok(response);
          }
      }
 }

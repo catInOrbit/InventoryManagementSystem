@@ -52,7 +52,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
 
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER, UserOperations.Create))
                 return Unauthorized();
-
+            
 
             var poData = _purchaseOrderRepos.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
             poData.PurchaseOrderStatus = PurchaseOrderStatusType.POWaitingConfirmation;

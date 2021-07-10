@@ -17,6 +17,7 @@ using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
 {
@@ -119,9 +120,13 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 package.TotalPrice = package.Price * package.Quantity;
                 
                 await _packageRepository.AddAsync(package);
+                roi.ProductVariant.Packages.Add(package);
+                
+                //Begin Inserting into bigQuery
+             
             }
-           
             await _recevingOrderSearchIndexRepository.ElasticSaveSingleAsync(true,IndexingHelper.GoodsReceiptOrderSearchIndex(ro), ElasticIndexConstant.RECEIVING_ORDERS);
+
 
             var response = new ROUpdateResponse();
             response.CreatedGoodsReceiptId = ro.Id;
@@ -206,6 +211,9 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
       public class ReceivingOrderSubmit : BaseAsyncEndpoint.WithRequest<ROSubmitRequest>.WithoutResponse
     {
         private IAsyncRepository<GoodsReceiptOrder> _roAsyncRepository;
+        private readonly ILogger<ReceivingOrderSubmit> _logger;
+
+
         private IAsyncRepository<PurchaseOrder> _poAsyncRepository;
         private IAsyncRepository<PurchaseOrderSearchIndex> _poSearchIndexAsyncRepository;
         private IAsyncRepository<GoodsReceiptOrderSearchIndex> _roSearchIndexAsyncRepository;
@@ -214,7 +222,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly IUserSession _userAuthentication;
 
 
-        public ReceivingOrderSubmit(IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<PurchaseOrder> poAsyncRepository, IAsyncRepository<PurchaseOrderSearchIndex> poSearchIndexAsyncRepository, IAsyncRepository<GoodsReceiptOrderSearchIndex> roSearchIndexAsyncRepository, INotificationService notificationService, IUserSession userAuthentication)
+        public ReceivingOrderSubmit(IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<PurchaseOrder> poAsyncRepository, IAsyncRepository<PurchaseOrderSearchIndex> poSearchIndexAsyncRepository, IAsyncRepository<GoodsReceiptOrderSearchIndex> roSearchIndexAsyncRepository, INotificationService notificationService, IUserSession userAuthentication, ILogger<ReceivingOrderSubmit> logger)
         {
             _roAsyncRepository = roAsyncRepository;
             _poAsyncRepository = poAsyncRepository;
@@ -222,6 +230,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             _roSearchIndexAsyncRepository = roSearchIndexAsyncRepository;
             _notificationService = notificationService;
             _userAuthentication = userAuthentication;
+            _logger = logger;
         }
 
         [HttpPost("api/goodsreceipt/submit")]
@@ -239,6 +248,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 (await _userAuthentication.GetCurrentSessionUser()).Id, ro.Id, "");
 
             var response = new ROSubmitResponse();
+            BigQueryService bigQueryService = new BigQueryService();
             foreach (var goodsReceiptOrderItem in ro.ReceivedOrderItems)
             {
                 if (goodsReceiptOrderItem.QuantityReceived < po.PurchaseOrderProduct
@@ -248,7 +258,21 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                     response.IncompletePurchaseOrderId = po.Id;
                     response.IncompleteVariantId.Add(goodsReceiptOrderItem.ProductVariantId);
                 }
+
+                try
+                {
+
+                    bigQueryService.InsertProductRowBQ(goodsReceiptOrderItem.ProductVariant, ro.PurchaseOrder.PurchaseOrderProduct.FirstOrDefault(p => p.ProductVariantId == goodsReceiptOrderItem.ProductVariantId).Price
+                        , ro.Location.LocationName, goodsReceiptOrderItem.QuantityReceived , 0, 0, "In Storage");
+                    _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError("Error updating BigQuery on " + this.GetType().ToString());
+                }
             }
+            
+
             
             if(response.IncompleteVariantId.IsNullOrEmpty())
                 po.PurchaseOrderStatus = PurchaseOrderStatusType.Done;

@@ -18,21 +18,16 @@ namespace Infrastructure.Services
                 GoogleCredential.FromStream(new StreamReader(@"/home/thomasm/InventoryManagementSystem/src/Infrastructure/imswarehouse-70a47bcd9c79.json").BaseStream));
         }
 
-        public void InsertProductRowToAPI(ProductVariant productVariant, int quantitySold)
+        public void InsertProductRowBQ(ProductVariant productVariant, decimal buy_price, 
+            string storageLocation, int quantityAvailable,
+            int quantitySold, decimal salePrice, string transactionType)
         {
             
             var dataset = _bigQueryClient.ListDatasets(GCC_PROJECTID, new ListDatasetsOptions());
             BigQueryTable productTable = null;
             BigQueryTable factTable = null;
 
-            string query = @"SELECT * FROM fact ORDER BY productsk DESC LIMIT 1";
             
-            var result = _bigQueryClient.ExecuteQuery(query, parameters: null);
-            ulong latestRecordNumber = 0;
-            if (result.TotalRows != null)
-                latestRecordNumber += result.TotalRows.Value;
-
-
             foreach (var bigQueryDataset in dataset)
             {
                 foreach (var bigQueryTable in bigQueryDataset.ListTables())
@@ -42,29 +37,42 @@ namespace Infrastructure.Services
                 }
             }
             
-            List<BigQueryInsertRow> listRowInser = new List<BigQueryInsertRow>();
-            Dictionary<string, object> columnValues = new Dictionary<string, object>();
+            // List<BigQueryInsertRow> listRowInser = new List<BigQueryInsertRow>();
+            // Dictionary<string, object> columnValues = new Dictionary<string, object>();
+
             BigQueryInsertRow row = new BigQueryInsertRow();
-            
-            
-            foreach (var productVariantPackage in productVariant.Packages)
+        
+            row = new BigQueryInsertRow
             {
-                columnValues.Add("productsk", latestRecordNumber);
-                columnValues.Add("productvariantid", productVariantPackage.ProductVariant.Id);
-                columnValues.Add("productcategory", productVariantPackage.ProductVariant.Product.Category.CategoryName);
-                columnValues.Add("price", Convert.ToSingle(productVariantPackage.Price));
-                columnValues.Add("storagelocation", productVariantPackage.Location);
-                columnValues.Add("date", DateTime.Now);
-                columnValues.Add("cost", productVariantPackage.ProductVariant.Cost);
-                columnValues.Add("quantityavailable", productVariantPackage.Quantity);
-                columnValues.Add("quantitysold", quantitySold);
-                columnValues.Add("transactiontype", productVariantPackage.ProductVariant.Transaction.Type);
-            }
-       
+                {"productvariantid", productVariant.Id},
+                {"name", productVariant.Name},
+                {"category", productVariant.Product.Category.CategoryName},
+                {"buy_price", Convert.ToSingle(buy_price)},
+                {"storagelocation", storageLocation},
+                {"sale_price", Convert.ToSingle(salePrice)},
+                {"quantityavailable", quantityAvailable},
+                {"quantitysold", quantitySold},
+                {"transactiontype", transactionType},
+                {"date", DateTime.Now.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")},
+            };
+            // columnValues.Add("productvariantid", productVariant.Id);
+            // columnValues.Add("name", productVariant.Name);
+            // columnValues.Add("category", productVariant.Product.Category.CategoryName);
+            // columnValues.Add("buy_price", Convert.ToSingle(productVariantPackage.Price));
+            // columnValues.Add("storagelocation", productVariantPackage.Location.LocationName);
+            // columnValues.Add("sale_price", Convert.ToSingle(salePrice));
+            // columnValues.Add("quantityavaialble", productVariantPackage.Quantity);
+            // columnValues.Add("quantitysold", quantitySold);
+            // columnValues.Add("transactiontype", transactionType);
+            // columnValues.Add("date", DateTime.Now.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"));
             
-            row.Add(columnValues);
-            listRowInser.Add(row);
-            _bigQueryClient.InsertRows(productTable.Reference, listRowInser);
+            // row.Add(new Dictionary<string, object>(columnValues));
+            // columnValues.Clear();
+            productTable.InsertRow(row);
+            // _bigQueryClient.InsertRow(productTable.Reference, row);
+            
+            // listRowInser.Add(row);
+            // _bigQueryClient.InsertRows(productTable.Reference, listRowInser);
         }
 
         public BigQueryResults Get3LinesData()

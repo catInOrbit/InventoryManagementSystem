@@ -15,6 +15,7 @@ using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder
@@ -28,9 +29,10 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         private readonly IAsyncRepository<PurchaseOrderSearchIndex> _poIndexAsyncRepositoryRepos;
 
         private readonly INotificationService _notificationService;
+        private readonly ILogger<PurchaseOrderSubmit> _logger;
 
 
-        public PurchaseOrderSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> poIndexAsyncRepositoryRepos, INotificationService notificationService)
+        public PurchaseOrderSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> poIndexAsyncRepositoryRepos, INotificationService notificationService, ILogger<PurchaseOrderSubmit> logger)
         {
             _emailSender = emailSender;
             _authorizationService = authorizationService;
@@ -38,6 +40,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             _userAuthentication = userAuthentication;
             _poIndexAsyncRepositoryRepos = poIndexAsyncRepositoryRepos;
             _notificationService = notificationService;
+            _logger = logger;
         }
         
         [HttpPost("api/purchaseorder/submit")]
@@ -68,7 +71,23 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
 
                 await _asyncRepository.UpdateAsync(po);
                 await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
+                
+                BigQueryService bigQueryService = new BigQueryService();
 
+                try
+                {
+                    foreach (var orderItem in po.PurchaseOrderProduct)
+                    {
+                        bigQueryService.InsertProductRowBQ(orderItem.ProductVariant, orderItem.Price,null,
+                            0, 0 , 0, "Upcoming Order");
+                        _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError("Error updating BigQuery on " + this.GetType().ToString());
+                }
+                
                 var currentUser = await _userAuthentication.GetCurrentSessionUser();
                 
                 var messageNotification =

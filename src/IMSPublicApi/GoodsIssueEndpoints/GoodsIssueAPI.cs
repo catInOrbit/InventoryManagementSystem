@@ -17,12 +17,14 @@ using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
 {
      public class GoodsIssueCreate : BaseAsyncEndpoint.WithRequest<GiCreateRequest>.WithResponse<GiResponse>
         {
+            
             private readonly IUserSession _userAuthentication;
             private readonly IAsyncRepository<GoodsIssueOrder> _asyncRepository;
             private IAsyncRepository<GoodsReceiptOrder> _roAsyncRepository;
@@ -103,7 +105,9 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
         }
      
      public class GoodsIssueUpdate : BaseAsyncEndpoint.WithRequest<GiUpdateRequest>.WithResponse<GiResponse>
-    {
+     {
+         private readonly ILogger<GoodsIssueUpdate> _logger;
+        
         private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<GoodsIssueOrder> _asyncRepository;
         private readonly IAsyncRepository<ProductVariant> _productVariantAsyncRepository;
@@ -116,7 +120,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
         private INotificationService _notificationService;
 
 
-        public GoodsIssueUpdate(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAsyncRepository<GoodsIssueSearchIndex> goodIssueasyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository)
+        public GoodsIssueUpdate(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAsyncRepository<GoodsIssueSearchIndex> goodIssueasyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository, ILogger<GoodsIssueUpdate> logger)
         {
             _userAuthentication = userAuthentication;
             _asyncRepository = asyncRepository;
@@ -125,6 +129,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             _packageAsyncRepository = packageAsyncRepository;
             _goodIssueasyncRepository = goodIssueasyncRepository;
             _productVariantAsyncRepository = productVariantAsyncRepository;
+            _logger = logger;
         }
 
         [HttpPut("api/goodsissue/update")]
@@ -177,6 +182,9 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             //         await _packageAsyncRepository.DeleteAsync(package);
             // }
 
+            BigQueryService bigQueryService = new BigQueryService();
+            var response = new GiResponse();
+
             if (gio.GoodsIssueType == GoodsIssueStatusType.Shipping)
             {
                 foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
@@ -215,16 +223,28 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             
                     foreach (var i in listIndexPackageToRemove)
                         await _packageAsyncRepository.DeleteAsync(listPackages[i]);
+                    try
+                    {
+                        bigQueryService.InsertProductRowBQ(gioGoodsIssueProduct.ProductVariant,
+                            gioGoodsIssueProduct.ProductVariant.Price, null,
+                            gioGoodsIssueProduct.ProductVariant.StorageQuantity, gioGoodsIssueProduct.OrderQuantity,
+                            gioGoodsIssueProduct.SalePrice, "Issue Out");
+                        _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError("Error updating BigQuery on " + this.GetType().ToString());
+                    }
                 }
             }
+
            
             
             await _asyncRepository.UpdateAsync(gio);
             await _goodIssueasyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.GoodsIssueSearchIndexHelper(gio), ElasticIndexConstant.GOODS_ISSUE_ORDERS);
 
-            var response = new GiResponse();
             response.GoodsIssueOrder = gio;
-            
+                
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
 
             var messageNotification =

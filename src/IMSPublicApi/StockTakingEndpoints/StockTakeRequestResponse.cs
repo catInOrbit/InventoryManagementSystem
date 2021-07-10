@@ -11,6 +11,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
         public string Verbose { get; set; }
         public StockTakeOrder StockTakeOrder { get; set; }
         
+        public string StockTakeOrderId { get; set; }
         public List<string> MismatchQuantityPackageIds { get; set; } = new List<string>();
     }
     
@@ -20,6 +21,12 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
     {
         public string Id { get; set; }
     }
+    
+    public class STResponse : BaseResponse
+    {
+        public string UpdatedId { get; set; }
+    }
+    
     public class STSearchRequest : BaseRequest
     {
         public string SearchQuery { get; set; }
