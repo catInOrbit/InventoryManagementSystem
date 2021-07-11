@@ -4,7 +4,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders.Status
     {
         Progressing = 0,
         Completed = 1,
-        Adjusted = 2,
+        AwaitingAdjustment = 2,
         Cancel = -1
     }
 }

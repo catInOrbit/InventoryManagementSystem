@@ -463,7 +463,7 @@ CREATE INDEX [IX_UserRole_RoleId] ON [UserRole] ([RoleId]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20210709063444_Creation', N'5.0.5');
+VALUES (N'20210711073709_Creation', N'5.0.5');
 GO
 
 COMMIT;

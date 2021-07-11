@@ -502,9 +502,6 @@ namespace Infrastructure.Data
                         ModifiedDate = st.Transaction.TransactionRecord[^1].Date
                     };
                     
-                    Console.WriteLine(index.CreatedDate);
-                    Console.WriteLine(index.ModifiedDate);
-
                     pagingOption.ResultList.Add(index);
                 }
                 catch (Exception e)

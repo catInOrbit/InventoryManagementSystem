@@ -327,7 +327,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                  await _productAsyncRepository.UpdateAsync(productVariant);
              }
             
-             stockTakeOrder.StockTakeOrderType = StockTakeOrderType.Adjusted;
+             stockTakeOrder.StockTakeOrderType = StockTakeOrderType.AwaitingAdjustment;
              
              stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Modify,
                  (await _userAuthentication.GetCurrentSessionUser()).Id, stockTakeOrder.Id, "");
