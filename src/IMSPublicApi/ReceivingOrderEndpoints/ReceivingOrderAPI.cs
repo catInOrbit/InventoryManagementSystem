@@ -263,7 +263,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 {
 
                     bigQueryService.InsertProductRowBQ(goodsReceiptOrderItem.ProductVariant, ro.PurchaseOrder.PurchaseOrderProduct.FirstOrDefault(p => p.ProductVariantId == goodsReceiptOrderItem.ProductVariantId).Price
-                        , ro.Location.LocationName, goodsReceiptOrderItem.QuantityReceived , 0, 0, "In Storage");
+                        , ro.Location.LocationName, goodsReceiptOrderItem.QuantityReceived , 0, 0, "In Storage", ro.Supplier.SupplierName);
                     _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
                 }
                 catch (Exception e)

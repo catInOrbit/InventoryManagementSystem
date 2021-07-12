@@ -20,7 +20,9 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         //Notifications
         Task<bool> AddNotifications(string keyId, Notification notification);
 
+        
         Task<List<Notification>> GetNotificationAll(string keyId);
+        Task ClearNotification(string keyId);
 
         Task<bool> AddProductUpdateMessage(string keyId, ProductUpdateMessage productUpdateMessage);
         Task<bool> RemoveProductUpdateMessage(string keyId, string productVariantId);

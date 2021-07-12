@@ -20,7 +20,7 @@ namespace Infrastructure.Services
 
         public void InsertProductRowBQ(ProductVariant productVariant, decimal buy_price, 
             string storageLocation, int quantityAvailable,
-            int quantitySold, decimal salePrice, string transactionType)
+            int quantitySold, decimal salePrice, string transactionType, string supplier)
         {
             
             var dataset = _bigQueryClient.ListDatasets(GCC_PROJECTID, new ListDatasetsOptions());
@@ -47,6 +47,7 @@ namespace Infrastructure.Services
                 {"productvariantid", productVariant.Id},
                 {"name", productVariant.Name},
                 {"category", productVariant.Product.Category.CategoryName},
+                {"supplier", supplier},
                 {"buy_price", Convert.ToSingle(buy_price)},
                 {"storagelocation", storageLocation},
                 {"sale_price", Convert.ToSingle(salePrice)},

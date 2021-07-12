@@ -1,9 +1,11 @@
 using System;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure.Identity.DbContexts;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Notifications;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -45,6 +47,9 @@ namespace Infrastructure.Services
                         await dbContext.SaveChangesAsync(stoppingToken);
                     }
                 }
+                
+                await _redisRepository.ClearNotification("Notifications");
+                
                 await Task.Delay(3600000, stoppingToken);
             }
         }

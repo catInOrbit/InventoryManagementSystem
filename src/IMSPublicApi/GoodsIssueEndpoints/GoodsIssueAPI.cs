@@ -228,7 +228,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                         bigQueryService.InsertProductRowBQ(gioGoodsIssueProduct.ProductVariant,
                             gioGoodsIssueProduct.ProductVariant.Price, null,
                             gioGoodsIssueProduct.ProductVariant.StorageQuantity, gioGoodsIssueProduct.OrderQuantity,
-                            gioGoodsIssueProduct.SalePrice, "Issue Out");
+                            gioGoodsIssueProduct.SalePrice, "Issue Out", null);
                         _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
                     }
                     catch (Exception e)

@@ -79,7 +79,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                     foreach (var orderItem in po.PurchaseOrderProduct)
                     {
                         bigQueryService.InsertProductRowBQ(orderItem.ProductVariant, orderItem.Price,null,
-                            0, 0 , 0, "Upcoming Order");
+                            0, 0 , 0, "Upcoming Order", po.Supplier.SupplierName);
                         _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
                     }
                 }

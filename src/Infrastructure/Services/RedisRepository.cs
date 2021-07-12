@@ -79,8 +79,6 @@ namespace Infrastructure.Services
                 await database.StringSetAsync(keyId, JsonSerializer.Serialize(groupNotificationNew));
             }
             
-            data = await database.StringGetAsync(keyId);
-
             var group_notification = JsonSerializer.Deserialize<GroupNotifications>(data);
             group_notification.Notifications.Add(notification);
 
@@ -100,6 +98,15 @@ namespace Infrastructure.Services
 
             var notifications_manager = JsonSerializer.Deserialize<GroupNotifications>(data);
             return notifications_manager.Notifications;
+        }
+
+        public async Task ClearNotification(string keyId)
+        {
+            var data = await database.StringGetAsync(keyId);
+            var group_notification = JsonSerializer.Deserialize<GroupNotifications>(data);
+            group_notification.Notifications.Clear();
+            
+            await database.StringSetAsync(keyId, JsonSerializer.Serialize(group_notification));
         }
 
         public async Task<bool> AddProductUpdateMessage(string keyId, ProductUpdateMessage productUpdateMessage)
