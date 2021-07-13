@@ -80,9 +80,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(poMerged), ElasticIndexConstant.PURCHASE_ORDERS);
             }
             
-            
-   
-            
             po.MailDescription = request.MailDescription;
             po.SupplierId = request.SupplierId;
             po.Deadline = request.Deadline;

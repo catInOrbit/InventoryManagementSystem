@@ -36,14 +36,14 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             _userAuthentication = userAuthentication;
         }
 
-        [HttpPost("api/po/confirm/{PurchaseOrderNumber}")]
+        [HttpPost("api/po/confirm")]
         [SwaggerOperation(
             Summary = "Confirm purchase order ",
             Description = "Confirm purchase order",
             OperationId = "catalog-items.create",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync([FromRoute]POConfirmRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult> HandleAsync(POConfirmRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER, UserOperations.Approve))
                 return Unauthorized();
