@@ -70,7 +70,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             
             await _asyncRepository.UpdateAsync(po);
             
-            var subject = "REQUEST FOR QUOTATION-" + DateTime.Now.ToString("dd/MM//yyyy") + " FROM IMS Inventory";
+            var subject = "REQUEST FOR QUOTATION-" + DateTime.UtcNow.ToString("dd/MM//yyyy") + " FROM IMS Inventory";
             
             var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
             var message = new EmailMessage(request.To, subject, request.Content, files);

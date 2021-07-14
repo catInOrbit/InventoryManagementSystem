@@ -40,7 +40,7 @@ namespace Infrastructure.Identity
             var user = await userManager.FindByNameAsync("JakeA");
             if (user == null)
             {
-                var dob = DateTime.Now;
+                var dob = DateTime.UtcNow;
                 user = new ApplicationUser
                 {
                     Id = Guid.NewGuid().ToString(),

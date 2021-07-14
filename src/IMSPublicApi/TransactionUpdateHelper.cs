@@ -21,7 +21,7 @@ namespace InventoryManagementSystem.PublicApi
             transaction.TransactionRecord.Add( new 
                 TransactionRecord
             {
-                Date = DateTime.Now,
+                Date = DateTime.UtcNow,
                 Transaction = transaction,
                 OrderId = objectId,
                 TransactionId = transaction.Id,
@@ -47,7 +47,7 @@ namespace InventoryManagementSystem.PublicApi
             transaction.TransactionRecord.Add(new 
                 TransactionRecord
                 {
-                    Date = DateTime.Now,
+                    Date = DateTime.UtcNow,
                     Transaction = transaction,
                     OrderId = objectId,
                     TransactionId = transaction.Id,

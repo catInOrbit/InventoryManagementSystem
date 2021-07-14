@@ -36,7 +36,7 @@ namespace Infrastructure.Services
                 Channel = notificationInfo.Channel,
                 UserId = notificationInfo.UserId,
                 Message = message,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
                 UserName = notificationInfo.UserName
             };
 
@@ -61,7 +61,7 @@ namespace Infrastructure.Services
                 Channel = notificationInfo.Channel,
                 UserId = notificationInfo.UserId,
                 Message = message,
-                CreatedDate = DateTime.Now,
+                CreatedDate = DateTime.UtcNow,
                 UserName = notificationInfo.UserName
             };
 
@@ -79,7 +79,7 @@ namespace Infrastructure.Services
 
         public string CreateMessage(string fromUserFullname, string action, string page, string objectId)
         {
-            return fromUserFullname + " " + action + " " + page + " with ID: " + objectId + ", at: " + DateTime.Now;
+            return fromUserFullname + " " + action + " " + page + " with ID: " + objectId + ", at: " + DateTime.UtcNow;
         }
     }
 }

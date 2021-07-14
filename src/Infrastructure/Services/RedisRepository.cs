@@ -118,7 +118,7 @@ namespace Infrastructure.Services
                 var productMessageGroup = new ProductMessageGroup
                 {
                     Id = keyId,
-                    ModifiedDate = DateTime.Now,
+                    ModifiedDate = DateTime.UtcNow,
                     ProductUpdateMessages =  new List<ProductUpdateMessage>()
                 };
                 

@@ -7,7 +7,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
     {
         public TransactionRecord()
         {
-            Id = DateTime.Now.Date.ToString("ddMMyyyy") + "-"+Guid.NewGuid();
+            Id = DateTime.UtcNow.Date.ToString("ddMMyyyy") + "-"+Guid.NewGuid();
         }
 
         public DateTime Date { get; set; }

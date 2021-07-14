@@ -52,7 +52,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         ]
         public override async Task<ActionResult> HandleAsync([FromForm] POSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            var subject = "Purchase Order " + DateTime.Now;
+            var subject = "Purchase Order " + DateTime.UtcNow;
 
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER, UserOperations.Update))
                 return Unauthorized();

@@ -54,7 +54,7 @@ namespace Infrastructure.Services
                 {"quantityavailable", quantityAvailable},
                 {"quantitysold", quantitySold},
                 {"transactiontype", transactionType},
-                {"date", DateTime.Now.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")},
+                {"date", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")},
             };
             // columnValues.Add("productvariantid", productVariant.Id);
             // columnValues.Add("name", productVariant.Name);

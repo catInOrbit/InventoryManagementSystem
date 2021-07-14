@@ -13,7 +13,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         {
             Id = "GR" +Guid.NewGuid().ToString().Substring(0, 8).ToUpper();
                            Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
-            ReceivedDate = DateTime.Now;
+            ReceivedDate = DateTime.UtcNow;
         }
         public string PurchaseOrderId { get; set; }
         [JsonIgnore]

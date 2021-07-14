@@ -650,12 +650,12 @@ namespace Infrastructure.Data
             {
                 case ReportType.Month:
                     thisMonthSales = nonNullTransaction.Where(order => 
-                        order.Transaction.TransactionRecord[order.Transaction.TransactionRecord.Count - 1].Date.Month == DateTime.Now.Month).ToList();
+                        order.Transaction.TransactionRecord[order.Transaction.TransactionRecord.Count - 1].Date.Month == DateTime.UtcNow.Month).ToList();
                     break;        
                 
                 case ReportType.Year:
                     thisMonthSales = nonNullTransaction.Where(order => 
-                        order.Transaction.TransactionRecord[order.Transaction.TransactionRecord.Count - 1].Date.Year == DateTime.Now.Year).ToList();
+                        order.Transaction.TransactionRecord[order.Transaction.TransactionRecord.Count - 1].Date.Year == DateTime.UtcNow.Year).ToList();
                     break;
             }
             
@@ -676,7 +676,7 @@ namespace Infrastructure.Data
                         ProductName = x1.ProductVariant.Name,
                         TotalSold = x1.OrderQuantityAggregrated,
                         ReportType = "Month",
-                        ReportDate = $"{DateTime.Now.Month}/{DateTime.Now.Year}"
+                        ReportDate = $"{DateTime.UtcNow.Month}/{DateTime.UtcNow.Year}"
                     });
                 }
             }
