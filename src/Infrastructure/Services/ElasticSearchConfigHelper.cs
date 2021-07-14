@@ -110,6 +110,8 @@ namespace Infrastructure.Services
                 index => index.Map<Package>(x => x.AutoMap())
             );
 
+            
+            
             // client.Indices.Create(indexName, i => i
             //     .Settings(s => s
             //         .NumberOfShards(2)
@@ -132,6 +134,12 @@ namespace Infrastructure.Services
             //     )
             // );
         }
+
+        private static async Task ReIndex(IElasticClient client, string defaultIndexName)
+        {
+            
+        }
+
 
     }
 }

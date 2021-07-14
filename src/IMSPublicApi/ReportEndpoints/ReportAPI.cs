@@ -151,6 +151,43 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
             response.Paging = await _packageAsycnRepository.GenerateTopSellingReport(ReportType.Month,pagingOption, cancellationToken);
             return Ok(response);
         }
+        
+        
+    }
+    
+    public class TrainMLAndGetLatest : BaseAsyncEndpoint.WithoutRequest.WithResponse<TrainMLResponse>
+    {
+        private IAsyncRepository<Package> _packageAsycnRepository;
+        private readonly IAuthorizationService _authorizationService;
+
+        public TrainMLAndGetLatest(IAsyncRepository<Package> packageAsycnRepository, IAuthorizationService authorizationService)
+        {
+            _packageAsycnRepository = packageAsycnRepository;
+            _authorizationService = authorizationService;
+        }
+        
+        [HttpGet]
+        [Route("api/report/trainml")]
+        [SwaggerOperation(
+            Summary = "Create a stock take report",
+            Description = "Create a stock take report",
+            OperationId = "report.stocktake",
+            Tags = new[] { "ReportEndpoints" })
+        ]
+        public override async Task<ActionResult<TrainMLResponse>> HandleAsync( CancellationToken cancellationToken = new CancellationToken())
+        {
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.REPORT, UserOperations.Read))
+                return Unauthorized();
+
+            BigQueryService bqs = new BigQueryService();
+            var response = new TrainMLResponse();
+
+            response.TopSellingProductName = bqs.TrainMLWithLargestSoldProduct();
+    
+            return Ok(response);
+        }
+        
+        
     }
     
     // public class GenerateMainSummary : BaseAsyncEndpoint.WithRequest<StockReportRequest>.WithResponse<TopSellingResponse>

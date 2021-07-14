@@ -762,7 +762,7 @@ namespace Infrastructure.Data
                 Console.WriteLine("ElasticSaveSingleAsync: Type: " + type.GetType() + " || Update");
                 var response = await _elasticClient.UpdateAsync<T>(type, u => u.Index(index).Doc(type));
                 if (!response.IsValid)
-                    throw new Exception();
+                    throw new Exception(response.DebugInformation);
             }
 
             else
@@ -770,9 +770,9 @@ namespace Infrastructure.Data
                 Console.WriteLine("ElasticSaveSingleAsync: Type: " + type.GetType() + " || AddNew");
                 // _elasticCache.Add(type);
                 // await _elasticClient.IndexDocumentAsync<T>(type);
-                var respone = await _elasticClient.IndexAsync(type, i => i.Index(index));
-                if (!respone.IsValid)
-                    throw new Exception();
+                var response = await _elasticClient.IndexAsync(type, i => i.Index(index));
+                if (!response.IsValid)
+                    throw new Exception(response.DebugInformation);
             }
         }
 

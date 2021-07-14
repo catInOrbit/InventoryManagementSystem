@@ -37,9 +37,6 @@ namespace Infrastructure.Services
                 }
             }
             
-            // List<BigQueryInsertRow> listRowInser = new List<BigQueryInsertRow>();
-            // Dictionary<string, object> columnValues = new Dictionary<string, object>();
-
             BigQueryInsertRow row = new BigQueryInsertRow();
         
             row = new BigQueryInsertRow
@@ -90,6 +87,62 @@ namespace Infrastructure.Services
             var result = _bigQueryClient.ExecuteQuery(query, parameters: null);
             
             return result;
+        }
+        
+        
+        /// <summary>
+        /// Query product name with largest sold quantity and train machine learning model in bigqery
+        /// </summary>
+        /// <returns>Product name with largest sold quantity</returns>
+        public string TrainMLWithLargestSoldProduct()
+        {
+            string queryLargestSoldProduct =
+                @"Select a.name, a.quantitysold from `imswarehouse.IMSWH01.mock10ksequential` as a
+                    inner join(
+                        Select name, Max(quantitysold) as quantitysold 
+                        from `imswarehouse.IMSWH01.mock10ksequential`
+                        Group by name 
+                    ) as b ON a.name = b.name and a.quantitysold = b.quantitysold 
+                    ORDER BY a.quantitysold
+                    DESC LIMIT 1";
+            
+            var result = _bigQueryClient.ExecuteQuery(queryLargestSoldProduct, parameters: null);
+            string productName = null;
+            
+            foreach (var row in result)
+                productName = row["name"].ToString();
+
+            string trainMLQuery = @"create or replace model imswarehouse.ML_Product.product_ml
+                                options
+                                (
+                                    model_type= 'ARIMA',
+                                    time_series_timestamp_col = 'date',
+                                    time_series_data_col = 'quantitysold',
+                                    time_series_id_col = 'name'
+                                 ) as
+                                select name,
+                                extract(date from date) as date,
+                                 quantitysold
+                                 from `imswarehouse.IMSWH01.mock10ksequential`
+                                 where EXTRACT(DATE from date) <= CURRENT_DATETIME() AND name=?
+                                 group by name,date,quantitysold";
+
+            var parameters = new BigQueryParameter[]
+            {
+                new BigQueryParameter("name", BigQueryDbType.String, productName),
+            };
+            
+            var job = _bigQueryClient.CreateQueryJob(
+                sql: trainMLQuery,
+                parameters: parameters,
+                options: new QueryOptions
+                {
+                    UseQueryCache = false,
+                });
+            // Wait for the job to complete.
+            job = job.PollUntilCompleted().ThrowOnAnyError();
+            
+            return productName;
         }
     }
 }

@@ -51,7 +51,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                 PageConstant.STOCKTAKEORDER, UserOperations.Update))
                 return Unauthorized();
             
-            stockTakeOrder.StockTakeOrderType = StockTakeOrderType.Completed;
+            stockTakeOrder.StockTakeOrderType = StockTakeOrderType.AwaitingAdjustment;
             stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Submit,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, stockTakeOrder.Id, "");
             
@@ -322,7 +322,9 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                      package.Quantity = stockTakeItem.ActualQuantity;
                      
                      var productVariant = package.ProductVariant;
-                     productVariant.StorageQuantity += package.Quantity;
+                     
+                     // productVariant.StorageQuantity += package.Quantity;
+                     
                      if (quantityUpdateProductDict.ContainsKey(productVariant))
                          quantityUpdateProductDict[productVariant] += package.Quantity;
                      else
@@ -337,7 +339,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                  await _productAsyncRepository.UpdateAsync(productVariant);
              }
             
-             stockTakeOrder.StockTakeOrderType = StockTakeOrderType.AwaitingAdjustment;
+             stockTakeOrder.StockTakeOrderType = StockTakeOrderType.Completed;
 
              stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Modify,
                  (await _userAuthentication.GetCurrentSessionUser()).Id, stockTakeOrder.Id, "");

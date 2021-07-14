@@ -21,6 +21,11 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
         public PagingOption<TopSellingReport> Paging { get; set; }
     }
     
+    public class TrainMLResponse
+    {
+        public string TopSellingProductName { get; set; }
+    }
+    
     public class StockReportRequest
     {
         public int CurrentPage { get; set; }
