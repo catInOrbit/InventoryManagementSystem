@@ -19,5 +19,19 @@ namespace Infrastructure.Services
                 return false;
             return true;
         }
+        
+        public static async Task<bool> AuthorizeWithUserId(IAuthorizationService authorizationService, string userID, string idToMatch, ClaimsPrincipal user, string pageAllowed,
+                   OperationAuthorizationRequirement operationAuthorizationRequirement)
+       {
+           var isAuthorized = await authorizationService.AuthorizeAsync(
+               user, pageAllowed,
+               operationAuthorizationRequirement);
+           
+           if (!isAuthorized.Succeeded && userID != idToMatch)
+               return false;
+           return true;
+       } 
+        
+        
     }
 }

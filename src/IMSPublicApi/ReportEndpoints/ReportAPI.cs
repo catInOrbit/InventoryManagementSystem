@@ -8,6 +8,7 @@ using Google.Cloud.BigQuery.V2;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Entities.Reports;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -87,7 +88,7 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
     {
         private IAsyncRepository<Package> _packageAsycnRepository;
         private readonly IAuthorizationService _authorizationService;
-
+    
         public GenerateTopSellingProductThisYear(IAsyncRepository<Package> packageAsycnRepository, IAuthorizationService authorizationService)
         {
             _packageAsycnRepository = packageAsycnRepository;
@@ -109,10 +110,11 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
             
             var response = new TopSellingResponse();
             
-            PagingOption<ProductVariant> pagingOption =
-                new PagingOption<ProductVariant>(request.CurrentPage, request.SizePerPage);
+            PagingOption<TopSellingReport> pagingOption =
+                new PagingOption<TopSellingReport>(request.CurrentPage, request.SizePerPage);
             
-            response.Paging = await _packageAsycnRepository.GenerateTopSellingYearReport(pagingOption, cancellationToken);
+            response.Paging = await _packageAsycnRepository.GenerateTopSellingReport(ReportType.Year,pagingOption, cancellationToken);
+
             return Ok(response);
         }
     }
@@ -143,10 +145,10 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
             
             var response = new TopSellingResponse();
             
-            PagingOption<ProductVariant> pagingOption =
-                new PagingOption<ProductVariant>(request.CurrentPage, request.SizePerPage);
+            PagingOption<TopSellingReport> pagingOption =
+                new PagingOption<TopSellingReport>(request.CurrentPage, request.SizePerPage);
             
-            response.Paging = await _packageAsycnRepository.GenerateTopSellingCurrentMonthReport(pagingOption, cancellationToken);
+            response.Paging = await _packageAsycnRepository.GenerateTopSellingReport(ReportType.Month,pagingOption, cancellationToken);
             return Ok(response);
         }
     }

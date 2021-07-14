@@ -1,5 +1,6 @@
     using System;
-using System.Collections.Generic;
+    using System.Collections;
+    using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +11,8 @@ using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
-using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
+    using InventoryManagementSystem.ApplicationCore.Entities.Reports;
+    using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -556,13 +558,16 @@ namespace Infrastructure.Data
 
         public async Task<PagingOption<StockOnhandReport>> GenerateOnHandReport(PagingOption<StockOnhandReport> pagingOption, CancellationToken cancellationToken = default)
         {
-            var productVariantList = await _identityAndProductDbContext.Set<ProductVariant>().Skip(pagingOption.SkipValue)
-                .Take(pagingOption.SizePerPage).OrderByDescending(pac => pac.Packages[pac.Packages.Count - 1].ImportedDate).ToListAsync();
+            var productVariantNonNullList = await _identityAndProductDbContext.Set<ProductVariant>().
+                Where(p => p.Packages.Count > 0).ToListAsync();
+                
+                
+            productVariantNonNullList = productVariantNonNullList.OrderByDescending(pac => pac.Packages[pac.Packages.Count - 1].ImportedDate).ToList();
             
             // var list = await _identityAndProductDbContext.Set<Package>().Skip(pagingOption.SkipValue)
             //     .Take(pagingOption.SizePerPage).OrderByDescending(pac => pac.ImportedDate).ToListAsync();
 
-            foreach (var productVariant in productVariantList)
+            foreach (var productVariant in productVariantNonNullList)
             {
                 try
                 {
@@ -603,17 +608,20 @@ namespace Infrastructure.Data
                 
             }
 
-            pagingOption.ExecuteResourcePaging(productVariantList.Count);
+            pagingOption.ExecuteResourcePaging(productVariantNonNullList.Count);
             return pagingOption;
         }
 
         public async Task<PagingOption<StockTakeReport>> GenerateStockTakeReport(PagingOption<StockTakeReport> pagingOption, CancellationToken cancellationToken = default)
         {
-            var list = await _identityAndProductDbContext.Set<StockTakeItem>().Skip(pagingOption.SkipValue)
-                .Take(pagingOption.SizePerPage).
-                OrderByDescending(item =>  item.StockTakeOrder.Transaction.TransactionRecord[item.StockTakeOrder.Transaction.TransactionRecord.Count - 1].Date).ToListAsync();
+            var listNonNullTransac = await _identityAndProductDbContext.Set<StockTakeItem>()
+                .Where(item => item.StockTakeOrder.Transaction.TransactionRecord.Count > 0).ToListAsync();
+                
+                
+            listNonNullTransac = listNonNullTransac.OrderByDescending(item =>  item.StockTakeOrder.Transaction.TransactionRecord[item.StockTakeOrder.Transaction.TransactionRecord.Count - 1].Date).
+                Skip(pagingOption.SkipValue).Take(pagingOption.SizePerPage).ToList();
 
-            foreach (var stockTakeItem in list)
+            foreach (var stockTakeItem in listNonNullTransac)
             {
                 var stockTakeReport = new StockTakeReport()
                 {
@@ -627,23 +635,54 @@ namespace Infrastructure.Data
                 pagingOption.ResultList.Add(stockTakeReport);
             }
 
-            pagingOption.ExecuteResourcePaging(list.Count);
+            pagingOption.ExecuteResourcePaging(listNonNullTransac.Count);
             return pagingOption;
         }
 
-        public async Task<PagingOption<ProductVariant>> GenerateTopSellingYearReport(PagingOption<ProductVariant> pagingOption, CancellationToken cancellationToken = default)
+        public async Task<PagingOption<TopSellingReport>> GenerateTopSellingReport(ReportType reportType, PagingOption<TopSellingReport> pagingOption, CancellationToken cancellationToken = default)
         {
-            pagingOption.ResultList = await _identityAndProductDbContext.Set<ProductVariant>().Where(variant => variant.Packages[variant.Packages.Count-1].ImportedDate.Year == DateTime.Now.Year).
-                OrderByDescending(item =>  item.StorageQuantity).Skip(pagingOption.SkipValue).Take(pagingOption.SizePerPage).ToListAsync();
+            var nonNullTransaction = await _identityAndProductDbContext.Set<GoodsIssueOrder>()
+                .Where(order => order.Transaction.TransactionRecord.Count > 0).ToListAsync();
 
-            pagingOption.ExecuteResourcePaging();
-            return pagingOption;
-        }
+            List<GoodsIssueOrder> thisMonthSales = null;
 
-        public async Task<PagingOption<ProductVariant>> GenerateTopSellingCurrentMonthReport(PagingOption<ProductVariant> pagingOption, CancellationToken cancellationToken = default)
-        {
-            pagingOption.ResultList = await _identityAndProductDbContext.Set<ProductVariant>().Where(variant => variant.Packages[variant.Packages.Count-1].ImportedDate.Month == DateTime.Now.Month).
-                OrderByDescending(item =>  item.StorageQuantity).Skip(pagingOption.SkipValue).Take(pagingOption.SizePerPage).ToListAsync();
+            switch (reportType)
+            {
+                case ReportType.Month:
+                    thisMonthSales = nonNullTransaction.Where(order => 
+                        order.Transaction.TransactionRecord[order.Transaction.TransactionRecord.Count - 1].Date.Month == DateTime.Now.Month).ToList();
+                    break;        
+                
+                case ReportType.Year:
+                    thisMonthSales = nonNullTransaction.Where(order => 
+                        order.Transaction.TransactionRecord[order.Transaction.TransactionRecord.Count - 1].Date.Year == DateTime.Now.Year).ToList();
+                    break;
+            }
+            
+            
+            Dictionary<ProductVariant, int> top = new Dictionary<ProductVariant, int>();
+                
+            foreach (var goodsIssueOrder in thisMonthSales)
+            {
+                var tempTop = goodsIssueOrder.GoodsIssueProducts.GroupBy(order => order.ProductVariant).Select(
+                    g => new {ProductVariant = g.Key, OrderQuantityAggregrated = g.Sum(order => order.OrderQuantity)}
+                );
+
+                foreach (var x1 in tempTop)
+                {
+                    pagingOption.ResultList.Add(new TopSellingReport
+                    {
+                        ProductId = x1.ProductVariant.ProductId,
+                        ProductName = x1.ProductVariant.Name,
+                        TotalSold = x1.OrderQuantityAggregrated,
+                        ReportType = "Month",
+                        ReportDate = $"{DateTime.Now.Month}/{DateTime.Now.Year}"
+                    });
+                }
+            }
+            
+            // pagingOption.ResultList = await _identityAndProductDbContext.Set<ProductVariant>().Where(variant => variant.Packages[variant.Packages.Count-1].ImportedDate.Month == DateTime.Now.Month).
+            //     OrderByDescending(item =>  item.StorageQuantity).Skip(pagingOption.SkipValue).Take(pagingOption.SizePerPage).ToListAsync();
 
             pagingOption.ExecuteResourcePaging();
             return pagingOption;

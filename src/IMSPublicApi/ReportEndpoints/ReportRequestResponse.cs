@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Entities.Reports;
 
 namespace InventoryManagementSystem.PublicApi.ReportEndpoints
 {
@@ -16,7 +18,7 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
     
     public class TopSellingResponse
     {
-        public PagingOption<ProductVariant> Paging { get; set; }
+        public PagingOption<TopSellingReport> Paging { get; set; }
     }
     
     public class StockReportRequest

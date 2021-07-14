@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using Newtonsoft.Json;
 
-namespace InventoryManagementSystem.ApplicationCore.Entities
+namespace InventoryManagementSystem.ApplicationCore.Entities.Reports
 {
     public class StockOnhandReport : BaseEntity
     {
@@ -79,4 +78,27 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public int ActualQuantity { get; set; }
         public decimal Value { get; set; }
     }
+
+    public class TopSellingReport : BaseEntity
+    {
+        [JsonIgnore]
+        public override string Id { get; set; }
+
+        public TopSellingReport()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
+        public string ProductId { get; set; }
+        public string ProductName { get; set; }
+        public int TotalSold { get; set; }
+        public string ReportDate { get; set; }
+        public string ReportType { get; set; }
+    }
+
+    public enum ReportType
+    {
+        Month= 1,
+        Year = 2,
+    }
+    
 }
