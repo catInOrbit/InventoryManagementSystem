@@ -135,11 +135,7 @@ namespace Infrastructure.Services
             // );
         }
 
-        private static async Task ReIndex(IElasticClient client, string defaultIndexName)
-        {
-            
-        }
-
+      
 
     }
 }

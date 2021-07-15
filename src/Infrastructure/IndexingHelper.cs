@@ -229,29 +229,28 @@ namespace Infrastructure
                     Debug.Assert(productVariant.Transaction != null, "productVariant.Transaction != null");
                     index = new ProductVariantSearchIndex();
                     index.TransactionId = (productVariant.Transaction != null) ? productVariant.TransactionId : "";
-                        index.Id = productVariant.Id;
-                        index.Name = productVariant.Name;
-                        index.ProductId = (productVariant.ProductId != null) ? productVariant.ProductId : "";
-                        index.ProductVariantId = productVariant.Id;
-                        index.Category = (productVariant.Product!=null && productVariant.Product.Category.CategoryName != null) ? productVariant.Product.Category.CategoryName : "";
-                        index.Quantity = productVariant.StorageQuantity;
-                        // ModifiedDate = (productVariant.Transaction.TransactionRecord.Count > 0) ? productVariant.Transaction.TransactionRecord[^1].Date : DateTime.MinValue,
-                        index.Sku = productVariant.Sku;
-                        index.Unit = productVariant.Product.Unit;
-                        index.Brand = (productVariant.Product != null && productVariant.Product.Brand != null) ? productVariant.Product.Brand.BrandName : "";
-                        index.Price = productVariant.Price;
-                        index.Strategy = (productVariant.Product != null && productVariant.Product.SellingStrategy!= null) ? productVariant.Product.SellingStrategy : "";
-                        // CreatedDate =  (productVariant.Transaction.TransactionRecord.Count > 0) ? productVariant.Transaction.TransactionRecord[0].Date : DateTime.MinValue,
-                        index.CreatedByName =(productVariant.Transaction.TransactionRecord.Count > 0 && productVariant.Transaction.TransactionRecord.
-                            FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create) != null) ? productVariant.Transaction.TransactionRecord.
-                            FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create).ApplicationUser
-                            .Fullname : "";
-                        index.ModifiedByName = (productVariant.Transaction.TransactionRecord.Count > 0 && productVariant.Transaction.TransactionRecord.
-                            FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Modify) != null) ? productVariant.Transaction.TransactionRecord.
-                            FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Modify).ApplicationUser
-                            .Fullname: "";
+                    index.Id = productVariant.Id;
+                    index.Name = productVariant.Name;
+                    index.ProductId = (productVariant.ProductId != null) ? productVariant.ProductId : "";
+                    index.ProductVariantId = productVariant.Id;
+                    index.Category = (productVariant.Product!=null && productVariant.Product.Category.CategoryName != null) ? productVariant.Product.Category.CategoryName : "";
+                    index.Quantity = productVariant.StorageQuantity;
+                    // ModifiedDate = (productVariant.Transaction.TransactionRecord.Count > 0) ? productVariant.Transaction.TransactionRecord[^1].Date : DateTime.MinValue,
+                    index.Sku = productVariant.Sku;
+                    index.Unit = productVariant.Product.Unit;
+                    index.Brand = (productVariant.Product != null && productVariant.Product.Brand != null) ? productVariant.Product.Brand.BrandName : "";
+                    index.Price = productVariant.Price;
+                    index.Strategy = (productVariant.Product != null && productVariant.Product.SellingStrategy!= null) ? productVariant.Product.SellingStrategy : "";
+                    // CreatedDate =  (productVariant.Transaction.TransactionRecord.Count > 0) ? productVariant.Transaction.TransactionRecord[0].Date : DateTime.MinValue,
+                    index.CreatedByName =(productVariant.Transaction.TransactionRecord.Count > 0 && productVariant.Transaction.TransactionRecord.
+                        FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create) != null) ? productVariant.Transaction.TransactionRecord.
+                        FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create).ApplicationUser
+                        .Fullname : "";
+                    index.ModifiedByName = (productVariant.Transaction.TransactionRecord.Count > 0 && productVariant.Transaction.TransactionRecord.
+                        FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Modify) != null) ? productVariant.Transaction.TransactionRecord.
+                        FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Modify).ApplicationUser
+                        .Fullname: "";
                         // SupplierName = productVariant.Packages[^1].Supplier.SupplierName
-
                
                     index.ModifiedDate = (productVariant.Transaction.TransactionRecord.Count > 0)
                         ? productVariant.Transaction.TransactionRecord[^1].Date

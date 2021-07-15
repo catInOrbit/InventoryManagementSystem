@@ -23,20 +23,24 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
     public class ProductCreate : BaseAsyncEndpoint.WithRequest<ProductRequest>.WithResponse<ProductCreateResponse>
     {
         private IAsyncRepository<ApplicationCore.Entities.Products.Product> _asyncRepository;
+        private IAsyncRepository<Category> _categoryAsyncRepository;
 
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserSession _userAuthentication;
-        private readonly IAsyncRepository<ProductVariantSearchIndex> _productIndexAsyncRepositoryRepos;
+        private readonly IAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
+        private readonly IAsyncRepository<ProductVariantSearchIndex> _productVariantIndexAsyncRepositoryRepos;
 
         private readonly INotificationService _notificationService;
 
-        public ProductCreate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductVariantSearchIndex> productIndexAsyncRepositoryRepos, INotificationService notificationService)
+        public ProductCreate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos, INotificationService notificationService, IAsyncRepository<ProductVariantSearchIndex> productVariantIndexAsyncRepositoryRepos, IAsyncRepository<Category> categoryAsyncRepository)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
             _productIndexAsyncRepositoryRepos = productIndexAsyncRepositoryRepos;
             _notificationService = notificationService;
+            _productVariantIndexAsyncRepositoryRepos = productVariantIndexAsyncRepositoryRepos;
+            _categoryAsyncRepository = categoryAsyncRepository;
         }
         
         [HttpPost("api/product/create")]
@@ -51,6 +55,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
         {
                if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Create))
                 return Unauthorized();
+               
+            var category = await _categoryAsyncRepository.GetByIdAsync(request.CategoryId);
 
             ApplicationCore.Entities.Products.Product product = new ApplicationCore.Entities.Products.Product
             {
@@ -61,12 +67,12 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     BrandName = request.BrandName
                 },
                 CategoryId = request.CategoryId,
+                Category = category,
                 Unit = request.Unit
             };
 
-           
             product.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Product,
-                product.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
+                product.Id, (await _userAuthentication.GetCurrentSessionUser()));
 
 
             product.TransactionId = product.Transaction.Id;
@@ -82,17 +88,24 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     Barcode = productVairantRequestInfo.Barcode,
                     Price = productVairantRequestInfo.Price,
                     Cost = productVairantRequestInfo.SalePrice,  
+                    Product =  product
                     // Unit = product.Unit
                 };
                 productVariant.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.ProductVariant, productVariant.Id, 
-                    (await _userAuthentication.GetCurrentSessionUser()).Id);
+                    (await _userAuthentication.GetCurrentSessionUser()));
 
                 var packages = await _asyncRepository.GetPackagesFromProductVariantId(productVariant.Id);
-
+                productVariant.Packages = new List<Package>();
                 foreach (var package in packages)
                 {
                     productVariant.StorageQuantity += package.Quantity;
+                    productVariant.Packages.Add(package);
                 }
+                
+
+                await _productVariantIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(true,
+                    IndexingHelper.ProductVariantSearchIndex(productVariant),
+                    ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
 
                 product.ProductVariants.Add(productVariant);
             }
@@ -101,7 +114,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             //     product.Name = product.ProductVariants.ToList()[0].Name;
             
             await _asyncRepository.AddAsync(product);
-            await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(true,IndexingHelper.ProductVariantSearchIndex(product),ElasticIndexConstant.PRODUCT_INDICES);
+            await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(true,IndexingHelper.ProductSearchIndex(product),ElasticIndexConstant.PRODUCT_INDICES);
             
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
 
@@ -282,6 +295,10 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
                 currentUser.Id, messageNotification);
 
+
+            // await _asyncRepository.ReIndexProduct();
+            // await _asyncRepository.ReIndexProductVariant();
+
             var response = new ProductUpdateResponse();
             response.Product = product;
             return Ok(response);
@@ -345,6 +362,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                 
             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
                 currentUser.Id, messageNotification);
+
+            // await _asyncRepository.ReIndexProduct();
 
             var response = new ProductUpdateResponse();
             response.Product = product;

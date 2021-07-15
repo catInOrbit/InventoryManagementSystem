@@ -54,7 +54,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             OperationId = "po.update",
             Tags = new[] { "PriceQuoteOrderEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync([FromForm] PQSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult> HandleAsync(PQSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
           
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRICEQUOTEORDER, UserOperations.Update))
@@ -70,11 +70,11 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             
             await _asyncRepository.UpdateAsync(po);
             
-            var subject = "REQUEST FOR QUOTATION-" + DateTime.UtcNow.ToString("dd/MM//yyyy") + " FROM IMS Inventory";
+            // var subject = "REQUEST FOR QUOTATION-" + DateTime.UtcNow.ToString("dd/MM//yyyy") + " FROM IMS Inventory";
             
-            var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
-            var message = new EmailMessage(request.To, subject, request.Content, files);
-            await _emailSender.SendEmailAsync(message);
+            // var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
+            // var message = new EmailMessage(request.To, subject, request.Content, files);
+            // await _emailSender.SendEmailAsync(message);
             await _asyncRepository.UpdateAsync(po);
             await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
             

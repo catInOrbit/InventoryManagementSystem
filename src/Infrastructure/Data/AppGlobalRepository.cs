@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 using Ardalis.Specification;
 using Elasticsearch.Net;
 using Infrastructure.Identity.DbContexts;
-using InventoryManagementSystem.ApplicationCore.Entities;
+    using InventoryManagementSystem.ApplicationCore.Constants;
+    using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
@@ -760,7 +761,9 @@ namespace Infrastructure.Data
             if (!isSavingNew)
             {
                 Console.WriteLine("ElasticSaveSingleAsync: Type: " + type.GetType() + " || Update");
+               // var response = await _elasticClient.UpdateAsync<T>(type, u => u.Index(index).Doc(type));
                 var response = await _elasticClient.UpdateAsync<T>(type, u => u.Index(index).Doc(type));
+
                 if (!response.IsValid)
                     throw new Exception(response.DebugInformation);
             }
@@ -791,7 +794,40 @@ namespace Infrastructure.Data
                 }
             }
         }
+        
+        public async Task ReIndexProduct()
+        {
+            await _elasticClient.Indices.DeleteAsync(ElasticIndexConstant.PRODUCT_INDICES);
+            await _elasticClient.Indices.CreateAsync( ElasticIndexConstant.PRODUCT_INDICES,
+                index 
+                    => index.Map<ProductSearchIndex>(x 
+                        => x.AutoMap().Properties(ps 
+                            => ps.Completion(c 
+                                => c.Name(n => n.Suggest))))
+            );
+            
+            // await ElasticSaveBulkAsync((await GetProductVariantForELIndexAsync(new PagingOption<ProductVariantSearchIndex>(0, 0))).ResultList.ToArray(),  ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+            // await ElasticSaveBulkAsync((await GetProductForELIndexAsync(new PagingOption<ProductSearchIndex>(0, 0))).ResultList.ToArray(),  ElasticIndexConstant.PRODUCT_INDICES);
+        }
 
+
+        public async Task ReIndexProductVariant()
+        {
+            await _elasticClient.Indices.DeleteAsync(ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+
+            await _elasticClient.Indices.CreateAsync( ElasticIndexConstant.PRODUCT_VARIANT_INDICES,
+                index 
+                    => index.Settings(s=> s.Analysis(
+                            a => a.Tokenizers(
+                                t => t.Pattern("hyphen_tokenizer", descriptor => descriptor.Pattern(".*-.*"))
+                            )
+                        ))
+                        .Map<ProductVariantSearchIndex>(x 
+                            => x.AutoMap().Properties(ps 
+                                => ps.Completion(c 
+                                    => c.Name(n => n.Suggest))))
+            );
+        }
         // public async Task ElasticSaveManyAsync(T[] types)
         // {
         //     _elasticCacheProduct.AddRange(types);

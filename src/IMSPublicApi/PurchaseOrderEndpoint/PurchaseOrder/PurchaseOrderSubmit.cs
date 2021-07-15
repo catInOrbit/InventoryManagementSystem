@@ -73,7 +73,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
                 
                 BigQueryService bigQueryService = new BigQueryService();
-
+                
                 try
                 {
                     foreach (var orderItem in po.PurchaseOrderProduct)

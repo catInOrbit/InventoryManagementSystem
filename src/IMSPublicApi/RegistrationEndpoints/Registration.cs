@@ -89,6 +89,14 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                             DateOfBirth = request.DateOfBirth,
                             DateOfBirthNormalizedString = string.Format("{0}-{1}-{2}", request.DateOfBirth.Month, request.DateOfBirth.Day, request.DateOfBirth.Year)
                         };
+                        
+                        var checkDuplicateUser = await _userRoleModificationService.UserManager.FindByEmailAsync(request.Email);
+                        if (checkDuplicateUser != null)
+                        {
+                            response.Result = false;
+                            response.Verbose = "Error saving to DB, email already exists";
+                            return Ok(response);
+                        }
 
                         var resultCreate = await _userRoleModificationService.UserManager.CreateAsync(newIMSUser, request.Password);
                         if (!resultCreate.Succeeded)

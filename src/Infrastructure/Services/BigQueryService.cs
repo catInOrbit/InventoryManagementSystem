@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.BigQuery.V2;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
@@ -13,9 +14,10 @@ namespace Infrastructure.Services
         private BigQueryClient _bigQueryClient;
         public BigQueryService()
         {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), @"imswarehouse-70a47bcd9c79.json");
             
             _bigQueryClient = BigQueryClient.Create(GCC_PROJECTID,
-                GoogleCredential.FromStream(new StreamReader(@"/home/thomasm/InventoryManagementSystem/src/Infrastructure/imswarehouse-70a47bcd9c79.json").BaseStream));
+                GoogleCredential.FromStream(new StreamReader(path).BaseStream));
         }
 
         public void InsertProductRowBQ(ProductVariant productVariant, decimal buy_price, 
@@ -124,7 +126,7 @@ namespace Infrastructure.Services
                                 extract(date from date) as date,
                                  quantitysold
                                  from `imswarehouse.IMSWH01.mock10ksequential`
-                                 where EXTRACT(DATE from date) <= CURRENT_DATETIME() AND name=?
+                                 where EXTRACT(DATE from date) <= CURRENT_DATETIME() AND name=@name
                                  group by name,date,quantitysold";
 
             var parameters = new BigQueryParameter[]

@@ -44,9 +44,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
     public class PQSubmitRequest : BaseRequest
     {
         public string OrderNumber { get; set; }
-        public string[] To { get; set; }
-        public string Content { get; set; }
-        public string Subject { get; set; }
     }
     
     public class POConfirmRequest : BaseRequest

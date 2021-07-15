@@ -55,4 +55,8 @@
     <Folder Include="Migrations" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="imswarehouse-70a47bcd9c79.json" />
+  </ItemGroup>
+
 </Project>

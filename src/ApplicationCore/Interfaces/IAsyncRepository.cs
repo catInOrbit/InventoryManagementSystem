@@ -80,6 +80,9 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         Task ElasticSaveBulkAsync(T[] types, string index);
         Task ElasticDeleteSingleAsync(T type, string index);
 
+        Task ReIndexProduct();
+        Task ReIndexProductVariant();
+
         Notification GetNotificationInfoFromUserId(string userId);
 
     }

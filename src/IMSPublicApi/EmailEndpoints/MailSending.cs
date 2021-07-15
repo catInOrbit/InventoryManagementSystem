@@ -1,15 +1,17 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.EmailEndpoints
 {
 
-    public class MailSending : BaseAsyncEndpoint.WithRequest<MailSendingRequest>.WithResponse<MailSendingResponse>
+    public class MailSending : BaseAsyncEndpoint.WithRequest<MailSendingRequest>.WithoutResponse
     {
         private readonly IEmailSender _emailSender;
 
@@ -20,19 +22,17 @@ namespace InventoryManagementSystem.PublicApi.EmailEndpoints
 
         [HttpPost("api/mailservice")]
         [SwaggerOperation(
-            Summary = "Send email to specified email",
-            Description = "Send email to specified email",
-            OperationId = "resetpass",
-            Tags = new[] { "ResetPasswordEndpoints" })
+            Summary = "Send email to specified address",
+            Description = "Send email to specified address",
+            OperationId = "mail",
+            Tags = new[] { "MailEndpoints" })
         ]
-        public override async Task<ActionResult<MailSendingResponse>> HandleAsync(MailSendingRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult> HandleAsync([FromForm] MailSendingRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            var response = new MailSendingResponse();
-            
-            var message = new EmailMessage(request.To, request.Content, request.Content, null);
+            var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
+            var message = new EmailMessage(request.To, request.Subject, request.Content, files);
             await _emailSender.SendEmailAsync(message);
-            response.Result = true;
-            return Ok(response);
+            return Ok();
         }
     }
 }
