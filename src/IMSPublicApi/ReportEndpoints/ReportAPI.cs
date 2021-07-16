@@ -182,7 +182,7 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
             BigQueryService bqs = new BigQueryService();
             var response = new TrainMLResponse();
     
-            response.TopSellingProductName = bqs.TrainMLWithLargestSoldProduct();
+            response.TopSellingProductName = await bqs.TrainMLWithLargestSoldProduct();
     
             return Ok(response);
         }

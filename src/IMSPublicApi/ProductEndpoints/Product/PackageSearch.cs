@@ -80,8 +80,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
             PagingOption<Package> pagingOptionPackage =
                 new PagingOption<Package>(request.CurrentPage, request.SizePerPage);
             
-            PagingOption<Location> pagingOptionLocation =
-                new PagingOption<Location>(request.CurrentPage, request.SizePerPage);
+            PagingOption<ApplicationCore.Entities.Products.Location> pagingOptionLocation =
+                new PagingOption<ApplicationCore.Entities.Products.Location>(request.CurrentPage, request.SizePerPage);
             
             
             ISearchResponse<Package> responseElastic;
@@ -100,7 +100,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                         _packageAsyncRepository.GetPackages(new PagingOption<Package>(0,0), cancellationToken);
 
                     resource = packages.ResultList.ToList();
-                    
                 }
                 
 
@@ -149,13 +148,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                 response.Paging = pagingOptionLocation;
                 return Ok(response);
             }
-            
-           
-            
-           
-            
-            
-
 
         }
     }

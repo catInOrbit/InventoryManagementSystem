@@ -25,7 +25,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         [JsonIgnore]
         public virtual Transaction Transaction { get; set; }
         public string SellingStrategy { get; set; }
-        [JsonIgnore]
         public virtual Category Category { get; set; }
         public virtual ICollection<ProductVariant> ProductVariants { get; set; }
         public bool IsVariantType { get; set; }

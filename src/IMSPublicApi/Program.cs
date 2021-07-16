@@ -41,6 +41,7 @@ namespace InventoryManagementSystem.PublicApi
                 var elasticStRepos = services.GetRequiredService<IAsyncRepository<StockTakeSearchIndex>>();
                 var elasticSupRepos = services.GetRequiredService<IAsyncRepository<Supplier>>();
                 var elasticPackageRepos = services.GetRequiredService<IAsyncRepository<Package>>();
+                var elasticLocationRepos = services.GetRequiredService<IAsyncRepository<Location>>();
 
                 try
                 {
@@ -52,13 +53,13 @@ namespace InventoryManagementSystem.PublicApi
                     await elasticStRepos.ElasticSaveBulkAsync((await elasticStRepos.GetSTForELIndexAsync(new PagingOption<StockTakeSearchIndex>(0,0), new STSearchFilter())).ResultList.ToArray(),  ElasticIndexConstant.STOCK_TAKE_ORDERS);
                     await elasticSupRepos.ElasticSaveBulkAsync((await elasticSupRepos.ListAllAsync(new PagingOption<Supplier>(0,0))).ResultList.ToArray(),    ElasticIndexConstant.SUPPLIERS);
                     await elasticPackageRepos.ElasticSaveBulkAsync((await elasticPackageRepos.ListAllAsync(new PagingOption<Package>(0,0))).ResultList.ToArray(), ElasticIndexConstant.PACKAGES);
+                    await elasticLocationRepos.ElasticSaveBulkAsync((await elasticLocationRepos.ListAllAsync(new PagingOption<Location>(0,0))).ResultList.ToArray(), ElasticIndexConstant.LOCATIONS);
                     
                     //
                     await SeedRole.Initialize(services, "test@12345Aha");
                     
-                    BigQueryService bigQueryService = new BigQueryService();
+                    // BigQueryService bigQueryService = new BigQueryService();
                     // bigQueryService.Get3LinesData();
-
                 }
                 catch (Exception ex)
                 {

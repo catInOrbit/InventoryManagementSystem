@@ -1,4 +1,5 @@
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 
 namespace InventoryManagementSystem.PublicApi.ProductEndpoints
 {
@@ -17,6 +18,17 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
     
     public class LocationResponse : BaseRequest
     {
-        public Location Location { get; set; }
+        public ApplicationCore.Entities.Products.Location Location { get; set; }
+    }
+    
+    public class LocationSearchRequest : LocationSearchFilter
+    {
+        public string SearchQuery { get; set; }
+        public int CurrentPage { get; set; }
+        public int SizePerPage { get; set; }
+    }
+    
+    public class LocationSearchResponse : BaseSearchResponse<ApplicationCore.Entities.Products.Location>
+    {
     }
 }

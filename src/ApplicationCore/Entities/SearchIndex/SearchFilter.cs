@@ -102,4 +102,11 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string ModifiedByName { get; set; }
         public string Brand { get; set; }
     }
+    
+    public class LocationSearchFilter 
+    {
+        public string FromQuantity { get; set; }
+        public string ToQuantity { get; set; }
+        public bool NoPackages { get; set; }
+    }
 }

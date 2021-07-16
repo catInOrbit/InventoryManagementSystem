@@ -26,7 +26,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
     {
     }
     
-    public class LocationSearchResponse : BaseSearchResponse<Location>
+    public class LocationSearchResponse : BaseSearchResponse<ApplicationCore.Entities.Products.Location>
     {
     }
 }

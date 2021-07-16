@@ -4,23 +4,22 @@ using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
-using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
+namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Location
 {
     public class LocationCreate : BaseAsyncEndpoint.WithRequest<LocationCreateRequest>.WithResponse<LocationResponse>
     {
-        private readonly IAsyncRepository<Location> _locationAsyncRepository;
+        private readonly IAsyncRepository<ApplicationCore.Entities.Products.Location> _locationAsyncRepository;
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserSession _userAuthentication;
         private readonly INotificationService _notificationService;
 
-        public LocationCreate(IAsyncRepository<Location> locationAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, INotificationService notificationService)
+        public LocationCreate(IAsyncRepository<ApplicationCore.Entities.Products.Location> locationAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, INotificationService notificationService)
         {
             _locationAsyncRepository = locationAsyncRepository;
             _authorizationService = authorizationService;
@@ -42,7 +41,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                 return Unauthorized();
             
             
-            var location = new Location
+            var location = new ApplicationCore.Entities.Products.Location
             {
                 LocationName = request.LocationName
             };
@@ -73,12 +72,12 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
     
      public class LocationUpdate : BaseAsyncEndpoint.WithRequest<LocationUpdateRequest>.WithResponse<LocationResponse>
     {
-        private readonly IAsyncRepository<Location> _locationAsyncRepository;
+        private readonly IAsyncRepository<ApplicationCore.Entities.Products.Location> _locationAsyncRepository;
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserSession _userAuthentication;
         private readonly INotificationService _notificationService;
 
-        public LocationUpdate(IAsyncRepository<Location> locationAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, INotificationService notificationService)
+        public LocationUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Location> locationAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, INotificationService notificationService)
         {
             _locationAsyncRepository = locationAsyncRepository;
             _authorizationService = authorizationService;

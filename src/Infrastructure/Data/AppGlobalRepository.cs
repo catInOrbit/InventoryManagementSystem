@@ -223,7 +223,9 @@ namespace Infrastructure.Data
                 .ToList();
             return pos;
         }
+
         
+
         private static T ParseEnum<T>(string value)
         {
             return (T) Enum.Parse(typeof(T), value, true);
