@@ -12,6 +12,7 @@ using Google.Apis.Sheets.v4.Data;
 using Google.Apis.Util.Store;
 using Google.Cloud.BigQuery.V2;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using Org.BouncyCastle.Crypto;
 
 namespace Infrastructure.Services
 {
@@ -167,7 +168,7 @@ namespace Infrastructure.Services
                         FROM ML.FORECAST(MODEL ML_Product.product_ml, STRUCT(100 AS horizon, 0.9 AS confidence_level))";
             
             job = _bigQueryClient.CreateQueryJob(
-                sql: trainMLQuery,
+                sql: query_forecast,
                 parameters: parameters,
                 options: new QueryOptions
                 {
@@ -175,8 +176,7 @@ namespace Infrastructure.Services
                 });
             
             job = job.PollUntilCompleted().ThrowOnAnyError();
-            BigQueryResults queryResult = _bigQueryClient.GetQueryResults(job.Reference.JobId,
-                new GetQueryResultsOptions());
+            BigQueryResults queryResult = job.GetQueryResults();
 
             StringBuilder stringBuilder = new StringBuilder();
             
@@ -214,7 +214,7 @@ namespace Infrastructure.Services
                 stringBuilder.Append(Environment.NewLine);
             }
 
-            string csvoutputPath =Path.Combine(Directory.GetCurrentDirectory(), @"forecast_single_product.csv");
+            string csvoutputPath = Path.Combine(Directory.GetCurrentDirectory(), @"forecast_single_product.csv");
             File.WriteAllText(csvoutputPath, stringBuilder.ToString());
             
             return productName;
@@ -225,7 +225,7 @@ namespace Infrastructure.Services
     {
         static string[] Scopes = { SheetsService.Scope.SpreadsheetsReadonly };
         static string ApplicationName = "Datasheet";
-
+        private readonly SheetsService _service;
         public GoogleSheetService()
         {
             
@@ -242,41 +242,96 @@ namespace Infrastructure.Services
                 {
                     User = serviceAccountEmail,
                     Key = serviceAccountCredential.Key,
-                    Scopes = Scopes
+                    Scopes = scopes
                 };
                 serviceAccountCredential = new ServiceAccountCredential(initializer);
             }
             
-            var service = new SheetsService(new BaseClientService.Initializer()
+            _service = new SheetsService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = serviceAccountCredential,
                 ApplicationName = ApplicationName,
             });
+        }
 
+        public void OverrideForecastDatasheet()
+        {
             string spreadSheetId ="1bev02YIKBl4YXxA-8eZety9fAalOseWRGzjhrJZ2Eqc";
-            string range = "datasheet!A1:C";
+            string rangeDeletion = "A1:Z";
        
+            ClearValuesRequest clearValuesRequest = new ClearValuesRequest();
+                // assumes you have a sheetservice initialized 
+            // _service.Spreadsheets.Values.Clear(clearValuesRequest, spreadSheetId, range);
+            SpreadsheetsResource.ValuesResource.ClearRequest requestClear =
+                _service.Spreadsheets.Values.Clear(clearValuesRequest, spreadSheetId, rangeDeletion);
 
-
-            List<Object> row1 = new List<object>();
-            row1.Add("Name");
-            row1.Add("Rollno");
-            row1.Add("Class");
-            // similarly create more rows with data
-
+            requestClear.Execute();
+            
+            List<string> row1 = new List<string>();
             List<object> values = new List<object>();
-            values.Add(row1);
-            
-            ValueRange valueRange = new ValueRange();
-            valueRange.MajorDimension = "ROWS";
-            valueRange.Values.Add(values);
+            //
+            row1.Add("name");
+            row1.Add("timestamp");
+            row1.Add("quantitysold");
+            row1.Add("forecast_value");
+            row1.Add("prediction_interval_lower_bound");
+            row1.Add("prediction_interval_upper_bound");
+            //
+            values.Add(new List<object>(row1));
+            // ValueRange valueRange = new ValueRange();
+            // valueRange.MajorDimension = "ROWS";
+            // valueRange.Values = new List<IList<object>>();
 
-            SpreadsheetsResource.ValuesResource.AppendRequest request =
-                service.Spreadsheets.Values.Append(valueRange, spreadSheetId, range);
-            request.InsertDataOption = SpreadsheetsResource.ValuesResource.AppendRequest.InsertDataOptionEnum.INSERTROWS;
-            request.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
+            List<ValueRange> valueRanges = new List<ValueRange>();
             
-            var response = request.Execute();
+            string rangeAppend = "A:Z";
+
+           
+            var valueRange = new ValueRange();
+            valueRange.Values = new List<IList<object>>();
+
+            using (var reader =
+                new StreamReader(Path.Combine(Directory.GetCurrentDirectory(), @"forecast_single_product.csv")))
+            {
+                reader.ReadLine();
+                while (!reader.EndOfStream)
+                {
+                    var splitValue = reader.ReadLine().Split(',');
+                    foreach (var s in splitValue)
+                        row1.Add(s);
+                    
+                    values.Add(new List<object>(row1));
+                   
+                    valueRange.MajorDimension = "ROWS";
+                    valueRange.Range = rangeAppend;
+                    
+                    valueRange.Values.Add(new List<object>(values));
+                    
+                    
+                    row1.Clear();
+                    values.Clear();
+                    // valueRange.Values.Clear();
+                }
+            }
+            
+            
+            valueRanges.Add(valueRange);
+
+            // SpreadsheetsResource.ValuesResource.AppendRequest request =
+            //     _service.Spreadsheets.Values.Append(valueRange, spreadSheetId, rangeAppend);
+            // request.InsertDataOption = SpreadsheetsResource.ValuesResource.AppendRequest.InsertDataOptionEnum.INSERTROWS;
+            // request.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
+            // request.Execute();
+            
+            BatchUpdateValuesRequest batchRequestBody = new BatchUpdateValuesRequest();
+            batchRequestBody.ValueInputOption = "USER_ENTERED";
+            batchRequestBody.Data = valueRanges;
+            
+            
+            SpreadsheetsResource.ValuesResource.BatchUpdateRequest requestBatch =
+                _service.Spreadsheets.Values.BatchUpdate(batchRequestBody, spreadSheetId);
+            
+            requestBatch.Execute();
         }
     }
 }

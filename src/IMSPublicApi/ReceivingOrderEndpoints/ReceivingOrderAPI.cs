@@ -27,6 +27,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly IAsyncRepository<GoodsReceiptOrder> _recevingOrderRepository;
         private readonly IAsyncRepository<PurchaseOrder> _poRepository;
         private readonly IAsyncRepository<Package> _packageRepository;
+        private readonly IAsyncRepository<Location> _locationRepository;
+
 
         private readonly IAsyncRepository<GoodsReceiptOrderSearchIndex> _recevingOrderSearchIndexRepository;
 
@@ -36,7 +38,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly INotificationService _notificationService;
 
 
-        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IAsyncRepository<ProductVariant> productRepository, IUserSession userAuthentication, IAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository, IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService)
+        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IAsyncRepository<ProductVariant> productRepository, IUserSession userAuthentication, IAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository, IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository)
         {
             _authorizationService = authorizationService;
             _recevingOrderRepository = recevingOrderRepository;
@@ -46,6 +48,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             _poRepository = poRepository;
             _packageRepository = packageRepository;
             _notificationService = notificationService;
+            _locationRepository = locationRepository;
         }
         
         [HttpPut("api/goodsreceipt/update")]
@@ -76,10 +79,12 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             var purhchaseOrder = await _poRepository.GetByIdAsync(request.PurchaseOrderNumber);
             ro.SupplierId = purhchaseOrder.SupplierId;
             ro.PurchaseOrderId = request.PurchaseOrderNumber;
-            ro.Location = new Location
-            {
-                LocationName = request.StorageLocation
-            };
+
+            var location = await _locationRepository.GetByIdAsync(request.LocationId);
+            if (location == null)
+                return NotFound("ID of Location not found");
+            
+            ro.Location = location;
                 
             //TODO: Update sku of product in a seperate API
             
@@ -104,10 +109,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             
             foreach (var roi in ro.ReceivedOrderItems)
             {
-                var package = (await _packageRepository.ListAllAsync(new PagingOption<Package>(0, 0))).ResultList.FirstOrDefault(package => package.ProductVariantId == roi.ProductVariantId);
-                
                 //Package
-                package = new Package
+                var package = new Package
                 {
                     ProductVariantId =  roi.ProductVariantId,
                     Quantity = roi.QuantityReceived,

@@ -42,7 +42,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
     public class ROUpdateRequest : BaseRequest
     {
         public string PurchaseOrderNumber { get; set; }
-        public string StorageLocation { get; set; }
+        public string LocationId { get; set; }
         public List<ROItemUpdateRequest> UpdateItems { get; set; }
     }
     

@@ -179,10 +179,13 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.REPORT, UserOperations.Read))
                 return Unauthorized();
     
-            BigQueryService bqs = new BigQueryService();
+            // BigQueryService bqs = new BigQueryService();
             var response = new TrainMLResponse();
     
-            response.TopSellingProductName = await bqs.TrainMLWithLargestSoldProduct();
+            // response.TopSellingProductName = await bqs.TrainMLWithLargestSoldProduct();
+
+            GoogleSheetService googleSheetService = new GoogleSheetService();
+            googleSheetService.OverrideForecastDatasheet();
     
             return Ok(response);
         }
