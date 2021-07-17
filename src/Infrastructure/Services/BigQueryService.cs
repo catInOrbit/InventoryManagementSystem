@@ -267,29 +267,28 @@ namespace Infrastructure.Services
 
             requestClear.Execute();
             
-            List<string> row1 = new List<string>();
-            List<object> values = new List<object>();
+            List<object> row = new List<object>();
             //
-            row1.Add("name");
-            row1.Add("timestamp");
-            row1.Add("quantitysold");
-            row1.Add("forecast_value");
-            row1.Add("prediction_interval_lower_bound");
-            row1.Add("prediction_interval_upper_bound");
-            //
-            values.Add(new List<object>(row1));
-            // ValueRange valueRange = new ValueRange();
-            // valueRange.MajorDimension = "ROWS";
-            // valueRange.Values = new List<IList<object>>();
+            row.Add("name");
+            row.Add("timestamp");
+            row.Add("quantitysold");
+            row.Add("forecast_value");
+            row.Add("prediction_interval_lower_bound");
+            row.Add("prediction_interval_upper_bound");
+         ;
 
             List<ValueRange> valueRanges = new List<ValueRange>();
             
-            string rangeAppend = "A:Z";
+            string rangeAppend = "A:G";
 
            
             var valueRange = new ValueRange();
             valueRange.Values = new List<IList<object>>();
+            valueRange.Values.Add(new List<object>(row));
+            valueRange.Range = rangeAppend;
+            valueRange.MajorDimension = "ROWS";
 
+            row.Clear();
             using (var reader =
                 new StreamReader(Path.Combine(Directory.GetCurrentDirectory(), @"forecast_single_product.csv")))
             {
@@ -298,30 +297,16 @@ namespace Infrastructure.Services
                 {
                     var splitValue = reader.ReadLine().Split(',');
                     foreach (var s in splitValue)
-                        row1.Add(s);
+                        row.Add(s);
+                    valueRange.Values.Add(new List<object>(row));
                     
-                    values.Add(new List<object>(row1));
-                   
-                    valueRange.MajorDimension = "ROWS";
-                    valueRange.Range = rangeAppend;
+                    row.Clear();
                     
-                    valueRange.Values.Add(new List<object>(values));
-                    
-                    
-                    row1.Clear();
-                    values.Clear();
-                    // valueRange.Values.Clear();
                 }
             }
             
             
             valueRanges.Add(valueRange);
-
-            // SpreadsheetsResource.ValuesResource.AppendRequest request =
-            //     _service.Spreadsheets.Values.Append(valueRange, spreadSheetId, rangeAppend);
-            // request.InsertDataOption = SpreadsheetsResource.ValuesResource.AppendRequest.InsertDataOptionEnum.INSERTROWS;
-            // request.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.USERENTERED;
-            // request.Execute();
             
             BatchUpdateValuesRequest batchRequestBody = new BatchUpdateValuesRequest();
             batchRequestBody.ValueInputOption = "USER_ENTERED";

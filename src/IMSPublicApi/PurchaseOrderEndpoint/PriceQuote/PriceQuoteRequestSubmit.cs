@@ -20,7 +20,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
 {
-    public class PriceQuoteRequestSubmit : BaseAsyncEndpoint.WithRequest<PQSubmitRequest>.WithoutResponse
+    public class PriceQuoteRequestSubmit : BaseAsyncEndpoint.WithRequest<PQSubmitRequest>.WithResponse<PQSubmitResponse>
     {
         private readonly IEmailSender _emailSender;
         private readonly IAuthorizationService _authorizationService;
@@ -54,12 +54,12 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             OperationId = "po.update",
             Tags = new[] { "PriceQuoteOrderEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync(PQSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<PQSubmitResponse>> HandleAsync(PQSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
           
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRICEQUOTEORDER, UserOperations.Update))
                 return Unauthorized();
-            
+            var response = new PQSubmitResponse();
             var po = _asyncRepository.GetPurchaseOrderByNumber(request.OrderNumber);
             po.PurchaseOrderStatus = PurchaseOrderStatusType.POCreated;
             po.HasBeenModified = true;
@@ -85,7 +85,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 
             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
                 currentUser.Id, messageNotification);
-            return Ok();
+
+            response.PriceQuote = po;
+            return Ok(response);
         }
     }
 }

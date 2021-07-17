@@ -25,14 +25,16 @@ namespace Infrastructure.Data
     {
         private readonly IdentityAndProductDbContext _identityAndProductDbContext;
         private readonly IElasticClient _elasticClient;
+        private readonly ILogger<AppGlobalRepository<T>> _logger;
 
         private List<T> _elasticCache = new List<T>();
         private List<ProductVariantSearchIndex> _elasticCacheProductSearchIndex = new List<ProductVariantSearchIndex>();
 
-        public AppGlobalRepository(IdentityAndProductDbContext identityAndProductDbContext, IElasticClient elasticClient)
+        public AppGlobalRepository(IdentityAndProductDbContext identityAndProductDbContext, IElasticClient elasticClient, ILogger<AppGlobalRepository<T>> logger)
         {
             _identityAndProductDbContext = identityAndProductDbContext;
             _elasticClient = elasticClient;
+            _logger = logger;
         }
 
         public async Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default)
@@ -755,30 +757,40 @@ namespace Infrastructure.Data
         
         public async Task ElasticSaveSingleAsync(bool isSavingNew, T type, string index)
         {
-            // if (_elasticCache.Any(p => p.Id == type.Id))
+
+            try
+            {
+                await ElasticDeleteSingleAsync(type, index);
+            }
+            catch
+            {
+                
+            }
+            // Console.WriteLine("ElasticSaveSingleAsync: Type: " + type.GetType() + " || Reindexing");
+            _logger.LogInformation("ElasticSaveSingleAsync: Type: " + type.GetType() + " || Reindexing");
+            var response = await _elasticClient.IndexAsync(type, i => i.Index(index));
+            if (!response.IsValid)
+                throw new Exception(response.DebugInformation);
+
+            // if (!isSavingNew)
             // {
-            //     await _elasticClient.UpdateAsync<T>(type, u => u.Doc(type));
+            //     Console.WriteLine("ElasticSaveSingleAsync: Type: " + type.GetType() + " || Update");
+            //    // var response = await _elasticClient.UpdateAsync<T>(type, u => u.Index(index).Doc(type));
+            //     var response = await _elasticClient.UpdateAsync<T>(type, u => u.Index(index).Doc(type));
+            //
+            //     if (!response.IsValid)
+            //         throw new Exception(response.DebugInformation);
             // }
-
-            if (!isSavingNew)
-            {
-                Console.WriteLine("ElasticSaveSingleAsync: Type: " + type.GetType() + " || Update");
-               // var response = await _elasticClient.UpdateAsync<T>(type, u => u.Index(index).Doc(type));
-                var response = await _elasticClient.UpdateAsync<T>(type, u => u.Index(index).Doc(type));
-
-                if (!response.IsValid)
-                    throw new Exception(response.DebugInformation);
-            }
-
-            else
-            {
-                Console.WriteLine("ElasticSaveSingleAsync: Type: " + type.GetType() + " || AddNew");
-                // _elasticCache.Add(type);
-                // await _elasticClient.IndexDocumentAsync<T>(type);
-                var response = await _elasticClient.IndexAsync(type, i => i.Index(index));
-                if (!response.IsValid)
-                    throw new Exception(response.DebugInformation);
-            }
+            //
+            // else
+            // {
+            //     Console.WriteLine("ElasticSaveSingleAsync: Type: " + type.GetType() + " || AddNew");
+            //     // _elasticCache.Add(type);
+            //     // await _elasticClient.IndexDocumentAsync<T>(type);
+            //     var response = await _elasticClient.IndexAsync(type, i => i.Index(index));
+            //     if (!response.IsValid)
+            //         throw new Exception(response.DebugInformation);
+            // }
         }
 
         public async Task ElasticSaveManyAsync(T[] types)
@@ -868,10 +880,14 @@ namespace Infrastructure.Data
         public async Task ElasticDeleteSingleAsync(T type, string index)
         {
             var response = await _elasticClient.DeleteAsync<T>(type, u => u.Index(index));
-            Console.WriteLine("ElasticDeleteSingleAsync: Type: " + type.GetType() + " || Delete");
+            // Console.WriteLine("ElasticDeleteSingleAsync: Type: " + type.GetType() + " || Delete");
+            _logger.LogInformation("ElasticDeleteSingleAsync: Type: " + type.GetType() + " || Delete");
 
             if (!response.IsValid)
-                throw new Exception(response.Result.ToString());
+            {
+                _logger.LogWarning("ElasticDeleteSingleAsync: Problem: " + response.DebugInformation);
+                // throw new Exception(response.Result.ToString());
+            }
         }
 
         public Notification GetNotificationInfoFromUserId(string userId)

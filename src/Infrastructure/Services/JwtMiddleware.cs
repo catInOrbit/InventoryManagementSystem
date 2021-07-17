@@ -17,8 +17,8 @@ namespace WebApi.Helpers
     public class JwtMiddleware
     {
         private readonly RequestDelegate _next;
-        JwtSecurityToken jwtToken;
-        string userId = null;
+        JwtSecurityToken _jwtToken;
+        string _userId = null;
         public JwtMiddleware(RequestDelegate next)
         {
             _next = next;
@@ -41,12 +41,12 @@ namespace WebApi.Helpers
             try
             {
                 ValidateToken(tokenHandler, token, key);
-                var currentUser = await userManager.FindByIdAsync(userId);
+                var currentUser = await userManager.FindByIdAsync(_userId);
                 await userAuthentication.SaveUserAsync(currentUser, (await userManager.GetRolesAsync(currentUser))[0]);
             }
             catch
             {
-                if (userAuthentication.GetCurrentSessionUser() != null)
+                if ((await userAuthentication.GetCurrentSessionUser()) != null)
                 {
                     context.Request.Headers.Remove("Authorization");
                     
@@ -82,8 +82,8 @@ namespace WebApi.Helpers
                 ClockSkew = TimeSpan.Zero
             }, out SecurityToken validatedToken);
 
-            jwtToken = (JwtSecurityToken)validatedToken;
-            userId = jwtToken.Claims.First(x => x.Type == "id").Value;
+            _jwtToken = (JwtSecurityToken)validatedToken;
+            _userId = _jwtToken.Claims.First(x => x.Type == "id").Value;
         }
 
     }

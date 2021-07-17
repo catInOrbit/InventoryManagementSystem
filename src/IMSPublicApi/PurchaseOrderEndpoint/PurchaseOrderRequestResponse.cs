@@ -46,6 +46,11 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
         public string OrderNumber { get; set; }
     }
     
+    public class PQSubmitResponse : BaseResponse
+    {
+        public ApplicationCore.Entities.Orders.PurchaseOrder PriceQuote { get; set; }
+    }
+    
     public class POConfirmRequest : BaseRequest
     {
         public string PurchaseOrderNumber { get; set; }

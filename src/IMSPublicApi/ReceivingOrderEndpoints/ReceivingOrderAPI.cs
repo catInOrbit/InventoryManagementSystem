@@ -28,6 +28,9 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly IAsyncRepository<PurchaseOrder> _poRepository;
         private readonly IAsyncRepository<Package> _packageRepository;
         private readonly IAsyncRepository<Location> _locationRepository;
+        private readonly IAsyncRepository<ProductVariant> _productVariantRepository;
+
+        private readonly IAsyncRepository<ProductVariantSearchIndex> _productVariantElasticRepository;
 
 
         private readonly IAsyncRepository<GoodsReceiptOrderSearchIndex> _recevingOrderSearchIndexRepository;
@@ -38,7 +41,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly INotificationService _notificationService;
 
 
-        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IAsyncRepository<ProductVariant> productRepository, IUserSession userAuthentication, IAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository, IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository)
+        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IAsyncRepository<ProductVariant> productRepository, IUserSession userAuthentication, IAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository, IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository, IAsyncRepository<ProductVariant> productVariantRepository, IAsyncRepository<ProductVariantSearchIndex> productVariantElasticRepository)
         {
             _authorizationService = authorizationService;
             _recevingOrderRepository = recevingOrderRepository;
@@ -49,6 +52,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             _packageRepository = packageRepository;
             _notificationService = notificationService;
             _locationRepository = locationRepository;
+            _productVariantRepository = productVariantRepository;
+            _productVariantElasticRepository = productVariantElasticRepository;
         }
         
         [HttpPut("api/goodsreceipt/update")]
@@ -102,6 +107,28 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                     ProductVariantName = (await _productRepository.GetByIdAsync(item.ProductVariantId)).Name
                 };
                 ro.ReceivedOrderItems.Add(roi);
+                
+                var productVariant = await _productVariantRepository.GetByIdAsync(roi.ProductVariantId);
+                bool initiateUpdate = false;
+                if (item.Sku != null)
+                {
+                    productVariant.Sku = item.Sku;
+                    initiateUpdate = true;
+                }
+
+                if (item.Barcode != null)
+                {
+                    productVariant.Barcode = item.Barcode;
+                    initiateUpdate = true;
+                }
+
+                if (initiateUpdate)
+                {
+                    await _productVariantRepository.UpdateAsync(productVariant);
+                    await _productVariantElasticRepository.ElasticSaveSingleAsync(false,
+                        IndexingHelper.ProductVariantSearchIndex(productVariant),
+                        ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+                }
             }
 
             //Update and indexing
@@ -124,9 +151,11 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 
                 await _packageRepository.AddAsync(package);
                 roi.ProductVariant.Packages.Add(package);
+
+               
                 
                 //Begin Inserting into bigQuery
-             
+
             }
             await _recevingOrderSearchIndexRepository.ElasticSaveSingleAsync(true,IndexingHelper.GoodsReceiptOrderSearchIndex(ro), ElasticIndexConstant.RECEIVING_ORDERS);
 
