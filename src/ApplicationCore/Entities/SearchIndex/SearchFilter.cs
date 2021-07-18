@@ -46,6 +46,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string FromCreatedDate { get; set; }
         public string ToCreatedDate { get; set; }
         public string CreatedByName { get; set; }
+        
+        public string DateSortType { get; set; }
 
     }
     

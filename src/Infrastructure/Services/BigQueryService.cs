@@ -112,7 +112,7 @@ namespace Infrastructure.Services
                         Select name, Max(quantitysold) as quantitysold 
                         from `imswarehouse.IMSWH01.mock10ksequential`
                         Group by name 
-                    ) as b ON a.name = b.name and a.quantitysold = b.quantitysold 
+                    ) as b ON a.name = b.name and a.quantitysold = b.quantitysold
                     ORDER BY a.quantitysold
                     DESC LIMIT 1";
             

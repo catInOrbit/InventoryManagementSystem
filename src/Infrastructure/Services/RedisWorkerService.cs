@@ -47,6 +47,7 @@ namespace Infrastructure.Services
                         await dbContext.SaveChangesAsync(stoppingToken);
                     }
                 }
+        
                 
                 await _redisRepository.ClearNotification("Notifications");
                 

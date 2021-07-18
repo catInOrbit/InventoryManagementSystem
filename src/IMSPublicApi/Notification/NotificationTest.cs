@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
@@ -74,6 +75,37 @@ namespace InventoryManagementSystem.PublicApi
             
             await notificationService.SendNotificationGroup(request.Group, request.UserId, request.Message);
             return Ok();
+        }
+    }
+    
+    public class GetNotification : BaseAsyncEndpoint.WithRequest<NotificationGetRequest>.WithResponse<NotificationGetResponse>
+    {
+        private readonly IAsyncRepository<Notification> _notificationAsyncRepository;
+
+        public GetNotification(IAsyncRepository<Notification> notificationAsyncRepository)
+        {
+            _notificationAsyncRepository = notificationAsyncRepository;
+        }
+
+        [HttpGet("api/notification")]
+        [SwaggerOperation(
+            Summary = "Get Notification by latest date",
+            Description = "Get Notification by latest date",
+            OperationId = "noti",
+            Tags = new[] { "Notification" })
+        ]
+        public override async Task<ActionResult<NotificationGetResponse>> HandleAsync([FromQuery] NotificationGetRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            
+            PagingOption<Notification> pagingOptionPackage =
+                new PagingOption<Notification>(request.CurrentPage, request.SizePerPage);
+
+            var response = new NotificationGetResponse();
+            response.IsDisplayingAll = true;
+            response.Paging = await _notificationAsyncRepository.ListAllAsync(pagingOptionPackage, cancellationToken);
+            response.Paging.ResultList = response.Paging.ResultList.OrderByDescending(no => no.CreatedDate).ToList();
+            
+            return Ok(response);
         }
     }
 }

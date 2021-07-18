@@ -11,9 +11,8 @@ namespace InventoryManagementSystem.ApplicationCore.Constants
         public const string SUPPLIERS = "suppliers";
         public const string PACKAGES = "packages"; 
         public const string CATEGORIES = "categories"; 
-        public const string LOCATIONS = "locations"; 
-
-         //
+        public const string LOCATIONS = "locations";
+        
          //
          //  public const string STOCK_TAKE_ORDERS = "stocktakeorders_test";
          //  public const string GOODS_ISSUE_ORDERS = "goodsissueorders_test";

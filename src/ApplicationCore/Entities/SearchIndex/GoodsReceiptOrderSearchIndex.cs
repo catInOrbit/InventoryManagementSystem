@@ -15,6 +15,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 
         public string PurchaseOrderId { get; set; }
         public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
+
         public string SupplierName { get; set; }
         public string CreatedBy { get; set; }
     }

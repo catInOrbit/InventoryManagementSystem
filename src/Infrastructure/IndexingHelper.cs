@@ -80,7 +80,8 @@ namespace Infrastructure
                     FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create) != null) ? ro.Transaction.TransactionRecord.
                     FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create).ApplicationUser
                     .Fullname: "",
-                CreatedDate = (ro.Transaction.TransactionRecord.Count > 0) ? ro.Transaction.TransactionRecord[0].Date : DateTime.MinValue
+                CreatedDate = (ro.Transaction.TransactionRecord.Count > 0) ? ro.Transaction.TransactionRecord[0].Date : DateTime.MinValue,
+                ModifiedDate = (ro.Transaction.TransactionRecord.Count > 0) ? ro.Transaction.TransactionRecord[^1].Date : DateTime.MinValue
             };
 
             return index;
