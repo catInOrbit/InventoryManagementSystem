@@ -1,7 +1,9 @@
     using System;
     using System.Collections;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
-using System.Linq;
+    using System.Diagnostics;
+    using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Specification;
@@ -46,13 +48,30 @@ namespace Infrastructure.Data
         public async Task<PagingOption<ProductSearchIndex>> GetProductForELIndexAsync(PagingOption<ProductSearchIndex> pagingOption, CancellationToken cancellationToken = default)
         {
 
+            var stopWatch = Stopwatch.StartNew();
+            TimeSpan totalTime = default;
+            
+            stopWatch.Start();
             var products = await _identityAndProductDbContext.Product.Where(product =>
                 product.Transaction.TransactionRecord.Count > 0 && product.Transaction.TransactionStatus != false &&
                 product.Transaction.Type != TransactionType.Deleted).ToListAsync();
-                
+            
+            _logger.LogInformation("StopWatch-GetProductForELIndexAsync-GetAll: " + stopWatch.Elapsed);
+
+            totalTime += stopWatch.Elapsed;
+            stopWatch.Stop();
+
+            stopWatch.Start();
+
             products = products.OrderByDescending(e =>
                 e.Transaction.TransactionRecord[e.Transaction.TransactionRecord.Count - 1].Date).ToList();
             
+            totalTime += stopWatch.Elapsed;
+            stopWatch.Stop();
+            
+            _logger.LogInformation("StopWatch-GetProductForELIndexAsync-OrderByDescending: " + stopWatch.Elapsed);
+
+            stopWatch.Start();
             foreach (var product in products)
             {
               
@@ -69,6 +88,13 @@ namespace Infrastructure.Data
                     throw;
                 }
             }            
+            
+            totalTime += stopWatch.Elapsed;
+            stopWatch.Stop();
+            _logger.LogInformation("StopWatch-GetProductForELIndexAsync-Indexing: " + stopWatch.Elapsed);
+            _logger.LogInformation("StopWatch-GetProductForELIndexAsync-TOTAL: " + totalTime);
+            
+
             pagingOption.ExecuteResourcePaging();
             return pagingOption;
         }
@@ -102,6 +128,9 @@ namespace Infrastructure.Data
         public async Task<PagingOption<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(bool hideMergeStatus, PagingOption<PurchaseOrderSearchIndex> pagingOption, POSearchFilter poSearchFilter,  CancellationToken cancellationToken = default)
         {
             List<PurchaseOrder> pos;
+
+            var stopWatch = Stopwatch.StartNew();
+            TimeSpan totalTime = default;
             if(hideMergeStatus)
                 pos = await _identityAndProductDbContext.PurchaseOrder.
                     Where(variant => variant.Transaction.TransactionRecord.Count > 0 && variant.Transaction.TransactionStatus!=false 
@@ -113,9 +142,22 @@ namespace Infrastructure.Data
                     Where(variant => variant.Transaction.TransactionRecord.Count > 0 && variant.Transaction.TransactionStatus!=false 
                         && variant.Transaction.Type!=TransactionType.Deleted
                     ).ToListAsync();
+
+            totalTime += stopWatch.Elapsed;
+            stopWatch.Stop();
+            _logger.LogInformation("STOPWATCH-GetPOForELIndexAsync-GetAllWhereTransaction: " + stopWatch.Elapsed);
                 
+            stopWatch = Stopwatch.StartNew();
+
             pos = pos.OrderByDescending(e =>
                 e.Transaction.TransactionRecord[e.Transaction.TransactionRecord.Count - 1].Date).ToList();
+            
+            totalTime += stopWatch.Elapsed;
+            stopWatch.Stop();
+            _logger.LogInformation("STOPWATCH-GetPOForELIndexAsync-ORderByDescending: " + stopWatch.Elapsed);
+
+            stopWatch = Stopwatch.StartNew();
+
             foreach (var po in pos)
             {
                 PurchaseOrderSearchIndex index; 
@@ -129,8 +171,18 @@ namespace Infrastructure.Data
                     throw;
                 }
             }
+            totalTime += stopWatch.Elapsed;
+            stopWatch.Stop();
+            _logger.LogInformation("STOPWATCH-GetPOForELIndexAsync-Indexing: " + stopWatch.Elapsed);
 
+            stopWatch = Stopwatch.StartNew();
             pagingOption.ResultList = PurchaseOrderIndexFiltering(pagingOption.ResultList.ToList(), poSearchFilter);
+            
+            totalTime += stopWatch.Elapsed;
+            stopWatch.Stop();
+            _logger.LogInformation("STOPWATCH-GetPOForELIndexAsync-Filtering: " + stopWatch.Elapsed);
+            _logger.LogInformation("STOPWATCH-GetPOForELIndexAsync-TOTAL: " + totalTime);
+
             pagingOption.ExecuteResourcePaging();
             return pagingOption;
         }
@@ -557,6 +609,20 @@ namespace Infrastructure.Data
         public async Task<PagingOption<T>> ListAllAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default)
         {
             pagingOption.ResultList = await _identityAndProductDbContext.Set<T>().ToListAsync(cancellationToken);
+            pagingOption.ExecuteResourcePaging();
+            return pagingOption;
+        }
+
+        public async Task<PagingOption<Supplier>> GetSuppliers(PagingOption<Supplier> pagingOption, CancellationToken cancellationToken = default)
+        {
+            var list = await _identityAndProductDbContext.Supplier.Where(s =>
+                s.Transaction.TransactionRecord.Count > 0 && s.Transaction.TransactionStatus != false &&
+                s.Transaction.Type != TransactionType.Deleted).ToListAsync();
+
+            list = list.OrderByDescending(s =>
+                s.Transaction.TransactionRecord[s.Transaction.TransactionRecord.Count - 1].Date).ToList();
+
+            pagingOption.ResultList = list;
             pagingOption.ExecuteResourcePaging();
             return pagingOption;
         }

@@ -44,7 +44,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
         public string BrandName { get; set; }
         public string BrandDescription { get; set; }
         public string Unit { get; set; }
-
         public string CategoryId { get; set; }
         public bool IsVariantType { get; set; }
 
@@ -72,7 +71,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string Barcode { get; set; }
-
+        public string ProductVariantImageLink { get; set; }
         public string Sku { get; set; }
         // public string StorageLocation { get; set; }
      

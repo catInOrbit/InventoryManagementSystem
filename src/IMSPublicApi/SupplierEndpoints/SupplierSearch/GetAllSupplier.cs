@@ -90,16 +90,12 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.SupplierSearch
                 new PagingOption<Supplier>(request.CurrentPage, request.SizePerPage);
             response.IsDisplayingAll = true;
 
-            if (request.SearchQuery == null)
-            {
-                response.Paging = await 
-                    _asyncRepository.ListAllAsync(pagingOption, cancellationToken);
-                return Ok(response);
-            }
-
-            var responseElastic = await _elasticClient.SearchAsync<Supplier>
-            (
-                s => s.Size(2000).Index(ElasticIndexConstant.SUPPLIERS).Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+            
+            ISearchResponse<Supplier> responseElastic;
+      
+            ElasticSearchHelper<Supplier> elasticSearchHelper = new ElasticSearchHelper<Supplier>(_elasticClient, request.SearchQuery,
+                ElasticIndexConstant.SUPPLIERS);
+            responseElastic = await elasticSearchHelper.SearchDocuments();                        
 
             foreach (var purchaseOrderSearchIndex in responseElastic.Documents)
             {

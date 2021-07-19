@@ -53,7 +53,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
               po.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Requisition, po.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
 
               po.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionCreated;
-              po.SupplierId = request.SupplierId;
               
               foreach (var requestOrderItem in request.OrderItems)
               {
@@ -193,8 +192,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Modify,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
             po.Deadline = request.Deadline;
-            
-            po.SupplierId = request.SupplierId;
             
             await _asyncRepository.UpdateAsync(po);
 

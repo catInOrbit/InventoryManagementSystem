@@ -321,6 +321,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     BrandId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ProductImageLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     SellingStrategy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsVariantType = table.Column<bool>(type: "bit", nullable: false)
@@ -380,6 +381,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     RequestId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeliveryMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DeliveryAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CustomerPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SupplierId = table.Column<string>(type: "nvarchar(450)", nullable: true),
@@ -452,6 +454,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     Sku = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StorageQuantity = table.Column<int>(type: "int", nullable: false),
                     TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ProductVariantImageLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsVariantType = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>

@@ -1,0 +1,51 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using InventoryManagementSystem.ApplicationCore.Constants;
+using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using Nest;
+
+namespace Infrastructure.Services
+{
+    public class ElasticSearchHelper<T> where T: class
+    {
+        private readonly string SearchQuery;
+        private readonly string Index;
+
+        private readonly IElasticClient _elasticClient;
+        
+
+        public ElasticSearchHelper(IElasticClient elasticClient, string searchQuery, string index)
+        {
+            _elasticClient = elasticClient;
+            SearchQuery = searchQuery;
+            Index = index;
+        }
+
+        public async Task<ISearchResponse<T>> SearchDocuments()
+        {
+            ISearchResponse<T> responseElastic;
+
+            if (SearchQuery == null)
+            {
+                responseElastic = await _elasticClient.SearchAsync<T>
+                (
+                    s => s.Size(2000).Index(Index).MatchAll());
+                    
+                return responseElastic;
+            }
+
+            else
+            {
+                responseElastic = await _elasticClient.SearchAsync<T>
+                (
+                    s => s.Size(2000).Index(Index).
+                        Query(q =>q.
+                            QueryString(d =>d.Query('*' + SearchQuery + '*'))));
+
+                return responseElastic;
+            }
+        }
+    }
+}

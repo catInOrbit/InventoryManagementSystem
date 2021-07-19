@@ -137,14 +137,12 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
     
     public class RequisitionCreateRequest
     {
-        public string SupplierId { get; set; }
         public DateTime Deadline { get; set; }
         public List<OrderItem> OrderItems { get; set; }
     }
     
     public class RequisitionUpdateRequest
     {
-        public string SupplierId { get; set; }
         public string RequisitionId { get; set; }
         public DateTime Deadline { get; set; }
         public List<OrderItem> OrderItems { get; set; }

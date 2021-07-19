@@ -81,19 +81,26 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
                 HideMerged = request.HideMerged,
                 IgnoreOrderIds = request.IgnoreOrderID
             };
-            if (request.SearchQuery == null)
-            {
-                var posi = await 
-                    _asyncRepository.GetPOForELIndexAsync(request.HideMerged, pagingOption, poSearchFilter, cancellationToken);
             
-                response.Paging = posi;
-                return Ok(response);
-            }
+            ISearchResponse<PurchaseOrderSearchIndex> responseElastic;
+
+            ElasticSearchHelper<PurchaseOrderSearchIndex> elasticSearchHelper = new ElasticSearchHelper<PurchaseOrderSearchIndex>(_elasticClient, request.SearchQuery,
+                ElasticIndexConstant.PURCHASE_ORDERS);
+            responseElastic = await elasticSearchHelper.SearchDocuments();
             
-            var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>
-            (
-                s => s.Size(2000)
-                    .Index(ElasticIndexConstant.PURCHASE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+            // if (request.SearchQuery == null)
+            // {
+            //     var posi = await 
+            //         _asyncRepository.GetPOForELIndexAsync(request.HideMerged, pagingOption, poSearchFilter, cancellationToken);
+            //
+            //     response.Paging = posi;
+            //     return Ok(response);
+            // }
+            //
+            // var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>
+            // (
+            //     s => s.Size(2000)
+            //         .Index(ElasticIndexConstant.PURCHASE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
             
             pagingOption.ResultList = _asyncRepository.PurchaseOrderIndexFiltering(responseElastic.Documents.ToList(), poSearchFilter,
                 new CancellationToken());

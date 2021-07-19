@@ -25,10 +25,10 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string Name { get; set; }
         public string Sku { get; set; }
         public string Unit { get; set; }
+        
         public int Quantity { get; set; }
         
         public decimal Price { get; set; }
-
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public CompletionField Suggest { get; set; }

@@ -138,6 +138,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("CustomerPhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("DeliveryAddress")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("DeliveryDate")
                         .HasColumnType("datetime2");
 
@@ -597,6 +600,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ProductImageLink")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SellingStrategy")
                         .HasColumnType("nvarchar(max)");
 
@@ -639,6 +645,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.Property<string>("ProductId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProductVariantImageLink")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sku")
                         .HasColumnType("nvarchar(max)");

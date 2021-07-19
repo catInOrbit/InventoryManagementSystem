@@ -102,6 +102,7 @@ namespace Infrastructure
                 CreatedDate =  (gi.Transaction.TransactionRecord.Count > 0) ? gi.Transaction.TransactionRecord[0].Date : DateTime.MinValue,
                 DeliveryDate = gi.DeliveryDate,
                 DeliveryMethod = gi.DeliveryMethod,
+                DeliveryAddress = gi.DeliveryAddress,
                 GoodsIssueNumber = gi.Id,
                 GoodsIssueRequestNumber = gi.RequestId
             };
@@ -184,8 +185,7 @@ namespace Infrastructure
                         .ApplicationUser
                         .Fullname
                     : "";
-                
-                
+
                 foreach (var productProductVariant in product.ProductVariants)
                     index.VariantIds.Add(productProductVariant.Id);
                 

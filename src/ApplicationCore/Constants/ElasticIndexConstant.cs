@@ -13,7 +13,6 @@ namespace InventoryManagementSystem.ApplicationCore.Constants
         public const string CATEGORIES = "categories"; 
         public const string LOCATIONS = "locations";
         
-         //
          //  public const string STOCK_TAKE_ORDERS = "stocktakeorders_test";
          //  public const string GOODS_ISSUE_ORDERS = "goodsissueorders_test";
          //  public const string PRODUCT_INDICES = "productindices_test";
@@ -24,6 +23,5 @@ namespace InventoryManagementSystem.ApplicationCore.Constants
          //  public const string PACKAGES = "packages_test"; 
          //  public const string CATEGORIES = "categories_test";
          // public const string LOCATIONS = "locations_test"; 
-
     }
 }

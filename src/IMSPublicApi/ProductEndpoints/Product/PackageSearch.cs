@@ -88,33 +88,19 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
 
             List<Package> resource;
 
+            
+
             if (!request.IsLocationOnly)
             {
                 
                 var response = new PackageSearchResponse();
                 response.IsDisplayingAll = true;
-
-                if (request.SearchQuery == null)
-                {
-                    var packages = await 
-                        _packageAsyncRepository.GetPackages(new PagingOption<Package>(0,0), cancellationToken);
-
-                    resource = packages.ResultList.ToList();
-                }
                 
-
-                else
-                {
-                    responseElastic = await _elasticClient.SearchAsync<Package>
-                    (
-                        s => s.Size(2000).Index( ElasticIndexConstant.PACKAGES).
-                            Query(q =>q.
-                                QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));
-
-                    resource = responseElastic.Documents.ToList();
-                }
+                ElasticSearchHelper<Package> elasticSearchHelper = new ElasticSearchHelper<Package>(_elasticClient, request.SearchQuery,
+                    ElasticIndexConstant.PACKAGES);
                 
-                 
+                resource = (await elasticSearchHelper.SearchDocuments()).Documents.ToList();
+
                 pagingOptionPackage.ResultList = _packageAsyncRepository.PackageIndexFiltering(resource, request,
                     new CancellationToken());
             

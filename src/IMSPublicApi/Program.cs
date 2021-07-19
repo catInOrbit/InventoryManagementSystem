@@ -51,8 +51,8 @@ namespace InventoryManagementSystem.PublicApi
                     await elasticRoRepos.ElasticSaveBulkAsync((await elasticRoRepos.GetROForELIndexAsync(new PagingOption<GoodsReceiptOrderSearchIndex>(0,0),new ROSearchFilter())).ResultList.ToArray(), ElasticIndexConstant.RECEIVING_ORDERS);
                     await elasticGiRepos.ElasticSaveBulkAsync((await elasticGiRepos.GetGIForELIndexAsync(new PagingOption<GoodsIssueSearchIndex>(0,0), new GISearchFilter())).ResultList.ToArray(),  ElasticIndexConstant.GOODS_ISSUE_ORDERS);
                     await elasticStRepos.ElasticSaveBulkAsync((await elasticStRepos.GetSTForELIndexAsync(new PagingOption<StockTakeSearchIndex>(0,0), new STSearchFilter())).ResultList.ToArray(),  ElasticIndexConstant.STOCK_TAKE_ORDERS);
-                    await elasticSupRepos.ElasticSaveBulkAsync((await elasticSupRepos.ListAllAsync(new PagingOption<Supplier>(0,0))).ResultList.ToArray(),    ElasticIndexConstant.SUPPLIERS);
-                    await elasticPackageRepos.ElasticSaveBulkAsync((await elasticPackageRepos.ListAllAsync(new PagingOption<Package>(0,0))).ResultList.ToArray(), ElasticIndexConstant.PACKAGES);
+                    await elasticSupRepos.ElasticSaveBulkAsync((await elasticSupRepos.GetSuppliers(new PagingOption<Supplier>(0,0))).ResultList.ToArray(),    ElasticIndexConstant.SUPPLIERS);
+                    await elasticPackageRepos.ElasticSaveBulkAsync((await elasticPackageRepos.GetPackages(new PagingOption<Package>(0,0))).ResultList.ToArray(), ElasticIndexConstant.PACKAGES);
                     await elasticLocationRepos.ElasticSaveBulkAsync((await elasticLocationRepos.ListAllAsync(new PagingOption<Location>(0,0))).ResultList.ToArray(), ElasticIndexConstant.LOCATIONS);
                     //
                     //

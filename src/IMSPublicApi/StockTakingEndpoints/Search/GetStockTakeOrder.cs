@@ -62,15 +62,12 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
                 ToDeliveryDate = request.ToDeliveryDate,
             };
             
-            if (request.SearchQuery == null)
-            {
-                response.IsDisplayingAll = true;
-                response.Paging = await _asyncRepository.GetSTForELIndexAsync(pagingOption, stSearchFilter, cancellationToken);
-                return Ok(response);
-            }
-            
-            var responseElastic = await _elasticClient.SearchAsync<StockTakeSearchIndex>(
-                s => s.Size(2000).Index(ElasticIndexConstant.STOCK_TAKE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+               
+            ISearchResponse<StockTakeSearchIndex> responseElastic;
+      
+            ElasticSearchHelper<StockTakeSearchIndex> elasticSearchHelper = new ElasticSearchHelper<StockTakeSearchIndex>(_elasticClient, request.SearchQuery,
+                ElasticIndexConstant.STOCK_TAKE_ORDERS);
+            responseElastic = await elasticSearchHelper.SearchDocuments();
             
             pagingOption.ResultList = _asyncRepository.StockTakeIndexFiltering(responseElastic.Documents.ToList(), stSearchFilter,
                 new CancellationToken());

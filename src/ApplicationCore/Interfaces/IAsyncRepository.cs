@@ -19,6 +19,7 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         Task<PagingOption<ProductSearchIndex>> GetProductForELIndexAsync(
             PagingOption<ProductSearchIndex> pagingOption, CancellationToken cancellationToken = default);
         Task<PagingOption<ProductVariantSearchIndex>> GetProductVariantForELIndexAsync(PagingOption<ProductVariantSearchIndex> pagingOption, CancellationToken cancellationToken = default);
+        
         Task<PagingOption<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(bool hideMergeStatus, PagingOption<PurchaseOrderSearchIndex> pagingOption,POSearchFilter poSearchFilter,CancellationToken cancellationToken = default);
         Task<PagingOption<GoodsReceiptOrderSearchIndex>> GetROForELIndexAsync(PagingOption<GoodsReceiptOrderSearchIndex> pagingOption, ROSearchFilter roSearchFilter, CancellationToken cancellationToken = default);
         
@@ -52,12 +53,15 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         List<ProductSearchIndex> ProductIndexFiltering(List<ProductSearchIndex> resource,
             ProductSearchFilter productSearchFilter, CancellationToken cancellationToken);
 
-        Task<PagingOption<Package>> GetPackages(PagingOption<Package> pagingOption,CancellationToken cancellationToken);
+        Task<PagingOption<Package>> GetPackages(PagingOption<Package> pagingOption,CancellationToken cancellationToken = default);
         List<StockTakeSearchIndex> StockTakeIndexFiltering(List<StockTakeSearchIndex> resource,
             STSearchFilter stSearchFilter, CancellationToken cancellationToken);
 
         // Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default);
         Task<PagingOption<T>> ListAllAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default);
+        
+        Task<PagingOption<Supplier>> GetSuppliers(PagingOption<Supplier> pagingOption, CancellationToken cancellationToken = default);
+
         Task<PagingOption<StockOnhandReport>> GenerateOnHandReport(PagingOption<StockOnhandReport> pagingOption, CancellationToken cancellationToken = default);
         Task<PagingOption<StockTakeReport>> GenerateStockTakeReport(PagingOption<StockTakeReport> pagingOption, CancellationToken cancellationToken = default);
         Task<PagingOption<TopSellingReport>> GenerateTopSellingReport(ReportType reportType, PagingOption<TopSellingReport> pagingOption, CancellationToken cancellationToken = default);

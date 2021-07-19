@@ -195,7 +195,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                             productVariantSystemList.IsVariantType = product.IsVariantType;
                             productVariantSystemList.Barcode = productVairantRequestInfo.Barcode;
                             productVariantSystemList.Price = productVairantRequestInfo.Price;
-
+                            
                             await _productVariantIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.ProductVariantSearchIndex(productVariantSystemList),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
 
                             listNewVariant.Remove(productVairantRequestInfo);

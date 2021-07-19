@@ -102,14 +102,12 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
                   SupplierName = request.SupplierName
               };
               
-              if (request.SearchQuery == null)
-              {
-                  response.Paging  = await _asyncRepository.GetROForELIndexAsync(pagingOption, roSearchFilter, cancellationToken);
-                  return Ok(response);
-              }
               
-              var responseElastic = await _elasticClient.SearchAsync<GoodsReceiptOrderSearchIndex>(
-                  s => s.Size(2000).Index(ElasticIndexConstant.RECEIVING_ORDERS).Query(q =>q.QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));
+              ISearchResponse<GoodsReceiptOrderSearchIndex> responseElastic;
+      
+              ElasticSearchHelper<GoodsReceiptOrderSearchIndex> elasticSearchHelper = new ElasticSearchHelper<GoodsReceiptOrderSearchIndex>(_elasticClient, request.SearchQuery,
+                  ElasticIndexConstant.RECEIVING_ORDERS);
+              responseElastic = await elasticSearchHelper.SearchDocuments();
 
 
               pagingOption.ResultList = _asyncRepository.ReceivingOrderIndexFiltering(

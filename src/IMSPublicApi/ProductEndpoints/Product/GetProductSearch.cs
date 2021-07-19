@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure.Data;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
@@ -61,9 +62,9 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
     {
         private readonly IElasticClient _elasticClient;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IAsyncRepository<ApplicationCore.Entities.Products.Product> _asyncRepository;
+        private readonly IAsyncRepository<ProductVariant> _asyncRepository;
 
-        public SearchProductVariant(IElasticClient elasticClient, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository)
+        public SearchProductVariant(IElasticClient elasticClient, IAuthorizationService authorizationService, IAsyncRepository<ProductVariant> asyncRepository)
         {
             _elasticClient = elasticClient;
             _authorizationService = authorizationService;
@@ -104,19 +105,29 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                     ModifiedByName = request.ModifiedByName
                 };
 
-                if (request.SearchQuery == null)
-                {
-                    response.Paging = await 
-                        _asyncRepository.GetProductVariantForELIndexAsync(pagingOption, cancellationToken);
-
-                    return Ok(response);
-                }
-
-
-            var responseElastic = await _elasticClient.SearchAsync<ProductVariantSearchIndex>
-            (
-                s => s.Size(2000).Index( ElasticIndexConstant.PRODUCT_VARIANT_INDICES).Query(q =>q.QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));
-        
+                
+                ElasticSearchHelper<ProductVariantSearchIndex> elasticSearchHelper = new ElasticSearchHelper<ProductVariantSearchIndex>(_elasticClient, request.SearchQuery,
+                    ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+                
+                
+                
+                ISearchResponse<ProductVariantSearchIndex> responseElastic;
+                responseElastic = await elasticSearchHelper.SearchDocuments();
+                // if (request.SearchQuery == null)
+                // {
+                //     responseElastic = await _elasticClient.SearchAsync<ProductVariantSearchIndex>
+                //     (
+                //         s => s.Size(2000).Index( ElasticIndexConstant.PRODUCT_VARIANT_INDICES).MatchAll());
+                // }
+                //
+                // else
+                // {
+                //     responseElastic = await _elasticClient.SearchAsync<ProductVariantSearchIndex>
+                //     (
+                //         s => s.Size(2000).Index( ElasticIndexConstant.PRODUCT_VARIANT_INDICES).Query(q =>q.QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));
+                //
+                // }
+          
             pagingOption.ResultList = _asyncRepository.ProductVariantIndexFiltering(responseElastic.Documents.ToList(), productSearchFilter,
                 new CancellationToken());
             
@@ -179,17 +190,27 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                     ModifiedByName = request.ModifiedByName
                 };
 
-                if (request.SearchQuery == null)
-                {
-                    response.Paging = await 
-                        _asyncRepository.GetProductForELIndexAsync(pagingOption, cancellationToken);
+                
+                ISearchResponse<ProductSearchIndex> responseElastic;
+                
+                ElasticSearchHelper<ProductSearchIndex> elasticSearchHelper = new ElasticSearchHelper<ProductSearchIndex>(_elasticClient, request.SearchQuery,
+                    ElasticIndexConstant.PRODUCT_INDICES);
+                
+                responseElastic = await elasticSearchHelper.SearchDocuments();
 
-                    return Ok(response);
-                }
-
-            var responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
-            (
-                s => s.Size(2000).Index( ElasticIndexConstant.PRODUCT_INDICES).Query(q =>q.QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));
+                // if (request.SearchQuery == null)
+                // {
+                //     responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
+                //     (
+                //         s => s.Size(2000).Index( ElasticIndexConstant.PRODUCT_INDICES).MatchAll());
+                // }
+                //
+                // else
+                // {
+                //     responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
+                //     (
+                //         s => s.Size(2000).Index( ElasticIndexConstant.PRODUCT_INDICES).Query(q =>q.QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));
+                // }
         
             pagingOption.ResultList = _asyncRepository.ProductIndexFiltering(responseElastic.Documents.ToList(), productSearchFilter,
                 new CancellationToken());

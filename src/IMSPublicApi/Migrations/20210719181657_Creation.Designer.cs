@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210711073709_Creation")]
+    [Migration("20210719181657_Creation")]
     partial class Creation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -138,6 +138,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CustomerPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeliveryAddress")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DeliveryDate")
@@ -599,6 +602,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ProductImageLink")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SellingStrategy")
                         .HasColumnType("nvarchar(max)");
 
@@ -641,6 +647,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.Property<string>("ProductId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProductVariantImageLink")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Sku")
                         .HasColumnType("nvarchar(max)");

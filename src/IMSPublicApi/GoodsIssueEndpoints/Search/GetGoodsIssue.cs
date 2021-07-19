@@ -64,15 +64,14 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
                 DeliveryMethod = request.DeliveryMethod
             };
 
-            if (request.SearchQuery == null)
-            {
-                response.Paging  = await _asyncRepository.GetGIForELIndexAsync(pagingOption, searchFilter, cancellationToken);
-                return Ok(response);
-            }
             
-            var responseElastic = await _elasticClient.SearchAsync<GoodsIssueSearchIndex>(
-                s => s.Size(2000).Index(ElasticIndexConstant.GOODS_ISSUE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+            ISearchResponse<GoodsIssueSearchIndex> responseElastic;
             
+            ElasticSearchHelper<GoodsIssueSearchIndex> elasticSearchHelper = new ElasticSearchHelper<GoodsIssueSearchIndex>(_elasticClient, request.SearchQuery,
+                ElasticIndexConstant.GOODS_ISSUE_ORDERS);
+            responseElastic = await elasticSearchHelper.SearchDocuments();
+
+         
             pagingOption.ResultList = _asyncRepository.GoodsIssueIndexFiltering(responseElastic.Documents.ToList(), searchFilter,
                 new CancellationToken());
             
