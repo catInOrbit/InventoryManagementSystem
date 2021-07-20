@@ -22,7 +22,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         
         public int StorageQuantity { get; set; }
         public string TransactionId { get; set; }
-        
+        public string VariantImageLink { get; set; }
+
         [JsonIgnore]
         [Ignore]
         public virtual Transaction Transaction { get; set; }

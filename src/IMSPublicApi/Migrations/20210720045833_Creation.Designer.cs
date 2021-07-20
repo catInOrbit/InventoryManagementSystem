@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210719181657_Creation")]
+    [Migration("20210720045833_Creation")]
     partial class Creation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -80,6 +80,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ProfileImageLink")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -648,9 +651,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("ProductId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ProductVariantImageLink")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Sku")
                         .HasColumnType("nvarchar(max)");
 
@@ -659,6 +659,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.Property<string>("TransactionId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("VariantImageLink")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

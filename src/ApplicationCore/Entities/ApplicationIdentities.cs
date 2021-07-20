@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 
@@ -28,6 +29,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public string Address { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string DateOfBirthNormalizedString { get; set; }
+        public string ProfileImageLink { get; set; }
         public bool IsActive { get; set; }
     }
     

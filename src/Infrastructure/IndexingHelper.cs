@@ -185,6 +185,7 @@ namespace Infrastructure
                         .ApplicationUser
                         .Fullname
                     : "";
+                index.ProductImageLink = product.ProductImageLink;
 
                 foreach (var productProductVariant in product.ProductVariants)
                     index.VariantIds.Add(productProductVariant.Id);
@@ -269,6 +270,7 @@ namespace Infrastructure
                             supplier = productVariant.Packages[^1].Supplier;
                     }
                     index.SupplierName = supplier!=null ? supplier.SupplierName : "";
+                    index.VariantImageLink = productVariant.VariantImageLink;
                     index.FillSuggestion();
                 }
                 catch (Exception e)

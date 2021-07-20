@@ -11,6 +11,13 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
     {
         public string CreatedProductId { get; set; }
     }
+    
+    
+    public class ProductImageRequest : BaseRequest
+    {
+        public string Id { get; set; }
+        public string ImageLink { get; set; }
+    }
 
     public class ProductUpdateRequest : BaseRequest
     {
@@ -19,7 +26,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
         public string BrandName { get; set; }
         public string BrandDescription { get; set; }
         public string CategoryId { get; set; }
-        
+        public string ProductImageLink { get; set; }
         public string Unit { get; set; }
 
     }
@@ -45,6 +52,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
         public string BrandDescription { get; set; }
         public string Unit { get; set; }
         public string CategoryId { get; set; }
+        public string ProductImageLink { get; set; }
         public bool IsVariantType { get; set; }
 
         public List<ProductVairantRequestInfo> ProductVariants { get; set; }

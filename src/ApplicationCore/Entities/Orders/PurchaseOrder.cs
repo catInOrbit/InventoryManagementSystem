@@ -15,7 +15,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
             // Transaction.TransactionId = Id;
             // Transaction.TransactionNumber =  DateTime.UtcNow.Date.ToString("ddMMyyyy") +
             //                Guid.NewGuid().ToString().Substring(0, 5).ToUpper();
-            PurchaseOrderStatus = PurchaseOrderStatusType.PQCreated;
+            PurchaseOrderStatus = PurchaseOrderStatusType.PriceQuote;
             // Transaction.CreatedDate = DateTime.Now;
             // Transaction.Type = TransactionType.Purchase;
         }

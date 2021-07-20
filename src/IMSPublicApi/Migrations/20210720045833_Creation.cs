@@ -60,6 +60,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateOfBirthNormalizedString = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProfileImageLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -321,9 +322,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     BrandId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ProductImageLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     SellingStrategy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProductImageLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsVariantType = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -454,7 +455,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     Sku = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StorageQuantity = table.Column<int>(type: "int", nullable: false),
                     TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ProductVariantImageLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VariantImageLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsVariantType = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>

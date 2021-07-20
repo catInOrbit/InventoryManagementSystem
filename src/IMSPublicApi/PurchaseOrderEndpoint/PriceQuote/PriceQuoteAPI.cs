@@ -57,7 +57,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             
             po.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Purchase, po.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
             
-            po.PurchaseOrderStatus = PurchaseOrderStatusType.PQCreated;
+            po.PurchaseOrderStatus = PurchaseOrderStatusType.PriceQuote;
             po.HasBeenModified = true;
             
             response.PurchaseOrderPQ = po;
@@ -202,7 +202,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 return Unauthorized();
             var response = new PQSubmitResponse();
             var po = _asyncRepository.GetPurchaseOrderByNumber(request.OrderNumber);
-            po.PurchaseOrderStatus = PurchaseOrderStatusType.POCreated;
+            po.PurchaseOrderStatus = PurchaseOrderStatusType.PurchaseOrder;
             po.HasBeenModified = true;
             
             po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,

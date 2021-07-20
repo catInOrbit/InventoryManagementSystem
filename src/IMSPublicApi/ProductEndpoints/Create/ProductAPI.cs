@@ -77,6 +77,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
 
             product.TransactionId = product.Transaction.Id;
             product.IsVariantType = request.IsVariantType;
+            if(request.ProductImageLink!=null) product.ProductImageLink = request.ProductImageLink;
             product.ProductVariants = new List<ProductVariant>();
             foreach (var productVairantRequestInfo in request.ProductVariants)
             {
@@ -195,6 +196,10 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                             productVariantSystemList.IsVariantType = product.IsVariantType;
                             productVariantSystemList.Barcode = productVairantRequestInfo.Barcode;
                             productVariantSystemList.Price = productVairantRequestInfo.Price;
+
+                            if (productVairantRequestInfo.ProductVariantImageLink != null)
+                                productVariantSystemList.VariantImageLink =
+                                    productVairantRequestInfo.ProductVariantImageLink;
                             
                             await _productVariantIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.ProductVariantSearchIndex(productVariantSystemList),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
 
@@ -215,6 +220,11 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                         Price = productVairantRequestInfo.Price,
                         ProductId = product.Id,
                     };
+                    
+                    
+                    if (productVairantRequestInfo.ProductVariantImageLink != null)
+                        productVariant.VariantImageLink =
+                            productVairantRequestInfo.ProductVariantImageLink;
                     
                     productVariant.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.ProductVariant, productVariant.Id, 
                         (await _userAuthentication.GetCurrentSessionUser()).Id);
@@ -261,6 +271,10 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     ProductId = product.Id,
                     Product = product
                 };
+                
+                if (productVairantUpdateRequestInfo.ProductVariantImageLink != null)
+                    productVariant.VariantImageLink =
+                        productVairantUpdateRequestInfo.ProductVariantImageLink;
 
                 
                 productVariant.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.ProductVariant, productVariant.Id, 
@@ -304,7 +318,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             return Ok(response);
         }
     }
-           public class ProductUpdate : BaseAsyncEndpoint.WithRequest<ProductUpdateRequest>.WithResponse<ProductUpdateResponse>
+    public class ProductUpdate : BaseAsyncEndpoint.WithRequest<ProductUpdateRequest>.WithResponse<ProductUpdateResponse>
     {
         private IAsyncRepository<ApplicationCore.Entities.Products.Product> _asyncRepository;
         private readonly IAuthorizationService _authorizationService;
@@ -343,6 +357,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
            product.Brand.BrandDescription = request.BrandDescription;
            product.CategoryId = request.CategoryId;
            product.Unit = request.Unit;
+
+           if (request.ProductImageLink != null) product.ProductImageLink = product.ProductImageLink;
            
            // foreach (var productProductVariant in product.ProductVariants)
            //     productProductVariant.Unit = product.Unit;
@@ -368,6 +384,88 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             var response = new ProductUpdateResponse();
             response.Product = product;
             return Ok(response);
+        }
+    }
+    
+    public class ProductImageUpdate : BaseAsyncEndpoint.WithRequest<ProductImageRequest>.WithoutResponse
+    {
+        private readonly IAsyncRepository<ApplicationCore.Entities.Products.Product> _asyncRepository;
+        private readonly IAsyncRepository<ProductVariant> _productVariantAsyncRepository;
+
+        private readonly IAuthorizationService _authorizationService;
+        private readonly IUserSession _userAuthentication;
+        private readonly IAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
+        private readonly IAsyncRepository<ProductVariantSearchIndex> _productVariantIndexAsyncRepositoryRepos;
+        private readonly INotificationService _notificationService;
+
+        public ProductImageUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos, IAsyncRepository<ProductVariantSearchIndex> productVariantIndexAsyncRepositoryRepos, INotificationService notificationService)
+        {
+            _asyncRepository = asyncRepository;
+            _productVariantAsyncRepository = productVariantAsyncRepository;
+            _authorizationService = authorizationService;
+            _userAuthentication = userAuthentication;
+            _productIndexAsyncRepositoryRepos = productIndexAsyncRepositoryRepos;
+            _productVariantIndexAsyncRepositoryRepos = productVariantIndexAsyncRepositoryRepos;
+            _notificationService = notificationService;
+        }
+
+        [HttpPut("api/productglobal/updateimage")]
+        [SwaggerOperation(
+            Summary = "Update picture product (productVariant)",
+            Description = "Update picture product (productVariant)",
+            OperationId = "product.pic",
+            Tags = new[] { "ProductEndpoints" })
+        ]
+        public override async Task<ActionResult> HandleAsync(ProductImageRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+           if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Update))
+            return Unauthorized();
+
+           var product = await _asyncRepository.GetByIdAsync(request.Id);
+           var productVariant = await _productVariantAsyncRepository.GetByIdAsync(request.Id);
+
+           if (product != null)
+           {
+               product.ProductImageLink = request.ImageLink;
+               product.Transaction = TransactionUpdateHelper.UpdateTransaction(product.Transaction,UserTransactionActionType.Modify,
+                   (await _userAuthentication.GetCurrentSessionUser()).Id, product.Id, "");
+               product.TransactionId = product.Transaction.Id;
+               await _asyncRepository.UpdateAsync(product);
+            
+               var currentUser = await _userAuthentication.GetCurrentSessionUser();
+            
+               await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.ProductSearchIndex(product),ElasticIndexConstant.PRODUCT_INDICES);
+            
+               var messageNotification =
+                   _notificationService.CreateMessage(currentUser.Fullname, "Update", "Product", product.Id);
+                
+               await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                   currentUser.Id, messageNotification);
+               return Ok();
+           }
+
+           if (productVariant != null)
+           {
+               productVariant.VariantImageLink = request.ImageLink;
+               productVariant.Transaction = TransactionUpdateHelper.UpdateTransaction(productVariant.Transaction,UserTransactionActionType.Modify,
+                   (await _userAuthentication.GetCurrentSessionUser()).Id, productVariant.Id, "");
+               productVariant.TransactionId = productVariant.Transaction.Id;
+               await _productVariantAsyncRepository.UpdateAsync(productVariant);
+            
+               var currentUser = await _userAuthentication.GetCurrentSessionUser();
+            
+               await _productVariantIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.ProductVariantSearchIndex(productVariant),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+            
+               var messageNotification =
+                   _notificationService.CreateMessage(currentUser.Fullname, "Update", "Product", productVariant.Id);
+                
+               await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                   currentUser.Id, messageNotification);
+               return Ok();
+           }
+           
+           
+           return NotFound("Can not found product / product variant with id : "+request.Id);
         }
     }
 

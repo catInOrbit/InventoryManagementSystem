@@ -118,7 +118,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
 
-            po.PurchaseOrderStatus = PurchaseOrderStatusType.PQCreated;
+            po.PurchaseOrderStatus = PurchaseOrderStatusType.Requisition;
 
             await _asyncRepository.UpdateAsync(po);
             await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);

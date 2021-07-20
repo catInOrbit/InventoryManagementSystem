@@ -48,8 +48,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
             PagingOption<StockTakeSearchIndex> pagingOption = new PagingOption<StockTakeSearchIndex>(
                 request.CurrentPage, request.SizePerPage);
 
-
             var response = new STSearchResponse();
+            response.IsDisplayingAll = true;
             
             var stSearchFilter = new STSearchFilter
             {

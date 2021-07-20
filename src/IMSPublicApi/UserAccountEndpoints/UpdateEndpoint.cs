@@ -48,6 +48,8 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
                 // userGet.Email = request.Email;
                 if(request.Fullname != userInfoGet.Fullname ) userInfoGet.Fullname = request.Fullname;
                 if(request.PhoneNumber != userInfoGet.PhoneNumber ) userInfoGet.PhoneNumber = request.PhoneNumber;
+                if(request.ProfileImageLink != null ) userInfoGet.ProfileImageLink = request.ProfileImageLink;
+
                 if (request.DateOfBirth != userInfoGet.DateOfBirth)
                 {
                     userInfoGet.DateOfBirth = request.DateOfBirth.Date;
@@ -72,6 +74,48 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
                 response.ApplicationUser = userInfoGet;
                 return Ok(response);
             }
+        }
+    }
+    
+    public class UpdateImageEndpoint : BaseAsyncEndpoint.WithRequest<UpdateImageRequest>.WithResponse<UpdateResponse>
+    {
+        private UserManager<ApplicationUser> _userManager;
+        private IUserSession _userAuthentication;
+
+        public UpdateImageEndpoint(UserManager<ApplicationUser> userManager, IUserSession userAuthentication)
+        {
+            _userManager = userManager;
+            _userAuthentication = userAuthentication;
+        }
+
+        [HttpPut("api/accountedit/image")]
+        [SwaggerOperation(
+            Summary = "Edit profile image information of account",
+            Description = "Edit profile image information of account",
+            OperationId = "users.editimage",
+            Tags = new[] { "UserAccountEndpoints" })
+        ]
+        public override async Task<ActionResult<UpdateResponse>> HandleAsync(UpdateImageRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            var response = new UpdateResponse();
+
+            var userSystemGet = await _userAuthentication.GetCurrentSessionUser();
+            if(userSystemGet == null)
+                return Unauthorized(response);  
+
+            var userInfoGet = await _userManager.FindByIdAsync(userSystemGet.Id);
+
+            if (userInfoGet == null)
+                return Unauthorized(response);
+            
+            if(request.ProfileImageLink != null ) userInfoGet.ProfileImageLink = request.ProfileImageLink;
+
+            await _userManager.UpdateAsync(userInfoGet);
+
+            response.Result = true;
+            response.Verbose = "Done updating profile image";
+            response.ApplicationUser = userInfoGet;
+            return Ok(response);
         }
     }
 }

@@ -46,6 +46,7 @@ CREATE TABLE [SystemUser] (
     [Address] nvarchar(max) NULL,
     [DateOfBirth] datetime2 NOT NULL,
     [DateOfBirthNormalizedString] nvarchar(max) NULL,
+    [ProfileImageLink] nvarchar(max) NULL,
     [IsActive] bit NOT NULL,
     [UserName] nvarchar(256) NULL,
     [NormalizedUserName] nvarchar(256) NULL,
@@ -187,6 +188,7 @@ CREATE TABLE [Product] (
     [CategoryId] nvarchar(450) NULL,
     [TransactionId] nvarchar(450) NULL,
     [SellingStrategy] nvarchar(max) NULL,
+    [ProductImageLink] nvarchar(max) NULL,
     [IsVariantType] bit NOT NULL,
     CONSTRAINT [PK_Product] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_Product_Brand_BrandId] FOREIGN KEY ([BrandId]) REFERENCES [Brand] ([Id]) ON DELETE NO ACTION,
@@ -252,6 +254,7 @@ CREATE TABLE [ProductVariant] (
     [Sku] nvarchar(max) NULL,
     [StorageQuantity] int NOT NULL,
     [TransactionId] nvarchar(450) NULL,
+    [VariantImageLink] nvarchar(max) NULL,
     [IsVariantType] bit NOT NULL,
     CONSTRAINT [PK_ProductVariant] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_ProductVariant_Product_ProductId] FOREIGN KEY ([ProductId]) REFERENCES [Product] ([Id]) ON DELETE NO ACTION,
@@ -464,7 +467,7 @@ CREATE INDEX [IX_UserRole_RoleId] ON [UserRole] ([RoleId]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20210719142544_Creation', N'5.0.5');
+VALUES (N'20210720045833_Creation', N'5.0.5');
 GO
 
 COMMIT;

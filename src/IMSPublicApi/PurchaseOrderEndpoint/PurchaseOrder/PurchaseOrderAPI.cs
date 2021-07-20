@@ -53,17 +53,22 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             
             po.Transaction.TransactionStatus = false;
 
-            if((int)po.PurchaseOrderStatus == 0)
+            if((int)po.PurchaseOrderStatus >= 0 && (int)po.PurchaseOrderStatus <= 2)
                 po.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionCanceled;
             
-            else if((int)po.PurchaseOrderStatus >=1 && (int)po.PurchaseOrderStatus <=2)
+            else if((int)po.PurchaseOrderStatus == 3)
                 po.PurchaseOrderStatus = PurchaseOrderStatusType.PQCanceled;
             
-            else if((int)po.PurchaseOrderStatus >=3 && (int)po.PurchaseOrderStatus <=5)
+            else if((int)po.PurchaseOrderStatus >=4 && (int)po.PurchaseOrderStatus <= 5)
                 po.PurchaseOrderStatus = PurchaseOrderStatusType.POCanceled;
+
+            else
+            {
+                return NotFound("Unable to cancel at this stage");
+            }
             
-            if((int)po.PurchaseOrderStatus == 0)
-                po.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionCanceled;
+            // if((int)po.PurchaseOrderStatus == 0)
+            //     po.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionCanceled;
             
             po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Reject,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, request.CancelReason);
@@ -155,14 +160,14 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             _notificationService = notificationService;
         }
 
-        [HttpPost("api/purchaseorder/create/{PurchaseOrderNumber}")]
+        [HttpPost("api/purchaseorder/create")]
         [SwaggerOperation(
             Summary = "Create purchase order",
             Description = "Create purchase order",
             OperationId = "po.create",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
-        public override async Task<ActionResult<POCreateResponse>> HandleAsync([FromRoute] POCreateRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<POCreateResponse>> HandleAsync(POCreateRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var response = new POCreateResponse();
 
@@ -171,7 +176,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             
 
             var poData = _purchaseOrderRepos.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
-            poData.PurchaseOrderStatus = PurchaseOrderStatusType.POWaitingConfirmation;
+            poData.PurchaseOrderStatus = PurchaseOrderStatusType.PurchaseOrder;
             poData.Transaction.Type = TransactionType.Purchase;
 
             poData.Transaction = TransactionUpdateHelper.UpdateTransaction(poData.Transaction,UserTransactionActionType.Modify,
@@ -232,7 +237,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             try
             {
                 var po = _asyncRepository.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
-                // po.PurchaseOrderStatus = PurchaseOrderStatusType.POConfirm;
+                po.PurchaseOrderStatus = PurchaseOrderStatusType.POWaitingConfirmation;
                 po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,
                     (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
                 
