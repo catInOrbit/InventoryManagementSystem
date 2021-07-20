@@ -1,31 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
-using Infrastructure.Identity;
 using Infrastructure.Services;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Notifications;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using InventoryManagementSystem.ApplicationCore.Entities;
-using InventoryManagementSystem.ApplicationCore.Entities.Notifications;
-using Microsoft.AspNetCore.Cors;
 
 namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 {
     [AllowAnonymous]
-    public class Authentication : BaseAsyncEndpoint
-        .WithRequest<AuthenticateRequest>
-        .WithResponse<AuthenticateResponse>
+    public class Authentication : BaseAsyncEndpoint.WithRequest<AuthenticateRequest>.WithResponse<AuthenticateResponse>
     {
 
         private readonly SignInManager<ApplicationUser> _signInManager;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Reports
@@ -18,6 +19,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Reports
         
         public DateTime CreatedDate { get; set; }
         public int StorageQuantity { get; set; }
+        [Column(TypeName = "decimal(16,3)")]
         public decimal Value { get; set; }
 
         [JsonIgnore]
@@ -52,6 +54,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Reports
     {
         public DateTime Date { get; set; }
         public int StorageQuantity { get; set; }
+        [Column(TypeName = "decimal(16,3)")]
         public decimal Value { get; set; }
     }
     
@@ -59,6 +62,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Reports
     {
         public DateTime CreatedDate { get; set; }
         public int StorageQuantity { get; set; }
+        [Column(TypeName = "decimal(16,3)")]
         public decimal Value { get; set; }
     }
     
@@ -76,6 +80,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Reports
         public string ProductName { get; set; }
         public int StorageQuantity { get; set; }
         public int ActualQuantity { get; set; }
+        [Column(TypeName = "decimal(16,3)")]
         public decimal Value { get; set; }
     }
 

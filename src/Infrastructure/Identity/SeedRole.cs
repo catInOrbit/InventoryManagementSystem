@@ -1,11 +1,9 @@
 using System;
 using System.Security.Claims;
-using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure.Data;
 using Infrastructure.Identity.DbContexts;
 using InventoryManagementSystem.ApplicationCore.Entities;
-using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

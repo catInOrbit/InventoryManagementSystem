@@ -16,7 +16,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         public string ProductId { get; set; }
         public string Name { get; set; }
         public string Barcode { get; set; }
+        [Column(TypeName = "decimal(16,3)")]
         public decimal Price { get; set; }
+        [Column(TypeName = "decimal(16,3)")]
         public decimal Cost { get; set; }
         public string Sku { get; set; }
         

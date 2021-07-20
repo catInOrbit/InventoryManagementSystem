@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
-using InventoryManagementSystem.ApplicationCore.Entities.Products;
-using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
@@ -32,7 +31,10 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public virtual Supplier Supplier { get; set; }
         public string WarehouseLocation { get; set; }
         public PurchaseOrderStatusType PurchaseOrderStatus { get; set; }
+        
+        [Column(TypeName = "decimal(16,3)")]
         public decimal TotalDiscountAmount { get; set; }
+        [Column(TypeName = "decimal(16,3)")]
         public decimal TotalOrderAmount { get; set; }
         public virtual ICollection<OrderItem> PurchaseOrderProduct { get; set; } = new List<OrderItem>();
         public string TransactionId { get; set; }

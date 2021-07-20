@@ -5,17 +5,10 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Security.Policy;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using InventoryManagementSystem.ApplicationCore.Entities.Orders;
-using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi;
 using InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
-using Moq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
@@ -28,7 +21,6 @@ namespace IMSBackend.Tests
     {
         private readonly ITestOutputHelper _testOutputHelper;
         private readonly HttpClient _client;
-        private string authorization;
         public EndpointsTest(TestFixture<Startup> fixture, ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;

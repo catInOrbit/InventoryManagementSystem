@@ -21,7 +21,10 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         [Ignore]
         public virtual Supplier Supplier { get; set; }
         public string SupplierId { get; set; }
+
+        [Column(TypeName = "decimal(16,3)")]
         public decimal Price { get; set; }
+        [Column(TypeName = "decimal(16,3)")]
         public decimal TotalPrice { get; set; }
         public int Quantity { get; set; }
         public DateTime ImportedDate { get; set; }

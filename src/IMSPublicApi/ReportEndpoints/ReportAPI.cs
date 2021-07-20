@@ -1,10 +1,6 @@
-using System.Drawing.Text;
-using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
-using Google.Cloud.BigQuery.V2;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;

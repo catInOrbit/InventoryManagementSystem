@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Elasticsearch.Net;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.SignalR;
@@ -9,8 +8,6 @@ namespace Infrastructure.Services
 {
     public class NotificationService : INotificationService
     {
-        
-        
         private IHubContext<NotificationHub> _hubContext;
         private readonly IRedisRepository _redisRepository;
         private readonly IAsyncRepository<Notification> _notificationAsyncRepository;

@@ -16,7 +16,6 @@ using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -235,7 +234,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                             gioGoodsIssueProduct.SalePrice, "Issue Out", null);
                         _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
                     }
-                    catch (Exception e)
+                    catch
                     {
                         _logger.LogError("Error updating BigQuery on " + this.GetType().ToString());
                     }

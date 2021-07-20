@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint

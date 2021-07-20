@@ -1,5 +1,3 @@
-using System;
-
 namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
     public class GISearchFilter

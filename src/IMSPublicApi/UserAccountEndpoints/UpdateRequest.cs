@@ -1,5 +1,4 @@
 using System;
-using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
 {

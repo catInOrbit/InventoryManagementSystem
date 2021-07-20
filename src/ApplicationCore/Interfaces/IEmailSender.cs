@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Entities;
-using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace InventoryManagementSystem.ApplicationCore.Interfaces
 {

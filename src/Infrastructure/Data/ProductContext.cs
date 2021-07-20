@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using InventoryManagementSystem.ApplicationCore.Entities;
-using System.Reflection;
-using InventoryManagementSystem.ApplicationCore.Entities;
+﻿using System.Reflection;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {

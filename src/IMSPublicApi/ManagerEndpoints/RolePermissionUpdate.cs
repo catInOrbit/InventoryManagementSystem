@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
-using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -82,8 +80,6 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             response.Verbose = "Success";
             response.RoleChanged = oldRole;
             return Ok(response);
-
-            return Unauthorized();
         }
     }
     
@@ -149,7 +145,6 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             response.Verbose = "Success";
             response.RoleChanged = newRole;
             return Ok(response);
-            return Unauthorized();
         }
     }
 }

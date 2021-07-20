@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -127,7 +126,7 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
                     await dbContext.SaveChangesAsync();
                     return Ok(response);
                 }
-                catch (Exception e)
+                catch
                 {
                     response.Status = false;
                     response.Verbose = "Id of transaction not found or internal error";

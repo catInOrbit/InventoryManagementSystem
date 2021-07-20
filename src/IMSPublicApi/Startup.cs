@@ -4,33 +4,28 @@ using System.Text;
 using AutoMapper;
 using BlazorShared;
 using Infrastructure.Data;
-using Infrastructure.Identity;
 using Infrastructure.Identity.DbContexts;
 using Infrastructure.Logging;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
+using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using InventoryManagementSystem.ApplicationCore.Interfaces;
-using InventoryManagementSystem.ApplicationCore.Services;
-using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using WebApi.Helpers;
 
@@ -223,7 +218,7 @@ namespace InventoryManagementSystem.PublicApi
            
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore
                 );
             
             services.AddScoped<IAuthorizationHandler,

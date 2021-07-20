@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
+﻿namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
     public class PqDisplay : BaseEntity
     {

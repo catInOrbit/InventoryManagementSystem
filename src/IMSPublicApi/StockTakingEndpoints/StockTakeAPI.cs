@@ -117,7 +117,6 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                     
                     var packages = await _asyncRepository.GetPackagesFromProductVariantId(productVariant.Id);
                     Console.WriteLine("Number of packages found: " + packages.Count);
-                    int totalQuantity = 0;
 
                     foreach (var package in packages)
                     {
@@ -256,7 +255,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                  else
                      await _stAsyncRepository.UpdateAsync(stockTakeOrder);
              }
-             catch (Exception e)
+             catch
              {
                  response.Status = false;
                  response.Verbose = "Fail to update stocktake, request may be wrong";

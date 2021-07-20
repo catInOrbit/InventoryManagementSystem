@@ -1,27 +1,24 @@
     using System;
-    using System.Collections;
-    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Ardalis.Specification;
-using Elasticsearch.Net;
-using Infrastructure.Identity.DbContexts;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using Ardalis.Specification;
+    using Infrastructure.Identity.DbContexts;
     using InventoryManagementSystem.ApplicationCore.Constants;
     using InventoryManagementSystem.ApplicationCore.Entities;
-using InventoryManagementSystem.ApplicationCore.Entities.Orders;
-using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
-using InventoryManagementSystem.ApplicationCore.Entities.Products;
+    using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+    using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
+    using InventoryManagementSystem.ApplicationCore.Entities.Products;
     using InventoryManagementSystem.ApplicationCore.Entities.Reports;
     using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
-using InventoryManagementSystem.ApplicationCore.Interfaces;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Nest;
+    using InventoryManagementSystem.ApplicationCore.Interfaces;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Logging;
+    using Nest;
 
-namespace Infrastructure.Data
+    namespace Infrastructure.Data
 {
     public class AppGlobalRepository<T> : IAsyncRepository<T> where T : BaseEntity
     {
@@ -773,7 +770,7 @@ namespace Infrastructure.Data
 
         public Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
@@ -808,17 +805,17 @@ namespace Infrastructure.Data
 
         public Task<int> CountAsync(ISpecification<T> spec, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Task<T> FirstAsync(ISpecification<T> spec, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Task<T> FirstOrDefaultAsync(ISpecification<T> spec, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
         
         public async Task ElasticSaveSingleAsync(bool isSavingNew, T type, string index)

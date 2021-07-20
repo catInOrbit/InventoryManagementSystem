@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Constants;
-using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;

@@ -1,6 +1,5 @@
 using System;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
-using Nest;
 using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Products

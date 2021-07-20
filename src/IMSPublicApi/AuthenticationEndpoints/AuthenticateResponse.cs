@@ -1,7 +1,6 @@
-﻿using InventoryManagementSystem.ApplicationCore.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Security.Claims;
+using InventoryManagementSystem.ApplicationCore.Entities;
 
 namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 {

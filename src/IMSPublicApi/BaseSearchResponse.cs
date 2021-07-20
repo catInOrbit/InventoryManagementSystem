@@ -1,7 +1,6 @@
 using System;
 using System.Text.Json.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities;
-using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 
 namespace InventoryManagementSystem.PublicApi
 {

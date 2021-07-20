@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
@@ -21,10 +20,14 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public virtual ProductVariant ProductVariant { get; set; }
         public int OrderQuantity { get; set; }
         public string Unit { get; set; }
+        [Column(TypeName = "decimal(16,3)")]
         public decimal Price { get; set; }
         [JsonIgnore]
+        [Column(TypeName = "decimal(16,3)")]
         public decimal SalePrice { get; set; }
+        [Column(TypeName = "decimal(16,3)")]
         public decimal DiscountAmount { get; set; }
+        [Column(TypeName = "decimal(16,3)")]
         public decimal TotalAmount { get; set; }
 
 

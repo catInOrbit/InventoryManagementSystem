@@ -1,15 +1,9 @@
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
-using Infrastructure.Identity;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
-using InventoryManagementSystem.ApplicationCore.Interfaces;
-using InventoryManagementSystem.PublicApi.AuthenticationEndpoints;
-using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -17,9 +11,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
 {
      
-    public class GetUserByID : BaseAsyncEndpoint
-        .WithRequest<UsersRequest>
-        .WithResponse<UsersResponse>
+    public class GetUserByID : BaseAsyncEndpoint.WithRequest<UsersRequest>.WithResponse<UsersResponse>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;

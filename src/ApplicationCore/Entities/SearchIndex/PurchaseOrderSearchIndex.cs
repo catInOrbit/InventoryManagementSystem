@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Transactions;
 using Nest;
-using Transaction = InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {

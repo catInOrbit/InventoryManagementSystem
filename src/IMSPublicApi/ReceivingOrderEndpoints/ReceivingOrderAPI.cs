@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Annotations;
+
 namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
 {
     public class ReceivingOrderUpdate : BaseAsyncEndpoint.WithRequest<ROUpdateRequest>.WithResponse<ROUpdateResponse>
@@ -299,7 +300,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                         , ro.Location.LocationName, goodsReceiptOrderItem.QuantityReceived , 0, 0, "In Storage", ro.Supplier.SupplierName);
                     _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
                 }
-                catch (Exception e)
+                catch
                 {
                     _logger.LogError("Error updating BigQuery on " + this.GetType().ToString());
                 }

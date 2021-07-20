@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
+using Nest;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities
 {
@@ -9,7 +9,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
     public abstract class BaseEntity
     {
         [JsonIgnore]
-        [Nest.PropertyName("id")]
+        [PropertyName("id")]
+        [MaxLength(50)]
         public virtual string Id { get; set; }
     }
 }

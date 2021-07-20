@@ -260,7 +260,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                         _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
                     }
                 }
-                catch (Exception e)
+                catch
                 {
                     _logger.LogError("Error updating BigQuery on " + this.GetType().ToString());
                 }
@@ -274,7 +274,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                     currentUser.Id, messageNotification);
                 return Ok();
             }
-            catch (Exception e)
+            catch
             {
                 return NotFound();
             }

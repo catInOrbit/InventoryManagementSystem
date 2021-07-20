@@ -1,7 +1,4 @@
-﻿using InventoryManagementSystem.ApplicationCore.Entities;
-using InventoryManagementSystem.ApplicationCore.Interfaces;
-
-namespace InventoryManagementSystem.ApplicationCore.Entities
+﻿namespace InventoryManagementSystem.ApplicationCore.Entities
 {
     public class ProductBrand : BaseEntity
     {
