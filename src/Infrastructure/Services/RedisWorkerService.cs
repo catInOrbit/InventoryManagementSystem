@@ -31,6 +31,7 @@ namespace Infrastructure.Services
             while (!stoppingToken.IsCancellationRequested)
             {
                 var data = await _redisRepository.GetNotificationAll("Notifications");
+                await _redisRepository.ClearNotification("Notifications");
                 _logger.LogInformation("Worker for redis running at: {0}", DateTimeOffset.Now);
                 if (data != null)
                 {
@@ -44,10 +45,6 @@ namespace Infrastructure.Services
                         await dbContext.SaveChangesAsync(stoppingToken);
                     }
                 }
-        
-                
-                await _redisRepository.ClearNotification("Notifications");
-                
                 await Task.Delay(3600000, stoppingToken);
             }
         }

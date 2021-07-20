@@ -11,7 +11,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "Brand",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     BrandName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BrandDescription = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -24,7 +24,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "Notification",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Channel = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -86,7 +86,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "Transaction",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
                     TransactionStatus = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -205,10 +205,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "Category",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    TransactionId = table.Column<string>(type: "nvarchar(50)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -225,10 +225,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "Location",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LocationBarcode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LocationName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    TransactionId = table.Column<string>(type: "nvarchar(50)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -245,8 +245,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "StockTakeOrder",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    TransactionId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     StockTakeOrderType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -264,14 +264,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "Supplier",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     SupplierName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SalePersonName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    TransactionId = table.Column<string>(type: "nvarchar(50)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -288,9 +288,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "TransactionRecord",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TransactionId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     OrderId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
@@ -317,12 +317,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "Product",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BrandId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    BrandId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CategoryId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    TransactionId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     SellingStrategy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProductImageLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsVariantType = table.Column<bool>(type: "bit", nullable: false)
@@ -354,9 +354,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "StockTakeGroupLocation",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LocationId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    StockTakeOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LocationId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    StockTakeOrderId = table.Column<string>(type: "nvarchar(50)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -379,14 +379,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "GoodsIssueOrder",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     RequestId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeliveryMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeliveryAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CustomerPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SupplierId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    SupplierId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    TransactionId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     GoodsIssueType = table.Column<int>(type: "int", nullable: false),
                     DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -411,17 +411,17 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "PurchaseOrder",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeliveryAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MergedWithPurchaseOrderId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MailDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SupplierId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    SupplierId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     WarehouseLocation = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PurchaseOrderStatus = table.Column<int>(type: "int", nullable: false),
-                    TotalDiscountAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TotalOrderAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TotalDiscountAmount = table.Column<decimal>(type: "decimal(16,3)", nullable: false),
+                    TotalOrderAmount = table.Column<decimal>(type: "decimal(16,3)", nullable: false),
+                    TransactionId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
                     HasBeenModified = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -446,15 +446,15 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "ProductVariant",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProductId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ProductId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Barcode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(16,3)", nullable: false),
+                    Cost = table.Column<decimal>(type: "decimal(16,3)", nullable: false),
                     Sku = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     StorageQuantity = table.Column<int>(type: "int", nullable: false),
-                    TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TransactionId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     VariantImageLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsVariantType = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -479,13 +479,13 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "GoodsReceiptOrder",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PurchaseOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    LocationId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PurchaseOrderId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    LocationId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     ReceivedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SupplierId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    SupplierId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     SupplierInvoice = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    TransactionId = table.Column<string>(type: "nvarchar(50)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -520,17 +520,17 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "OrderItem",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     OrderId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProductVariantId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ProductVariantId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     OrderQuantity = table.Column<int>(type: "int", nullable: false),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    SalePrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    DiscountAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    GoodsIssueOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    PurchaseOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Price = table.Column<decimal>(type: "decimal(16,3)", nullable: false),
+                    SalePrice = table.Column<decimal>(type: "decimal(16,3)", nullable: false),
+                    DiscountAmount = table.Column<decimal>(type: "decimal(16,3)", nullable: false),
+                    TotalAmount = table.Column<decimal>(type: "decimal(16,3)", nullable: false),
+                    GoodsIssueOrderId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    PurchaseOrderId = table.Column<string>(type: "nvarchar(50)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -559,9 +559,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "GoodsReceiptOrderItems",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    GoodsReceiptOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ProductVariantId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    GoodsReceiptOrderId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    ProductVariantId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     ProductVariantName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     QuantityReceived = table.Column<int>(type: "int", nullable: false)
                 },
@@ -586,16 +586,16 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "Package",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProductVariantId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    SupplierId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ProductVariantId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    SupplierId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(16,3)", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "decimal(16,3)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     ImportedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LocationId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    TransactionId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    GoodsReceiptOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    LocationId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    TransactionId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    GoodsReceiptOrderId = table.Column<string>(type: "nvarchar(50)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -636,12 +636,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 name: "StockTakeItem",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PackageId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    PackageId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     ActualQuantity = table.Column<int>(type: "int", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StockTakeOrderId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    StockTakeGroupLocationId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    StockTakeOrderId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    StockTakeGroupLocationId = table.Column<string>(type: "nvarchar(50)", nullable: true)
                 },
                 constraints: table =>
                 {

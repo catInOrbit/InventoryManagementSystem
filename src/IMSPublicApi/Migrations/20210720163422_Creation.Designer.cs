@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210720045833_Creation")]
+    [Migration("20210720163422_Creation")]
     partial class Creation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -110,7 +110,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Notification", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Channel")
                         .HasColumnType("nvarchar(max)");
@@ -135,7 +136,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsIssueOrder", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("CustomerName")
                         .HasColumnType("nvarchar(max)");
@@ -159,10 +161,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SupplierId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -176,25 +178,26 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsReceiptOrder", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LocationId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("PurchaseOrderId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("ReceivedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("SupplierId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("SupplierInvoice")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -212,13 +215,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.GoodsReceiptOrderItem", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("GoodsReceiptOrderId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ProductVariantId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ProductVariantName")
                         .HasColumnType("nvarchar(max)");
@@ -238,13 +242,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.OrderItem", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("DiscountAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(16,3)");
 
                     b.Property<string>("GoodsIssueOrderId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(max)");
@@ -253,19 +258,19 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(16,3)");
 
                     b.Property<string>("ProductVariantId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("PurchaseOrderId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("SalePrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(16,3)");
 
                     b.Property<decimal>("TotalAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(16,3)");
 
                     b.Property<string>("Unit")
                         .HasColumnType("nvarchar(max)");
@@ -284,7 +289,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.PurchaseOrder", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("Deadline")
                         .HasColumnType("datetime2");
@@ -308,16 +314,16 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("SupplierId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("TotalDiscountAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(16,3)");
 
                     b.Property<decimal>("TotalOrderAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(16,3)");
 
                     b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("WarehouseLocation")
                         .HasColumnType("nvarchar(max)");
@@ -334,13 +340,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeGroupLocation", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LocationId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("StockTakeOrderId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -354,7 +361,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeItem", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("ActualQuantity")
                         .HasColumnType("int");
@@ -363,13 +371,13 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PackageId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("StockTakeGroupLocationId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("StockTakeOrderId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -385,13 +393,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("StockTakeOrderType")
                         .HasColumnType("int");
 
                     b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -403,7 +412,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.Supplier", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
@@ -426,7 +436,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -438,7 +448,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.Transaction", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("TransactionStatus")
                         .HasColumnType("bit");
@@ -454,7 +465,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.TransactionRecord", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
@@ -469,7 +481,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("UserTransactionActionType")
                         .HasColumnType("int");
@@ -486,7 +498,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Brand", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("BrandDescription")
                         .HasColumnType("nvarchar(max)");
@@ -502,7 +515,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Category", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("CategoryDescription")
                         .HasColumnType("nvarchar(max)");
@@ -511,7 +525,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -523,7 +537,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Location", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LocationBarcode")
                         .HasColumnType("nvarchar(max)");
@@ -532,7 +547,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -544,34 +559,35 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Package", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("GoodsReceiptOrderId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("ImportedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LocationId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(16,3)");
 
                     b.Property<string>("ProductVariantId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("SupplierId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(16,3)");
 
                     b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -591,13 +607,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.Product", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("BrandId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("CategoryId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("IsVariantType")
                         .HasColumnType("bit");
@@ -612,7 +629,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Unit")
                         .HasColumnType("nvarchar(max)");
@@ -631,13 +648,14 @@ namespace InventoryManagementSystem.PublicApi.Migrations
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Products.ProductVariant", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Barcode")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Cost")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(16,3)");
 
                     b.Property<bool>("IsVariantType")
                         .HasColumnType("bit");
@@ -646,10 +664,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(16,3)");
 
                     b.Property<string>("ProductId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Sku")
                         .HasColumnType("nvarchar(max)");
@@ -658,7 +676,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TransactionId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("VariantImageLink")
                         .HasColumnType("nvarchar(max)");
