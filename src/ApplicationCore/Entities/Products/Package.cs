@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace InventoryManagementSystem.ApplicationCore.Entities.Products
 {
     [Serializable]
-    public class Package : BaseEntity
+    public class Package : BaseSearchIndex
     {
         public Package()
         {

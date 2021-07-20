@@ -6,7 +6,7 @@ using Transaction = InventoryManagementSystem.ApplicationCore.Entities.Orders.Tr
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
-    public class PurchaseOrderSearchIndex : BaseEntity
+    public class PurchaseOrderSearchIndex : BaseSearchIndex
     {
         public override string Id { get; set; }
 

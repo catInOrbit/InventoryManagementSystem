@@ -2,7 +2,7 @@ using System;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
-    public class CategorySearchIndex : BaseEntity
+    public class CategorySearchIndex : BaseSearchIndex
     {
         public override string Id { get; set; }
         public string CategoryName { get; set; }

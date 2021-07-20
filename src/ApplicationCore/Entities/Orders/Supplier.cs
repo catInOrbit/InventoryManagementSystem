@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
 
-    public class Supplier : BaseEntity
+    public class Supplier : BaseSearchIndex
     {
         public Supplier()
         {
@@ -24,10 +24,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 
         public string TransactionId { get; set; }
         
-        
         [JsonIgnore]
         [Ignore]
         public virtual Transaction  Transaction{ get; set; }
-        //IBaseAddress
+
     }
 }

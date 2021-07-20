@@ -8,7 +8,7 @@ using Nest;
 
 namespace Infrastructure.Services
 {
-    public class ElasticSearchHelper<T> where T: class
+    public class ElasticSearchHelper<T> where T: BaseSearchIndex
     {
         private readonly string SearchQuery;
         private readonly string Index;
@@ -31,7 +31,7 @@ namespace Infrastructure.Services
             {
                 responseElastic = await _elasticClient.SearchAsync<T>
                 (
-                    s => s.Size(2000).Index(Index).MatchAll());
+                    s => s.Sort(ss => ss.Descending(p => p.LatestUpdateDate)).Size(2000).Index(Index).MatchAll());
                     
                 return responseElastic;
             }

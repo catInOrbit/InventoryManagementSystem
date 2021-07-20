@@ -148,7 +148,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                     SupplierId = ro.SupplierId,
                 };
                 package.TotalPrice = package.Price * package.Quantity;
-                
+                package.LatestUpdateDate = DateTime.UtcNow;
+
                 await _packageRepository.AddAsync(package);
                 roi.ProductVariant.Packages.Add(package);
 

@@ -52,6 +52,8 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             };
             
             supplier.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Supplier, supplier.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
+            supplier.LatestUpdateDate = DateTime.UtcNow;
+            
             await _supplierAsyncRepository.AddAsync(supplier);
             await _supplierAsyncRepository.ElasticSaveSingleAsync(true, supplier, ElasticIndexConstant.SUPPLIERS);
 
@@ -110,6 +112,8 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             supplier.SalePersonName = request.SalePersonName;
             supplier.SupplierName = request.SupplierName;
             
+            supplier.LatestUpdateDate = DateTime.UtcNow;
+
             await _supplierAsyncRepository.UpdateAsync(supplier);
             await _supplierAsyncRepository.ElasticSaveSingleAsync(false, supplier, ElasticIndexConstant.SUPPLIERS);
 

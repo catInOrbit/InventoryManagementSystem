@@ -4,7 +4,7 @@ using Nest;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
-    public class ProductVariantSearchIndex : BaseEntity
+    public class ProductVariantSearchIndex : BaseSearchIndex
     {
         public ProductVariantSearchIndex()
         {
@@ -48,7 +48,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         }
     }
     
-    public class ProductSearchIndex : BaseEntity
+    public class ProductSearchIndex : BaseSearchIndex
     {
         public override string Id { get; set; }
 

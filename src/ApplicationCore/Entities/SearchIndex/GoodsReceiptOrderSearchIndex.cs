@@ -2,7 +2,7 @@
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
-    public class GoodsReceiptOrderSearchIndex : BaseEntity
+    public class GoodsReceiptOrderSearchIndex : BaseSearchIndex
     {
         public override string Id { get; set; }
 

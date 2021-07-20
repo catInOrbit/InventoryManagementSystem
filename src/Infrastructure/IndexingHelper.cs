@@ -6,6 +6,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
+using MimeKit;
 
 namespace Infrastructure
 {
@@ -29,6 +30,13 @@ namespace Infrastructure
                 SupplierPhone = (po.Supplier != null) ? po.Supplier.PhoneNumber : "",
                 HasBeenModified = po.HasBeenModified
             };
+
+            if (index.ModifiedDate != DateTime.MinValue)
+                index.LatestUpdateDate = index.ModifiedDate;
+            else if(index.CreatedDate != DateTime.MinValue)
+                index.LatestUpdateDate = index.ModifiedDate;
+            else
+                index.LatestUpdateDate = index.CreatedDate;
             
             index.Status = (po.PurchaseOrderStatus.GetStringValue() != null)
                 ? po.PurchaseOrderStatus.GetStringValue()
@@ -83,6 +91,13 @@ namespace Infrastructure
                 CreatedDate = (ro.Transaction.TransactionRecord.Count > 0) ? ro.Transaction.TransactionRecord[0].Date : DateTime.MinValue,
                 ModifiedDate = (ro.Transaction.TransactionRecord.Count > 0) ? ro.Transaction.TransactionRecord[^1].Date : DateTime.MinValue
             };
+            
+            if (index.ModifiedDate != DateTime.MinValue)
+                index.LatestUpdateDate = index.ModifiedDate;
+            else if(index.CreatedDate != DateTime.MinValue)
+                index.LatestUpdateDate = index.ModifiedDate;
+            else
+                index.LatestUpdateDate = index.CreatedDate;
 
             return index;
         }
@@ -100,12 +115,20 @@ namespace Infrastructure
                     FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create).ApplicationUser
                     .Fullname: "",
                 CreatedDate =  (gi.Transaction.TransactionRecord.Count > 0) ? gi.Transaction.TransactionRecord[0].Date : DateTime.MinValue,
+                ModifyDate =  (gi.Transaction.TransactionRecord.Count > 0) ? gi.Transaction.TransactionRecord[^1].Date : DateTime.MinValue,
                 DeliveryDate = gi.DeliveryDate,
                 DeliveryMethod = gi.DeliveryMethod,
                 DeliveryAddress = gi.DeliveryAddress,
                 GoodsIssueNumber = gi.Id,
                 GoodsIssueRequestNumber = gi.RequestId
             };
+            
+            if (index.ModifyDate != DateTime.MinValue)
+                index.LatestUpdateDate = index.ModifyDate;
+            else if(index.CreatedDate != DateTime.MinValue)
+                index.LatestUpdateDate = index.ModifyDate;
+            else
+                index.LatestUpdateDate = index.CreatedDate;
 
             return index;
         }
@@ -131,6 +154,8 @@ namespace Infrastructure
                         Sku = productVariant.Sku,
                         Brand = (product.Brand!=null) ? product.Brand.BrandName : "",
                     };
+                    
+                
                     index.FillSuggestion();
                     
                 }
@@ -186,6 +211,14 @@ namespace Infrastructure
                         .Fullname
                     : "";
                 index.ProductImageLink = product.ProductImageLink;
+                
+                if (index.ModifiedDate != DateTime.MinValue)
+                    index.LatestUpdateDate = index.ModifiedDate;
+                else if(index.CreatedDate != DateTime.MinValue)
+                    index.LatestUpdateDate = index.ModifiedDate;
+                else
+                    index.LatestUpdateDate = index.CreatedDate;
+
 
                 foreach (var productProductVariant in product.ProductVariants)
                     index.VariantIds.Add(productProductVariant.Id);
@@ -220,6 +253,12 @@ namespace Infrastructure
                         .Fullname: "",
                 };
 
+            if (index.ModifiedDate != DateTime.MinValue)
+                index.LatestUpdateDate = index.ModifiedDate;
+            else if(index.CreatedDate != DateTime.MinValue)
+                index.LatestUpdateDate = index.ModifiedDate;
+            else
+                index.LatestUpdateDate = index.CreatedDate;
             return index;
         }
         
@@ -271,6 +310,13 @@ namespace Infrastructure
                     }
                     index.SupplierName = supplier!=null ? supplier.SupplierName : "";
                     index.VariantImageLink = productVariant.VariantImageLink;
+                    
+                    if (index.ModifiedDate != DateTime.MinValue)
+                        index.LatestUpdateDate = index.ModifiedDate;
+                    else if(index.CreatedDate != DateTime.MinValue)
+                        index.LatestUpdateDate = index.ModifiedDate;
+                    else
+                        index.LatestUpdateDate = index.CreatedDate;
                     index.FillSuggestion();
                 }
                 catch (Exception e)
@@ -301,6 +347,7 @@ namespace Infrastructure
                         ProductName = brandProduct.Name
                     });
                 }
+                
 
                 return brandSearchIndex;
             }
@@ -338,6 +385,14 @@ namespace Infrastructure
                 categoryIndex.CreatedDate = (category.Transaction.TransactionRecord.Count > 0)
                     ? category.Transaction.TransactionRecord[0].Date
                     : DateTime.MinValue;
+                
+                if (categoryIndex.ModifiedDate != DateTime.MinValue)
+                    categoryIndex.LatestUpdateDate = categoryIndex.ModifiedDate;
+                else if(categoryIndex.CreatedDate != DateTime.MinValue)
+                    categoryIndex.LatestUpdateDate = categoryIndex.ModifiedDate;
+                else
+                    categoryIndex.LatestUpdateDate = categoryIndex.CreatedDate;
+                
                 
                 return categoryIndex;
             }

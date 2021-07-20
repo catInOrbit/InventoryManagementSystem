@@ -202,6 +202,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                             if (listPackages[i].Quantity >= quantityToDeduce)
                             {
                                 listPackages[i].Quantity -= quantityToDeduce;
+                                listPackages[i].LatestUpdateDate = DateTime.UtcNow;
                                 //Remove aggregated quantity of product as well
                                 productVariant.StorageQuantity -= quantityToDeduce; 
                             }
@@ -220,9 +221,12 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                     }
             
                     await _productVariantAsyncRepository.UpdateAsync(productVariant);
-            
+
                     foreach (var i in listIndexPackageToRemove)
+                    {
+                        await _packageAsyncRepository.ElasticDeleteSingleAsync(listPackages[i], ElasticIndexConstant.PACKAGES);
                         await _packageAsyncRepository.DeleteAsync(listPackages[i]);
+                    }
                     try
                     {
                         bigQueryService.InsertProductRowBQ(gioGoodsIssueProduct.ProductVariant,

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
-    public class BrandSearchIndex : BaseEntity
+    public class BrandSearchIndex : BaseSearchIndex
     {
         public string BrandId { get; set; }
         public string BrandName { get; set; }

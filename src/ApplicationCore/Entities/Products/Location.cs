@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Products
 {
-    public class Location : BaseEntity
+    public class Location : BaseSearchIndex
     {
         public Location()
         {
