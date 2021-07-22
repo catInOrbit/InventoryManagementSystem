@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -72,7 +73,9 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             }
             
             var role = await _userRoleModificationService.RoleManager.FindByIdAsync(request.RoleId);
+            
             await _userRoleModificationService.UserManager.RemoveFromRoleAsync(user, role.Name);
+            await _userRoleModificationService.RoleManager.DeleteAsync(role);
             var result = await _userRoleModificationService.RoleCreatingHelper(user.Id, role.Name);
 
             if (result.Succeeded)

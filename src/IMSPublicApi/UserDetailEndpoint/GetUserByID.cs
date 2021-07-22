@@ -52,7 +52,7 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
 
                 var userAndRole = new UserAndRole();
                 userAndRole.ImsUser = userGet;
-                userAndRole.UserRole = (await _userManager.GetRolesAsync(user))[0];
+                userAndRole.UserRole = (await _userManager.GetRolesAsync(userGet))[0];
                 userAndRole.RoleID = (await _roleManager.FindByNameAsync(userAndRole.UserRole)).Id;
                 
                 response.UserAndRole = userAndRole; 

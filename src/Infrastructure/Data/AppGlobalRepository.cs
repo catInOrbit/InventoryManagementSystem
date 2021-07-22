@@ -99,7 +99,7 @@
             pagingOption.ExecuteResourcePaging();
             return pagingOption;
         }
-
+        
         public async Task<PagingOption<PurchaseOrderSearchIndex>> GetPOForELIndexAsync(bool hideMergeStatus, PagingOption<PurchaseOrderSearchIndex> pagingOption, POSearchFilter poSearchFilter,  CancellationToken cancellationToken = default)
         {
             List<PurchaseOrder> pos;
@@ -117,13 +117,13 @@
                     ).ToListAsync();
 
 
-            pos = pos.OrderByDescending(e =>
-                e.Transaction.TransactionRecord.OrderByDescending(r => r.Date).First().Date).ToList();
+            // pos = pos.OrderByDescending(e =>
+            //     e.Transaction.TransactionRecord.OrderByDescending(r => r.Date).First().Date).ToList();
             
 
             // var listTransctionRecord = _identityAndProductDbContext.TransactionRecord
             //     .Where(t => t.UserTransactionActionType == UserTransactionActionType.Submit).ToList();
-            
+            //
             //
             // foreach (var record in listTransctionRecord)
             //     Console.WriteLine(record.Id);
