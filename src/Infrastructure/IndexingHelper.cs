@@ -19,7 +19,6 @@ namespace Infrastructure
                 TransactionId = (po.Transaction!=null) ? po.Transaction.Id : "",
                 Id = po.Id,
                 SupplierName = (po.Supplier != null) ? po.Supplier.SupplierName : "",
-                
                 CreatedDate =  (po.Transaction.TransactionRecord.Count > 0) ? po.Transaction.TransactionRecord[0].Date : DateTime.MinValue,
                 ModifiedDate = (po.Transaction.TransactionRecord.Count > 0) ? po.Transaction.TransactionRecord[^1].Date : DateTime.MinValue,
                 DeliveryDate = po.DeliveryDate,

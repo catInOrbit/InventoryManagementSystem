@@ -182,6 +182,16 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
 
             if (product.IsVariantType)
             {
+                foreach (var productProductVariant in product.ProductVariants)
+                {
+                    productProductVariant.Transaction.TransactionStatus = false;
+                    await _productVariantIndexAsyncRepositoryRepos.ElasticDeleteSingleAsync(IndexingHelper.ProductVariantSearchIndex(productProductVariant),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+
+                    productProductVariant.Transaction.Type = TransactionType.Deleted;
+                    await _productVariantAsyncRepository.UpdateAsync(productProductVariant);
+                }
+                product.ProductVariants.Clear();
+                
                 foreach (var productVairantRequestInfo in request.ProductVariantsUpdate)
                 {
                     foreach (var productVariantSystemList in product.ProductVariants)
@@ -248,11 +258,10 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                 foreach (var productProductVariant in product.ProductVariants)
                 {
                     productProductVariant.Transaction.TransactionStatus = false;
+                    await _productVariantIndexAsyncRepositoryRepos.ElasticDeleteSingleAsync(IndexingHelper.ProductVariantSearchIndex(productProductVariant),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+
                     productProductVariant.Transaction.Type = TransactionType.Deleted;
                     await _productVariantAsyncRepository.UpdateAsync(productProductVariant);
-                    
-                    if(productProductVariant.Transaction.Type != TransactionType.Deleted)
-                        await _productVariantIndexAsyncRepositoryRepos.ElasticDeleteSingleAsync(IndexingHelper.ProductVariantSearchIndex(productProductVariant),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
                 }
                 product.ProductVariants.Clear();
                 

@@ -37,6 +37,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             response.IsDisplayingAll = false;
 
             response.PurchaseOrder = await _purchaseAsyncRepository.GetByIdAsync(request.Id);
+            response.PurchaseOrder.PurchaseOrderStatusString = response.PurchaseOrder.PurchaseOrderStatus.ToString();
             foreach (var orderItem in response.PurchaseOrder.PurchaseOrderProduct)
                 orderItem.IsShowingProductVariant = true;
         

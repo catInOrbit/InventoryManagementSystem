@@ -58,19 +58,47 @@ namespace Infrastructure.Services
             await client.Indices.DeleteAsync( ElasticIndexConstant.LOCATIONS);
 
 
+            // await client.Indices.CreateAsync( ElasticIndexConstant.PRODUCT_VARIANT_INDICES,
+            //     index 
+            //         => index.Settings(s=> s.Analysis(
+            //                 a => a.Tokenizers(
+            //                     t => t.Pattern("hyphen_tokenizer", descriptor => descriptor.Pattern(".*-.*"))
+            //                     )
+            //                 ))
+            //             .Map<ProductVariantSearchIndex>(x 
+            //         => x.AutoMap().Properties(ps 
+            //             => ps.Completion(c 
+            //                 => c.Name(n => n.Suggest))))
+            // );
+            
+            // await client.Indices.CreateAsync( ElasticIndexConstant.PRODUCT_VARIANT_INDICES,
+            //     index 
+            //         => index.Settings(s=> s.Analysis(
+            //                 a => a.Tokenizers(
+            //                     t => t.Pattern("hyphen_tokenizer", descriptor => descriptor.Pattern(".*-.*"))
+            //                 )
+            //             ))
+            //             .Map<ProductVariantSearchIndex>(x 
+            //                 => x.Properties(ps 
+            //                     => ps.Text(t=>t.Name(n=>n.Name)).Completion(c 
+            //                         => c.Name(n => n.Suggest))))
+            // );
+            
+               
             await client.Indices.CreateAsync( ElasticIndexConstant.PRODUCT_VARIANT_INDICES,
                 index 
                     => index.Settings(s=> s.Analysis(
                             a => a.Tokenizers(
                                 t => t.Pattern("hyphen_tokenizer", descriptor => descriptor.Pattern(".*-.*"))
-                                )
-                            ))
+                            )
+                        ))
                         .Map<ProductVariantSearchIndex>(x 
-                    => x.AutoMap().Properties(ps 
-                        => ps.Completion(c 
-                            => c.Name(n => n.Suggest))))
+                            => x.AutoMap().Properties(ps 
+                                => ps.Completion(c 
+                                    => c.Name(n => n.Suggest))))
             );
             
+        
             await client.Indices.CreateAsync( ElasticIndexConstant.PRODUCT_INDICES,
                 index 
                     => index.Map<ProductSearchIndex>(x 

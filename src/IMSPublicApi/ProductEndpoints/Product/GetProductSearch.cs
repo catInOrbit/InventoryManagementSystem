@@ -87,29 +87,25 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
             
                 response.IsDisplayingAll = true;
                 
-                var productSearchFilter = new ProductVariantSearchFilter()
-                {
-                    CreatedByName = request.CreatedByName,
-                    FromCreatedDate = request.FromCreatedDate,
-                    FromModifiedDate = request.FromModifiedDate,
-                    ToCreatedDate = request.ToCreatedDate,
-                    ToModifiedDate = request.ToModifiedDate,
-                    Brand = request.Brand,
-                    Category = request.Category,
-                    Strategy = request.Strategy,
-                    FromPrice = request.FromPrice,
-                    ToPrice = request.ToPrice,
-                    ModifiedByName = request.ModifiedByName
-                };
-
-                
-                ElasticSearchHelper<ProductVariantSearchIndex> elasticSearchHelper = new ElasticSearchHelper<ProductVariantSearchIndex>(_elasticClient, request.SearchQuery,
-                    ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
-                
-                
                 
                 ISearchResponse<ProductVariantSearchIndex> responseElastic;
-                responseElastic = await elasticSearchHelper.SearchDocuments();
+
+                if (!request.SearchNameOnly)
+                {
+                    ElasticSearchHelper<ProductVariantSearchIndex> elasticSearchHelper = new ElasticSearchHelper<ProductVariantSearchIndex>(_elasticClient, request.SearchQuery,
+                        ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+                
+                    responseElastic = await elasticSearchHelper.SearchDocuments();
+                }
+                else
+                {
+                    responseElastic =  await _elasticClient.SearchAsync<ProductVariantSearchIndex>
+                    (
+                        s => s.Size(2000).Index(ElasticIndexConstant.PRODUCT_VARIANT_INDICES).
+                            Query(q =>q.
+                                QueryString(d =>d.
+                                    DefaultField(f =>f.Name).Query("\"" + request.SearchQuery + "\""))));
+                }
                 // if (request.SearchQuery == null)
                 // {
                 //     responseElastic = await _elasticClient.SearchAsync<ProductVariantSearchIndex>
@@ -125,7 +121,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                 //
                 // }
           
-            pagingOption.ResultList = _asyncRepository.ProductVariantIndexFiltering(responseElastic.Documents.ToList(), productSearchFilter,
+            pagingOption.ResultList = _asyncRepository.ProductVariantIndexFiltering(responseElastic.Documents.ToList(), request,
                 new CancellationToken());
             
             pagingOption.ExecuteResourcePaging();
@@ -174,42 +170,30 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
             
                 response.IsDisplayingAll = true;
                 
-                var productSearchFilter = new ProductSearchFilter()
-                {
-                    CreatedByName = request.CreatedByName,
-                    FromCreatedDate = request.FromCreatedDate,
-                    FromModifiedDate = request.FromModifiedDate,
-                    ToCreatedDate = request.ToCreatedDate,
-                    ToModifiedDate = request.ToModifiedDate,
-                    Brand = request.Brand,
-                    Category = request.Category,
-                    Strategy = request.Strategy,
-                    ModifiedByName = request.ModifiedByName
-                };
-
                 
                 ISearchResponse<ProductSearchIndex> responseElastic;
-                
-                ElasticSearchHelper<ProductSearchIndex> elasticSearchHelper = new ElasticSearchHelper<ProductSearchIndex>(_elasticClient, request.SearchQuery,
-                    ElasticIndexConstant.PRODUCT_INDICES);
-                
-                responseElastic = await elasticSearchHelper.SearchDocuments();
 
-                // if (request.SearchQuery == null)
-                // {
-                //     responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
-                //     (
-                //         s => s.Size(2000).Index( ElasticIndexConstant.PRODUCT_INDICES).MatchAll());
-                // }
-                //
-                // else
-                // {
-                //     responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
-                //     (
-                //         s => s.Size(2000).Index( ElasticIndexConstant.PRODUCT_INDICES).Query(q =>q.QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));
-                // }
+                if (!request.SearchNameOnly)
+                {
+                    ElasticSearchHelper<ProductSearchIndex> elasticSearchHelper = new ElasticSearchHelper<ProductSearchIndex>(_elasticClient, request.SearchQuery,
+                        ElasticIndexConstant.PRODUCT_INDICES);
+                
+                    responseElastic = await elasticSearchHelper.SearchDocuments();
+    
+                }
+
+                else
+                {
+                    responseElastic =  await _elasticClient.SearchAsync<ProductSearchIndex>
+                    (
+                        s => s.Size(2000).Index(ElasticIndexConstant.PRODUCT_INDICES).
+                            Query(q =>q.
+                                QueryString(d =>d.Fields(f => 
+                                    f.Field(p => p.Name)).Query('*' + request.SearchQuery + '*'))));
+                }
+                
         
-            pagingOption.ResultList = _asyncRepository.ProductIndexFiltering(responseElastic.Documents.ToList(), productSearchFilter,
+            pagingOption.ResultList = _asyncRepository.ProductIndexFiltering(responseElastic.Documents.ToList(), request,
                 new CancellationToken());
             
             pagingOption.ExecuteResourcePaging();

@@ -31,6 +31,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public virtual Supplier Supplier { get; set; }
         public string WarehouseLocation { get; set; }
         public PurchaseOrderStatusType PurchaseOrderStatus { get; set; }
+        [NotMapped]
+        public string PurchaseOrderStatusString { get; set; }
         
         [Column(TypeName = "decimal(16,3)")]
         public decimal TotalDiscountAmount { get; set; }

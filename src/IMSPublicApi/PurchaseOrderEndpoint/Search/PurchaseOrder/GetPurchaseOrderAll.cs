@@ -56,26 +56,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
                 new PagingOption<PurchaseOrderSearchIndex>(request.CurrentPage, request.SizePerPage);
             response.IsDisplayingAll = true;
 
-            var poSearchFilter = new POSearchFilter
-            {
-                FromStatus = request.FromStatus,
-                ToStatus = request.ToStatus,
-                SupplierId = request.SupplierId,
-                ConfirmedByName = request.ConfirmedByName,
-                CreatedByName = request.CreatedByName,
-                FromConfirmedDate = request.FromConfirmedDate,
-                FromCreatedDate = request.FromCreatedDate,
-                FromDeliveryDate = request.FromDeliveryDate,
-                FromModifiedDate = request.FromModifiedDate,
-                ToConfirmedDate = request.ToConfirmedDate,
-                ToCreatedDate = request.ToCreatedDate,
-                ToDeliveryDate = request.ToDeliveryDate,
-                ToModifiedDate = request.ToModifiedDate,
-                FromTotalOrderPrice = request.FromTotalOrderPrice,
-                ToTotalOrderPrice = request.ToTotalOrderPrice,
-                HideMerged = request.HideMerged,
-                IgnoreOrderIds = request.IgnoreOrderID
-            };
             
             ISearchResponse<PurchaseOrderSearchIndex> responseElastic;
 
@@ -97,7 +77,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             //     s => s.Size(2000)
             //         .Index(ElasticIndexConstant.PURCHASE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
             
-            pagingOption.ResultList = _asyncRepository.PurchaseOrderIndexFiltering(responseElastic.Documents.ToList(), poSearchFilter,
+            pagingOption.ResultList = _asyncRepository.PurchaseOrderIndexFiltering(responseElastic.Documents.ToList(), request,
                 new CancellationToken());
             
             pagingOption.ExecuteResourcePaging();

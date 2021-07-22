@@ -197,7 +197,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         }
     }
         
-            public class PurchaseOrderSubmit : BaseAsyncEndpoint.WithRequest<POSubmitRequest>.WithoutResponse
+    public class PurchaseOrderSubmit : BaseAsyncEndpoint.WithRequest<POSubmitRequest>.WithoutResponse
     {
         private readonly IEmailSender _emailSender;
         private readonly IAuthorizationService _authorizationService;
@@ -227,7 +227,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             OperationId = "catalog-items.create",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync([FromForm] POSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult> HandleAsync(POSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             var subject = "Purchase Order " + DateTime.UtcNow;
 
@@ -241,11 +241,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,
                     (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
                 
-                await _asyncRepository.UpdateAsync(po);
-                var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
-                var message = new EmailMessage(request.To, request.Subject, request.Content, files);
-                await _emailSender.SendEmailAsync(message);
-
                 await _asyncRepository.UpdateAsync(po);
                 await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
                 
@@ -272,7 +267,14 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 
                 await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
                     currentUser.Id, messageNotification);
-                return Ok();
+
+
+                var response = new POSubmitResponse();
+                response.PurchaseOrder = po;
+                response.PurchaseOrder.PurchaseOrderStatusString = response.PurchaseOrder.PurchaseOrderStatus.ToString();
+                foreach (var orderItem in response.PurchaseOrder.PurchaseOrderProduct)
+                    orderItem.IsShowingProductVariant = true;
+                return Ok(response);
             }
             catch
             {

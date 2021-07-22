@@ -45,30 +45,14 @@
         public async Task<PagingOption<ProductSearchIndex>> GetProductForELIndexAsync(PagingOption<ProductSearchIndex> pagingOption, CancellationToken cancellationToken = default)
         {
 
-            var stopWatch = Stopwatch.StartNew();
-            TimeSpan totalTime = default;
-            
-            stopWatch.Start();
             var products = await _identityAndProductDbContext.Product.Where(product =>
                 product.Transaction.TransactionRecord.Count > 0 && product.Transaction.TransactionStatus != false &&
                 product.Transaction.Type != TransactionType.Deleted).ToListAsync();
             
-            _logger.LogInformation("StopWatch-GetProductForELIndexAsync-GetAll: " + stopWatch.Elapsed);
-
-            totalTime += stopWatch.Elapsed;
-            stopWatch.Stop();
-
-            stopWatch.Start();
 
             products = products.OrderByDescending(e =>
                 e.Transaction.TransactionRecord[e.Transaction.TransactionRecord.Count - 1].Date).ToList();
             
-            totalTime += stopWatch.Elapsed;
-            stopWatch.Stop();
-            
-            _logger.LogInformation("StopWatch-GetProductForELIndexAsync-OrderByDescending: " + stopWatch.Elapsed);
-
-            stopWatch.Start();
             foreach (var product in products)
             {
               
@@ -86,12 +70,6 @@
                 }
             }            
             
-            totalTime += stopWatch.Elapsed;
-            stopWatch.Stop();
-            _logger.LogInformation("StopWatch-GetProductForELIndexAsync-Indexing: " + stopWatch.Elapsed);
-            _logger.LogInformation("StopWatch-GetProductForELIndexAsync-TOTAL: " + totalTime);
-            
-
             pagingOption.ExecuteResourcePaging();
             return pagingOption;
         }
@@ -126,8 +104,6 @@
         {
             List<PurchaseOrder> pos;
 
-            var stopWatch = Stopwatch.StartNew();
-            TimeSpan totalTime = default;
             if(hideMergeStatus)
                 pos = await _identityAndProductDbContext.PurchaseOrder.
                     Where(variant => variant.Transaction.TransactionRecord.Count > 0 && variant.Transaction.TransactionStatus!=false 
@@ -140,21 +116,25 @@
                         && variant.Transaction.Type!=TransactionType.Deleted
                     ).ToListAsync();
 
-            totalTime += stopWatch.Elapsed;
-            stopWatch.Stop();
-            _logger.LogInformation("STOPWATCH-GetPOForELIndexAsync-GetAllWhereTransaction: " + stopWatch.Elapsed);
-                
-            stopWatch = Stopwatch.StartNew();
 
             pos = pos.OrderByDescending(e =>
-                e.Transaction.TransactionRecord[e.Transaction.TransactionRecord.Count - 1].Date).ToList();
+                e.Transaction.TransactionRecord.OrderByDescending(r => r.Date).First().Date).ToList();
             
-            totalTime += stopWatch.Elapsed;
-            stopWatch.Stop();
-            _logger.LogInformation("STOPWATCH-GetPOForELIndexAsync-ORderByDescending: " + stopWatch.Elapsed);
 
-            stopWatch = Stopwatch.StartNew();
-
+            // var listTransctionRecord = _identityAndProductDbContext.TransactionRecord
+            //     .Where(t => t.UserTransactionActionType == UserTransactionActionType.Submit).ToList();
+            
+            //
+            // foreach (var record in listTransctionRecord)
+            //     Console.WriteLine(record.Id);
+            //
+            // var matchList = from po in pos
+            //     from record in listTransctionRecord
+            //     where
+            //         po.Transaction.TransactionRecord.Contains(record)
+            //     select po;
+          
+            
             foreach (var po in pos)
             {
                 PurchaseOrderSearchIndex index; 
@@ -168,50 +148,12 @@
                     throw;
                 }
             }
-            totalTime += stopWatch.Elapsed;
-            stopWatch.Stop();
-            _logger.LogInformation("STOPWATCH-GetPOForELIndexAsync-Indexing: " + stopWatch.Elapsed);
-
-            stopWatch = Stopwatch.StartNew();
             pagingOption.ResultList = PurchaseOrderIndexFiltering(pagingOption.ResultList.ToList(), poSearchFilter);
             
-            totalTime += stopWatch.Elapsed;
-            stopWatch.Stop();
-            _logger.LogInformation("STOPWATCH-GetPOForELIndexAsync-Filtering: " + stopWatch.Elapsed);
-            _logger.LogInformation("STOPWATCH-GetPOForELIndexAsync-TOTAL: " + totalTime);
-
             pagingOption.ExecuteResourcePaging();
             return pagingOption;
         }
 
-
-        // public async Task<List<PurchaseOrder>> PurchaseOrderFiltering(POSearchFilter poSearchFilter, CancellationToken cancellationToken)
-        // {
-        //     var pos = await _identityAndProductDbContext.Set<PurchaseOrder>().Where(po =>
-        //             (poSearchFilter.FromStatus == null ||
-        //              
-        //              po.PurchaseOrderStatus == (PurchaseOrderStatusType) poSearchFilter.Status) &&
-        //             
-        //             
-        //             (poSearchFilter.FromDeliveryDate == null ||
-        //              (po.DeliveryDate >= DateTime.Parse(poSearchFilter.FromDeliveryDate) &&
-        //               po.DeliveryDate <= DateTime.Parse(poSearchFilter.ToDeliveryDate))) &&
-        //             (poSearchFilter.FromCreatedDate == null ||
-        //              (po.Transaction.CreatedDate >= DateTime.Parse(poSearchFilter.FromCreatedDate) &&
-        //               po.Transaction.CreatedDate <= DateTime.Parse(poSearchFilter.ToCreatedDate))) &&
-        //             (poSearchFilter.FromTotalOrderPrice == null ||
-        //              (po.TotalOrderAmount >= Decimal.Parse(poSearchFilter.FromTotalOrderPrice) &&
-        //               po.TotalOrderAmount <= Decimal.Parse(poSearchFilter.ToTotalOrderPrice))) &&
-        //             (poSearchFilter.SupplierId == null || po.SupplierId == poSearchFilter.SupplierId) &&
-        //             (poSearchFilter.CreatedByName == null || po.Transaction.CreatedBy.Fullname == poSearchFilter.CreatedByName)
-        //             &&
-        //             (poSearchFilter.FromModifiedDate == null ||
-        //              (po.Transaction.ModifiedDate >= DateTime.Parse(poSearchFilter.FromModifiedDate) &&
-        //               po.Transaction.ModifiedDate <= DateTime.Parse(poSearchFilter.ToModifiedDate)))
-        //             )
-        //         .ToListAsync(cancellationToken);
-        //     return pos;
-        // }
 
 
         public async Task<PagingOption<Category>> GetCategory(PagingOption<Category> pagingOption, CancellationToken cancellationToken = default)
@@ -232,10 +174,8 @@
         public List<PurchaseOrderSearchIndex> PurchaseOrderIndexFiltering(List<PurchaseOrderSearchIndex> resource, POSearchFilter poSearchFilter, CancellationToken cancellationToken  = default)
         {
             var pos = resource.Where(po =>
-                    ( (poSearchFilter.FromStatus  == null ||
-                      (int)(ParseEnum<PurchaseOrderStatusType>(po.Status))  >= Int32.Parse(poSearchFilter.FromStatus)
-                        &&
-                      (int)(ParseEnum<PurchaseOrderStatusType>(po.Status))  <= Int32.Parse(poSearchFilter.ToStatus))
+                    ( (poSearchFilter.Statuses == null ||
+                       poSearchFilter.Statuses.Contains((ParseEnum<PurchaseOrderStatusType>(po.Status).ToString()) ))
                       
                     &&
                     (poSearchFilter.FromDeliveryDate == null ||

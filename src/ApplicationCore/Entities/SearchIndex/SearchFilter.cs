@@ -15,8 +15,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
     
     public class POSearchFilter
     {
-        public string FromStatus { get; set; }
-        public string ToStatus { get; set; }
+        public string[] Statuses { get; set; }
         public string SupplierId { get; set; }
         public string FromTotalOrderPrice { get; set; }
         public string ToTotalOrderPrice { get; set; }
@@ -73,6 +72,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string FromPrice { get; set; }
         public string ToPrice { get; set; }
         public string Brand { get; set; }
+        
+        public bool SearchNameOnly { get; set; }
     }
     
     public class PackageSearchFilter
@@ -101,6 +102,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string CreatedByName { get; set; }
         public string ModifiedByName { get; set; }
         public string Brand { get; set; }
+        public bool SearchNameOnly { get; set; }
     }
     
     public class LocationSearchFilter 

@@ -25,6 +25,7 @@ namespace Infrastructure.Identity.DbContexts
         public DbSet<Supplier> Supplier { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrder { get; set; }
         public DbSet<Transaction> Transaction { get; set; }
+        public DbSet<TransactionRecord> TransactionRecord { get; set; }
         public DbSet<Product> Product { get; set; }
         // public DbSet<ProductSerialNumber> ProductSerialNumber { get; set; }
         public DbSet<ProductVariant> ProductVariant { get; set; }
