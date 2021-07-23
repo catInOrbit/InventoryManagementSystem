@@ -13,6 +13,7 @@ using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Nest;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
@@ -145,7 +146,9 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
 
         private readonly INotificationService _notificationService;
 
-        public ProductVariantUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductVariantSearchIndex> productVariantIndexAsyncRepositoryRepos, INotificationService notificationService, IRedisRepository redisRepository, IAsyncRepository<Package> pacakgeAsyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos)
+        private IElasticClient _elasticClient;
+
+        public ProductVariantUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductVariantSearchIndex> productVariantIndexAsyncRepositoryRepos, INotificationService notificationService, IRedisRepository redisRepository, IAsyncRepository<Package> pacakgeAsyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos, IElasticClient elasticClient)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
@@ -156,6 +159,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             _pacakgeAsyncRepository = pacakgeAsyncRepository;
             _productVariantAsyncRepository = productVariantAsyncRepository;
             _productIndexAsyncRepositoryRepos = productIndexAsyncRepositoryRepos;
+            _elasticClient = elasticClient;
         }
         
         [HttpPut("api/productvariant/update")]
@@ -237,6 +241,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                         (await _userAuthentication.GetCurrentSessionUser()).Id);
                         
                     var packages = await _asyncRepository.GetPackagesFromProductVariantId(productVariant.Id);
+                    
+                    // ElasticSearchHelper<ProductVariantSearchIndex> elasticSearchHelper = new ElasticSearchHelper<ProductVariantSearchIndex>()
 
                     foreach (var package in packages)
                     {
