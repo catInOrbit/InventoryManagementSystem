@@ -67,7 +67,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
             
             ElasticSearchHelper<GoodsIssueSearchIndex> elasticSearchHelper = new ElasticSearchHelper<GoodsIssueSearchIndex>(_elasticClient, request.SearchQuery,
                 ElasticIndexConstant.GOODS_ISSUE_ORDERS);
-            responseElastic = await elasticSearchHelper.SearchDocuments();
+            responseElastic = await elasticSearchHelper.GetDocuments();
 
          
             pagingOption.ResultList = _asyncRepository.GoodsIssueIndexFiltering(responseElastic.Documents.ToList(), searchFilter,

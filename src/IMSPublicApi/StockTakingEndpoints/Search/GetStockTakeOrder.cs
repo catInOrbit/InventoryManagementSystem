@@ -67,7 +67,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
       
             ElasticSearchHelper<StockTakeSearchIndex> elasticSearchHelper = new ElasticSearchHelper<StockTakeSearchIndex>(_elasticClient, request.SearchQuery,
                 ElasticIndexConstant.STOCK_TAKE_ORDERS);
-            responseElastic = await elasticSearchHelper.SearchDocuments();
+            responseElastic = await elasticSearchHelper.GetDocuments();
             
             pagingOption.ResultList = _asyncRepository.StockTakeIndexFiltering(responseElastic.Documents.ToList(), stSearchFilter,
                 new CancellationToken());

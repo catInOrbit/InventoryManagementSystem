@@ -51,7 +51,7 @@ namespace InventoryManagementSystem.PublicApi
                     await elasticSupRepos.ElasticSaveBulkAsync((await elasticSupRepos.GetSuppliers(new PagingOption<Supplier>(0,0))).ResultList.ToArray(),    ElasticIndexConstant.SUPPLIERS);
                     await elasticPackageRepos.ElasticSaveBulkAsync((await elasticPackageRepos.GetPackages(new PagingOption<Package>(0,0))).ResultList.ToArray(), ElasticIndexConstant.PACKAGES);
                     await elasticLocationRepos.ElasticSaveBulkAsync((await elasticLocationRepos.ListAllAsync(new PagingOption<Location>(0,0))).ResultList.ToArray(), ElasticIndexConstant.LOCATIONS);
-
+                    
                     await elasticPoRepos.GetPOForELIndexAsync(false,
                         new PagingOption<PurchaseOrderSearchIndex>(0, 0), new POSearchFilter());
                     

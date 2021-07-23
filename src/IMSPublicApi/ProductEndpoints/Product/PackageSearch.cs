@@ -98,7 +98,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                 ElasticSearchHelper<Package> elasticSearchHelper = new ElasticSearchHelper<Package>(_elasticClient, request.SearchQuery,
                     ElasticIndexConstant.PACKAGES);
                 
-                resource = (await elasticSearchHelper.SearchDocuments()).Documents.ToList();
+                resource = (await elasticSearchHelper.GetDocuments()).Documents.ToList();
 
                 pagingOptionPackage.ResultList = _packageAsyncRepository.PackageIndexFiltering(resource, request,
                     new CancellationToken());

@@ -95,7 +95,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                     ElasticSearchHelper<ProductVariantSearchIndex> elasticSearchHelper = new ElasticSearchHelper<ProductVariantSearchIndex>(_elasticClient, request.SearchQuery,
                         ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
                 
-                    responseElastic = await elasticSearchHelper.SearchDocuments();
+                    responseElastic = await elasticSearchHelper.GetDocuments();
                 }
                 else
                 {
@@ -178,7 +178,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                     ElasticSearchHelper<ProductSearchIndex> elasticSearchHelper = new ElasticSearchHelper<ProductSearchIndex>(_elasticClient, request.SearchQuery,
                         ElasticIndexConstant.PRODUCT_INDICES);
                 
-                    responseElastic = await elasticSearchHelper.SearchDocuments();
+                    responseElastic = await elasticSearchHelper.GetDocuments();
     
                 }
 

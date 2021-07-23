@@ -177,7 +177,9 @@
             var pos = resource.Where(po =>
                     ( (poSearchFilter.Statuses == null ||
                        poSearchFilter.Statuses.Contains((ParseEnum<PurchaseOrderStatusType>(po.Status).ToString()) ))
-                      
+                      &&
+                      (poSearchFilter.HideMerged == false ||
+                       po.Status != PurchaseOrderStatusType.RequisitionMerged.ToString())      
                     &&
                     (poSearchFilter.FromDeliveryDate == null ||
                      (po.DeliveryDate >= DateTime.Parse(poSearchFilter.FromDeliveryDate) &&

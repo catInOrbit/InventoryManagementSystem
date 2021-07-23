@@ -108,7 +108,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
       
               ElasticSearchHelper<GoodsReceiptOrderSearchIndex> elasticSearchHelper = new ElasticSearchHelper<GoodsReceiptOrderSearchIndex>(_elasticClient, request.SearchQuery,
                   ElasticIndexConstant.RECEIVING_ORDERS);
-              responseElastic = await elasticSearchHelper.SearchDocuments();
+              responseElastic = await elasticSearchHelper.GetDocuments();
 
 
               pagingOption.ResultList = _asyncRepository.ReceivingOrderIndexFiltering(

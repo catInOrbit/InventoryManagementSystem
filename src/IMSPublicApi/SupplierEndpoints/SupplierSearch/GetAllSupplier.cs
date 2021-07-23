@@ -92,7 +92,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.SupplierSearch
       
             ElasticSearchHelper<Supplier> elasticSearchHelper = new ElasticSearchHelper<Supplier>(_elasticClient, request.SearchQuery,
                 ElasticIndexConstant.SUPPLIERS);
-            responseElastic = await elasticSearchHelper.SearchDocuments();                        
+            responseElastic = await elasticSearchHelper.GetDocuments();                        
 
             foreach (var purchaseOrderSearchIndex in responseElastic.Documents)
             {

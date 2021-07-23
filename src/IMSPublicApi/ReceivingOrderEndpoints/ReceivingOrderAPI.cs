@@ -99,36 +99,39 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             ro.ReceivedOrderItems.Clear();
             foreach (var item in request.UpdateItems)
             {
-                var roi = new GoodsReceiptOrderItem
+                if (item.QuantityReceived > 0)
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    QuantityReceived =  item.QuantityReceived,
-                    ProductVariantId = item.ProductVariantId,
-                    GoodsReceiptOrderId = ro.Id,
-                    ProductVariantName = (await _productRepository.GetByIdAsync(item.ProductVariantId)).Name
-                };
-                ro.ReceivedOrderItems.Add(roi);
+                    var roi = new GoodsReceiptOrderItem
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        QuantityReceived =  item.QuantityReceived,
+                        ProductVariantId = item.ProductVariantId,
+                        GoodsReceiptOrderId = ro.Id,
+                        ProductVariantName = (await _productRepository.GetByIdAsync(item.ProductVariantId)).Name
+                    };
+                    ro.ReceivedOrderItems.Add(roi);
                 
-                var productVariant = await _productVariantRepository.GetByIdAsync(roi.ProductVariantId);
-                bool initiateUpdate = false;
-                if (item.Sku != null)
-                {
-                    productVariant.Sku = item.Sku;
-                    initiateUpdate = true;
-                }
+                    var productVariant = await _productVariantRepository.GetByIdAsync(roi.ProductVariantId);
+                    bool initiateUpdate = false;
+                    if (item.Sku != null)
+                    {
+                        productVariant.Sku = item.Sku;
+                        initiateUpdate = true;
+                    }
 
-                if (item.Barcode != null)
-                {
-                    productVariant.Barcode = item.Barcode;
-                    initiateUpdate = true;
-                }
+                    if (item.Barcode != null)
+                    {
+                        productVariant.Barcode = item.Barcode;
+                        initiateUpdate = true;
+                    }
 
-                if (initiateUpdate)
-                {
-                    await _productVariantRepository.UpdateAsync(productVariant);
-                    await _productVariantElasticRepository.ElasticSaveSingleAsync(false,
-                        IndexingHelper.ProductVariantSearchIndex(productVariant),
-                        ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+                    if (initiateUpdate)
+                    {
+                        await _productVariantRepository.UpdateAsync(productVariant);
+                        await _productVariantElasticRepository.ElasticSaveSingleAsync(false,
+                            IndexingHelper.ProductVariantSearchIndex(productVariant),
+                            ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+                    }
                 }
             }
 

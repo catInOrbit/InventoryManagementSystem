@@ -1,10 +1,11 @@
 using System;
+using CsvHelper.Configuration.Attributes;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Products
 {
-    public class Category : BaseEntity
+    public class Category : BaseSearchIndex
     {
         public override string Id { get; set; }
 
@@ -17,6 +18,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         
         public string TransactionId { get; set; }
         [JsonIgnore]
+        [Ignore]
         public virtual Transaction Transaction{ get; set; }
     }
 }

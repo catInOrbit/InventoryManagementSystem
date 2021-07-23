@@ -66,6 +66,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             await _asyncRepository.UpdateAsync(po);
             await _indexAsyncRepository.ElasticSaveSingleAsync(false,IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
             
+            foreach (var orderItem in po.PurchaseOrderProduct)
+                orderItem.IsShowingProductVariant = true;
                   
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
 
@@ -147,6 +149,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
 
             var response = new PQEditResponse();
+            
+            foreach (var orderItem in po.PurchaseOrderProduct)
+                orderItem.IsShowingProductVariant = true;
             response.PurchaseOrder = po;
             
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
@@ -218,6 +223,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             // await _emailSender.SendEmailAsync(message);
             await _asyncRepository.UpdateAsync(po);
             await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
+
+            foreach (var orderItem in po.PurchaseOrderProduct)
+                orderItem.IsShowingProductVariant = true;
             
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
 

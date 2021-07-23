@@ -19,7 +19,7 @@ namespace Infrastructure.Services
             Index = index;
         }
 
-        public async Task<ISearchResponse<T>> SearchDocuments()
+        public async Task<ISearchResponse<T>> GetDocuments()
         {
             ISearchResponse<T> responseElastic;
 
@@ -42,6 +42,17 @@ namespace Infrastructure.Services
 
                 return responseElastic;
             }
+        }
+        
+        public async Task<ISearchResponse<T>> GetDocumentsOldestFirst()
+        {
+            ISearchResponse<T> responseElastic;
+
+            responseElastic = await _elasticClient.SearchAsync<T>
+            (
+                s => s.Sort(ss => ss.Ascending(p => p.LatestUpdateDate)).Size(2000).Index(Index).MatchAll());
+                
+            return responseElastic;
         }
     }
 }

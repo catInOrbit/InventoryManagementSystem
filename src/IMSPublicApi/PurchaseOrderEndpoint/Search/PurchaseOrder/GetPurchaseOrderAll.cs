@@ -60,9 +60,12 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
 
             ElasticSearchHelper<PurchaseOrderSearchIndex> elasticSearchHelper = new ElasticSearchHelper<PurchaseOrderSearchIndex>(_elasticClient, request.SearchQuery,
                 ElasticIndexConstant.PURCHASE_ORDERS);
-            responseElastic = await elasticSearchHelper.SearchDocuments();
+            responseElastic = await elasticSearchHelper.GetDocuments();
             
-            
+            if(!request.OldestFirst)
+                responseElastic = await elasticSearchHelper.GetDocuments();
+            else
+                responseElastic = await elasticSearchHelper.GetDocumentsOldestFirst();
             
             pagingOption.ResultList = _asyncRepository.PurchaseOrderIndexFiltering(responseElastic.Documents.ToList(), request,
                 new CancellationToken());
