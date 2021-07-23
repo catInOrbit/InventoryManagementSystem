@@ -40,7 +40,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             response.PurchaseOrder.PurchaseOrderStatusString = response.PurchaseOrder.PurchaseOrderStatus.ToString();
             foreach (var orderItem in response.PurchaseOrder.PurchaseOrderProduct)
                 orderItem.IsShowingProductVariant = true;
-        
+
+            response.MergedOrderIdLists =
+                _purchaseAsyncRepository.GetMergedPurchaseOrders(response.PurchaseOrder.MergedWithPurchaseOrderId);
             return Ok(response);
         }
     }

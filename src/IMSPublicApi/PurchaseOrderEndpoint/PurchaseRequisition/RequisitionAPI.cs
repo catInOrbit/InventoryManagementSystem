@@ -172,10 +172,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
                 return Unauthorized();
                 
             var po = await _asyncRepository.GetByIdAsync(request.RequisitionId);
-            
-
-          
-
             foreach (var requestOrderItem in request.OrderItems)
             {
                 requestOrderItem.OrderId = po.Id;

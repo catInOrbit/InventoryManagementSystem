@@ -32,7 +32,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string ToModifiedDate { get; set; }
         public string CreatedByName { get; set; }
         public bool HideMerged { get; set; }
-        
+        public bool OldestFirst { get; set; }
         public string[] IgnoreOrderIds { get; set; }
     }
     

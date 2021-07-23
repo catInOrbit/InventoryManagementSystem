@@ -55,7 +55,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             PagingOption<PurchaseOrderSearchIndex> pagingOption =
                 new PagingOption<PurchaseOrderSearchIndex>(request.CurrentPage, request.SizePerPage);
             response.IsDisplayingAll = true;
-
             
             ISearchResponse<PurchaseOrderSearchIndex> responseElastic;
 
@@ -63,19 +62,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
                 ElasticIndexConstant.PURCHASE_ORDERS);
             responseElastic = await elasticSearchHelper.SearchDocuments();
             
-            // if (request.SearchQuery == null)
-            // {
-            //     var posi = await 
-            //         _asyncRepository.GetPOForELIndexAsync(request.HideMerged, pagingOption, poSearchFilter, cancellationToken);
-            //
-            //     response.Paging = posi;
-            //     return Ok(response);
-            // }
-            //
-            // var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>
-            // (
-            //     s => s.Size(2000)
-            //         .Index(ElasticIndexConstant.PURCHASE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.SearchQuery + '*'))));
+            
             
             pagingOption.ResultList = _asyncRepository.PurchaseOrderIndexFiltering(responseElastic.Documents.ToList(), request,
                 new CancellationToken());

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
+using InventoryManagementSystem.ApplicationCore.Extensions;
 using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
@@ -14,7 +15,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
     
     public class PQCreateResponse : BaseResponse
     {
-        public ApplicationCore.Entities.Orders.PurchaseOrder PurchaseOrderPQ { get; set; }
+        public ApplicationCore.Entities.Orders.PurchaseOrder PurchaseOrder { get; set; }
     }
     
     public class PQEditRequest : BaseRequest 
@@ -37,7 +38,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
         public PQEditResponse()
         { }
         
-        public ApplicationCore.Entities.Orders.PurchaseOrder PriceQuoteResponse { get; set; }
+        public ApplicationCore.Entities.Orders.PurchaseOrder PurchaseOrder { get; set; }
         public bool Result { get; set; }
     }
     
@@ -48,7 +49,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
     
     public class PQSubmitResponse : BaseResponse
     {
-        public ApplicationCore.Entities.Orders.PurchaseOrder PriceQuote { get; set; }
+        public ApplicationCore.Entities.Orders.PurchaseOrder PurchaseOrder { get; set; }
     }
     
     public class POConfirmRequest : BaseRequest
@@ -209,6 +210,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
        //     new List<PurchaseOrderSearchIndex>();
        public PagingOption<PurchaseOrderSearchIndex> Paging { get; set; }
        public ApplicationCore.Entities.Orders.PurchaseOrder PurchaseOrder { get; set; }
+       public List<MergedOrderIdList> MergedOrderIdLists { get; set; }
    }
    
    public class GetPurchaseOrderIdRequest

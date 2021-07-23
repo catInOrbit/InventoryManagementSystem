@@ -13,6 +13,7 @@
     using InventoryManagementSystem.ApplicationCore.Entities.Products;
     using InventoryManagementSystem.ApplicationCore.Entities.Reports;
     using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
+    using InventoryManagementSystem.ApplicationCore.Extensions;
     using InventoryManagementSystem.ApplicationCore.Interfaces;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
@@ -447,6 +448,37 @@
             pagingOption.ResultList = ReceivingOrderIndexFiltering(pagingOption.ResultList.ToList(), roSearchFilter);
             pagingOption.ExecuteResourcePaging();
             return pagingOption;
+        }
+        public List<MergedOrderIdList> GetMergedPurchaseOrders(string parentOrderId, CancellationToken cancellationToken = default)
+        {
+            List<MergedOrderIdList> returnList = new List<MergedOrderIdList>();
+            var result = _identityAndProductDbContext.PurchaseOrder
+                .Where(o => o.MergedWithPurchaseOrderId == parentOrderId).ToList();
+            
+            foreach (var purchaseOrder in result)
+            {
+                returnList.Add( new MergedOrderIdList()
+                {
+                    ParentOrderId = parentOrderId,
+                    PurchaseOrderId = purchaseOrder.Id,
+                    CreatedDate = (purchaseOrder.Transaction.TransactionRecord.Count > 0 &&
+                                   purchaseOrder.Transaction.TransactionRecord[0] != null)
+                        ? purchaseOrder.Transaction.TransactionRecord
+                            .OrderByDescending(e => e.UserTransactionActionType == UserTransactionActionType.Create).First()
+                            .Date
+                        : DateTime.MinValue,
+                    CreatedBy = (purchaseOrder.Transaction.TransactionRecord.Count > 0 &&
+                                 purchaseOrder.Transaction.TransactionRecord.FirstOrDefault(t =>
+                                     t.UserTransactionActionType == UserTransactionActionType.Create) != null)
+                        ? purchaseOrder.Transaction.TransactionRecord
+                            .OrderByDescending(e => e.UserTransactionActionType == UserTransactionActionType.Create).First()
+                            .ApplicationUser
+                            .Fullname
+                        : ""
+                });
+            }
+
+            return returnList;
         }
 
         public async Task<PagingOption<GoodsIssueSearchIndex>> GetGIForELIndexAsync(PagingOption<GoodsIssueSearchIndex> pagingOption,GISearchFilter searchFilter, CancellationToken cancellationToken = default)

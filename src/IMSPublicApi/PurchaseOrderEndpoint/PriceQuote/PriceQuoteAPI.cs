@@ -60,7 +60,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             po.PurchaseOrderStatus = PurchaseOrderStatusType.PriceQuote;
             po.HasBeenModified = true;
             
-            response.PurchaseOrderPQ = po;
+            response.PurchaseOrder = po;
             Console.WriteLine(po.ToString());
             
             await _asyncRepository.UpdateAsync(po);
@@ -147,7 +147,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
 
             var response = new PQEditResponse();
-            response.PriceQuoteResponse = po;
+            response.PurchaseOrder = po;
             
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
 
@@ -227,7 +227,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
                 currentUser.Id, messageNotification);
 
-            response.PriceQuote = po;
+            response.PurchaseOrder = po;
             return Ok(response);
         }
     }
