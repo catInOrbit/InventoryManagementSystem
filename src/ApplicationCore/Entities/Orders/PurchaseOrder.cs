@@ -47,8 +47,9 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         
           
         [OnSerializing]
-        public void FormatProductVariantResponse(StreamingContext context)
+        public void FormatResponse(StreamingContext context)
         {
+            PurchaseOrderStatusString = PurchaseOrderStatus.ToString();
             foreach (var orderItem in PurchaseOrderProduct)
             {
                 orderItem.ProductVariant.IsShowingTransaction = false;
@@ -57,11 +58,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
             }
         }
         
-        [OnSerialized]
-        public void FormatPurchaseOrderStatusString(StreamingContext context)
-        {
-            PurchaseOrderStatusString = PurchaseOrderStatus.ToString();
-        }
 
         public override string ToString()
         {

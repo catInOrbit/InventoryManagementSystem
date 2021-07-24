@@ -16,6 +16,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
     public class PQCreateResponse : BaseResponse
     {
         public ApplicationCore.Entities.Orders.PurchaseOrder PurchaseOrder { get; set; }
+        public List<MergedOrderIdList> MergedOrderIdLists { get; set; }
     }
     
     public class PQEditRequest : BaseRequest 
@@ -39,6 +40,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
         { }
         
         public ApplicationCore.Entities.Orders.PurchaseOrder PurchaseOrder { get; set; }
+        public List<MergedOrderIdList> MergedOrderIdLists { get; set; }
         public bool Result { get; set; }
     }
     

@@ -77,6 +77,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 currentUser.Id, messageNotification);
             await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
                 currentUser.Id, messageNotification);
+
+            response.MergedOrderIdLists = _asyncRepository.GetMergedPurchaseOrders(po.MergedWithPurchaseOrderId);
             return Ok(response);
         }
     }
@@ -171,7 +173,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             // messageNotification = _notificationService.CreateMessage(currentUser.Fullname, "Update", "Price Quote", po.Id);
             // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
             //     currentUser.Id, messageNotification);
-            
+            response.MergedOrderIdLists = _asyncRepository.GetMergedPurchaseOrders(po.MergedWithPurchaseOrderId);
             return Ok(response);
         }
     }
