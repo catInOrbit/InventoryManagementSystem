@@ -21,11 +21,9 @@ namespace Infrastructure.Services
             Index = index;
         }
         
-        public ElasticSearchHelper(IElasticClient elasticClient, string fieldExistCheck)
+        public ElasticSearchHelper(IElasticClient elasticClient)
         {
-            FieldToCheckExisting = fieldExistCheck;
             _elasticClient = elasticClient;
-
         }
 
         public async Task<ISearchResponse<T>> GetDocuments()
@@ -64,19 +62,31 @@ namespace Infrastructure.Services
             return responseElastic;
         }
         
-        public async Task<ISearchResponse<ProductVariantSearchIndex>> CheckFieldExistProduct(string field)
+        public async Task<ISearchResponse<ProductVariantSearchIndex>> CheckFieldExistProduct(string nameValue, string skuValue)
         {
             ISearchResponse<ProductVariantSearchIndex> responseElastic;
+            // responseElastic = await _elasticClient.SearchAsync<ProductVariantSearchIndex>
+            // (
+            //     s => s.Size(2000).Index(Index).Query(q =>
+            //         q.Bool(b =>
+            //             b.Should(s =>
+            //                     s.Term(t =>
+            //                         t.Field(f => f.Name).Value(nameValue)),
+            //                 s => s.Term(t =>
+            //                     t.Field(f => f.Sku).Value(skuValue))
+            //             ))));
+            
             responseElastic = await _elasticClient.SearchAsync<ProductVariantSearchIndex>
             (
                 s => s.Size(2000).Index(Index).Query(q =>
                     q.Bool(b =>
-                        b.Should(s =>
-                                s.Term(t =>
-                                    t.Field(f => f.Name).Value(FieldToCheckExisting)),
-                            s => s.Term(t =>
-                                t.Field(f => f.Sku).Value(FieldToCheckExisting))
-                        ))));
+                        b.Should(
+                            s =>
+                                s.MultiMatch(t =>
+                                    t.Query(nameValue).Type(TextQueryType.Phrase).Boost(10).Fields(f => 
+                                        f.Field(f => f.Name).
+                                          Field(f => f.Sku))
+                        )))));
             return responseElastic;
         }
     }

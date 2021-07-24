@@ -423,7 +423,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     TotalOrderAmount = table.Column<decimal>(type: "decimal(16,3)", nullable: false),
                     TransactionId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    HasBeenModified = table.Column<bool>(type: "bit", nullable: false)
+                    HasSentMail = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

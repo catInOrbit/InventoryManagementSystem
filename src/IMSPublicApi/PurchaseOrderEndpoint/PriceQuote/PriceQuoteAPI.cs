@@ -58,8 +58,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             po.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Purchase, po.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
             
             po.PurchaseOrderStatus = PurchaseOrderStatusType.PriceQuote;
-            po.HasBeenModified = true;
-            
+                            
             response.PurchaseOrder = po;
             Console.WriteLine(po.ToString());
             
@@ -120,7 +119,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             
             po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction, UserTransactionActionType.Modify,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
-            po.HasBeenModified = true;
 
             po.PurchaseOrderProduct.Clear();
             po.TotalOrderAmount = 0;
@@ -220,7 +218,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             var response = new PQSubmitResponse();
             var po = _asyncRepository.GetPurchaseOrderByNumber(request.OrderNumber);
             po.PurchaseOrderStatus = PurchaseOrderStatusType.PurchaseOrder;
-            po.HasBeenModified = true;
             
             po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");

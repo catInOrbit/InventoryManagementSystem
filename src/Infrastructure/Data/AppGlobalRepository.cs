@@ -802,20 +802,20 @@
         
         public async Task ElasticSaveSingleAsync(bool isSavingNew, T type, string index)
         {
-
             try
             {
                 await ElasticDeleteSingleAsync(type, index);
+                _logger.LogInformation("ElasticSaveSingleAsync: Type: " + type.GetType() + " || Reindexing");
+                var response = await _elasticClient.IndexAsync(type, i => i.Index(index));
+                if (!response.IsValid)
+                    throw new Exception(response.DebugInformation);
             }
             catch
             {
                 
             }
             // Console.WriteLine("ElasticSaveSingleAsync: Type: " + type.GetType() + " || Reindexing");
-            _logger.LogInformation("ElasticSaveSingleAsync: Type: " + type.GetType() + " || Reindexing");
-            var response = await _elasticClient.IndexAsync(type, i => i.Index(index));
-            if (!response.IsValid)
-                throw new Exception(response.DebugInformation);
+         
 
             // if (!isSavingNew)
             // {

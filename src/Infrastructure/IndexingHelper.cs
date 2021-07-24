@@ -26,7 +26,7 @@ namespace Infrastructure
                 SupplierEmail = (po.Supplier != null) ? po.Supplier.Email : "",
                 SupplierId = (po.Supplier != null) ? po.Supplier.Id : "",
                 SupplierPhone = (po.Supplier != null) ? po.Supplier.PhoneNumber : "",
-                HasBeenModified = po.HasBeenModified
+                HasBeenModified = po.HasSentMail
             };
 
             if (index.ModifiedDate != DateTime.MinValue)

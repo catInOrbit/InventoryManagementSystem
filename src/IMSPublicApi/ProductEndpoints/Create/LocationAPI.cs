@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
@@ -46,8 +47,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Location
                 LocationName = request.LocationName
             };
 
-            if (request.LocationBarcode != null)
-                location.LocationBarcode = request.LocationBarcode;
+            location.LocationBarcode = "LO" + Guid.NewGuid().ToString().Substring(0, 10);
 
             var userId = (await _userAuthentication.GetCurrentSessionUser()).Id;
             location.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Location, location.Id,
@@ -103,8 +103,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Location
                 return NotFound("Location not found");
 
             location.LocationName = request.LocationName;
-            location.LocationBarcode = request.LocationBarcode;
-            
             var userId = (await _userAuthentication.GetCurrentSessionUser()).Id;
             location.Transaction = TransactionUpdateHelper.UpdateTransaction(location.Transaction, UserTransactionActionType.Modify, userId, location.Id, "");
             

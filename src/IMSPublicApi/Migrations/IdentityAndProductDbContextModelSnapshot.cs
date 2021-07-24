@@ -299,7 +299,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<DateTime>("DeliveryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("HasBeenModified")
+                    b.Property<bool>("HasSentMail")
                         .HasColumnType("bit");
 
                     b.Property<string>("MailDescription")

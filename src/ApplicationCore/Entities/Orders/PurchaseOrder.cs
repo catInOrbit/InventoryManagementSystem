@@ -43,8 +43,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public DateTime Deadline { get; set; }
         
         public virtual Transaction Transaction { get; set; }
-        public bool HasBeenModified { get; set; }
-        
+        public bool HasSentMail { get; set; }
           
         [OnSerializing]
         public void FormatResponse(StreamingContext context)

@@ -172,28 +172,36 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                 (await _userAuthentication.GetCurrentSessionUser()).Id, product.Id, "");
 
             product.TransactionId = product.Transaction.Id;
+            bool productWasVariantType = product.IsVariantType;
             product.IsVariantType = request.IsVariantType;
-            var listNewVariant = new List<ProductVairantUpdateRequestInfo>(request.ProductVariantsUpdate);
             
+            var listNewVariant = new List<ProductVairantUpdateRequestInfo>(request.ProductVariantsUpdate);
+            ElasticSearchHelper<ProductVariantSearchIndex> elasticSearchHelper =
+                new ElasticSearchHelper<ProductVariantSearchIndex>(_elasticClient);
 
             if (product.IsVariantType)
             {
-                foreach (var productProductVariant in product.ProductVariants)
+                if (!productWasVariantType)
                 {
-                    productProductVariant.Transaction.TransactionStatus = false;
-                    await _productVariantIndexAsyncRepositoryRepos.ElasticDeleteSingleAsync(IndexingHelper.ProductVariantSearchIndex(productProductVariant),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+                    //Purge First index
+                    foreach (var productProductVariant in product.ProductVariants)
+                    {
+                        productProductVariant.Transaction.TransactionStatus = false;
+                        await _productVariantIndexAsyncRepositoryRepos.ElasticDeleteSingleAsync(IndexingHelper.ProductVariantSearchIndex(productProductVariant),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
 
-                    productProductVariant.Transaction.Type = TransactionType.Deleted;
-                    await _productVariantAsyncRepository.UpdateAsync(productProductVariant);
+                        productProductVariant.Transaction.Type = TransactionType.Deleted;
+                        await _productVariantAsyncRepository.UpdateAsync(productProductVariant);
+                    }
+                    product.ProductVariants.Clear();
                 }
-                product.ProductVariants.Clear();
-                
+                                
                 foreach (var productVairantRequestInfo in request.ProductVariantsUpdate)
                 {
                     foreach (var productVariantSystemList in product.ProductVariants)
                     {
                         if (productVairantRequestInfo.Id != null && productVariantSystemList.Id == productVairantRequestInfo.Id)
                         {
+                            // var responseElasticCheck = await elasticSearchHelper.CheckFieldExistProduct(productVairantRequestInfo.Name, productVairantRequestInfo.Sku);
                             productVariantSystemList.Name = productVairantRequestInfo.Name;
                             productVariantSystemList.Sku = productVairantRequestInfo.Sku;
                             productVariantSystemList.IsVariantType = product.IsVariantType;
@@ -203,8 +211,10 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                             if (productVairantRequestInfo.ProductVariantImageLink != null)
                                 productVariantSystemList.VariantImageLink =
                                     productVairantRequestInfo.ProductVariantImageLink;
+
                             
                             await _productVariantIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.ProductVariantSearchIndex(productVariantSystemList),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+                            
 
                             listNewVariant.Remove(productVairantRequestInfo);
                         }
@@ -253,6 +263,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
 
             else
             {
+                //Purge All index
                 foreach (var productProductVariant in product.ProductVariants)
                 {
                     productProductVariant.Transaction.TransactionStatus = false;

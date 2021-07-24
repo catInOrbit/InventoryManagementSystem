@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210720163422_Creation")]
+    [Migration("20210724151153_Creation")]
     partial class Creation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -301,7 +301,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<DateTime>("DeliveryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("HasBeenModified")
+                    b.Property<bool>("HasSentMail")
                         .HasColumnType("bit");
 
                     b.Property<string>("MailDescription")

@@ -4,7 +4,7 @@ BEGIN
         [MigrationId] nvarchar(150) NOT NULL,
         [ProductVersion] nvarchar(32) NOT NULL,
         CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
-    )
+    );
 END;
 GO
 
@@ -237,7 +237,7 @@ CREATE TABLE [PurchaseOrder] (
     [TotalOrderAmount] decimal(16,3) NOT NULL,
     [TransactionId] nvarchar(50) NULL,
     [Deadline] datetime2 NOT NULL,
-    [HasBeenModified] bit NOT NULL,
+    [HasSentMail] bit NOT NULL,
     CONSTRAINT [PK_PurchaseOrder] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_PurchaseOrder_Supplier_SupplierId] FOREIGN KEY ([SupplierId]) REFERENCES [Supplier] ([Id]) ON DELETE NO ACTION,
     CONSTRAINT [FK_PurchaseOrder_Transaction_TransactionId] FOREIGN KEY ([TransactionId]) REFERENCES [Transaction] ([Id]) ON DELETE NO ACTION
@@ -467,7 +467,7 @@ CREATE INDEX [IX_UserRole_RoleId] ON [UserRole] ([RoleId]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20210720163422_Creation', N'5.0.5');
+VALUES (N'20210724151153_Creation', N'5.0.5');
 GO
 
 COMMIT;
