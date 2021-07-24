@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -80,10 +82,11 @@ namespace InventoryManagementSystem.PublicApi
     public class GetNotification : BaseAsyncEndpoint.WithRequest<NotificationGetRequest>.WithResponse<NotificationGetResponse>
     {
         private readonly IAsyncRepository<Notification> _notificationAsyncRepository;
-
-        public GetNotification(IAsyncRepository<Notification> notificationAsyncRepository)
+        private IRedisRepository _redisRepository;
+        public GetNotification(IAsyncRepository<Notification> notificationAsyncRepository, IRedisRepository redisRepository)
         {
             _notificationAsyncRepository = notificationAsyncRepository;
+            _redisRepository = redisRepository;
         }
 
         [HttpGet("api/notification")]
@@ -99,12 +102,26 @@ namespace InventoryManagementSystem.PublicApi
             PagingOption<Notification> pagingOptionPackage =
                 new PagingOption<Notification>(request.CurrentPage, request.SizePerPage);
 
+            List<Notification> notifications = new List<Notification>();
             var response = new NotificationGetResponse();
-            response.IsDisplayingAll = true;
-            response.Paging = await _notificationAsyncRepository.ListAllAsync(pagingOptionPackage, cancellationToken);
-            response.Paging.ResultList = response.Paging.ResultList.OrderByDescending(no => no.CreatedDate).ToList();
+            if (request.Channel == null)
+                return NotFound("Channel not found! Specify channel");
             
-            return Ok(response);
+            response.IsDisplayingAll = true;
+            try
+            {
+                notifications.AddRange(await _redisRepository.GetNotificationAllByChannel("Notifications", request.Channel));
+                notifications.AddRange(await _notificationAsyncRepository.ListAllNotificationByChannel(request.Channel));
+                pagingOptionPackage.ResultList = notifications;
+                pagingOptionPackage.ExecuteResourcePaging();
+
+                response.Paging = pagingOptionPackage;
+                return Ok(response);
+            }
+            catch
+            {
+                return NotFound("Error getting notifications, recheck channel");
+            }
         }
     }
 }

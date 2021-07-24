@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
@@ -62,7 +63,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
             var messageNotification =
                 _notificationService.CreateMessage(currentUser.Fullname, "Submit","Stock Take", stockTakeOrder.Id);
                 
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+            await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.MANAGER,
                 currentUser.Id, messageNotification);
 
             return Ok();
@@ -131,13 +132,13 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                 (await _userAuthentication.GetCurrentSessionUser()).Id, storder.Id, "");
             await _asyncRepository.UpdateAsync(storder);
             
-            var currentUser = await _userAuthentication.GetCurrentSessionUser();
-                  
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Update","Stock Take", storder.Id);
-                
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
+            // var currentUser = await _userAuthentication.GetCurrentSessionUser();
+            //       
+            // var messageNotification =
+            //     _notificationService.CreateMessage(currentUser.Fullname, "Update","Stock Take", storder.Id);
+            //     
+            // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+            //     currentUser.Id, messageNotification);
             return Ok(response);
         }
     }
@@ -268,11 +269,11 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              response.StockTakeOrderId = stockTakeOrder.Id;
             
                   
-             var messageNotification =
-                 _notificationService.CreateMessage(currentUser.Fullname, "Add","Stock Take Item", stockTakeOrder.Id);
-                
-             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                 currentUser.Id, messageNotification);
+             // var messageNotification =
+             //     _notificationService.CreateMessage(currentUser.Fullname, "Add","Stock Take Item", stockTakeOrder.Id);
+             //    
+             // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+             //     currentUser.Id, messageNotification);
              return Ok(response);
          }
      }
@@ -345,13 +346,13 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              
              await _stAsyncRepository.UpdateAsync(stockTakeOrder);
 
-             var currentUser = await _userAuthentication.GetCurrentSessionUser();
-                  
-             var messageNotification =
-                 _notificationService.CreateMessage(currentUser.Fullname, "Add","Stock Take Item", stockTakeOrder.Id);
-                
-             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                 currentUser.Id, messageNotification);
+             // var currentUser = await _userAuthentication.GetCurrentSessionUser();
+             //      
+             // var messageNotification =
+             //     _notificationService.CreateMessage(currentUser.Fullname, "Add","Stock Take Item", stockTakeOrder.Id);
+             //    
+             // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+             //     currentUser.Id, messageNotification);
 
              var response = new STResponse();
              response.UpdatedId = stockTakeOrder.Id;
@@ -406,9 +407,9 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              var currentUser = await _userAuthentication.GetCurrentSessionUser();
                   
              var messageNotification =
-                 _notificationService.CreateMessage(currentUser.Fullname, "Add","Stock Take Item", stockTakeOrder.Id);
+                 _notificationService.CreateMessage(currentUser.Fullname, "Reject","Stock Take Item", stockTakeOrder.Id);
                 
-             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+             await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.STOCKKEEPER,
                  currentUser.Id, messageNotification);
 
              var response = new STResponse();

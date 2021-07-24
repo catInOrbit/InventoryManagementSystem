@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.SignalR;
@@ -53,22 +54,28 @@ namespace Infrastructure.Services
         {
             
             var notificationInfo = _notificationAsyncRepository.GetNotificationInfoFromUserId(userId);
+            // var notification = new Notification
+            // {
+            //     Channel = notificationInfo.Channel,
+            //     UserId = notificationInfo.UserId,
+            //     Message = message,
+            //     CreatedDate = DateTime.UtcNow,
+            //     UserName = notificationInfo.UserName
+            // };
+            
             var notification = new Notification
             {
-                Channel = notificationInfo.Channel,
+                Channel = groupName,
                 UserId = notificationInfo.UserId,
                 Message = message,
                 CreatedDate = DateTime.UtcNow,
                 UserName = notificationInfo.UserName
             };
-
+    
             var isAdded = await _redisRepository.AddNotifications("Notifications", notification);
 
             if (isAdded)
-            {
                 await _hubContext.Clients.Groups(groupName).SendAsync("NotificationGroupMessage", message);
-                // await _hubContext.Clients.All.SendAsync("NotificationGroupMessage", message);
-            }
 
             else
                 throw new Exception();

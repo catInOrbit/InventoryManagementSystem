@@ -19,6 +19,7 @@ namespace InventoryManagementSystem.PublicApi
     {
         public int CurrentPage { get; set; }
         public int SizePerPage { get; set; }
+        public string Channel { get; set; }
     }
     
     public class NotificationGetResponse : BaseSearchResponse<Notification>

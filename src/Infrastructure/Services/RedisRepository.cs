@@ -100,6 +100,19 @@ namespace Infrastructure.Services
             return notifications_manager.Notifications;
         }
 
+        public async Task<List<Notification>> GetNotificationAllByChannel(string keyId, string channel)
+        {
+            var data = await database.StringGetAsync(keyId);
+
+            if (data.IsNullOrEmpty)
+                return new List<Notification>();
+            var notifications_manager = JsonSerializer.Deserialize<GroupNotifications>(data);
+            notifications_manager.Notifications =
+                notifications_manager.Notifications.Where(n => n.Channel == channel).ToList();
+            
+            return notifications_manager.Notifications;
+        }
+
         public async Task ClearNotification(string keyId)
         {
             var data = await database.StringGetAsync(keyId);

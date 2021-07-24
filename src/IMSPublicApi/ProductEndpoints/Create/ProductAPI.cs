@@ -115,14 +115,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             await _asyncRepository.AddAsync(product);
             await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(true,IndexingHelper.ProductSearchIndex(product),ElasticIndexConstant.PRODUCT_INDICES);
             
-            var currentUser = await _userAuthentication.GetCurrentSessionUser();
-
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Create", "Product", product.Id);
-                
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
-
             var response = new ProductCreateResponse
             {
                 CreatedProductId = product.Id
@@ -312,15 +304,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             await _asyncRepository.UpdateAsync(product);
             await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.ProductSearchIndex(product),ElasticIndexConstant.PRODUCT_INDICES);
 
-            var currentUser = await _userAuthentication.GetCurrentSessionUser();
-            
-            
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Update", "Product", product.Id);
-                
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
-
 
             // await _asyncRepository.ReIndexProduct();
             // await _asyncRepository.ReIndexProductVariant();
@@ -381,16 +364,10 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             product.TransactionId = product.Transaction.Id;
             await _asyncRepository.UpdateAsync(product);
             
-            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+      
             
             await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.ProductSearchIndex(product),ElasticIndexConstant.PRODUCT_INDICES);
             
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Update", "Product", product.Id);
-                
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
-
             // await _asyncRepository.ReIndexProduct();
 
             var response = new ProductUpdateResponse();
@@ -464,15 +441,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                productVariant.TransactionId = productVariant.Transaction.Id;
                await _productVariantAsyncRepository.UpdateAsync(productVariant);
             
-               var currentUser = await _userAuthentication.GetCurrentSessionUser();
-            
                await _productVariantIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.ProductVariantSearchIndex(productVariant),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
-            
-               var messageNotification =
-                   _notificationService.CreateMessage(currentUser.Fullname, "Update", "Product", productVariant.Id);
-                
-               await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                   currentUser.Id, messageNotification);
                return Ok();
            }
            

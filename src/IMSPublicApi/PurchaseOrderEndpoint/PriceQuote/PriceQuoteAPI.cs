@@ -73,8 +73,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
 
             var messageNotification =
                 _notificationService.CreateMessage(currentUser.Fullname, "Create", "Price Quote", po.Id);
-                
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+            await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.MANAGER,
+                currentUser.Id, messageNotification);
+            await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
                 currentUser.Id, messageNotification);
             return Ok(response);
         }
@@ -131,14 +132,26 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             }
             
             Console.WriteLine(po.ToString());
-            
+            ApplicationUser currentUser;
+            string messageNotification;
+            bool mergePerformed = false;
             foreach (var requestMergedRequisitionId in request.MergedRequisitionIds)
             {
+                mergePerformed = true;
                 var poMerged = await _asyncRepository.GetByIdAsync(requestMergedRequisitionId);
                 poMerged.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionMerged;
                 poMerged.MergedWithPurchaseOrderId = po.Id;
                 await _asyncRepository.UpdateAsync(poMerged);
                 await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(poMerged), ElasticIndexConstant.PURCHASE_ORDERS);
+            }
+            
+            if(mergePerformed)
+            {
+                currentUser = await _userAuthentication.GetCurrentSessionUser();
+                messageNotification =
+                    _notificationService.CreateMessage(currentUser.Fullname, "Merge", "Price Quote with Ids: " + string.Join(",", request.MergedRequisitionIds), po.Id);
+                await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                    currentUser.Id, messageNotification);
             }
             
             po.MailDescription = request.MailDescription;
@@ -153,14 +166,11 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             foreach (var orderItem in po.PurchaseOrderProduct)
                 orderItem.IsShowingProductVariant = true;
             response.PurchaseOrder = po;
-            
-            var currentUser = await _userAuthentication.GetCurrentSessionUser();
 
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Update", "Price Quote", po.Id);
-                
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
+            // currentUser = await _userAuthentication.GetCurrentSessionUser();
+            // messageNotification = _notificationService.CreateMessage(currentUser.Fullname, "Update", "Price Quote", po.Id);
+            // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+            //     currentUser.Id, messageNotification);
             
             return Ok(response);
         }

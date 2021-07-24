@@ -584,6 +584,14 @@
             return pagingOption;
         }
 
+        public async Task<List<Notification>> ListAllNotificationByChannel(string channel, CancellationToken cancellationToken = default)
+        {
+            var notifications =
+                await _identityAndProductDbContext.Notification.Where(n => n.Channel == channel).ToListAsync();
+
+            return notifications;
+        }
+
         public async Task<PagingOption<Supplier>> GetSuppliers(PagingOption<Supplier> pagingOption, CancellationToken cancellationToken = default)
         {
             var list = await _identityAndProductDbContext.Supplier.Where(s =>

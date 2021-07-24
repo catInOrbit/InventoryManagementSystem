@@ -111,4 +111,9 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
         public string CancelReason { get; set; }
 
     }
+    
+    public class GiCancelResponse : BaseResponse
+    {
+        public GoodsIssueOrder GoodsIssueOrder { get; set; }
+    }
 }

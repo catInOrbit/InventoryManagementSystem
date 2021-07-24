@@ -57,6 +57,11 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
         public string PurchaseOrderNumber { get; set; }
     }
     
+    public class POConfirmResponse : BaseResponse
+    {
+        public ApplicationCore.Entities.Orders.PurchaseOrder PurchaseOrder { get; set; }
+    }
+    
     public class POCreateRequest : BaseRequest
     {
         public string PurchaseOrderNumber { get; set; }
@@ -77,10 +82,15 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint
         
     }
     
-    public class PODeleteRequest : BaseRequest
+    public class PORejectRequest : BaseRequest
     {
         public string Id { get; set; }
         public string CancelReason { get; set; }
+    }
+    
+    public class PORejectResponse : BaseResponse
+    {
+        public ApplicationCore.Entities.Orders.PurchaseOrder PurchaseOrder { get; set; }
     }
     
     public class POSubmitRequest : BaseRequest

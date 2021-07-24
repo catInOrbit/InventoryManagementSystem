@@ -41,6 +41,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
             foreach (var orderItem in response.PurchaseOrder.PurchaseOrderProduct)
                 orderItem.IsShowingProductVariant = true;
 
+            response.PurchaseOrder.PurchaseOrderStatusString = response.PurchaseOrder.PurchaseOrderStatus.ToString();
             response.MergedOrderIdLists =
                 _purchaseAsyncRepository.GetMergedPurchaseOrders(response.PurchaseOrder.MergedWithPurchaseOrderId);
             return Ok(response);

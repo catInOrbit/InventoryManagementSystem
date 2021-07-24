@@ -21,6 +21,8 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
 
         
         Task<List<Notification>> GetNotificationAll(string keyId);
+        Task<List<Notification>> GetNotificationAllByChannel(string keyId, string channel);
+
         Task ClearNotification(string keyId);
 
         Task<bool> AddProductUpdateMessage(string keyId, ProductUpdateMessage productUpdateMessage);

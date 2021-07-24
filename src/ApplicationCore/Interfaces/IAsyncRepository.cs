@@ -58,7 +58,8 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
 
         // Task<IReadOnlyList<T>> ListAllAsync(CancellationToken cancellationToken = default);
         Task<PagingOption<T>> ListAllAsync(PagingOption<T> pagingOption, CancellationToken cancellationToken = default);
-        
+        Task<List<Notification>> ListAllNotificationByChannel(string channels, CancellationToken cancellationToken = default);
+
         Task<PagingOption<Supplier>> GetSuppliers(PagingOption<Supplier> pagingOption, CancellationToken cancellationToken = default);
 
         Task<PagingOption<StockOnhandReport>> GenerateOnHandReport(PagingOption<StockOnhandReport> pagingOption, CancellationToken cancellationToken = default);

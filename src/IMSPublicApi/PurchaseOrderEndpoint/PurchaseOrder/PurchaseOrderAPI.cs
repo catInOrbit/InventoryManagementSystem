@@ -20,7 +20,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrder
 {
-        public class PurchaseOrderDelete : BaseAsyncEndpoint.WithRequest<PODeleteRequest>.WithoutResponse
+        public class PurchaseOrderDelete : BaseAsyncEndpoint.WithRequest<PORejectRequest>.WithResponse<PORejectResponse>
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
@@ -44,7 +44,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             OperationId = "po.create",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync(PODeleteRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<PORejectResponse>> HandleAsync(PORejectRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER, UserOperations.Reject))
                 return Unauthorized();
@@ -80,15 +80,24 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 
            var messageNotification =
                _notificationService.CreateMessage(currentUser.Fullname, "Cancel","Purchase Order", po.Id);
-                
-           await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+           
+           await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
+               currentUser.Id, messageNotification);
+           
+           await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.SALEMAN,
                currentUser.Id, messageNotification);
 
-           return Ok();
+           foreach (var orderItem in po.PurchaseOrderProduct)
+               orderItem.IsShowingProductVariant = true;
+           
+           return Ok(new PORejectResponse()
+           {
+               PurchaseOrder = po
+           });
         }
     }
         
-    public class PurchaseOrderConfirm : BaseAsyncEndpoint.WithRequest<POConfirmRequest>.WithoutResponse
+    public class PurchaseOrderConfirm : BaseAsyncEndpoint.WithRequest<POConfirmRequest>.WithResponse<POConfirmResponse>
     {
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _purchaseOrderRepos;
         private readonly IAsyncRepository<PurchaseOrderSearchIndex> _poSearchRepos;
@@ -115,7 +124,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             OperationId = "catalog-items.create",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync(POConfirmRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<POConfirmResponse>> HandleAsync(POConfirmRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER, UserOperations.Approve))
                 return Unauthorized();
@@ -128,16 +137,22 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Confirm,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
             
-            
-            var currentUser = await _userAuthentication.GetCurrentSessionUser();
-                
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Confirm","Purchase Order", po.Id);
-                
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
+            // var currentUser = await _userAuthentication.GetCurrentSessionUser();
+            //     
+            // var messageNotification =
+            //     _notificationService.CreateMessage(currentUser.Fullname, "Confirm","Purchase Order", po.Id);
+            //     
+            // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+            //     currentUser.Id, messageNotification);
 
-            return Ok();
+            foreach (var orderItem in po.PurchaseOrderProduct)
+                orderItem.IsShowingProductVariant = true;
+            
+            var response = new POConfirmResponse()
+            {
+                PurchaseOrder = po
+            };
+            return Ok(response);
         }
     }
     
@@ -186,13 +201,13 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             await _purchaseOrderRepos.UpdateAsync(poData);
             await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(poData), ElasticIndexConstant.PURCHASE_ORDERS);
             
-            var currentUser = await _userAuthentication.GetCurrentSessionUser();
-                
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Create","Purchase Order", poData.Id);
-                
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
+            // var currentUser = await _userAuthentication.GetCurrentSessionUser();
+            //     
+            // var messageNotification =
+            //     _notificationService.CreateMessage(currentUser.Fullname, "Create","Purchase Order", poData.Id);
+            //     
+            // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+            //     currentUser.Id, messageNotification);
             return Ok(response);
         }
     }
@@ -241,6 +256,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,
                     (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
                 
+                foreach (var orderItem in po.PurchaseOrderProduct)
+                    orderItem.IsShowingProductVariant = true;
                 await _asyncRepository.UpdateAsync(po);
                 await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
                 
@@ -265,13 +282,14 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 var messageNotification =
                     _notificationService.CreateMessage(currentUser.Fullname, "Submit","Purchase Order", po.Id);
                 
-                await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.MANAGER,
                     currentUser.Id, messageNotification);
 
 
                 var response = new POSubmitResponse();
                 response.PurchaseOrder = po;
                 response.PurchaseOrder.PurchaseOrderStatusString = response.PurchaseOrder.PurchaseOrderStatus.ToString();
+                
                 foreach (var orderItem in response.PurchaseOrder.PurchaseOrderProduct)
                     orderItem.IsShowingProductVariant = true;
                 return Ok(response);
@@ -334,19 +352,21 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 po.PurchaseOrderProduct.Add(requestOrderItemInfo);
                 po.MailDescription = request.MailDescription;
             }
-      
 
             await _purchaseOrderRepos.UpdateAsync(po);
             await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false,IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
             response.PurchaseOrder = po;
             
-            var currentUser = await _userAuthentication.GetCurrentSessionUser();
-                
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Update","Purchase Order", po.Id);
-                
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
+            foreach (var orderItem in po.PurchaseOrderProduct)
+                orderItem.IsShowingProductVariant = true;
+            
+            // var currentUser = await _userAuthentication.GetCurrentSessionUser();
+            //     
+            // var messageNotification =
+            //     _notificationService.CreateMessage(currentUser.Fullname, "Update","Purchase Order", po.Id);
+            //     
+            // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+            //     currentUser.Id, messageNotification);
             
             return Ok(response);
         }

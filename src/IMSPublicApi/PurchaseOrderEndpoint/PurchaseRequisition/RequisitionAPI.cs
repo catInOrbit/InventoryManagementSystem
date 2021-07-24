@@ -68,13 +68,13 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
               await _asyncRepository.AddAsync(po);
               await _indexAsyncRepository.ElasticSaveSingleAsync(true, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
             
-              var currentUser = await _userAuthentication.GetCurrentSessionUser();
+              // var currentUser = await _userAuthentication.GetCurrentSessionUser();
                 
-              var messageNotification =
-                  _notificationService.CreateMessage(currentUser.Fullname, "Create","Purchase Requisition", po.Id);
-                
-              await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                  currentUser.Id, messageNotification);
+              // var messageNotification =
+              //     _notificationService.CreateMessage(currentUser.Fullname, "Create","Purchase Requisition", po.Id);
+              //   
+              // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+              //     currentUser.Id, messageNotification);
               return Ok(new RequisitionCreateResponse
               {
                   CreatedRequisitionId = po.Id,
@@ -128,7 +128,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             var messageNotification =
                 _notificationService.CreateMessage(currentUser.Fullname, "Submit","Purchase Requisition", po.Id);
                 
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+            await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
+                currentUser.Id, messageNotification);
+            await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.MANAGER,
                 currentUser.Id, messageNotification);
             return Ok();
         }
@@ -196,13 +198,13 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             foreach (var oldOrderItem in oldOrderItems)
                 await _orderItemAsyncRepository.DeleteAsync(oldOrderItem);
             
-            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+            // var currentUser = await _userAuthentication.GetCurrentSessionUser();
                 
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Update","Purchase Requisition", po.Id);
-                
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
+            // var messageNotification =
+            //     _notificationService.CreateMessage(currentUser.Fullname, "Update","Purchase Requisition", po.Id);
+            //     
+            // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+            //     currentUser.Id, messageNotification);
             return Ok(new RequisitionUpdateResponse
             {
                 UpdatedRequisitionId = po.Id,

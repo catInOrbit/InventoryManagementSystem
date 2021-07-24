@@ -96,7 +96,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 var messageNotification =
                     _notificationService.CreateMessage(currentUser.Fullname, "Create","Goods Issue", gio.Id);
                 
-                await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+                await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.STOCKKEEPER,
                     currentUser.Id, messageNotification);
                 
                 return Ok(response);
@@ -250,17 +250,34 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
 
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Update", "Goods Issue", gio.Id);
+            string messageNoti;
+            if (gio.GoodsIssueType == GoodsIssueStatusType.Shipping)
+            {
+                messageNoti = "Update to Shipping";
+                var messageNotification =
+                    _notificationService.CreateMessage(currentUser.Fullname, messageNoti, "Goods Issue", gio.Id);
                 
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
+                await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
+                    currentUser.Id, messageNotification);
+            }
+            else
+            {
+                messageNoti = "Update to Complete";
+                var messageNotification =
+                    _notificationService.CreateMessage(currentUser.Fullname, messageNoti, "Goods Issue", gio.Id);
+                
+                await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.MANAGER,
+                    currentUser.Id, messageNotification);
+                
+                await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
+                    currentUser.Id, messageNotification);
+            }
             
             return Ok(response);
         }
     }
      
-      public class GoodsIssueCancel : BaseAsyncEndpoint.WithRequest<GiCancel>.WithoutResponse
+      public class GoodsIssueCancel : BaseAsyncEndpoint.WithRequest<GiCancel>.WithResponse<GiCancelResponse>
     {
         private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<GoodsIssueOrder> _asyncRepository;
@@ -292,7 +309,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             OperationId = "gio.cancel",
             Tags = new[] { "GoodsIssueEndpoints" })
         ]
-        public override async Task<ActionResult> HandleAsync(GiCancel request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<GiCancelResponse>> HandleAsync(GiCancel request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSISSUE, UserOperations.Update))
                 return Unauthorized();
@@ -308,11 +325,14 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
 
             var messageNotification =
                 _notificationService.CreateMessage(currentUser.Fullname, "Cancel", "Goods Issue", gio.Id);
-                
             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
                 currentUser.Id, messageNotification);
             
-            return Ok();
+            
+            return Ok(new GiCancelResponse()
+            {
+                GoodsIssueOrder = gio
+            });
         }
     }
 }

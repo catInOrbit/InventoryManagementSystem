@@ -56,6 +56,12 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
                     productVariantPackage.IsShowingTransaction = false;
             }
         }
+        
+        [OnSerialized]
+        public void FormatPurchaseOrderStatusString(StreamingContext context)
+        {
+            PurchaseOrderStatusString = PurchaseOrderStatus.ToString();
+        }
 
         public override string ToString()
         {

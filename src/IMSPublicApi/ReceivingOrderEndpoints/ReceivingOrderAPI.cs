@@ -169,13 +169,13 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             response.CreatedGoodsReceiptId = ro.Id;
             response.TransactionId = ro.TransactionId;
 
-            var currentUser = await _userAuthentication.GetCurrentSessionUser();
-
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Update","Goods Receipt", ro.Id);
-                
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
+            // var currentUser = await _userAuthentication.GetCurrentSessionUser();
+            //
+            // var messageNotification =
+            //     _notificationService.CreateMessage(currentUser.Fullname, "Update","Goods Receipt", ro.Id);
+            //     
+            // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+            //     currentUser.Id, messageNotification);
             return Ok(response);
         }
     }
@@ -298,7 +298,6 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
 
                 try
                 {
-                
                     bigQueryService.InsertProductRowBQ(goodsReceiptOrderItem.ProductVariant, ro.PurchaseOrder.PurchaseOrderProduct.FirstOrDefault(p => p.ProductVariantId == goodsReceiptOrderItem.ProductVariantId).Price
                         , ro.Location.LocationName, goodsReceiptOrderItem.QuantityReceived , 0, 0, "In Storage", ro.Supplier.SupplierName);
                     _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
@@ -325,7 +324,10 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             var messageNotification =
                 _notificationService.CreateMessage(currentUser.Fullname, "Submit","Goods Receipt", ro.Id);
                 
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+            await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.MANAGER,
+                currentUser.Id, messageNotification);
+            
+            await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
                 currentUser.Id, messageNotification);
             
             if(!response.IncompleteVariantId.IsNullOrEmpty())
