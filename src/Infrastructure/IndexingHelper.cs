@@ -209,6 +209,7 @@ namespace Infrastructure
                         .Fullname
                     : "";
                 index.ProductImageLink = product.ProductImageLink;
+                index.IsDeactivated = product.Transaction.TransactionStatus;
                 
                 if (index.ModifiedDate != DateTime.MinValue)
                     index.LatestUpdateDate = index.ModifiedDate;
@@ -308,6 +309,7 @@ namespace Infrastructure
                     }
                     index.SupplierName = supplier!=null ? supplier.SupplierName : "";
                     index.VariantImageLink = productVariant.VariantImageLink;
+                    index.IsDeactivated = productVariant.Transaction.TransactionStatus;
                     
                     if (index.ModifiedDate != DateTime.MinValue)
                         index.LatestUpdateDate = index.ModifiedDate;

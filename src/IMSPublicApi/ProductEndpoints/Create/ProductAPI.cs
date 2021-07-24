@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
@@ -179,6 +180,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             ElasticSearchHelper<ProductVariantSearchIndex> elasticSearchHelper =
                 new ElasticSearchHelper<ProductVariantSearchIndex>(_elasticClient);
 
+            var response = new ProductUpdateResponse();
             if (product.IsVariantType)
             {
                 if (!productWasVariantType)
@@ -202,6 +204,10 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                         if (productVairantRequestInfo.Id != null && productVariantSystemList.Id == productVairantRequestInfo.Id)
                         {
                             // var responseElasticCheck = await elasticSearchHelper.CheckFieldExistProduct(productVairantRequestInfo.Name, productVairantRequestInfo.Sku);
+                            // if (responseElasticCheck.Documents.Count > 0)
+                            //     response.DupplicateFieldWarningList = new List<ProductVariantSearchIndex>(responseElasticCheck.Documents);
+                            
+                            
                             productVariantSystemList.Name = productVairantRequestInfo.Name;
                             productVariantSystemList.Sku = productVairantRequestInfo.Sku;
                             productVariantSystemList.IsVariantType = product.IsVariantType;
@@ -319,7 +325,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             // await _asyncRepository.ReIndexProduct();
             // await _asyncRepository.ReIndexProductVariant();
 
-            var response = new ProductUpdateResponse();
+        
             response.Product = product;
             return Ok(response);
         }

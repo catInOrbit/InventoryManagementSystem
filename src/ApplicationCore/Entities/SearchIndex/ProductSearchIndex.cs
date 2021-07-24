@@ -32,6 +32,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public decimal Price { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
+        
+        public bool IsDeactivated { get; set; }
         public CompletionField Suggest { get; set; }
 
         public void FillSuggestion()
@@ -67,7 +69,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string Brand { get; set; }
         public string ProductId { get; set; }
         public bool  IsVariantType { get; set; }
-        
+        public bool  IsDeactivated { get; set; }
         public string ProductImageLink { get; set; }
 
         public List<string> VariantIds { get; set; } = new List<string>();

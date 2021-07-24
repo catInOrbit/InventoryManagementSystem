@@ -87,6 +87,7 @@ namespace Infrastructure.Services
                                         f.Field(f => f.Name).
                                           Field(f => f.Sku))
                         )))));
+            
             return responseElastic;
         }
     }

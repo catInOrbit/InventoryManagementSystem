@@ -57,7 +57,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
             }
         }
         
-
         public override string ToString()
         {
             return base.ToString();
