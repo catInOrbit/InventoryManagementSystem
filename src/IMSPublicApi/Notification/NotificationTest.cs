@@ -112,7 +112,7 @@ namespace InventoryManagementSystem.PublicApi
             {
                 notifications.AddRange(await _redisRepository.GetNotificationAllByChannel("Notifications", request.Channel));
                 notifications.AddRange(await _notificationAsyncRepository.ListAllNotificationByChannel(request.Channel));
-                pagingOptionPackage.ResultList = notifications;
+                pagingOptionPackage.ResultList = notifications.OrderByDescending(n => n.CreatedDate).ToList();
                 pagingOptionPackage.ExecuteResourcePaging();
 
                 response.Paging = pagingOptionPackage;

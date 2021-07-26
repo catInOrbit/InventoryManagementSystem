@@ -600,6 +600,12 @@
 
             list = list.OrderByDescending(s =>
                 s.Transaction.TransactionRecord[s.Transaction.TransactionRecord.Count - 1].Date).ToList();
+            foreach (var supplier in list)
+            {
+                if (supplier.Email == null) supplier.Email = "";
+                if (supplier.Description == null) supplier.Description = "";
+                if (supplier.SupplierName == null) supplier.SupplierName = "";
+            }
 
             pagingOption.ResultList = list;
             pagingOption.ExecuteResourcePaging();

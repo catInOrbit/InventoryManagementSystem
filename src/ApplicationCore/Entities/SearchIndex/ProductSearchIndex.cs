@@ -24,6 +24,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string SupplierName { get; set; }
         public string Name { get; set; }
         public string Sku { get; set; }
+        public string Barcode { get; set; }
         public string Unit { get; set; }
         
         public int Quantity { get; set; }

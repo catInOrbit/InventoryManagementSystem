@@ -1,5 +1,8 @@
 using System.Threading.Tasks;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using Nest;
 
@@ -62,7 +65,7 @@ namespace Infrastructure.Services
             return responseElastic;
         }
         
-        public async Task<ISearchResponse<ProductVariantSearchIndex>> CheckFieldExistProduct(string nameValue, string skuValue)
+        public async Task<ISearchResponse<ProductVariantSearchIndex>> CheckFieldExistProductVariant(string value)
         {
             ISearchResponse<ProductVariantSearchIndex> responseElastic;
             // responseElastic = await _elasticClient.SearchAsync<ProductVariantSearchIndex>
@@ -78,16 +81,86 @@ namespace Infrastructure.Services
             
             responseElastic = await _elasticClient.SearchAsync<ProductVariantSearchIndex>
             (
-                s => s.Size(2000).Index(Index).Query(q =>
+                s => s.Size(2000).Index(ElasticIndexConstant.PRODUCT_VARIANT_INDICES).Query(q =>
                     q.Bool(b =>
                         b.Should(
                             s =>
                                 s.MultiMatch(t =>
-                                    t.Query(nameValue).Type(TextQueryType.Phrase).Boost(10).Fields(f => 
+                                    t.Query(value).Type(TextQueryType.Phrase).Boost(10).Fields(f => 
                                         f.Field(f => f.Name).
-                                          Field(f => f.Sku))
+                                          Field(f => f.Sku).
+                                          Field(f => f.Barcode))
                         )))));
             
+            return responseElastic;
+        }
+        
+        public async Task<ISearchResponse<ProductSearchIndex>> CheckFieldExistProduct(string value)
+        {
+            ISearchResponse<ProductSearchIndex> responseElastic;
+            
+            responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
+            (
+                s => s.Size(2000).Index(ElasticIndexConstant.PRODUCT_INDICES).Query(q =>
+                    q.Bool(b =>
+                        b.Should(
+                            s =>
+                                s.MultiMatch(t =>
+                                    t.Query(value).Type(TextQueryType.Phrase).Boost(10).Fields(f => 
+                                        f.Field(f => f.Name)
+                                ))))));
+            return responseElastic;
+        }
+        
+        public async Task<ISearchResponse<Location>> CheckFieldExistLocation(string value)
+        {
+            ISearchResponse<Location> responseElastic;
+            
+            responseElastic = await _elasticClient.SearchAsync<Location>
+            (
+                s => s.Size(2000).Index(ElasticIndexConstant.LOCATIONS).Query(q =>
+                    q.Bool(b =>
+                        b.Should(
+                            s =>
+                                s.MultiMatch(t =>
+                                    t.Query(value).Type(TextQueryType.Phrase).Boost(10).Fields(f => 
+                                        f.Field(f => f.LocationName)
+                                    ))))));
+            return responseElastic;
+        }
+        
+        public async Task<ISearchResponse<Category>> CheckFieldExistCategory(string value)
+        {
+            ISearchResponse<Category> responseElastic;
+            
+            responseElastic = await _elasticClient.SearchAsync<Category>
+            (
+                s => s.Size(2000).Index(ElasticIndexConstant.CATEGORIES).Query(q =>
+                    q.Bool(b =>
+                        b.Should(
+                            s =>
+                                s.MultiMatch(t =>
+                                    t.Query(value).Type(TextQueryType.Phrase).Boost(10).Fields(f => 
+                                        f.Field(f => f.CategoryName)
+                                    ))))));
+            return responseElastic;
+        }
+        
+        public async Task<ISearchResponse<Supplier>> CheckFieldExistSupplier(string value)
+        {
+            ISearchResponse<Supplier> responseElastic;
+            
+            responseElastic = await _elasticClient.SearchAsync<Supplier>
+            (
+                s => s.Size(2000).Index(ElasticIndexConstant.SUPPLIERS).Query(q =>
+                    q.Bool(b =>
+                        b.Should(
+                            s =>
+                                s.MultiMatch(t =>
+                                    t.Query(value).Type(TextQueryType.Phrase).Boost(10).Fields(f => 
+                                        f.Field(f => f.SupplierName).
+                                            Field(f => f.Email)
+                                    ))))));
             return responseElastic;
         }
     }

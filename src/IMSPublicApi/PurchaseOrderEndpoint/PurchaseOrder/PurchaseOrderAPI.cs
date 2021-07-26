@@ -196,7 +196,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
 
             poData.Transaction = TransactionUpdateHelper.UpdateTransaction(poData.Transaction,UserTransactionActionType.Modify,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, poData.Id, "");
-
             response.PurchaseOrder = poData;
             await _purchaseOrderRepos.UpdateAsync(poData);
             await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(poData), ElasticIndexConstant.PURCHASE_ORDERS);

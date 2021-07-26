@@ -26,7 +26,7 @@ namespace Infrastructure
                 SupplierEmail = (po.Supplier != null) ? po.Supplier.Email : "",
                 SupplierId = (po.Supplier != null) ? po.Supplier.Id : "",
                 SupplierPhone = (po.Supplier != null) ? po.Supplier.PhoneNumber : "",
-                HasBeenModified = po.HasSentMail
+                HasSentMail = po.HasSentMail
             };
 
             if (index.ModifiedDate != DateTime.MinValue)
@@ -248,7 +248,7 @@ namespace Infrastructure
                     ModifiedDate = stockTake.Transaction.TransactionRecord[^1].Date,
                     CreatedByName =(stockTake.Transaction.TransactionRecord.Count > 0 && stockTake.Transaction.TransactionRecord.
                         FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create) != null) ? stockTake.Transaction.TransactionRecord.
-                        FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Modify).ApplicationUser
+                        FirstOrDefault(t => t.UserTransactionActionType == UserTransactionActionType.Create).ApplicationUser
                         .Fullname: "",
                 };
 
@@ -310,6 +310,7 @@ namespace Infrastructure
                     index.SupplierName = supplier!=null ? supplier.SupplierName : "";
                     index.VariantImageLink = productVariant.VariantImageLink;
                     index.IsDeactivated = productVariant.Transaction.TransactionStatus;
+                    index.Barcode = productVariant.Barcode;
                     
                     if (index.ModifiedDate != DateTime.MinValue)
                         index.LatestUpdateDate = index.ModifiedDate;

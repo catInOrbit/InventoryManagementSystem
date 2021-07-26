@@ -14,12 +14,19 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         }
 
         [StringLength(50)] [Required] public string SupplierName { get; set; }
-
+            
+        
+        [PropertyName("description")]
          public string Description { get; set; }
+         [PropertyName("address")]
          public string Address { get; set; }
+         [PropertyName("salePersonName")]
          public string SalePersonName { get; set; }
+         [PropertyName("phoneNumber")]
         public string PhoneNumber { get; set; }
+        [PropertyName("email")]
         public string Email { get; set; }
+        [PropertyName("transactionId")]
 
         public string TransactionId { get; set; }
         

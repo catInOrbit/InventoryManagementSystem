@@ -13,9 +13,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         }
         public string BrandName { get; set; }
         public string BrandDescription { get; set; }
-        
         public virtual ICollection<Product> Products { get; set; }
-
         public bool ShouldSerializeProducts()
         {
             if (!IsShowingProducts)

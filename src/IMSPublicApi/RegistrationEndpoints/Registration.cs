@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
@@ -90,7 +91,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                         {
                             response.Result = false;
                             response.Verbose = "Error saving to DB, email already exists";
-                            return Ok(response);
+                            return NotFound(response);
                         }
 
                         var resultCreate = await _userRoleModificationService.UserManager.CreateAsync(newIMSUser, request.Password);
@@ -102,7 +103,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                             }
 
                             response.Result = false;
-                            return Ok(response);
+                            return NotFound(response);
                         }
                         var result = await _userRoleModificationService.RoleCreatingHelper(newIMSUser.Id, role.Name);
                         
@@ -127,7 +128,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                         {
                             response.Result = false;
                             response.Verbose = "Role does not exist in DB";
-                            return Ok(response);
+                            return NotFound(response);
 
                         }
                     }
@@ -136,7 +137,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                     {
                         response.Result = false;
                         response.Verbose = "Error saving to DB";
-                        return Ok(response);
+                        return NotFound(response);
 
                     }
                 }
@@ -155,8 +156,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
 
                 return Unauthorized();
             }
-
-            return NotFound();
+            return NotFound(response);
         }
 
 

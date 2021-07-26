@@ -13,6 +13,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public string UserName { get; set; }
         public string Channel { get; set; }
         public string Message { get; set; }
+        public string Type { get; set; }
+        public string TypeID { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 }
