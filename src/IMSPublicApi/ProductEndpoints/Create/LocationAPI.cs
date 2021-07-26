@@ -61,7 +61,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Location
                 _notificationService.CreateMessage(currentUser.Fullname, "Create", PageConstant.PRODUCT_LOCATION, location.Id);
                 
             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
+                currentUser.Id, messageNotification,PageConstant.LOCATION, location.Id);
 
             return Ok(new LocationResponse
             {
@@ -114,7 +114,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Location
                 _notificationService.CreateMessage(currentUser.Fullname, "Update", PageConstant.PRODUCT_LOCATION, location.Id);
                 
             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
+                currentUser.Id, messageNotification, PageConstant.LOCATION, location.Id);
 
             return Ok(new LocationResponse
             {

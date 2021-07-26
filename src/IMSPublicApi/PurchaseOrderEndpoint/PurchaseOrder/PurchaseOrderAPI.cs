@@ -82,10 +82,10 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                _notificationService.CreateMessage(currentUser.Fullname, "Cancel","Purchase Order", po.Id);
            
            await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
-               currentUser.Id, messageNotification);
+               currentUser.Id, messageNotification, PageConstant.PURCHASEORDER, po.Id);
            
            await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.SALEMAN,
-               currentUser.Id, messageNotification);
+               currentUser.Id, messageNotification, PageConstant.PURCHASEORDER, po.Id);
 
            foreach (var orderItem in po.PurchaseOrderProduct)
                orderItem.IsShowingProductVariant = true;
@@ -282,7 +282,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                     _notificationService.CreateMessage(currentUser.Fullname, "Submit","Purchase Order", po.Id);
                 
                 await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.MANAGER,
-                    currentUser.Id, messageNotification);
+                    currentUser.Id, messageNotification, PageConstant.PURCHASEORDER, po.Id);
 
 
                 var response = new POSubmitResponse();

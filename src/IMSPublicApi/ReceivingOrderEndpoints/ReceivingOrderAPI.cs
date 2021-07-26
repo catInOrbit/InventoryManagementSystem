@@ -325,10 +325,10 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 _notificationService.CreateMessage(currentUser.Fullname, "Submit","Goods Receipt", ro.Id);
                 
             await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.MANAGER,
-                currentUser.Id, messageNotification);
+                currentUser.Id, messageNotification, PageConstant.GOODSRECEIPT, po.Id);
             
             await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
-                currentUser.Id, messageNotification);
+                currentUser.Id, messageNotification, PageConstant.GOODSRECEIPT, po.Id);
             
             if(!response.IncompleteVariantId.IsNullOrEmpty())
                 return Ok(response);

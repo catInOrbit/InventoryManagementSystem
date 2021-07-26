@@ -129,9 +129,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
                 _notificationService.CreateMessage(currentUser.Fullname, "Submit","Purchase Requisition", po.Id);
                 
             await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
-                currentUser.Id, messageNotification);
+                currentUser.Id, messageNotification, PageConstant.REQUISITION, po.Id);
             await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.MANAGER,
-                currentUser.Id, messageNotification);
+                currentUser.Id, messageNotification, PageConstant.REQUISITION, po.Id);
             return Ok();
         }
     }

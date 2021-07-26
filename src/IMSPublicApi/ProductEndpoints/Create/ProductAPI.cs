@@ -438,15 +438,15 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                product.TransactionId = product.Transaction.Id;
                await _asyncRepository.UpdateAsync(product);
             
-               var currentUser = await _userAuthentication.GetCurrentSessionUser();
+               // var currentUser = await _userAuthentication.GetCurrentSessionUser();
             
                await _productIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.ProductSearchIndex(product),ElasticIndexConstant.PRODUCT_INDICES);
             
-               var messageNotification =
-                   _notificationService.CreateMessage(currentUser.Fullname, "Update", "Product", product.Id);
-                
-               await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                   currentUser.Id, messageNotification);
+               // var messageNotification =
+               //     _notificationService.CreateMessage(currentUser.Fullname, "Update", "Product", product.Id);
+               //  
+               // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+               //     currentUser.Id, messageNotification, PageConstant.PRODUCT, product.Id);
                return Ok();
            }
 

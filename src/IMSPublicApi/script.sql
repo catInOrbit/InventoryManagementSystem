@@ -25,6 +25,8 @@ CREATE TABLE [Notification] (
     [UserName] nvarchar(max) NULL,
     [Channel] nvarchar(max) NULL,
     [Message] nvarchar(max) NULL,
+    [Type] nvarchar(max) NULL,
+    [TypeID] nvarchar(max) NULL,
     [CreatedDate] datetime2 NOT NULL,
     CONSTRAINT [PK_Notification] PRIMARY KEY ([Id])
 );
@@ -467,7 +469,7 @@ CREATE INDEX [IX_UserRole_RoleId] ON [UserRole] ([RoleId]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20210724151153_Creation', N'5.0.5');
+VALUES (N'20210726090611_Creation', N'5.0.5');
 GO
 
 COMMIT;

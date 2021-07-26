@@ -97,7 +97,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                     _notificationService.CreateMessage(currentUser.Fullname, "Create","Goods Issue", gio.Id);
                 
                 await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.STOCKKEEPER,
-                    currentUser.Id, messageNotification);
+                    currentUser.Id, messageNotification, PageConstant.GOODSISSUE, gio.Id);
                 
                 return Ok(response);
             }
@@ -258,7 +258,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                     _notificationService.CreateMessage(currentUser.Fullname, messageNoti, "Goods Issue", gio.Id);
                 
                 await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
-                    currentUser.Id, messageNotification);
+                    currentUser.Id, messageNotification, PageConstant.GOODSISSUE, gio.Id);
             }
             else
             {
@@ -267,10 +267,10 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                     _notificationService.CreateMessage(currentUser.Fullname, messageNoti, "Goods Issue", gio.Id);
                 
                 await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.MANAGER,
-                    currentUser.Id, messageNotification);
+                    currentUser.Id, messageNotification,PageConstant.GOODSISSUE, gio.Id);
                 
                 await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
-                    currentUser.Id, messageNotification);
+                    currentUser.Id, messageNotification,PageConstant.GOODSISSUE, gio.Id);
             }
             
             return Ok(response);
@@ -326,7 +326,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             var messageNotification =
                 _notificationService.CreateMessage(currentUser.Fullname, "Cancel", "Goods Issue", gio.Id);
             await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
+                currentUser.Id, messageNotification, PageConstant.GOODSISSUE, gio.Id);
             
             
             return Ok(new GiCancelResponse()

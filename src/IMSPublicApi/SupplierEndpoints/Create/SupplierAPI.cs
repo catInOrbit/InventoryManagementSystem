@@ -58,13 +58,13 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             await _supplierAsyncRepository.ElasticSaveSingleAsync(true, supplier, ElasticIndexConstant.SUPPLIERS);
 
             
-            var currentUser = await _userAuthentication.GetCurrentSessionUser();
-                  
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Create","Supplier", supplier.Id);
-                
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
+            // var currentUser = await _userAuthentication.GetCurrentSessionUser();
+            //       
+            // var messageNotification =
+            //     _notificationService.CreateMessage(currentUser.Fullname, "Create","Supplier", supplier.Id);
+            //     
+            // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+            //     currentUser.Id, messageNotification, PageConstant.SUPPLIER, supplier.Id);
 
             var response = new SupplierResponse();
             response.ModifiedSupplierId = supplier.Id;
@@ -117,13 +117,13 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             await _supplierAsyncRepository.UpdateAsync(supplier);
             await _supplierAsyncRepository.ElasticSaveSingleAsync(false, supplier, ElasticIndexConstant.SUPPLIERS);
 
-            var currentUser = await _userAuthentication.GetCurrentSessionUser();
-                  
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Update","Supplier", supplier.Id);
-                
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
+            // var currentUser = await _userAuthentication.GetCurrentSessionUser();
+            //       
+            // var messageNotification =
+            //     _notificationService.CreateMessage(currentUser.Fullname, "Update","Supplier", supplier.Id);
+            //     
+            // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
+            //     currentUser.Id, messageNotification);
             
             var response = new SupplierResponse();
             response.ModifiedSupplierId = supplier.Id;

@@ -29,6 +29,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Channel = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TypeID = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>

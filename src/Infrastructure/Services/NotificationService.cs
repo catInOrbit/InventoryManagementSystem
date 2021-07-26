@@ -50,26 +50,19 @@ namespace Infrastructure.Services
                 throw new Exception();
         }
         
-        public async Task SendNotificationGroup(string groupName, string userId, string message)
+        public async Task SendNotificationGroup(string groupName, string userId, string message, string type, string typeId)
         {
             
             var notificationInfo = _notificationAsyncRepository.GetNotificationInfoFromUserId(userId);
-            // var notification = new Notification
-            // {
-            //     Channel = notificationInfo.Channel,
-            //     UserId = notificationInfo.UserId,
-            //     Message = message,
-            //     CreatedDate = DateTime.UtcNow,
-            //     UserName = notificationInfo.UserName
-            // };
-            
             var notification = new Notification
             {
                 Channel = groupName,
                 UserId = notificationInfo.UserId,
                 Message = message,
                 CreatedDate = DateTime.UtcNow,
-                UserName = notificationInfo.UserName
+                UserName = notificationInfo.UserName,
+                Type = type,
+                TypeID = typeId
             };
     
             var isAdded = await _redisRepository.AddNotifications("Notifications", notification);

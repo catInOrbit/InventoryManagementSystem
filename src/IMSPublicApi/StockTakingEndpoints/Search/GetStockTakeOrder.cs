@@ -50,18 +50,6 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
 
             var response = new STSearchResponse();
             response.IsDisplayingAll = true;
-            
-            var stSearchFilter = new STSearchFilter
-            {
-                FromStatus = request.FromStatus,
-                ToStatus = request.ToStatus,
-                CreatedByName = request.CreatedByName,
-                FromCreatedDate = request.FromCreatedDate,
-                FromDeliveryDate = request.FromDeliveryDate,
-                ToCreatedDate = request.ToCreatedDate,
-                ToDeliveryDate = request.ToDeliveryDate,
-            };
-            
                
             ISearchResponse<StockTakeSearchIndex> responseElastic;
       
@@ -69,7 +57,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
                 ElasticIndexConstant.STOCK_TAKE_ORDERS);
             responseElastic = await elasticSearchHelper.GetDocuments();
             
-            pagingOption.ResultList = _asyncRepository.StockTakeIndexFiltering(responseElastic.Documents.ToList(), stSearchFilter,
+            pagingOption.ResultList = _asyncRepository.StockTakeIndexFiltering(responseElastic.Documents.ToList(), request,
                 new CancellationToken());
             
             pagingOption.ExecuteResourcePaging();

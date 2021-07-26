@@ -64,7 +64,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                 _notificationService.CreateMessage(currentUser.Fullname, "Submit","Stock Take", stockTakeOrder.Id);
                 
             await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.MANAGER,
-                currentUser.Id, messageNotification);
+                currentUser.Id, messageNotification, PageConstant.STOCKTAKEORDER, stockTakeOrder.Id);
 
             return Ok();
         }
@@ -410,7 +410,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                  _notificationService.CreateMessage(currentUser.Fullname, "Reject","Stock Take Item", stockTakeOrder.Id);
                 
              await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.STOCKKEEPER,
-                 currentUser.Id, messageNotification);
+                 currentUser.Id, messageNotification, PageConstant.STOCKTAKEORDER, stockTakeOrder.Id);
 
              var response = new STResponse();
              response.UpdatedId = stockTakeOrder.Id;

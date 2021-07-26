@@ -18,6 +18,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public static string TRANSACTION = "Transaction";
         public static string REGISTRATION = "Registration";
         public static string CATEGORY = "Category";
+        public static string LOCATION = "Location";
         public static string REPORT = "Report";
 
     }

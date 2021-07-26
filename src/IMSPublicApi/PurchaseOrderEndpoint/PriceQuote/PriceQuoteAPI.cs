@@ -76,9 +76,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             var messageNotification =
                 _notificationService.CreateMessage(currentUser.Fullname, "Create", "Price Quote", po.Id);
             await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.MANAGER,
-                currentUser.Id, messageNotification);
+                currentUser.Id, messageNotification, PageConstant.PRICEQUOTEORDER, po.Id);
             await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
-                currentUser.Id, messageNotification);
+                currentUser.Id, messageNotification, PageConstant.PRICEQUOTEORDER, po.Id);
 
             response.MergedOrderIdLists = _asyncRepository.GetMergedPurchaseOrders(po.MergedWithPurchaseOrderId);
             return Ok(response);
@@ -153,8 +153,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 currentUser = await _userAuthentication.GetCurrentSessionUser();
                 messageNotification =
                     _notificationService.CreateMessage(currentUser.Fullname, "Merge", "Price Quote with Ids: " + string.Join(",", request.MergedRequisitionIds), po.Id);
-                await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                    currentUser.Id, messageNotification);
+                await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.SALEMAN,
+                    currentUser.Id, messageNotification, PageConstant.PRICEQUOTEORDER, po.Id);
             }
             
             po.MailDescription = request.MailDescription;
@@ -244,8 +244,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             var messageNotification =
                 _notificationService.CreateMessage(currentUser.Fullname, "Submit","Price Quote", po.Id);
                 
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification);
+            await _notificationService.SendNotificationGroup( AuthorizedRoleConstants.MANAGER,
+                currentUser.Id, messageNotification, PageConstant.PRICEQUOTEORDER, po.Id);
 
             response.PurchaseOrder = po;
             return Ok(response);

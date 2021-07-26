@@ -50,19 +50,21 @@ namespace InventoryManagementSystem.PublicApi.AuthorizationEndpoints
                     {
                         return Task.CompletedTask; //This user has unauthorized role for this page
                     }
+                    
+                    context.Succeed(requirement);
 
                     //Check if user action is authorized
 
-                    bool isActionAuthorized = false;
-                    roleClaims.ToList().ForEach(e =>
-                    {
-                        if (e.Value.ToString() == requirement.Name)
-                            isActionAuthorized = true;
-                    });
-
-                    if (isActionAuthorized)
-                        context.Succeed(requirement);
-                    else return Task.CompletedTask; //This user does not have permission for this page
+                    // bool isActionAuthorized = false;
+                    // roleClaims.ToList().ForEach(e =>
+                    // {
+                    //     if (e.Value.ToString() == requirement.Name)
+                    //         isActionAuthorized = true;
+                    // });
+                    //
+                    // if (isActionAuthorized)
+                    //     context.Succeed(requirement);
+                    // else return Task.CompletedTask; //This user does not have permission for this page
                 }
             }
             

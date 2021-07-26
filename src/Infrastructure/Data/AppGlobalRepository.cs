@@ -391,25 +391,23 @@
         {
             var sts = resource.Where(st =>
                 ( 
-                    (stSearchFilter.FromStatus  == null ||
-                     (int)(ParseEnum<StockTakeOrderType>(st.Status))  >= Int32.Parse(stSearchFilter.FromStatus)
+                    (stSearchFilter.Statuses == null ||
+                     stSearchFilter.Statuses.Contains((ParseEnum<StockTakeOrderType>(st.Status).ToString()))
+                    
                      &&
-                     (int)(ParseEnum<StockTakeOrderType>(st.Status))  <= Int32.Parse(stSearchFilter.ToStatus))
+                     (stSearchFilter.FromCreatedDate == null ||
+                      (st.CreatedDate >= DateTime.Parse(stSearchFilter.FromCreatedDate) &&
+                       st.CreatedDate <= DateTime.Parse(stSearchFilter.ToCreatedDate))) 
                     
-                    &&
-                    (stSearchFilter.FromCreatedDate == null ||
-                     (st.CreatedDate >= DateTime.Parse(stSearchFilter.FromCreatedDate) &&
-                      st.CreatedDate <= DateTime.Parse(stSearchFilter.ToCreatedDate))) 
-                    
-                    &&
-                    (stSearchFilter.FromDeliveryDate == null ||
-                     (st.ModifiedDate >= DateTime.Parse(stSearchFilter.FromDeliveryDate) &&
-                      st.ModifiedDate <= DateTime.Parse(stSearchFilter.ToDeliveryDate))) 
+                     &&
+                     (stSearchFilter.FromDeliveryDate == null ||
+                      (st.ModifiedDate >= DateTime.Parse(stSearchFilter.FromDeliveryDate) &&
+                       st.ModifiedDate <= DateTime.Parse(stSearchFilter.ToDeliveryDate))) 
                     
                
-                      &&
-                      (stSearchFilter.CreatedByName == null || st.CreatedByName == stSearchFilter.CreatedByName)
-                     ))
+                     &&
+                     (stSearchFilter.CreatedByName == null || st.CreatedByName == stSearchFilter.CreatedByName)
+                    )))
                 .ToList();
             return sts;
         }

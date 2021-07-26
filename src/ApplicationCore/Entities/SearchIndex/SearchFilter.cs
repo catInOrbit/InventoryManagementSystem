@@ -50,8 +50,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
     
     public class STSearchFilter
     {
-        public string FromStatus { get; set; }
-        public string ToStatus { get; set; }
+        public string[] Statuses { get; set; }
         public string FromCreatedDate { get; set; }
         public string ToCreatedDate { get; set; }
         public string CreatedByName { get; set; }

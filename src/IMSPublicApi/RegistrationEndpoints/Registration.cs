@@ -115,13 +115,6 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                             response.Verbose = "Authorized";
                             
                             //Save user notification info such as channel
-                            var currentUser = await _userAuthentication.GetCurrentSessionUser();
-            
-                            var messageNotification =
-                                _notificationService.CreateMessage(currentUser.Fullname, "Create","New User", user.Id);
-            
-                            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                                currentUser.Id, messageNotification);
                             return Ok(response);
                         }
                         else
