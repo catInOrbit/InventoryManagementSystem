@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Infrastructure.Data;
 using Infrastructure.Identity.DbContexts;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,8 @@ namespace Infrastructure.Identity
 
                 // allowed user can create and edit contacts that they create
                 var managerID = await EnsureUser(serviceProvider, testUserPw);
-                await EnsureRole(serviceProvider, managerID, "Manager");
+                await EnsureRoleManager(serviceProvider, managerID, "Manager");
+                await EnsureRoleOthers(serviceProvider);
             }
         }
 
@@ -63,7 +65,7 @@ namespace Infrastructure.Identity
             return user.Id;
         }
 
-        private static async Task<IdentityResult> EnsureRole(IServiceProvider serviceProvider,
+        private static async Task<IdentityResult> EnsureRoleManager(IServiceProvider serviceProvider,
                                                                       string uid, string role)
         {
             IdentityResult IR = null;
@@ -79,6 +81,7 @@ namespace Infrastructure.Identity
                 var identityRole = new IdentityRole(role);
 
                 IR = await roleManager.CreateAsync(identityRole);
+                
                 // await roleManager.AddClaimAsync(identityRole, new Claim("RolePermissionUpdate", AuthenticationConstants.CreateOperationName));
                 // await roleManager.AddClaimAsync(identityRole, new Claim("RolePermissionUpdate", AuthenticationConstants.UpdateOperationName));
                 // await roleManager.AddClaimAsync(identityRole, new Claim("RolePermissionUpdate", AuthenticationConstants.DeleteOperationName));
@@ -109,6 +112,53 @@ namespace Infrastructure.Identity
 
           
 
+            return IR;
+        }
+        
+         private static async Task<IdentityResult> EnsureRoleOthers(IServiceProvider serviceProvider)
+        {
+            IdentityResult IR = null;
+            var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+
+            if (roleManager == null)
+            {
+                throw new Exception("roleManager null");
+            }
+
+            IdentityRole identityRole;
+
+            if (!await roleManager.RoleExistsAsync(AuthorizedRoleConstants.SALEMAN))
+            {
+                identityRole = new IdentityRole(AuthorizedRoleConstants.SALEMAN);
+
+                IR = await roleManager.CreateAsync(identityRole);
+                
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.REQUISITION, ""));
+            }
+            
+            if (!await roleManager.RoleExistsAsync(AuthorizedRoleConstants.ACCOUNTANT))
+            {
+                identityRole = new IdentityRole(AuthorizedRoleConstants.ACCOUNTANT);
+
+                IR = await roleManager.CreateAsync(identityRole);
+                
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PURCHASEORDER, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PRICEQUOTEORDER, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.GOODSRECEIPT, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.GOODSISSUE, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.STOCKTAKEORDER, ""));
+            }
+            
+            if (!await roleManager.RoleExistsAsync(AuthorizedRoleConstants.STOCKKEEPER))
+            {
+                identityRole = new IdentityRole(AuthorizedRoleConstants.STOCKKEEPER);
+
+                IR = await roleManager.CreateAsync(identityRole);
+                
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.GOODSRECEIPT, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.GOODSISSUE, ""));
+            }
+          
             return IR;
         }
         
