@@ -96,7 +96,7 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
         [SwaggerOperation(
             Summary = "Create a stock take report",
             Description = "Create a stock take report",
-            OperationId = "report.stocktake",
+            OperationId = "report.currentyear",
             Tags = new[] { "ReportEndpoints" })
         ]
         public override async Task<ActionResult<TopSellingResponse>> HandleAsync([FromQuery]StockReportRequest request, CancellationToken cancellationToken = new CancellationToken())
@@ -131,7 +131,7 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
         [SwaggerOperation(
             Summary = "Create a stock take report",
             Description = "Create a stock take report",
-            OperationId = "report.stocktake",
+            OperationId = "report.currentmonth",
             Tags = new[] { "ReportEndpoints" })
         ]
         public override async Task<ActionResult<TopSellingResponse>> HandleAsync([FromQuery]StockReportRequest request, CancellationToken cancellationToken = new CancellationToken())
@@ -167,7 +167,7 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
         [SwaggerOperation(
             Summary = "Create a stock take report",
             Description = "Create a stock take report",
-            OperationId = "report.stocktake",
+            OperationId = "report.trainml",
             Tags = new[] { "ReportEndpoints" })
         ]
         public override async Task<ActionResult<TrainMLResponse>> HandleAsync( CancellationToken cancellationToken = new CancellationToken())
@@ -205,7 +205,7 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
         [SwaggerOperation(
             Summary = "Create a main summary",
             Description = "Create a main summary",
-            OperationId = "report.stocktake",
+            OperationId = "report.mainsum",
             Tags = new[] { "ReportEndpoints" })
         ]
         public override async Task<ActionResult<TopSellingResponse>> HandleAsync([FromQuery]StockReportRequest request, CancellationToken cancellationToken = new CancellationToken())

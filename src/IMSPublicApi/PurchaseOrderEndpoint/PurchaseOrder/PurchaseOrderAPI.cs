@@ -41,7 +41,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         [SwaggerOperation(
             Summary = "Create purchase order",
             Description = "Create purchase order",
-            OperationId = "po.create",
+            OperationId = "pq.cancel",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
         public override async Task<ActionResult<PORejectResponse>> HandleAsync(PORejectRequest request, CancellationToken cancellationToken = new CancellationToken())
@@ -121,7 +121,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         [SwaggerOperation(
             Summary = "Confirm purchase order ",
             Description = "Confirm purchase order",
-            OperationId = "catalog-items.create",
+            OperationId = "po.confirm",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
         public override async Task<ActionResult<POConfirmResponse>> HandleAsync(POConfirmRequest request, CancellationToken cancellationToken = new CancellationToken())
@@ -238,7 +238,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         [SwaggerOperation(
             Summary = "Submit",
             Description = "Submit new purchase order",
-            OperationId = "catalog-items.create",
+            OperationId = "po.submit",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
         public override async Task<ActionResult> HandleAsync(POSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())

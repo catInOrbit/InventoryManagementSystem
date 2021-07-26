@@ -25,7 +25,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
         [SwaggerOperation(
             Summary = "Get a purchase Order",
             Description = "Get a purchase Order",
-            OperationId = "po.searchnumber",
+            OperationId = "po.searchid",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
         public override async Task<ActionResult<GetAllPurchaseOrderResponse>> HandleAsync([FromRoute] GetPurchaseOrderIdRequest request, CancellationToken cancellationToken = new CancellationToken())

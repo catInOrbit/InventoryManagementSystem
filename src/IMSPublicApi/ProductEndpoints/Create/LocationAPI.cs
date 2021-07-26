@@ -89,7 +89,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Location
         [SwaggerOperation(
             Summary = "Create a new location",
             Description = "Create a new location",
-            OperationId = "product_location.create",
+            OperationId = "product_location.update",
             Tags = new[] { "ProductEndpoints" })
         ]
         public override async Task<ActionResult<LocationResponse>> HandleAsync(LocationUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())

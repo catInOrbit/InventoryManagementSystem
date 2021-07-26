@@ -42,7 +42,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.Search.Purch
                           "{CurrentPage}: Current page to display \n" +
                           "{SizePerPage}: Number of rows to display in a page \n " +
                           "{Status} Status of purchase order",
-            OperationId = "po.update",
+            OperationId = "po.searchall",
             Tags = new[] { "PurchaseOrderEndpoints" })
         ]
 

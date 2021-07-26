@@ -30,7 +30,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         [SwaggerOperation(
             Summary = "Get all roles of system",
             Description = "Get all roles of system",
-            OperationId = "auth.registertest",
+            OperationId = "auth.getroles",
             Tags = new[] { "ManagerEndpoints" })
         ]
         public override async Task<ActionResult<GetAllRoleResponse>> HandleAsync([FromQuery]GetAllRoleRequest request, CancellationToken cancellationToken = new CancellationToken())

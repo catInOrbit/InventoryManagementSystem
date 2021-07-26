@@ -26,7 +26,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         [SwaggerOperation(
             Summary = "Deactivate or activate a user",
             Description = "Deactivate or activate a user",
-            OperationId = "manager.roleedit",
+            OperationId = "manager.deactivate",
             Tags = new[] { "ManagerEndpoints" })
         ]
         public override async Task<ActionResult> HandleAsync(DeactivateUserRequest request, CancellationToken cancellationToken = new CancellationToken())

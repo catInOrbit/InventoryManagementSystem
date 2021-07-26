@@ -36,7 +36,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
                           "\n {SearchQuery}: Query to search, all to search all \n " +
                           "{CurrentPage}: Current page to display \n" +
                           "{SizePerPage}: Number of rows to display in a page",
-            OperationId = "st.search",
+            OperationId = "st.searchall",
             Tags = new[] { "StockTakingEndpoints" })
         ]
 

@@ -107,7 +107,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         [SwaggerOperation(
             Summary = "Edit a role with permission (claim), creating new one if there's none",
             Description = "Edit a role with permission (claim)",
-            OperationId = "manager.roleedit",
+            OperationId = "manager.rolecreate",
             Tags = new[] { "ManagerEndpoints" })
         ]
         public override async Task<ActionResult<RolePermissionResponse>> HandleAsync(RolePermissionCreateRequest request, CancellationToken cancellationToken = new CancellationToken())

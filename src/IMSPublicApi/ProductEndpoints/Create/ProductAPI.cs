@@ -159,7 +159,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
         [SwaggerOperation(
             Summary = "Update a new product",
             Description = "Update a new product",
-            OperationId = "product.create",
+            OperationId = "product_variant.update",
             Tags = new[] { "ProductEndpoints" })
         ]
         public override async Task<ActionResult<ProductUpdateResponse>> HandleAsync(ProductVariantUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
@@ -354,7 +354,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
         [SwaggerOperation(
             Summary = "Update a new product",
             Description = "Update a new product",
-            OperationId = "product.create",
+            OperationId = "product.update",
             Tags = new[] { "ProductEndpoints" })
         ]
         public override async Task<ActionResult<ProductUpdateResponse>> HandleAsync(ProductUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())

@@ -32,7 +32,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
         [SwaggerOperation(
             Summary = "Search Package by id",
             Description = "Search Package by id",
-            OperationId = "package.id",
+            OperationId = "package.searchid",
             Tags = new[] { "ProductEndpoints" })
         ]
 
@@ -68,7 +68,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
         [SwaggerOperation(
             Summary = "Search Packages",
             Description = "Search Packages",
-            OperationId = "package.search",
+            OperationId = "package.searchall",
             Tags = new[] { "ProductEndpoints" })
         ]
         public override async Task<ActionResult<PackageResponse>> HandleAsync([FromQuery]PackageSearchRequest request, CancellationToken cancellationToken = new CancellationToken())

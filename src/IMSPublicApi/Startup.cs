@@ -276,7 +276,7 @@ namespace InventoryManagementSystem.PublicApi
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.yaml", "My API V1");
             });
             
             app.UseAuthorization();

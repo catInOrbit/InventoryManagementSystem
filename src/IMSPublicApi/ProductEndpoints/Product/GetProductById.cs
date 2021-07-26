@@ -27,7 +27,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
         [SwaggerOperation(
             Summary = "Search Product by id",
             Description = "Search Product by id",
-            OperationId = "po.update",
+            OperationId = "product.searchid",
             Tags = new[] { "ProductEndpoints" })
         ]
         public override async Task<ActionResult<GetProductResponse>> HandleAsync([FromRoute] GetProductRequest request, CancellationToken cancellationToken = new CancellationToken())
@@ -60,7 +60,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
         [SwaggerOperation(
             Summary = "Search Product by id",
             Description = "Search Product by id",
-            OperationId = "po.update",
+            OperationId = "product_variant.searchid",
             Tags = new[] { "ProductEndpoints" })
         ]
         public override async Task<ActionResult<GetProductResponse>> HandleAsync([FromRoute] GetProductVariantRequest request, CancellationToken cancellationToken = new CancellationToken())

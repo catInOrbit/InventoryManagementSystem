@@ -92,7 +92,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
         [SwaggerOperation(
             Summary = "Update a single line of a stock take",
             Description = "Update a single line of a stock take",
-            OperationId = "st.update",
+            OperationId = "st.updatesingle",
             Tags = new[] { "StockTakingEndpoints" })
         ]
 
@@ -304,7 +304,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
          [SwaggerOperation(
              Summary = "Add product to check to stock take order",
              Description = "Add product to check to stock take order",
-             OperationId = "st.add",
+             OperationId = "st.adjust",
              Tags = new[] { "StockTakingEndpoints" })
          ]
          public override async Task<ActionResult<STResponse>> HandleAsync(STAdjustRequest request, CancellationToken cancellationToken = new CancellationToken())

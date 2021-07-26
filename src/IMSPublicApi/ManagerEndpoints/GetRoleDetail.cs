@@ -27,7 +27,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         [SwaggerOperation(
             Summary = "Get detail of a specific role",
             Description = "Get detail of a specific role",
-            OperationId = "manager.getRole",
+            OperationId = "manager.searchroleid",
             Tags = new[] { "ManagerEndpoints" })
         ]
         public override async Task<ActionResult<GetSpecificRoleResponse>> HandleAsync([FromRoute]GetSpecificRoleRequest request, CancellationToken cancellationToken = new CancellationToken())

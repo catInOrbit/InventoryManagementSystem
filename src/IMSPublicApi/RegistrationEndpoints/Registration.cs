@@ -41,7 +41,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
         [SwaggerOperation(
             Summary = "Registration of a user",
             Description = "Registration a user",
-            OperationId = "auth.registertest",
+            OperationId = "auth.registration",
             Tags = new[] { "IMSRegisterEndpoints" })
         ]
         public override async Task<ActionResult<RegistrationResponse>> HandleAsync(RegistrationRequest request, CancellationToken cancellationToken)

@@ -43,7 +43,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
         [SwaggerOperation(
             Summary = "Create price quote request with Id from purchase requisition",
             Description = "Create price quote request with Id from purchase requisition",
-            OperationId = "po.update",
+            OperationId = "pq.create",
             Tags = new[] { "PriceQuoteOrderEndpoints" })
         ]
 
@@ -110,7 +110,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
         [SwaggerOperation(
             Summary = "Edit price quote request",
             Description = "Edit price quote request",
-            OperationId = "po.update",
+            OperationId = "pq.update",
             Tags = new[] { "PriceQuoteOrderEndpoints" })
         ]
         public override async Task<ActionResult<PQEditResponse>> HandleAsync(PQEditRequest request, CancellationToken cancellationToken = new CancellationToken())
@@ -210,7 +210,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
         [SwaggerOperation(
             Summary = "Submit price quote request",
             Description = "Submit price quote request",
-            OperationId = "po.update",
+            OperationId = "pq.submit",
             Tags = new[] { "PriceQuoteOrderEndpoints" })
         ]
         public override async Task<ActionResult<PQSubmitResponse>> HandleAsync(PQSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())

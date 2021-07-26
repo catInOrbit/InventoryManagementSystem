@@ -27,7 +27,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
         [SwaggerOperation(
             Summary = "Get all stock take Order or specific with search query",
             Description = "Get all stock take Order or specific with search query",
-            OperationId = "st.search",
+            OperationId = "st.searchid",
             Tags = new[] { "StockTakingEndpoints" })
         ]
         public override async Task<ActionResult<STIdResponse>> HandleAsync([FromRoute]STIdRequest request, CancellationToken cancellationToken = new CancellationToken())

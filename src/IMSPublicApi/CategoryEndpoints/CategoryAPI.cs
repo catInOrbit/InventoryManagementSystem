@@ -79,7 +79,7 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
         [SwaggerOperation(
             Summary = "Update a category",
             Description = "Update a category",
-            OperationId = "category.create",
+            OperationId = "category.update",
             Tags = new[] { "CategoryEndpoints" })
         ]
 
@@ -135,7 +135,7 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
         [SwaggerOperation(
             Summary = "Search a specific category",
             Description = "Create a new category",
-            OperationId = "category.create",
+            OperationId = "category.searchid",
             Tags = new[] { "CategoryEndpoints" })
         ]
 
@@ -164,7 +164,7 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
             Description = "Get list of category" +
                           "\n{CurrentPage}: Current page to display \n" +
                           "{SizePerPage}: Number of rows to display in a page",
-            OperationId = "product-category.getall",
+            OperationId = "product_category.searchall",
             Tags = new[] { "CategoryEndpoints" })
         ]
         public override async Task<ActionResult<GetAllCategoryResponse>> HandleAsync([FromQuery] GetCategoryRequest request, CancellationToken cancellationToken = new CancellationToken())

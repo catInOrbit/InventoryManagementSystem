@@ -72,7 +72,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
         [SwaggerOperation(
             Summary = "Search Product Variant",
             Description = "Search Product Variant",
-            OperationId = "product.searchvariants",
+            OperationId = "product_variant.searchall",
             Tags = new[] { "ProductEndpoints" })
         ]
 

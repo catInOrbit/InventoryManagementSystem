@@ -80,7 +80,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
                             "\n {Query}: Querry to search, all to search all \n " +
                             "{CurrentPage}: Current page to display \n" +
                             "{SizePerPage}: Number of rows to display in a page" ,
-              OperationId = "ro.search",
+              OperationId = "ro.searchall",
               Tags = new[] { "GoodsReceiptOrders" })
           ]
           public override async Task<ActionResult<ROGetResponse>> HandleAsync([FromQuery]ROSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
@@ -137,7 +137,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
        [SwaggerOperation(
            Summary = "Get specific receive Order",
            Description = "Get specific receive Order",
-           OperationId = "ro.getid",
+           OperationId = "ro.searchid",
            Tags = new[] { "GoodsReceiptOrders" })
        ]
        public override async Task<ActionResult<ROGetResponse>> HandleAsync([FromRoute]ROIdGetRequest request, CancellationToken cancellationToken = new CancellationToken())
@@ -158,44 +158,44 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
        }
    }
    
-   public class SearchPurchaseOrdersForGoodReceipt : BaseAsyncEndpoint.WithRequest<POsForRORequest>.WithResponse<POsForROResponse>
-   {
-       private readonly IAuthorizationService _authorizationService;
-       private readonly IElasticClient _elasticClient;
-
-       public SearchPurchaseOrdersForGoodReceipt(IAuthorizationService authorizationService, IElasticClient elasticClient)
-       {
-           _authorizationService = authorizationService;
-           _elasticClient = elasticClient;
-       }
-
-       [HttpGet("api/goodsreceipt/searchpoids")]
-       [SwaggerOperation(
-           Summary = "Search Ids of confirmed Purchase Order for a Goods Receipt",
-           Description = "Search Ids of confirmed Purchase Order for a Goods Receipt",
-           OperationId = "ro.getpoids",
-           Tags = new[] { "GoodsReceiptOrders" })
-       ]
-
-       public override async Task<ActionResult<POsForROResponse>> HandleAsync(POsForRORequest request, CancellationToken cancellationToken = new CancellationToken())
-       {
-           if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Read))
-               return Unauthorized();
-            
-           var response = new POsForROResponse();
-           
-                       
-           var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>
-           (
-               s => s.Size(2000).Index(ElasticIndexConstant.PURCHASE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.Id + '*'))));
-
-           var poIndexList =
-               responseElastic.Documents.Where(d => d.Status == PurchaseOrderStatusType.POConfirm.ToString());
-           foreach (var purchaseOrderSearchIndex in poIndexList)
-               response.PurchaseOrderIdList.Add(purchaseOrderSearchIndex.Id);
-           
-           return Ok(response);
-       }
-   }
+   // public class SearchPurchaseOrdersForGoodReceipt : BaseAsyncEndpoint.WithRequest<POsForRORequest>.WithResponse<POsForROResponse>
+   // {
+   //     private readonly IAuthorizationService _authorizationService;
+   //     private readonly IElasticClient _elasticClient;
+   //
+   //     public SearchPurchaseOrdersForGoodReceipt(IAuthorizationService authorizationService, IElasticClient elasticClient)
+   //     {
+   //         _authorizationService = authorizationService;
+   //         _elasticClient = elasticClient;
+   //     }
+   //
+   //     [HttpGet("api/goodsreceipt/searchpoids")]
+   //     [SwaggerOperation(
+   //         Summary = "Search Ids of confirmed Purchase Order for a Goods Receipt",
+   //         Description = "Search Ids of confirmed Purchase Order for a Goods Receipt",
+   //         OperationId = "ro.getpoids",
+   //         Tags = new[] { "GoodsReceiptOrders" })
+   //     ]
+   //
+   //     public override async Task<ActionResult<POsForROResponse>> HandleAsync(POsForRORequest request, CancellationToken cancellationToken = new CancellationToken())
+   //     {
+   //         if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Read))
+   //             return Unauthorized();
+   //          
+   //         var response = new POsForROResponse();
+   //         
+   //                     
+   //         var responseElastic = await _elasticClient.SearchAsync<PurchaseOrderSearchIndex>
+   //         (
+   //             s => s.Size(2000).Index(ElasticIndexConstant.PURCHASE_ORDERS).Query(q => q.QueryString(d => d.Query('*' + request.Id + '*'))));
+   //
+   //         var poIndexList =
+   //             responseElastic.Documents.Where(d => d.Status == PurchaseOrderStatusType.POConfirm.ToString());
+   //         foreach (var purchaseOrderSearchIndex in poIndexList)
+   //             response.PurchaseOrderIdList.Add(purchaseOrderSearchIndex.Id);
+   //         
+   //         return Ok(response);
+   //     }
+   // }
    
 }

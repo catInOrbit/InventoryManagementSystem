@@ -61,7 +61,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         [SwaggerOperation(
             Summary = "Update Receiving Order",
             Description = "Update Receiving Order",
-            OperationId = "gr.updateitem",
+            OperationId = "gr.update",
             Tags = new[] { "GoodsReceiptOrders" })
         ]
 

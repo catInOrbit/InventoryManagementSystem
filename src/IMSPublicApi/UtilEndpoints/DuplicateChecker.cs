@@ -27,7 +27,7 @@ namespace InventoryManagementSystem.PublicApi.UtilEndpoints
         [SwaggerOperation(
             Summary = "Check product field for duplication (Name)",
             Description = "Check product field for duplication (Name)",
-            OperationId = "product.searchvariants",
+            OperationId = "dupcheck.product",
             Tags = new[] { "UtilsEndpoints" })
         ]
         public override async Task<ActionResult<DuplicateCheckerResponse>> HandleAsync(DuplicateCheckerRequest request, CancellationToken cancellationToken = new CancellationToken())
@@ -58,7 +58,7 @@ namespace InventoryManagementSystem.PublicApi.UtilEndpoints
         [SwaggerOperation(
             Summary = "Check product variant field for duplication (Name, SKU, Barcode)",
             Description = "Check product variant field for duplication (Name, SKU, Barcode)",
-            OperationId = "product.searchvariants",
+            OperationId = "dupcheck.productvariant",
             Tags = new[] { "UtilsEndpoints" })
         ]
         public override async Task<ActionResult<DuplicateCheckerResponse>> HandleAsync(DuplicateCheckerRequest request, CancellationToken cancellationToken = new CancellationToken())
@@ -89,7 +89,7 @@ namespace InventoryManagementSystem.PublicApi.UtilEndpoints
         [SwaggerOperation(
             Summary = "Check location field for duplication (Location Name)",
             Description = "Check location field for duplication (Location Name)",
-            OperationId = "product.searchvariants",
+            OperationId = "dupcheck.location",
             Tags = new[] { "UtilsEndpoints" })
         ]
         public override async Task<ActionResult<DuplicateCheckerResponse>> HandleAsync(DuplicateCheckerRequest request, CancellationToken cancellationToken = new CancellationToken())
@@ -120,7 +120,7 @@ namespace InventoryManagementSystem.PublicApi.UtilEndpoints
         [SwaggerOperation(
             Summary = "Check category field for duplication (Category Name)",
             Description = "Check category field for duplication (Category Name)",
-            OperationId = "product.searchvariants",
+            OperationId = "dupcheck.category",
             Tags = new[] { "UtilsEndpoints" })
         ]
         public override async Task<ActionResult<DuplicateCheckerResponse>> HandleAsync(DuplicateCheckerRequest request, CancellationToken cancellationToken = new CancellationToken())
@@ -151,7 +151,7 @@ namespace InventoryManagementSystem.PublicApi.UtilEndpoints
         [SwaggerOperation(
             Summary = "Check category field for duplication (Name, Email)",
             Description = "Check category field for duplication (Name, Email)",
-            OperationId = "product.searchvariants",
+            OperationId = "dupcheck.supplier",
             Tags = new[] { "UtilsEndpoints" })
         ]
         public override async Task<ActionResult<DuplicateCheckerResponse>> HandleAsync(DuplicateCheckerRequest request, CancellationToken cancellationToken = new CancellationToken())

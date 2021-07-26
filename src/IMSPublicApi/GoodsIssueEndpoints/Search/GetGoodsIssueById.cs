@@ -26,7 +26,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
         [SwaggerOperation(
             Summary = "Search for good issue with all or elasticsearch field",
             Description = "Search for good issue with all or elasticsearch field",
-            OperationId = "gi.search",
+            OperationId = "gi.searchid",
             Tags = new[] { "GoodsIssueEndpoints" })
         ]
         public override async Task<ActionResult<GiSearchResponse>> HandleAsync([FromRoute] GiIdRequest request, CancellationToken cancellationToken = new CancellationToken())

@@ -28,7 +28,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
         [SwaggerOperation(
             Summary = "Edit information of a user",
             Description = "Edit information a user",
-            OperationId = "auth.registertest",
+            OperationId = "auth.useredit",
             Tags = new[] { "ManagerEndpoints" })
         ]
 

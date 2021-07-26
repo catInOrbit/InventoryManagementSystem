@@ -35,7 +35,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
                           "\n {SearchQuery}: Querry to search, all to search all \n " +
                           "{CurrentPage}: Current page to display \n" +
                           "{SizePerPage}: Number of rows to display in a page",
-            OperationId = "gi.search",
+            OperationId = "gi.searchall",
             Tags = new[] { "GoodsIssueEndpoints" })
         ]
         [HttpGet("api/goodsissue/search")]
