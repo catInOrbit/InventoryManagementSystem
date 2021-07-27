@@ -87,7 +87,9 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                     response.Token = jwttoken;
                     response.Verbose = "Success";
                     var userGet = await _userRoleModificationService.UserManager.FindByIdAsync(user.Id);
-                    var claims = await _userRoleModificationService.ClaimGettingHelper();
+                    var roleIdentity = await _userRoleModificationService.RoleManager.FindByNameAsync(roles[0]);
+                    var claims = await _userRoleModificationService.RoleManager.GetClaimsAsync(roleIdentity);
+                    
                     var userPrinciple = new GenericPrincipal(new ClaimsIdentity(userGet.UserName), roles.ToArray());
                     HttpContext.User = userPrinciple;
 
