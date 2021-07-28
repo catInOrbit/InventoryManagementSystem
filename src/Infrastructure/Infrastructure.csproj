@@ -42,10 +42,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Identity\Models" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Content Include="imswarehouse-70a47bcd9c79.json">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
