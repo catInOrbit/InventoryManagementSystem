@@ -8,6 +8,7 @@ using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -100,7 +101,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                 
                 resource = (await elasticSearchHelper.GetDocuments()).Documents.ToList();
 
-                pagingOptionPackage.ResultList = _packageAsyncRepository.PackageIndexFiltering(resource, request,
+                pagingOptionPackage.ResultList = FilteringService.PackageIndexFiltering(resource, request,
                     new CancellationToken());
             
                 pagingOptionPackage.ExecuteResourcePaging();

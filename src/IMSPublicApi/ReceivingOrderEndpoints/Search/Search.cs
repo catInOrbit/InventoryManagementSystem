@@ -9,6 +9,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -111,7 +112,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
               responseElastic = await elasticSearchHelper.GetDocuments();
 
 
-              pagingOption.ResultList = _asyncRepository.ReceivingOrderIndexFiltering(
+              pagingOption.ResultList = FilteringService.ReceivingOrderIndexFiltering(
                   responseElastic.Documents.ToList(), roSearchFilter, cancellationToken);
                               
               pagingOption.ExecuteResourcePaging();

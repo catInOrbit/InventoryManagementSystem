@@ -13,6 +13,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,14 +30,14 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             private IAsyncRepository<GoodsReceiptOrder> _roAsyncRepository;
             private IAsyncRepository<GoodsReceiptOrderItem> _goOrderItemsAsyncRepository;
             private IAsyncRepository<Package> _packageAsyncRepository;
-            private readonly IAsyncRepository<GoodsIssueSearchIndex> _goodIssueasyncRepository;
+            private readonly IElasticAsyncRepository<GoodsIssueSearchIndex> _goodIssueasyncRepository;
 
           
             private readonly IAuthorizationService _authorizationService;
             
             private INotificationService _notificationService;
 
-            public GoodsIssueCreate(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<GoodsReceiptOrderItem> goOrderItemsAsyncRepository, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, INotificationService notificationService, IAsyncRepository<GoodsIssueSearchIndex> goodIssueasyncRepository)
+            public GoodsIssueCreate(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<GoodsReceiptOrderItem> goOrderItemsAsyncRepository, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, INotificationService notificationService, IElasticAsyncRepository<GoodsIssueSearchIndex> goodIssueasyncRepository)
             {
                 _userAuthentication = userAuthentication;
                 _asyncRepository = asyncRepository;
@@ -110,16 +111,18 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
         private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<GoodsIssueOrder> _asyncRepository;
         private readonly IAsyncRepository<ProductVariant> _productVariantAsyncRepository;
-
-        private readonly IAsyncRepository<GoodsIssueSearchIndex> _goodIssueasyncRepository;
+         
+        private readonly IElasticAsyncRepository<GoodsIssueSearchIndex> _goodIssueasyncRepository;
 
         private readonly IAuthorizationService _authorizationService;
         private IAsyncRepository<Package> _packageAsyncRepository;
+        private IElasticAsyncRepository<Package> _packageIndexAsyncRepository;
+
 
         private INotificationService _notificationService;
 
 
-        public GoodsIssueUpdate(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAsyncRepository<GoodsIssueSearchIndex> goodIssueasyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository, ILogger<GoodsIssueUpdate> logger)
+        public GoodsIssueUpdate(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IElasticAsyncRepository<GoodsIssueSearchIndex> goodIssueasyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository, ILogger<GoodsIssueUpdate> logger, IElasticAsyncRepository<Package> packageIndexAsyncRepository)
         {
             _userAuthentication = userAuthentication;
             _asyncRepository = asyncRepository;
@@ -129,6 +132,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             _goodIssueasyncRepository = goodIssueasyncRepository;
             _productVariantAsyncRepository = productVariantAsyncRepository;
             _logger = logger;
+            _packageIndexAsyncRepository = packageIndexAsyncRepository;
         }
 
         [HttpPut("api/goodsissue/update")]
@@ -223,7 +227,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
 
                     foreach (var i in listIndexPackageToRemove)
                     {
-                        await _packageAsyncRepository.ElasticDeleteSingleAsync(listPackages[i], ElasticIndexConstant.PACKAGES);
+                        await _packageIndexAsyncRepository.ElasticDeleteSingleAsync(listPackages[i], ElasticIndexConstant.PACKAGES);
                         await _packageAsyncRepository.DeleteAsync(listPackages[i]);
                     }
                     try

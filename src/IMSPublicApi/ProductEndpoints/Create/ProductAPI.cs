@@ -11,6 +11,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,22 +27,23 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
 
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserSession _userAuthentication;
-        private readonly IAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
-        private readonly IAsyncRepository<ProductVariantSearchIndex> _productVariantIndexAsyncRepositoryRepos;
+        private readonly IElasticAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
+        private readonly IElasticAsyncRepository<ProductVariantSearchIndex> _productVariantIndexAsyncRepositoryRepos;
 
         private readonly INotificationService _notificationService;
 
-        public ProductCreate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos, INotificationService notificationService, IAsyncRepository<ProductVariantSearchIndex> productVariantIndexAsyncRepositoryRepos, IAsyncRepository<Category> categoryAsyncRepository)
+        public ProductCreate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAsyncRepository<Category> categoryAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IElasticAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantIndexAsyncRepositoryRepos, INotificationService notificationService)
         {
             _asyncRepository = asyncRepository;
+            _categoryAsyncRepository = categoryAsyncRepository;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
             _productIndexAsyncRepositoryRepos = productIndexAsyncRepositoryRepos;
-            _notificationService = notificationService;
             _productVariantIndexAsyncRepositoryRepos = productVariantIndexAsyncRepositoryRepos;
-            _categoryAsyncRepository = categoryAsyncRepository;
+            _notificationService = notificationService;
         }
-        
+
+
         [HttpPost("api/product/create")]
         [SwaggerOperation(
             Summary = "Create a new product",
@@ -132,8 +134,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
 
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserSession _userAuthentication;
-        private readonly IAsyncRepository<ProductVariantSearchIndex> _productVariantIndexAsyncRepositoryRepos;
-        private readonly IAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
+        private readonly IElasticAsyncRepository<ProductVariantSearchIndex> _productVariantIndexAsyncRepositoryRepos;
+        private readonly IElasticAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
 
         private readonly IRedisRepository _redisRepository;
 
@@ -141,18 +143,18 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
 
         private IElasticClient _elasticClient;
 
-        public ProductVariantUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductVariantSearchIndex> productVariantIndexAsyncRepositoryRepos, INotificationService notificationService, IRedisRepository redisRepository, IAsyncRepository<Package> pacakgeAsyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos, IElasticClient elasticClient)
+        public ProductVariantUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, INotificationService notificationService, IRedisRepository redisRepository, IAsyncRepository<Package> pacakgeAsyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository, IElasticClient elasticClient, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantIndexAsyncRepositoryRepos1, IElasticAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos1)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
-            _productVariantIndexAsyncRepositoryRepos = productVariantIndexAsyncRepositoryRepos;
             _notificationService = notificationService;
             _redisRepository = redisRepository;
             _pacakgeAsyncRepository = pacakgeAsyncRepository;
             _productVariantAsyncRepository = productVariantAsyncRepository;
-            _productIndexAsyncRepositoryRepos = productIndexAsyncRepositoryRepos;
             _elasticClient = elasticClient;
+            _productVariantIndexAsyncRepositoryRepos = productVariantIndexAsyncRepositoryRepos1;
+            _productIndexAsyncRepositoryRepos = productIndexAsyncRepositoryRepos1;
         }
         
         [HttpPut("api/productvariant/update")]
@@ -335,19 +337,19 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
         private IAsyncRepository<ApplicationCore.Entities.Products.Product> _asyncRepository;
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserSession _userAuthentication;
-        private readonly IAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
+        private readonly IElasticAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
         private readonly IRedisRepository _redisRepository;
 
         private readonly INotificationService _notificationService;
 
-        public ProductUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos, INotificationService notificationService, IRedisRepository redisRepository)
+        public ProductUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication,  INotificationService notificationService, IRedisRepository redisRepository, IElasticAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos1)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
-            _productIndexAsyncRepositoryRepos = productIndexAsyncRepositoryRepos;
             _notificationService = notificationService;
             _redisRepository = redisRepository;
+            _productIndexAsyncRepositoryRepos = productIndexAsyncRepositoryRepos1;
         }
         
         [HttpPut("api/product/update")]
@@ -400,19 +402,19 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
 
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserSession _userAuthentication;
-        private readonly IAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
-        private readonly IAsyncRepository<ProductVariantSearchIndex> _productVariantIndexAsyncRepositoryRepos;
+        private readonly IElasticAsyncRepository<ProductSearchIndex> _productIndexAsyncRepositoryRepos;
+        private readonly IElasticAsyncRepository<ProductVariantSearchIndex> _productVariantIndexAsyncRepositoryRepos;
         private readonly INotificationService _notificationService;
 
-        public ProductImageUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos, IAsyncRepository<ProductVariantSearchIndex> productVariantIndexAsyncRepositoryRepos, INotificationService notificationService)
+        public ProductImageUpdate(IAsyncRepository<ApplicationCore.Entities.Products.Product> asyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos,  INotificationService notificationService, IElasticAsyncRepository<ProductSearchIndex> productIndexAsyncRepositoryRepos1, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantIndexAsyncRepositoryRepos1)
         {
             _asyncRepository = asyncRepository;
             _productVariantAsyncRepository = productVariantAsyncRepository;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
-            _productIndexAsyncRepositoryRepos = productIndexAsyncRepositoryRepos;
-            _productVariantIndexAsyncRepositoryRepos = productVariantIndexAsyncRepositoryRepos;
             _notificationService = notificationService;
+            _productIndexAsyncRepositoryRepos = productIndexAsyncRepositoryRepos1;
+            _productVariantIndexAsyncRepositoryRepos = productVariantIndexAsyncRepositoryRepos1;
         }
 
         [HttpPut("api/productglobal/updateimage")]

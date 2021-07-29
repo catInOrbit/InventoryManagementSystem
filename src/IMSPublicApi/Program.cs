@@ -9,10 +9,12 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Nest;
 
 namespace InventoryManagementSystem.PublicApi
 {
@@ -29,33 +31,58 @@ namespace InventoryManagementSystem.PublicApi
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 var productRepos = services.GetRequiredService<IAsyncRepository<ProductVariant>>();
 
-                var elasticProductVariantRepos = services.GetRequiredService<IAsyncRepository<ProductVariantSearchIndex>>();
-                var elasticProductRepos = services.GetRequiredService<IAsyncRepository<ProductSearchIndex>>();
+                var elasticProductVariantRepos = services.GetRequiredService<IAsyncRepository<ProductVariant>>();
+                var elasticProductRepos = services.GetRequiredService<IAsyncRepository<Product>>();
 
-                var elasticPoRepos = services.GetRequiredService<IAsyncRepository<PurchaseOrderSearchIndex>>();
-                var elasticRoRepos = services.GetRequiredService<IAsyncRepository<GoodsReceiptOrderSearchIndex>>();
-                var elasticGiRepos = services.GetRequiredService<IAsyncRepository<GoodsIssueSearchIndex>>();
-                var elasticStRepos = services.GetRequiredService<IAsyncRepository<StockTakeSearchIndex>>();
+                var elasticPoRepos = services.GetRequiredService<IAsyncRepository<PurchaseOrder>>();
+                var elasticRoRepos = services.GetRequiredService<IAsyncRepository<GoodsReceiptOrder>>();
+                var elasticGiRepos = services.GetRequiredService<IAsyncRepository<GoodsIssueOrder>>();
+                var elasticStRepos = services.GetRequiredService<IAsyncRepository<StockTakeOrder>>();
                 var elasticSupRepos = services.GetRequiredService<IAsyncRepository<Supplier>>();
                 var elasticPackageRepos = services.GetRequiredService<IAsyncRepository<Package>>();
                 var elasticLocationRepos = services.GetRequiredService<IAsyncRepository<Location>>();
                 var elasticCategoryRepos = services.GetRequiredService<IAsyncRepository<Category>>();
+
+                var elasticClient = services.GetRequiredService<IElasticClient>();
                 try
                 {
-                    await elasticProductVariantRepos.ElasticSaveBulkAsync((await elasticProductVariantRepos.GetProductVariantForELIndexAsync(new PagingOption<ProductVariantSearchIndex>(0, 0))).ResultList.ToArray(),  ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
-                    await elasticProductRepos.ElasticSaveBulkAsync((await elasticProductRepos.GetProductForELIndexAsync(new PagingOption<ProductSearchIndex>(0, 0))).ResultList.ToArray(),  ElasticIndexConstant.PRODUCT_INDICES);
-                    await elasticPoRepos.ElasticSaveBulkAsync((await elasticPoRepos.GetPOForELIndexAsync(false,new PagingOption<PurchaseOrderSearchIndex>(0,0), new POSearchFilter())).ResultList.ToArray(),  ElasticIndexConstant.PURCHASE_ORDERS);
-                    await elasticRoRepos.ElasticSaveBulkAsync((await elasticRoRepos.GetROForELIndexAsync(new PagingOption<GoodsReceiptOrderSearchIndex>(0,0),new ROSearchFilter())).ResultList.ToArray(), ElasticIndexConstant.RECEIVING_ORDERS);
-                    await elasticGiRepos.ElasticSaveBulkAsync((await elasticGiRepos.GetGIForELIndexAsync(new PagingOption<GoodsIssueSearchIndex>(0,0), new GISearchFilter())).ResultList.ToArray(),  ElasticIndexConstant.GOODS_ISSUE_ORDERS);
-                    await elasticStRepos.ElasticSaveBulkAsync((await elasticStRepos.GetSTForELIndexAsync(new PagingOption<StockTakeSearchIndex>(0,0), new STSearchFilter())).ResultList.ToArray(),  ElasticIndexConstant.STOCK_TAKE_ORDERS);
-                    await elasticSupRepos.ElasticSaveBulkAsync((await elasticSupRepos.GetSuppliers(new PagingOption<Supplier>(0,0))).ResultList.ToArray(),    ElasticIndexConstant.SUPPLIERS);
-                    await elasticPackageRepos.ElasticSaveBulkAsync((await elasticPackageRepos.GetPackages(new PagingOption<Package>(0,0))).ResultList.ToArray(), ElasticIndexConstant.PACKAGES);
-                    await elasticLocationRepos.ElasticSaveBulkAsync((await elasticLocationRepos.ListAllAsync(new PagingOption<Location>(0,0))).ResultList.ToArray(), ElasticIndexConstant.LOCATIONS);
-                    await elasticCategoryRepos.ElasticSaveBulkAsync((await elasticCategoryRepos.ListAllAsync(new PagingOption<Category>(0,0))).ResultList.ToArray(), ElasticIndexConstant.CATEGORIES);
+                    ElasticIndexingService<BaseSearchIndex> els = new ElasticIndexingService<BaseSearchIndex>(elasticPoRepos, elasticRoRepos,
+                        elasticStRepos, elasticGiRepos, elasticProductRepos,
+                    elasticProductVariantRepos);
 
-                    await elasticPoRepos.GetPOForELIndexAsync(false,
-                        new PagingOption<PurchaseOrderSearchIndex>(0, 0), new POSearchFilter());
+                    var productIndex = await els.IndexProduct(new PagingOption<ProductSearchIndex>(0, 0));
+                    var productVariantIndex = await els.IndexProductVariant(new PagingOption<ProductVariantSearchIndex>(0, 0));
+                    var poIndex =await els.IndexPurchasingOrder(new PagingOption<PurchaseOrderSearchIndex>(0, 0));
+                    var roIndex = await els.IndexReceivingOrder(new PagingOption<GoodsReceiptOrderSearchIndex>(0, 0));
+                    var giIndex = await els.IndexGoodsIssue(new PagingOption<GoodsIssueSearchIndex>(0, 0));
+                    var stIndex = await els.IndexStockTake(new PagingOption<StockTakeSearchIndex>(0, 0));
                     
+                    await new ElasticClientService<ProductSearchIndex>(services.GetRequiredService<ILogger<ElasticClientService<ProductSearchIndex>>>(), elasticClient).
+                        ElasticSaveBulkAsync(productIndex.ResultList.ToArray(),    ElasticIndexConstant.PRODUCT_INDICES);
+                    
+                    await new ElasticClientService<ProductVariantSearchIndex>(services.GetRequiredService<ILogger<ElasticClientService<ProductVariantSearchIndex>>>(), elasticClient).
+                        ElasticSaveBulkAsync(productVariantIndex.ResultList.ToArray(),    ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+                    
+                    await new ElasticClientService<PurchaseOrderSearchIndex>(services.GetRequiredService<ILogger<ElasticClientService<PurchaseOrderSearchIndex>>>(), elasticClient).
+                        ElasticSaveBulkAsync(poIndex.ResultList.ToArray(),    ElasticIndexConstant.PURCHASE_ORDERS);
+                    
+                    await new ElasticClientService<GoodsReceiptOrderSearchIndex>(services.GetRequiredService<ILogger<ElasticClientService<GoodsReceiptOrderSearchIndex>>>(), elasticClient).
+                        ElasticSaveBulkAsync(roIndex.ResultList.ToArray(),    ElasticIndexConstant.RECEIVING_ORDERS);
+                    
+                    await new ElasticClientService<GoodsIssueSearchIndex>(services.GetRequiredService<ILogger<ElasticClientService<GoodsIssueSearchIndex>>>(), elasticClient).
+                        ElasticSaveBulkAsync(giIndex.ResultList.ToArray(),    ElasticIndexConstant.GOODS_ISSUE_ORDERS);
+                    
+                    await new ElasticClientService<StockTakeSearchIndex>(services.GetRequiredService<ILogger<ElasticClientService<StockTakeSearchIndex>>>(), elasticClient).
+                        ElasticSaveBulkAsync(stIndex.ResultList.ToArray(),    ElasticIndexConstant.STOCK_TAKE_ORDERS);
+                    
+                    await new ElasticClientService<Supplier>(services.GetRequiredService<ILogger<ElasticClientService<Supplier>>>(), elasticClient).
+                        ElasticSaveBulkAsync((await elasticSupRepos.GetSuppliers(new PagingOption<Supplier>(0,0))).ResultList.ToArray(),    ElasticIndexConstant.SUPPLIERS);
+                    await new ElasticClientService<Package>(services.GetRequiredService<ILogger<ElasticClientService<Package>>>(), elasticClient).
+                        ElasticSaveBulkAsync((await elasticPackageRepos.GetPackages(new PagingOption<Package>(0,0))).ResultList.ToArray(), ElasticIndexConstant.PACKAGES);
+                    await new ElasticClientService<Location>(services.GetRequiredService<ILogger<ElasticClientService<Location>>>(), elasticClient).
+                        ElasticSaveBulkAsync((await elasticLocationRepos.ListAllAsync(new PagingOption<Location>(0,0))).ResultList.ToArray(), ElasticIndexConstant.LOCATIONS);
+                    await new ElasticClientService<Category>(services.GetRequiredService<ILogger<ElasticClientService<Category>>>(), elasticClient).ElasticSaveBulkAsync((await elasticCategoryRepos.ListAllAsync(new PagingOption<Category>(0,0))).ResultList.ToArray(), ElasticIndexConstant.CATEGORIES);
+
                     await SeedRole.Initialize(services, "test@12345Aha");
                     
                     // BigQueryService bigQueryService = new BigQueryService();

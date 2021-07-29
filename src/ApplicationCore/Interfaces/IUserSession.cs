@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Entities;
 
-namespace Infrastructure.Services
+namespace InventoryManagementSystem.ApplicationCore.Interfaces
 {
     public interface IUserSession
     {

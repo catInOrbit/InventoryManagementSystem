@@ -8,6 +8,7 @@ using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -69,8 +70,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
                 ElasticIndexConstant.GOODS_ISSUE_ORDERS);
             responseElastic = await elasticSearchHelper.GetDocuments();
 
-         
-            pagingOption.ResultList = _asyncRepository.GoodsIssueIndexFiltering(responseElastic.Documents.ToList(), searchFilter,
+            pagingOption.ResultList = FilteringService.GoodsIssueIndexFiltering(responseElastic.Documents.ToList(), searchFilter,
                 new CancellationToken());
             
             pagingOption.ExecuteResourcePaging();

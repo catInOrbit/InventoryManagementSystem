@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Infrastructure.Services

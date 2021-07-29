@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace Infrastructure.Services
+namespace InventoryManagementSystem.ApplicationCore.Services
 {
     public class UserRoleModificationService
     {

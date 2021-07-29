@@ -10,6 +10,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,21 +23,21 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
-        private readonly IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
+        private readonly IElasticAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
         private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<Product> _productRepos;
         
         private INotificationService _notificationService;
 
 
-        public PriceQuoteRequestCreate(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication,  IAsyncRepository<Product> productRepos, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, INotificationService notificationService)
+        public PriceQuoteRequestCreate(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication,  IAsyncRepository<Product> productRepos, INotificationService notificationService, IElasticAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository)
         {
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
             _userAuthentication = userAuthentication;
             _productRepos = productRepos;
-            _indexAsyncRepository = indexAsyncRepository;
             _notificationService = notificationService;
+            _indexAsyncRepository = indexAsyncRepository;
         }
         
         [HttpPost("api/pricequote/create")]
@@ -91,18 +92,18 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
         private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<ProductVariant> _productVariantRepos;
-        private readonly IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
+        private readonly IElasticAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
         
         private INotificationService _notificationService;
 
-        public PriceQuoteRequestEdit(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<ProductVariant> productVariantRepos, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, INotificationService notificationService)
+        public PriceQuoteRequestEdit(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<ProductVariant> productVariantRepos, INotificationService notificationService, IElasticAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository1)
         {
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
             _userAuthentication = userAuthentication;
             _productVariantRepos = productVariantRepos;
-            _indexAsyncRepository = indexAsyncRepository;
             _notificationService = notificationService;
+            _indexAsyncRepository = indexAsyncRepository1;
         }
         
         
@@ -118,7 +119,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRICEQUOTEORDER, UserOperations.Update))
                 return Unauthorized();
 
-            var po = _asyncRepository.GetPurchaseOrderByNumber(request.PurchaseOrderNumber);
+            var po = await _asyncRepository.GetByIdAsync(request.PurchaseOrderNumber);
             
             po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction, UserTransactionActionType.Modify,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
@@ -138,6 +139,10 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             ApplicationUser currentUser;
             string messageNotification;
             bool mergePerformed = false;
+            if(request.MergedRequisitionIds.Contains(po.Id))
+                return BadRequest(
+                    "Request list for merging -other- purchase order ID should not contain ID of current Purchase Order: " + po.Id);
+            
             foreach (var requestMergedRequisitionId in request.MergedRequisitionIds)
             {
                 mergePerformed = true;
@@ -185,7 +190,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
         private readonly IUserSession _userAuthentication;
-        private readonly IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
+        private readonly IElasticAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
         
         private readonly IRedisRepository _redisRepository;
         private readonly IAsyncRepository<Notification> _notificationAsyncRepository;
@@ -193,17 +198,17 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
 
         private readonly INotificationService _notificationService;
 
-        public PriceQuoteRequestSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, IRedisRepository redisRepository, IAsyncRepository<Notification> notificationAsyncRepository, IHubContext<NotificationHub> hubContext, INotificationService notificationService)
+        public PriceQuoteRequestSubmit(IEmailSender emailSender, IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IRedisRepository redisRepository, IAsyncRepository<Notification> notificationAsyncRepository, IHubContext<NotificationHub> hubContext, INotificationService notificationService, IElasticAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository1)
         {
             _emailSender = emailSender;
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
             _userAuthentication = userAuthentication;
-            _indexAsyncRepository = indexAsyncRepository;
             _redisRepository = redisRepository;
             _notificationAsyncRepository = notificationAsyncRepository;
             _hubContext = hubContext;
             _notificationService = notificationService;
+            _indexAsyncRepository = indexAsyncRepository1;
         }
         
         [HttpPost("api/pricequote/submit")]
@@ -219,7 +224,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRICEQUOTEORDER, UserOperations.Update))
                 return Unauthorized();
             var response = new PQSubmitResponse();
-            var po = _asyncRepository.GetPurchaseOrderByNumber(request.OrderNumber);
+            var po = await _asyncRepository.GetByIdAsync(request.OrderNumber);
             po.PurchaseOrderStatus = PurchaseOrderStatusType.PurchaseOrder;
             
             po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,

@@ -11,6 +11,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,19 +24,19 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
          private readonly IAuthorizationService _authorizationService;
          private readonly IUserSession _userAuthentication;
          private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
-         private readonly IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
+         private readonly IElasticAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
          private readonly IAsyncRepository<ProductVariant> _pvasyncRepository;
 
          private readonly INotificationService _notificationService;
 
-         public RequisitionCreate(IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, INotificationService notificationService, IAsyncRepository<ProductVariant> pvasyncRepository)
+         public RequisitionCreate(IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, INotificationService notificationService, IAsyncRepository<ProductVariant> pvasyncRepository, IElasticAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository)
          {
              _authorizationService = authorizationService;
              _userAuthentication = userAuthentication;
              _asyncRepository = asyncRepository;
-             _indexAsyncRepository = indexAsyncRepository;
              _notificationService = notificationService;
              _pvasyncRepository = pvasyncRepository;
+             _indexAsyncRepository = indexAsyncRepository;
          }
 
          [HttpPost("api/requisition/create")]
@@ -88,17 +89,17 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _asyncRepository;
         private readonly IUserSession _userAuthentication;
-        private readonly IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
+        private readonly IElasticAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
         
         private readonly INotificationService _notificationService;
 
-        public RequisitionSubmit(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, INotificationService notificationService)
+        public RequisitionSubmit(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, INotificationService notificationService, IElasticAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository1)
         {
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
             _userAuthentication = userAuthentication;
-            _indexAsyncRepository = indexAsyncRepository;
             _notificationService = notificationService;
+            _indexAsyncRepository = indexAsyncRepository1;
         }
 
         [HttpPost("api/requisition/submit")]
@@ -144,20 +145,20 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
         private readonly IAsyncRepository<OrderItem> _orderItemAsyncRepository;
 
         private readonly IUserSession _userAuthentication;
-        private readonly IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
+        private readonly IElasticAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
 
         
         private readonly INotificationService _notificationService;
 
-        public RequisitionUpdate(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, IAsyncRepository<ProductVariant> pvasyncRepository, INotificationService notificationService, IAsyncRepository<OrderItem> orderItemAsyncRepository)
+        public RequisitionUpdate(IAuthorizationService authorizationService, IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> asyncRepository, IUserSession userAuthentication, IAsyncRepository<ProductVariant> pvasyncRepository, INotificationService notificationService, IAsyncRepository<OrderItem> orderItemAsyncRepository, IElasticAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository)
         {
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
             _userAuthentication = userAuthentication;
-            _indexAsyncRepository = indexAsyncRepository;
             _pvasyncRepository = pvasyncRepository;
             _notificationService = notificationService;
             _orderItemAsyncRepository = orderItemAsyncRepository;
+            _indexAsyncRepository = indexAsyncRepository;
         }
 
         [HttpPut("api/requisition/update")]

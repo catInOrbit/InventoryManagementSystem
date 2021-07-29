@@ -9,6 +9,7 @@ using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -121,7 +122,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                 //
                 // }
           
-            pagingOption.ResultList = _asyncRepository.ProductVariantIndexFiltering(responseElastic.Documents.ToList(), request,
+            pagingOption.ResultList = FilteringService.ProductVariantIndexFiltering(responseElastic.Documents.ToList(), request,
                 new CancellationToken());
             
             pagingOption.ExecuteResourcePaging();
@@ -193,7 +194,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                 }
                 
         
-            pagingOption.ResultList = _asyncRepository.ProductIndexFiltering(responseElastic.Documents.ToList(), request,
+            pagingOption.ResultList = FilteringService.ProductIndexFiltering(responseElastic.Documents.ToList(), request,
                 new CancellationToken());
             
             pagingOption.ExecuteResourcePaging();

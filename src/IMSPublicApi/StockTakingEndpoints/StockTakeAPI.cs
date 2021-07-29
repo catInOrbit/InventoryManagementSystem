@@ -13,6 +13,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +24,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
     public class StockTakeSubmit : BaseAsyncEndpoint.WithRequest<StockTakeSubmitRequest>.WithoutResponse
     {
         private IAsyncRepository<StockTakeOrder> _asyncRepository;
-        private IAsyncRepository<StockTakeSearchIndex> _stSearchasyncRepository;
+        private IElasticAsyncRepository<StockTakeSearchIndex> _stSearchasyncRepository;
 
         private IAsyncRepository<ProductVariant> _poAsyncRepository;
 
@@ -31,14 +32,14 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
         private readonly INotificationService _notificationService;
         private readonly IUserSession _userAuthentication;
 
-        public StockTakeSubmit(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IAsyncRepository<ProductVariant> poAsyncRepository, INotificationService notificationService, IUserSession userAuthentication, IAsyncRepository<StockTakeSearchIndex> stSearchasyncRepository)
+        public StockTakeSubmit(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IAsyncRepository<ProductVariant> poAsyncRepository, INotificationService notificationService, IUserSession userAuthentication,  IElasticAsyncRepository<StockTakeSearchIndex> stSearchasyncRepository1)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
             _poAsyncRepository = poAsyncRepository;
             _notificationService = notificationService;
             _userAuthentication = userAuthentication;
-            _stSearchasyncRepository = stSearchasyncRepository;
+            _stSearchasyncRepository = stSearchasyncRepository1;
         }
 
         [HttpPut("api/stocktake/submit")]
@@ -80,20 +81,20 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
     {
         private readonly IAsyncRepository<StockTakeOrder> _asyncRepository;
         private readonly IAsyncRepository<ProductVariant> _pvasyncRepository;
-        private IAsyncRepository<StockTakeSearchIndex> _stSearchasyncRepository;
+        private IElasticAsyncRepository<StockTakeSearchIndex> _stSearchasyncRepository;
 
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserSession _userAuthentication;
         private readonly INotificationService _notificationService;
 
-        public StockTakeUpdate(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductVariant> pvasyncRepository, INotificationService notificationService, IAsyncRepository<StockTakeSearchIndex> stSearchasyncRepository)
+        public StockTakeUpdate(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductVariant> pvasyncRepository, INotificationService notificationService, IElasticAsyncRepository<StockTakeSearchIndex> stSearchasyncRepository1)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
             _pvasyncRepository = pvasyncRepository;
             _notificationService = notificationService;
-            _stSearchasyncRepository = stSearchasyncRepository;
+            _stSearchasyncRepository = stSearchasyncRepository1;
         }
 
         [HttpPut("api/stocktake/updatesingle")]
@@ -149,7 +150,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
      public class StockTakeAddProduct : BaseAsyncEndpoint.WithRequest<STAddRequest>.WithResponse<STCreateItemResponse>
      {
          private readonly IAsyncRepository<StockTakeOrder> _stAsyncRepository;
-         private readonly IAsyncRepository<StockTakeSearchIndex> _stSearchAsyncRepository;
+         private readonly IElasticAsyncRepository<StockTakeSearchIndex> _stSearchAsyncRepository;
 
          private readonly IAsyncRepository<ProductVariant> _productAsyncRepository;
          private readonly IAsyncRepository<Location> _locationAsyncRepository;
@@ -161,7 +162,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
 
          private readonly INotificationService _notificationService;
 
-         public StockTakeAddProduct(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, IAsyncRepository<StockTakeSearchIndex> stSearchAsyncRepository)
+         public StockTakeAddProduct(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, IElasticAsyncRepository<StockTakeSearchIndex> stSearchAsyncRepository1)
          {
              _stAsyncRepository = stAsyncRepository;
              _productAsyncRepository = productAsyncRepository;
@@ -170,7 +171,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              _notificationService = notificationService;
              _packageAsyncRepository = packageAsyncRepository;
              _authorizationService = authorizationService;
-             _stSearchAsyncRepository = stSearchAsyncRepository;
+             _stSearchAsyncRepository = stSearchAsyncRepository1;
          }
 
 
@@ -267,7 +268,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
       public class StockTakeAdjust : BaseAsyncEndpoint.WithRequest<STAdjustRequest>.WithResponse<STResponse>
      {
          private readonly IAsyncRepository<StockTakeOrder> _stAsyncRepository;
-         private readonly IAsyncRepository<StockTakeSearchIndex> _stSearchAsyncRepository;
+         private readonly IElasticAsyncRepository<StockTakeSearchIndex> _stSearchAsyncRepository;
 
          private readonly IAsyncRepository<ProductVariant> _productAsyncRepository;
          private readonly IAsyncRepository<Location> _locationAsyncRepository;
@@ -278,7 +279,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
 
          private readonly INotificationService _notificationService;
 
-         public StockTakeAdjust(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, IAsyncRepository<StockTakeSearchIndex> stSearchAsyncRepository)
+         public StockTakeAdjust(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, IElasticAsyncRepository<StockTakeSearchIndex> stSearchAsyncRepository1)
          {
              _stAsyncRepository = stAsyncRepository;
              _productAsyncRepository = productAsyncRepository;
@@ -287,7 +288,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              _notificationService = notificationService;
              _packageAsyncRepository = packageAsyncRepository;
              _authorizationService = authorizationService;
-             _stSearchAsyncRepository = stSearchAsyncRepository;
+             _stSearchAsyncRepository = stSearchAsyncRepository1;
          }
          [HttpPost("api/stocktake/adjust")]
          [SwaggerOperation(
@@ -347,18 +348,18 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
        public class StockTakeCancel : BaseAsyncEndpoint.WithRequest<STCancelRequest>.WithResponse<STResponse>
      {
          private readonly IAsyncRepository<StockTakeOrder> _stAsyncRepository;
-         private readonly IAsyncRepository<StockTakeSearchIndex> _stSearchAsyncRepository;
+         private readonly IElasticAsyncRepository<StockTakeSearchIndex> _stSearchAsyncRepository;
          private readonly IAuthorizationService _authorizationService;
          private readonly IUserSession _userAuthentication;
          private readonly INotificationService _notificationService;
 
-         public StockTakeCancel(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<StockTakeSearchIndex> stSearchAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, INotificationService notificationService)
+         public StockTakeCancel(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, INotificationService notificationService, IElasticAsyncRepository<StockTakeSearchIndex> stSearchAsyncRepository1)
          {
              _stAsyncRepository = stAsyncRepository;
-             _stSearchAsyncRepository = stSearchAsyncRepository;
              _authorizationService = authorizationService;
              _userAuthentication = userAuthentication;
              _notificationService = notificationService;
+             _stSearchAsyncRepository = stSearchAsyncRepository1;
          }
 
 

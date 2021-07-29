@@ -11,6 +11,7 @@ using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -91,6 +92,8 @@ namespace InventoryManagementSystem.PublicApi
             // services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
             services.AddElasticsearch(Configuration);
             services.AddScoped(typeof(IAsyncRepository<>), typeof(AppGlobalRepository<>));
+            services.AddScoped(typeof(IElasticAsyncRepository<>), typeof(ElasticClientService<>));
+
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddScoped<ITokenClaimsService, IdentityTokenClaimService>();
             

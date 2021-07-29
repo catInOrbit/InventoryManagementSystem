@@ -7,7 +7,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 
-namespace Infrastructure
+namespace InventoryManagementSystem.ApplicationCore.Services
 {
     public class IndexingHelper
     {

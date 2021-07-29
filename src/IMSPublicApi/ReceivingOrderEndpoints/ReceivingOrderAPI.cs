@@ -14,6 +14,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.RedisMessages;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,10 +32,9 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly IAsyncRepository<Location> _locationRepository;
         private readonly IAsyncRepository<ProductVariant> _productVariantRepository;
 
-        private readonly IAsyncRepository<ProductVariantSearchIndex> _productVariantElasticRepository;
+        private readonly IElasticAsyncRepository<ProductVariantSearchIndex> _productVariantElasticRepository;
 
-
-        private readonly IAsyncRepository<GoodsReceiptOrderSearchIndex> _recevingOrderSearchIndexRepository;
+        private readonly IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> _recevingOrderSearchIndexRepository;
 
         private readonly IAsyncRepository<ProductVariant> _productRepository;
         private readonly IUserSession _userAuthentication;
@@ -42,19 +42,19 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly INotificationService _notificationService;
 
 
-        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IAsyncRepository<ProductVariant> productRepository, IUserSession userAuthentication, IAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository, IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository, IAsyncRepository<ProductVariant> productVariantRepository, IAsyncRepository<ProductVariantSearchIndex> productVariantElasticRepository)
+        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IAsyncRepository<ProductVariant> productRepository, IUserSession userAuthentication,  IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository, IAsyncRepository<ProductVariant> productVariantRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantElasticRepository1, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository1)
         {
             _authorizationService = authorizationService;
             _recevingOrderRepository = recevingOrderRepository;
             _productRepository = productRepository;
             _userAuthentication = userAuthentication;
-            _recevingOrderSearchIndexRepository = recevingOrderSearchIndexRepository;
             _poRepository = poRepository;
             _packageRepository = packageRepository;
             _notificationService = notificationService;
             _locationRepository = locationRepository;
             _productVariantRepository = productVariantRepository;
-            _productVariantElasticRepository = productVariantElasticRepository;
+            _productVariantElasticRepository = productVariantElasticRepository1;
+            _recevingOrderSearchIndexRepository = recevingOrderSearchIndexRepository1;
         }
         
         [HttpPut("api/goodsreceipt/update")]
@@ -252,22 +252,22 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
 
 
         private IAsyncRepository<PurchaseOrder> _poAsyncRepository;
-        private IAsyncRepository<PurchaseOrderSearchIndex> _poSearchIndexAsyncRepository;
-        private IAsyncRepository<GoodsReceiptOrderSearchIndex> _roSearchIndexAsyncRepository;
+        private IElasticAsyncRepository<PurchaseOrderSearchIndex> _poSearchIndexAsyncRepository;
+        private IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> _roSearchIndexAsyncRepository;
         
         private readonly INotificationService _notificationService;
         private readonly IUserSession _userAuthentication;
 
 
-        public ReceivingOrderSubmit(IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<PurchaseOrder> poAsyncRepository, IAsyncRepository<PurchaseOrderSearchIndex> poSearchIndexAsyncRepository, IAsyncRepository<GoodsReceiptOrderSearchIndex> roSearchIndexAsyncRepository, INotificationService notificationService, IUserSession userAuthentication, ILogger<ReceivingOrderSubmit> logger)
+        public ReceivingOrderSubmit(IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<PurchaseOrder> poAsyncRepository, INotificationService notificationService, IUserSession userAuthentication, ILogger<ReceivingOrderSubmit> logger, IElasticAsyncRepository<PurchaseOrderSearchIndex> poSearchIndexAsyncRepository1, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> roSearchIndexAsyncRepository1)
         {
             _roAsyncRepository = roAsyncRepository;
             _poAsyncRepository = poAsyncRepository;
-            _poSearchIndexAsyncRepository = poSearchIndexAsyncRepository;
-            _roSearchIndexAsyncRepository = roSearchIndexAsyncRepository;
             _notificationService = notificationService;
             _userAuthentication = userAuthentication;
             _logger = logger;
+            _poSearchIndexAsyncRepository = poSearchIndexAsyncRepository1;
+            _roSearchIndexAsyncRepository = roSearchIndexAsyncRepository1;
         }
 
         [HttpPost("api/goodsreceipt/submit")]

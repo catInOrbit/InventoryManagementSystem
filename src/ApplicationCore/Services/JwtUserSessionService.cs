@@ -2,8 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 
-namespace Infrastructure.Services
+namespace InventoryManagementSystem.ApplicationCore.Services
 {
     public class UserSessionService : IUserSession
     {

@@ -8,6 +8,7 @@ using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,14 +20,17 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<Supplier> _supplierAsyncRepository;
+        private readonly IElasticAsyncRepository<Supplier> _supplierIndexRepository;
+
         private readonly IUserSession _userAuthentication;
         private readonly INotificationService _notificationService;
-        public SupplierCreate(IAsyncRepository<Supplier> supplierAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, INotificationService notificationService)
+        public SupplierCreate(IAsyncRepository<Supplier> supplierAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, INotificationService notificationService, IElasticAsyncRepository<Supplier> supplierIndexRepository)
         {
             _supplierAsyncRepository = supplierAsyncRepository;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
             _notificationService = notificationService;
+            _supplierIndexRepository = supplierIndexRepository;
         }
     
         [HttpPost("api/supplier/create")]
@@ -55,7 +59,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             supplier.LatestUpdateDate = DateTime.UtcNow;
             
             await _supplierAsyncRepository.AddAsync(supplier);
-            await _supplierAsyncRepository.ElasticSaveSingleAsync(true, supplier, ElasticIndexConstant.SUPPLIERS);
+            await _supplierIndexRepository.ElasticSaveSingleAsync(true, supplier, ElasticIndexConstant.SUPPLIERS);
 
             
             // var currentUser = await _userAuthentication.GetCurrentSessionUser();
@@ -76,14 +80,17 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
     {
         private readonly IAuthorizationService _authorizationService;
         private readonly IAsyncRepository<Supplier> _supplierAsyncRepository;
+        private readonly IElasticAsyncRepository<Supplier> _supplierIndexAsyncRepository;
+
         private readonly IUserSession _userAuthentication;
         private readonly INotificationService _notificationService;
-        public SupplierEdit(IAsyncRepository<Supplier> supplierAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, INotificationService notificationService)
+        public SupplierEdit(IAsyncRepository<Supplier> supplierAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, INotificationService notificationService, IElasticAsyncRepository<Supplier> supplierIndexAsyncRepository)
         {
             _supplierAsyncRepository = supplierAsyncRepository;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
             _notificationService = notificationService;
+            _supplierIndexAsyncRepository = supplierIndexAsyncRepository;
         }
     
         [HttpPut("api/supplier/edit")]
@@ -115,7 +122,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             supplier.LatestUpdateDate = DateTime.UtcNow;
 
             await _supplierAsyncRepository.UpdateAsync(supplier);
-            await _supplierAsyncRepository.ElasticSaveSingleAsync(false, supplier, ElasticIndexConstant.SUPPLIERS);
+            await _supplierIndexAsyncRepository.ElasticSaveSingleAsync(false, supplier, ElasticIndexConstant.SUPPLIERS);
 
             // var currentUser = await _userAuthentication.GetCurrentSessionUser();
             //       

@@ -9,6 +9,7 @@ using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,19 +21,19 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
 {
     public class DeactivateTransaction : BaseAsyncEndpoint.WithRequest<DeleteTransactionRequest>.WithResponse<DeleteTransactionResponse>
     {
-        private readonly IAsyncRepository<ProductVariantSearchIndex> _productVariantAsyncRepository;
-        private readonly IAsyncRepository<ProductSearchIndex> _productAsyncRepository;
+        private readonly IElasticAsyncRepository<ProductVariantSearchIndex> _productVariantAsyncRepository;
+        private readonly IElasticAsyncRepository<ProductSearchIndex> _productAsyncRepository;
 
         private  readonly IConfiguration _configuration;
 
         private readonly IAuthorizationService _authorizationService;
 
-        public DeactivateTransaction(IAsyncRepository<ProductVariantSearchIndex> productVariantAsyncRepository, IConfiguration configuration, IAuthorizationService authorizationService, IAsyncRepository<ProductSearchIndex> productAsyncRepository)
+        public DeactivateTransaction( IConfiguration configuration, IAuthorizationService authorizationService, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantAsyncRepository, IElasticAsyncRepository<ProductSearchIndex> productAsyncRepository1)
         {
-            _productVariantAsyncRepository = productVariantAsyncRepository;
             _configuration = configuration;
             _authorizationService = authorizationService;
-            _productAsyncRepository = productAsyncRepository;
+            _productVariantAsyncRepository = productVariantAsyncRepository;
+            _productAsyncRepository = productAsyncRepository1;
         }
 
 

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 
-namespace Infrastructure.Services
+namespace InventoryManagementSystem.ApplicationCore.Services
 {
     public static class UserAuthorizationService
     {

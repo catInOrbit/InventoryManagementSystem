@@ -10,6 +10,7 @@ using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using InventoryManagementSystem.ApplicationCore.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -21,14 +22,15 @@ namespace InventoryManagementSystem.PublicApi.EmailEndpoints
     {
         private readonly IEmailSender _emailSender;
         private IAsyncRepository<PurchaseOrder> _purchaseOrderAsyncRepository;
-        private IAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
+        private IElasticAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
 
-        public SendMail(IEmailSender emailSender, IAsyncRepository<PurchaseOrder> purchaseOrderAsyncRepository, IAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository)
+        public SendMail(IEmailSender emailSender, IAsyncRepository<PurchaseOrder> purchaseOrderAsyncRepository, IElasticAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository)
         {
             _emailSender = emailSender;
             _purchaseOrderAsyncRepository = purchaseOrderAsyncRepository;
             _indexAsyncRepository = indexAsyncRepository;
         }
+
 
         [HttpPost("api/mailservice")]
         [SwaggerOperation(
