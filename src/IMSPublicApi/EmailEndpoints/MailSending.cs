@@ -56,7 +56,7 @@ namespace InventoryManagementSystem.PublicApi.EmailEndpoints
                     var response = new MailSendingPOResponse();
                     response.PurchaseOrder = po;
                     response.MergedOrderIdLists =
-                        _purchaseOrderAsyncRepository.GetMergedPurchaseOrders(po.MergedWithPurchaseOrderId);
+                        _purchaseOrderAsyncRepository.GetMergedPurchaseOrders(po.Id);
                     
                     foreach (var orderItem in po.PurchaseOrderProduct)
                         orderItem.IsShowingProductVariant = true;

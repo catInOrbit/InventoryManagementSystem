@@ -15,8 +15,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string CreatedByName { get; set; }
         public string Status { get; set; }
         
-        public string DeliveryMethod { get; set; }
-
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
     }

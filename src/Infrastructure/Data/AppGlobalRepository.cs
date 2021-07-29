@@ -518,19 +518,9 @@
             
             foreach (var st in sts)
             {
-                StockTakeSearchIndex index; 
                 try
                 {
-                    index = new StockTakeSearchIndex
-                    {
-                        Id = st.Id,
-                        CreatedByName = (st.Transaction.TransactionRecord.Count > 0) ? st.Transaction.TransactionRecord[^1].ApplicationUser.Fullname : "",
-                        Status = st.StockTakeOrderType.ToString(),
-                        CreatedDate = st.Transaction.TransactionRecord[0].Date,
-                        ModifiedDate = st.Transaction.TransactionRecord[^1].Date
-                    };
-                    
-                    pagingOption.ResultList.Add(index);
+                    pagingOption.ResultList.Add(IndexingHelper.StockTakeSearchIndex(st));
                 }
                 catch (Exception e)
                 {

@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Infrastructure;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using Microsoft.AspNetCore.Authorization;
@@ -21,19 +23,22 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
     public class StockTakeSubmit : BaseAsyncEndpoint.WithRequest<StockTakeSubmitRequest>.WithoutResponse
     {
         private IAsyncRepository<StockTakeOrder> _asyncRepository;
+        private IAsyncRepository<StockTakeSearchIndex> _stSearchasyncRepository;
+
         private IAsyncRepository<ProductVariant> _poAsyncRepository;
 
         private readonly IAuthorizationService _authorizationService;
         private readonly INotificationService _notificationService;
         private readonly IUserSession _userAuthentication;
 
-        public StockTakeSubmit(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IAsyncRepository<ProductVariant> poAsyncRepository, INotificationService notificationService, IUserSession userAuthentication)
+        public StockTakeSubmit(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IAsyncRepository<ProductVariant> poAsyncRepository, INotificationService notificationService, IUserSession userAuthentication, IAsyncRepository<StockTakeSearchIndex> stSearchasyncRepository)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
             _poAsyncRepository = poAsyncRepository;
             _notificationService = notificationService;
             _userAuthentication = userAuthentication;
+            _stSearchasyncRepository = stSearchasyncRepository;
         }
 
         [HttpPut("api/stocktake/submit")]
@@ -58,7 +63,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
             
             
             await _asyncRepository.UpdateAsync(stockTakeOrder);
-            
+            await _stSearchasyncRepository.ElasticSaveSingleAsync(false,
+                IndexingHelper.StockTakeSearchIndex(stockTakeOrder), ElasticIndexConstant.STOCK_TAKE_ORDERS);
                 
             var messageNotification =
                 _notificationService.CreateMessage(currentUser.Fullname, "Submit","Stock Take", stockTakeOrder.Id);
@@ -74,18 +80,20 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
     {
         private readonly IAsyncRepository<StockTakeOrder> _asyncRepository;
         private readonly IAsyncRepository<ProductVariant> _pvasyncRepository;
+        private IAsyncRepository<StockTakeSearchIndex> _stSearchasyncRepository;
 
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserSession _userAuthentication;
         private readonly INotificationService _notificationService;
 
-        public StockTakeUpdate(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductVariant> pvasyncRepository, INotificationService notificationService)
+        public StockTakeUpdate(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductVariant> pvasyncRepository, INotificationService notificationService, IAsyncRepository<StockTakeSearchIndex> stSearchasyncRepository)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
             _pvasyncRepository = pvasyncRepository;
             _notificationService = notificationService;
+            _stSearchasyncRepository = stSearchasyncRepository;
         }
 
         [HttpPut("api/stocktake/updatesingle")]
@@ -131,14 +139,9 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
             storder.Transaction = TransactionUpdateHelper.UpdateTransaction(storder.Transaction,UserTransactionActionType.Modify,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, storder.Id, "");
             await _asyncRepository.UpdateAsync(storder);
-            
-            // var currentUser = await _userAuthentication.GetCurrentSessionUser();
-            //       
-            // var messageNotification =
-            //     _notificationService.CreateMessage(currentUser.Fullname, "Update","Stock Take", storder.Id);
-            //     
-            // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-            //     currentUser.Id, messageNotification);
+            await _stSearchasyncRepository.ElasticSaveSingleAsync(false,
+                IndexingHelper.StockTakeSearchIndex(storder), ElasticIndexConstant.STOCK_TAKE_ORDERS);
+   
             return Ok(response);
         }
     }
@@ -146,6 +149,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
      public class StockTakeAddProduct : BaseAsyncEndpoint.WithRequest<STAddRequest>.WithResponse<STCreateItemResponse>
      {
          private readonly IAsyncRepository<StockTakeOrder> _stAsyncRepository;
+         private readonly IAsyncRepository<StockTakeSearchIndex> _stSearchAsyncRepository;
+
          private readonly IAsyncRepository<ProductVariant> _productAsyncRepository;
          private readonly IAsyncRepository<Location> _locationAsyncRepository;
          private readonly IAsyncRepository<Package> _packageAsyncRepository;
@@ -156,7 +161,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
 
          private readonly INotificationService _notificationService;
 
-         public StockTakeAddProduct(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService)
+         public StockTakeAddProduct(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, IAsyncRepository<StockTakeSearchIndex> stSearchAsyncRepository)
          {
              _stAsyncRepository = stAsyncRepository;
              _productAsyncRepository = productAsyncRepository;
@@ -165,6 +170,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              _notificationService = notificationService;
              _packageAsyncRepository = packageAsyncRepository;
              _authorizationService = authorizationService;
+             _stSearchAsyncRepository = stSearchAsyncRepository;
          }
 
 
@@ -224,23 +230,6 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                  }
              }
              
-             
-             // foreach (var stitem in stlocationExist.CheckItems)
-             // {
-             //     var productVariant = await _productAsyncRepository.GetByIdAsync(stitem.ProductVariantId);
-             //     
-             //     var stockTakeItem = new StockTakeItem
-             //     {
-             //         Note = "",
-             //         ProductVariantId = productVariant.Id,
-             //     };
-             //     
-             //     // foreach (var package in packages)
-             //     //     stockTakeItem.ActualQuantity += package.Quantity;
-             //     
-             //     stockTakeOrder.CheckItems.Add(stockTakeItem);
-             // }
-
              stockTakeOrder.StockTakeOrderType = StockTakeOrderType.Progressing;
              
              if(isNewStockTake)
@@ -255,6 +244,9 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                      await _stAsyncRepository.AddAsync(stockTakeOrder);
                  else
                      await _stAsyncRepository.UpdateAsync(stockTakeOrder);
+
+                 await _stSearchAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.StockTakeSearchIndex(stockTakeOrder),
+                     ElasticIndexConstant.STOCK_TAKE_ORDERS);
              }
              catch
              {
@@ -268,12 +260,6 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              response.StockTakeOrder = stockTakeOrder;
              response.StockTakeOrderId = stockTakeOrder.Id;
             
-                  
-             // var messageNotification =
-             //     _notificationService.CreateMessage(currentUser.Fullname, "Add","Stock Take Item", stockTakeOrder.Id);
-             //    
-             // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-             //     currentUser.Id, messageNotification);
              return Ok(response);
          }
      }
@@ -281,6 +267,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
       public class StockTakeAdjust : BaseAsyncEndpoint.WithRequest<STAdjustRequest>.WithResponse<STResponse>
      {
          private readonly IAsyncRepository<StockTakeOrder> _stAsyncRepository;
+         private readonly IAsyncRepository<StockTakeSearchIndex> _stSearchAsyncRepository;
+
          private readonly IAsyncRepository<ProductVariant> _productAsyncRepository;
          private readonly IAsyncRepository<Location> _locationAsyncRepository;
          private readonly IAsyncRepository<Package> _packageAsyncRepository;
@@ -290,7 +278,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
 
          private readonly INotificationService _notificationService;
 
-         public StockTakeAdjust(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService)
+         public StockTakeAdjust(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, IAsyncRepository<StockTakeSearchIndex> stSearchAsyncRepository)
          {
              _stAsyncRepository = stAsyncRepository;
              _productAsyncRepository = productAsyncRepository;
@@ -299,6 +287,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              _notificationService = notificationService;
              _packageAsyncRepository = packageAsyncRepository;
              _authorizationService = authorizationService;
+             _stSearchAsyncRepository = stSearchAsyncRepository;
          }
          [HttpPost("api/stocktake/adjust")]
          [SwaggerOperation(
@@ -346,14 +335,9 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              
              await _stAsyncRepository.UpdateAsync(stockTakeOrder);
 
-             // var currentUser = await _userAuthentication.GetCurrentSessionUser();
-             //      
-             // var messageNotification =
-             //     _notificationService.CreateMessage(currentUser.Fullname, "Add","Stock Take Item", stockTakeOrder.Id);
-             //    
-             // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-             //     currentUser.Id, messageNotification);
-
+             await _stSearchAsyncRepository.ElasticSaveSingleAsync(false,
+                 IndexingHelper.StockTakeSearchIndex(stockTakeOrder), ElasticIndexConstant.STOCK_TAKE_ORDERS);
+             
              var response = new STResponse();
              response.UpdatedId = stockTakeOrder.Id;
              return Ok(response);
@@ -363,24 +347,18 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
        public class StockTakeCancel : BaseAsyncEndpoint.WithRequest<STCancelRequest>.WithResponse<STResponse>
      {
          private readonly IAsyncRepository<StockTakeOrder> _stAsyncRepository;
-         private readonly IAsyncRepository<ProductVariant> _productAsyncRepository;
-         private readonly IAsyncRepository<Location> _locationAsyncRepository;
-         private readonly IAsyncRepository<Package> _packageAsyncRepository;
+         private readonly IAsyncRepository<StockTakeSearchIndex> _stSearchAsyncRepository;
          private readonly IAuthorizationService _authorizationService;
-
          private readonly IUserSession _userAuthentication;
-
          private readonly INotificationService _notificationService;
 
-         public StockTakeCancel(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService)
+         public StockTakeCancel(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<StockTakeSearchIndex> stSearchAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, INotificationService notificationService)
          {
              _stAsyncRepository = stAsyncRepository;
-             _productAsyncRepository = productAsyncRepository;
-             _locationAsyncRepository = locationAsyncRepository;
+             _stSearchAsyncRepository = stSearchAsyncRepository;
+             _authorizationService = authorizationService;
              _userAuthentication = userAuthentication;
              _notificationService = notificationService;
-             _packageAsyncRepository = packageAsyncRepository;
-             _authorizationService = authorizationService;
          }
 
 
@@ -404,6 +382,9 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                  (await _userAuthentication.GetCurrentSessionUser()).Id, stockTakeOrder.Id, request.CancelReason);
              
              await _stAsyncRepository.UpdateAsync(stockTakeOrder);
+             
+             await _stSearchAsyncRepository.ElasticSaveSingleAsync(false,
+                 IndexingHelper.StockTakeSearchIndex(stockTakeOrder), ElasticIndexConstant.STOCK_TAKE_ORDERS);
              var currentUser = await _userAuthentication.GetCurrentSessionUser();
                   
              var messageNotification =

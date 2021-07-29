@@ -51,6 +51,7 @@ namespace Infrastructure.Services
 
             await client.Indices.DeleteAsync(ElasticIndexConstant.PURCHASE_ORDERS);
             await client.Indices.DeleteAsync( ElasticIndexConstant.RECEIVING_ORDERS);
+            await client.Indices.DeleteAsync(ElasticIndexConstant.STOCK_TAKE_ORDERS);
             await client.Indices.DeleteAsync( ElasticIndexConstant.GOODS_ISSUE_ORDERS);
             await client.Indices.DeleteAsync( ElasticIndexConstant.SUPPLIERS);
             await client.Indices.DeleteAsync( ElasticIndexConstant.PACKAGES);
