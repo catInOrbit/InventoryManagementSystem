@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Nest;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
@@ -57,7 +58,7 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
             
             if (await _userManager.IsInRoleAsync(user, "Manager"))
             {
-                var users = await _userManager.Users.Where(user => user.IsActive == true).ToListAsync();
+                var users = await _userManager.Users.ToListAsync();
                 foreach (var applicationUser in users)
                 {
                     var userAndRole = new UserAndRole();
@@ -65,7 +66,8 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
                     userAndRole.UserRole = (await _userManager.GetRolesAsync(applicationUser))[0];
                     pagingOption.ResultList.Add(userAndRole);
                 }
-                
+
+                pagingOption.ResultList = FilteringService.UserAndRolesIndexFiltering(pagingOption.ResultList.ToList(), request);
                 response.Paging = pagingOption;
                 response.Paging.ExecuteResourcePaging();
                 return Ok(response);

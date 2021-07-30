@@ -116,6 +116,13 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                             response.Verbose = "Authorized";
                             
                             //Save user notification info such as channel
+
+                            response.UserAndRole = new UserAndRole
+                            {
+                                ImsUser = newIMSUser,
+                                UserRole = role.Name,
+                                RoleID = role.Id
+                            };
                             return Ok(response);
                         }
                         else

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
@@ -243,6 +244,31 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                          return sts;
                      }
 
+                     public static List<UserAndRole> UserAndRolesIndexFiltering(List<UserAndRole> resources,
+                         UserInfoFilter userInfoFilter, CancellationToken cancellationToken = default)
+                     {
+                         var userFilter = resources.Where(u => (
+                             ((userInfoFilter.SearchQuery == null ||
+                             u.ImsUser.Fullname.Contains(userInfoFilter.SearchQuery)
+                            )
+                             
+                             ||
+                             (userInfoFilter.SearchQuery == null ||
+                              u.ImsUser.Email.Contains(userInfoFilter.SearchQuery) 
+                             ))
+                             
+                             &&
+                             (userInfoFilter.Role == null ||
+                              userInfoFilter.Role.Contains(u.UserRole)
+                             )
 
+                             &&
+                             (userInfoFilter.Status == null ||
+                                 userInfoFilter.Status.Contains(u.ImsUser.IsActive))
+
+                         )).ToList();
+
+                         return userFilter;
+                     }
     }
 }

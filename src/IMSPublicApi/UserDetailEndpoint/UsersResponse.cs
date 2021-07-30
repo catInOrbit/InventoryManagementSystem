@@ -14,14 +14,7 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
         public UserAndRole UserAndRole { get; set; }
 
         public PagingOption<UserAndRole> Paging { get; set; }
-
     }
     
-    public class UserAndRole
-    {
-        public ApplicationUser ImsUser { get; set; }
-        public string UserRole { get; set; }
-        public string RoleID { get; set; }
-        
-    }
+  
 }

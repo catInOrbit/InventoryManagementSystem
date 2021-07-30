@@ -31,6 +31,13 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public bool IsActive { get; set; }
     }
     
+    public class UserAndRole
+    {
+        public ApplicationUser ImsUser { get; set; }
+        public string UserRole { get; set; }
+        public string RoleID { get; set; }
+    }
+    
     // public class ApplicationRole : IdentityRole
     // {
     //     // public string RoleDescription { get; set; }

@@ -1,3 +1,5 @@
+using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
+
 namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
 {
     public class UsersRequest : BaseRequest
@@ -5,7 +7,7 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
         public string UserID { get; set; }
     }
     
-    public class GetAllUserRequest : BaseRequest
+    public class GetAllUserRequest : UserInfoFilter
     {
         public int CurrentPage { get; set; }
         public int SizePerPage { get; set; }

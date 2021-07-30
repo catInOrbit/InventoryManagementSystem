@@ -110,4 +110,11 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string ToQuantity { get; set; }
         public bool NoPackages { get; set; }
     }
+    
+    public class UserInfoFilter
+    {
+        public string SearchQuery { get; set; }
+        public string[] Role { get; set; }
+        public bool[] Status { get; set; }
+    }
 }
