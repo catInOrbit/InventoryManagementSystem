@@ -36,17 +36,15 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
 
         private readonly IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> _recevingOrderSearchIndexRepository;
 
-        private readonly IAsyncRepository<ProductVariant> _productRepository;
         private readonly IUserSession _userAuthentication;
         
         private readonly INotificationService _notificationService;
 
 
-        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IAsyncRepository<ProductVariant> productRepository, IUserSession userAuthentication,  IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository, IAsyncRepository<ProductVariant> productVariantRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantElasticRepository1, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository1)
+        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IUserSession userAuthentication,  IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository, IAsyncRepository<ProductVariant> productVariantRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantElasticRepository1, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository1)
         {
             _authorizationService = authorizationService;
             _recevingOrderRepository = recevingOrderRepository;
-            _productRepository = productRepository;
             _userAuthentication = userAuthentication;
             _poRepository = poRepository;
             _packageRepository = packageRepository;
@@ -96,86 +94,15 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             
             //Data of receipt order is from frontend
 
-            ro.ReceivedOrderItems.Clear();
-            foreach (var item in request.UpdateItems)
-            {
-                if (item.QuantityReceived > 0)
-                {
-                    var roi = new GoodsReceiptOrderItem
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        QuantityReceived =  item.QuantityReceived,
-                        ProductVariantId = item.ProductVariantId,
-                        GoodsReceiptOrderId = ro.Id,
-                        ProductVariantName = (await _productRepository.GetByIdAsync(item.ProductVariantId)).Name
-                    };
-                    ro.ReceivedOrderItems.Add(roi);
-                
-                    var productVariant = await _productVariantRepository.GetByIdAsync(roi.ProductVariantId);
-                    bool initiateUpdate = false;
-                    if (item.Sku != null)
-                    {
-                        productVariant.Sku = item.Sku;
-                        initiateUpdate = true;
-                    }
-
-                    if (item.Barcode != null)
-                    {
-                        productVariant.Barcode = item.Barcode;
-                        initiateUpdate = true;
-                    }
-
-                    if (initiateUpdate)
-                    {
-                        await _productVariantRepository.UpdateAsync(productVariant);
-                        await _productVariantElasticRepository.ElasticSaveSingleAsync(false,
-                            IndexingHelper.ProductVariantSearchIndex(productVariant),
-                            ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
-                    }
-                }
-            }
-
-            //Update and indexing
-            await _recevingOrderRepository.AddAsync(ro);
-            
-            foreach (var roi in ro.ReceivedOrderItems)
-            {
-                //Package
-                var package = new Package
-                {
-                    ProductVariantId =  roi.ProductVariantId,
-                    Quantity = roi.QuantityReceived,
-                    Location = ro.Location,
-                    ImportedDate = ro.ReceivedDate,
-                    GoodsReceiptOrderId = ro.Id,
-                    Price = ro.PurchaseOrder.PurchaseOrderProduct.FirstOrDefault(item => item.ProductVariantId == roi.ProductVariantId).Price,
-                    SupplierId = ro.SupplierId,
-                };
-                package.TotalPrice = package.Price * package.Quantity;
-                package.LatestUpdateDate = DateTime.UtcNow;
-
-                await _packageRepository.AddAsync(package);
-                roi.ProductVariant.Packages.Add(package);
-
-               
-                
-                //Begin Inserting into bigQuery
-
-            }
+           GoodsReceiptBusinessService gbs = new GoodsReceiptBusinessService( _productVariantRepository, _recevingOrderRepository, _packageRepository, _productVariantElasticRepository,
+               _recevingOrderSearchIndexRepository);
+           ro = await gbs.ReceiveProducts(ro, request.UpdateItems);
             await _recevingOrderSearchIndexRepository.ElasticSaveSingleAsync(true,IndexingHelper.GoodsReceiptOrderSearchIndex(ro), ElasticIndexConstant.RECEIVING_ORDERS);
-
 
             var response = new ROUpdateResponse();
             response.CreatedGoodsReceiptId = ro.Id;
             response.TransactionId = ro.TransactionId;
 
-            // var currentUser = await _userAuthentication.GetCurrentSessionUser();
-            //
-            // var messageNotification =
-            //     _notificationService.CreateMessage(currentUser.Fullname, "Update","Goods Receipt", ro.Id);
-            //     
-            // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-            //     currentUser.Id, messageNotification);
             return Ok(response);
         }
     }
@@ -222,25 +149,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 Sku = request.Sku,
                 ProductVariantId = request.ProductVariantId
             });
-            
-            //Get Product Variant
-            // var productVariant = await _productVariantRepository.GetByIdAsync(request.ProductVariantId);
-            //
-            // //Update SKU, LOCATION, PRICE
-            // productVariant.Sku = request.Sku;
-            // productVariant.Barcode = request.Barcode;
-            
-            //Update and indexing
-            // await _productVariantRepository.UpdateAsync(productVariant);
-            // await _poSearchIndexRepository.ElasticSaveSingleAsync(false,IndexingHelper.ProductVariantSearchIndex(productVariant), ElasticIndexConstant.RECEIVING_ORDERS);
-            
-            // var currentUser = await _userAuthentication.GetCurrentSessionUser();
-            //
-            // var messageNotification =
-            //     _notificationService.CreateMessage(currentUser.Fullname, "Update","Product Variant", request.ProductVariantId);
-            //     
-            // await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-            //     currentUser.Id, messageNotification);
+         
             return Ok();
         }
     }

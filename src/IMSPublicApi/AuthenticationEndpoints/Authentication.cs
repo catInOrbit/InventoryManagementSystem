@@ -63,27 +63,15 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                 return Unauthorized(response);
             }
 
-            else
-            {
                 var roles = await _userRoleModificationService.UserManager.GetRolesAsync(user);
                 var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, true, true);
 
                 
                 if (result.Succeeded)
                 {
-                    // await HttpContext.AuthenticateAsync("Cookie", userPrincipal);
                     var jwttoken = await _tokenClaimsService.GetTokenAsync(user.Email);
                     var jwtRefreshtoken = await _tokenClaimsService.GetRefreshTokenAsync(user.Email);
                     await _tokenClaimsService.SaveRefreshTokenForUser(user, jwtRefreshtoken);
-
-                    // Write the login id in the login claim, so we identify the login context
-                    // Claim[] customClaims = { new Claim("UserLoginSessionId", token) };
-
-                    // await _userManager.AddClaimsAsync(user,  customClaims);
-                    // Signin User
-                    // CookieSignInAndStore(user.Email, user.UserName, roles[0]);
-
-                    // await _signInManager.SignInWithClaimsAsync(user, true, customClaims);
 
                     response.Token = jwttoken;
                     response.Verbose = "Success";
@@ -112,8 +100,7 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                     return Ok(response);
                 }
 
-            }
-                    return Unauthorized(response);
+            return Unauthorized(response);
 
         }
 

@@ -71,14 +71,14 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 response.GoodsIssueOrder = gio;
                 
                 //-------------
-                ProductStrategyService productStrategyService =
-                    new ProductStrategyService(_packageAsyncRepository);
+                GoodsIssueService goodsIssueService =
+                    new GoodsIssueService(_packageAsyncRepository);
                 
                 // List<string> productVariantIds = new List<string>();
                 // foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
                 //     productVariantIds.Add(gioGoodsIssueProduct.ProductVariantId);
                 
-                var nDictionary = await productStrategyService.FifoPackagesSuggestion(gio.GoodsIssueProducts.ToList());
+                var nDictionary = await goodsIssueService.FifoPackagesSuggestion(gio.GoodsIssueProducts.ToList());
                 
                 foreach (var keyValuePair in nDictionary)
                 {
@@ -190,63 +190,27 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
 
             if (gio.GoodsIssueType == GoodsIssueStatusType.Shipping)
             {
-                foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
-                {
-                    var listPackages =
-                        await _asyncRepository.GetPackagesFromProductVariantId(gioGoodsIssueProduct.ProductVariantId);
-                    var productVariant =
-                        await _productVariantAsyncRepository.GetByIdAsync(gioGoodsIssueProduct.ProductVariantId);
-                    List<int> listIndexPackageToRemove = new List<int>();
-                    var quantityToDeduce = gioGoodsIssueProduct.OrderQuantity;
-                    for (var i = 0; i < listPackages.Count; i++)
-                    {
-                        if (quantityToDeduce > 0)
-                        {
-                            if (listPackages[i].Quantity >= quantityToDeduce)
-                            {
-                                listPackages[i].Quantity -= quantityToDeduce;
-                                listPackages[i].LatestUpdateDate = DateTime.UtcNow;
-                                //Remove aggregated quantity of product as well
-                                productVariant.StorageQuantity -= quantityToDeduce; 
-                            }
-                            else
-                            {
-                                quantityToDeduce -= listPackages[i].Quantity;
-                                listPackages[i].Quantity -= listPackages[i].Quantity;
-                            
-                                //Remove aggregated quantity of product as well
-                                productVariant.StorageQuantity -= quantityToDeduce; 
-                            }
-                        }
-            
-                        if (listPackages[i].Quantity <= 0)
-                            listIndexPackageToRemove.Add(i);
-                    }
-            
-                    await _productVariantAsyncRepository.UpdateAsync(productVariant);
-
-                    foreach (var i in listIndexPackageToRemove)
-                    {
-                        await _packageIndexAsyncRepository.ElasticDeleteSingleAsync(listPackages[i], ElasticIndexConstant.PACKAGES);
-                        await _packageAsyncRepository.DeleteAsync(listPackages[i]);
-                    }
-                    try
-                    {
-                        bigQueryService.InsertProductRowBQ(gioGoodsIssueProduct.ProductVariant,
-                            gioGoodsIssueProduct.ProductVariant.Price, null,
-                            gioGoodsIssueProduct.ProductVariant.StorageQuantity, gioGoodsIssueProduct.OrderQuantity,
-                            gioGoodsIssueProduct.SalePrice, "Issue Out", null);
-                        _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
-                    }
-                    catch
-                    {
-                        _logger.LogError("Error updating BigQuery on " + this.GetType().ToString());
-                    }
-                }
+                GoodsIssueService gis = new GoodsIssueService(_asyncRepository, _productVariantAsyncRepository,
+                    _packageAsyncRepository, _packageIndexAsyncRepository);
+                await gis.UpdatePackageFromGoodsIssue(gio);
             }
 
-           
-            
+            foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
+            {
+                try
+                {
+                    bigQueryService.InsertProductRowBQ(gioGoodsIssueProduct.ProductVariant,
+                        gioGoodsIssueProduct.ProductVariant.Price, null,
+                        gioGoodsIssueProduct.ProductVariant.StorageQuantity, gioGoodsIssueProduct.OrderQuantity,
+                        gioGoodsIssueProduct.SalePrice, "Issue Out", null);
+                    _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
+                }
+                catch
+                {
+                    _logger.LogError("Error updating BigQuery on " + this.GetType().ToString());
+                }    
+            }
+
             await _asyncRepository.UpdateAsync(gio);
             await _goodIssueasyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.GoodsIssueSearchIndexHelper(gio), ElasticIndexConstant.GOODS_ISSUE_ORDERS);
 
