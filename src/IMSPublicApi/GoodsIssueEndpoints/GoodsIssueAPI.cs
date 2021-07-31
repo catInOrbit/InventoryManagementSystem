@@ -71,8 +71,8 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 response.GoodsIssueOrder = gio;
                 
                 //-------------
-                GoodsIssueService goodsIssueService =
-                    new GoodsIssueService(_packageAsyncRepository);
+                GoodsIssueBusinessService goodsIssueService =
+                    new GoodsIssueBusinessService(_packageAsyncRepository);
                 
                 // List<string> productVariantIds = new List<string>();
                 // foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
@@ -190,7 +190,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
 
             if (gio.GoodsIssueType == GoodsIssueStatusType.Shipping)
             {
-                GoodsIssueService gis = new GoodsIssueService(_asyncRepository, _productVariantAsyncRepository,
+                GoodsIssueBusinessService gis = new GoodsIssueBusinessService(_asyncRepository, _productVariantAsyncRepository,
                     _packageAsyncRepository, _packageIndexAsyncRepository);
                 await gis.UpdatePackageFromGoodsIssue(gio);
             }

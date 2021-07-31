@@ -26,10 +26,4 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
         public List<string> PageAuthorized { get; set; } = new List<string>();
     }
 
-    public class UserInfo
-    {
-        public string UserRole { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
-        public List<string> PageAuthorized { get; set; } = new List<string>();
-    }
 }

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
@@ -22,6 +24,14 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public virtual Transaction Transaction { get; set; }
         public GoodsIssueStatusType GoodsIssueType { get; set; }
         public virtual ICollection<OrderItem> GoodsIssueProducts { get; set; }
+        [NotMapped]
+        public string GoodsIssueOrderStatusString { get; set; }
         public DateTime DeliveryDate { get; set; }
+        
+        [OnSerializing]
+        public void FormatResponse(StreamingContext context)
+        {
+            GoodsIssueOrderStatusString = GoodsIssueType.ToString();
+        }
     }
 }

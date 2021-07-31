@@ -10,7 +10,7 @@ using InventoryManagementSystem.ApplicationCore.Interfaces;
 
 namespace InventoryManagementSystem.ApplicationCore.Services
 {
-    public class GoodsIssueService
+    public class GoodsIssueBusinessService
     {
         private readonly IAsyncRepository<Package> _packageAsyncRepository;
         
@@ -18,12 +18,12 @@ namespace InventoryManagementSystem.ApplicationCore.Services
         private readonly IAsyncRepository<ProductVariant> _productVariantAsyncRepository;
         private readonly IElasticAsyncRepository<Package> _packageIndexAsyncRepository;
 
-        public GoodsIssueService(IAsyncRepository<Package> packageAsyncRepository)
+        public GoodsIssueBusinessService(IAsyncRepository<Package> packageAsyncRepository)
         {
             _packageAsyncRepository = packageAsyncRepository;
         }
 
-        public GoodsIssueService(IAsyncRepository<GoodsIssueOrder> gioAsyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository, IAsyncRepository<Package> packageAsyncRepository, IElasticAsyncRepository<Package> packageIndexAsyncRepository)
+        public GoodsIssueBusinessService(IAsyncRepository<GoodsIssueOrder> gioAsyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository, IAsyncRepository<Package> packageAsyncRepository, IElasticAsyncRepository<Package> packageIndexAsyncRepository)
         {
             _gioAsyncRepository = gioAsyncRepository;
             _productVariantAsyncRepository = productVariantAsyncRepository;
