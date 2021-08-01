@@ -94,7 +94,7 @@
         
         public async Task<PagingOption<Package>> GetPackages(PagingOption<Package> pagingOption, CancellationToken cancellationToken = default)
         {
-            pagingOption.ResultList = await _identityAndProductDbContext.Package.OrderByDescending(pa => pa.ImportedDate).ToListAsync();
+            pagingOption.ResultList = await _identityAndProductDbContext.Package.Where(t => t.Transaction.TransactionStatus!=false).OrderByDescending(pa => pa.ImportedDate).ToListAsync();
             pagingOption.ExecuteResourcePaging();
             return pagingOption;
         }
@@ -204,10 +204,9 @@
                 var stockTakeReport = new StockTakeReport()
                 {
                     StockTakeDate = stockTakeItem.StockTakeOrder.Transaction.TransactionRecord[0].Date,
-                    ProductName = stockTakeItem.Package.ProductVariant.Name,
-                    StorageQuantity = stockTakeItem.Package.ProductVariant.StorageQuantity,
+                    ProductName = stockTakeItem.ProductVariantName,
+                    StorageQuantity = stockTakeItem.StorageQuantity,
                     ActualQuantity = stockTakeItem.ActualQuantity,
-                    Value = stockTakeItem.Package.ProductVariant.StorageQuantity * stockTakeItem.Package.ProductVariant.Price
                 };
                 
                 pagingOption.ResultList.Add(stockTakeReport);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using InventoryManagementSystem.ApplicationCore.Entities;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
@@ -77,10 +78,9 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                      {
                          var ros = resource.Where(gi =>
                                  
-                                 (giSearchFilter.FromStatus  == null ||
-                                  (int)(EnumUtil.ParseEnum<GoodsIssueStatusType>(gi.Status))  >= Int32.Parse(giSearchFilter.FromStatus)
-                                  &&
-                                  (int)(EnumUtil.ParseEnum<GoodsIssueStatusType>(gi.Status))  <= Int32.Parse(giSearchFilter.ToStatus))
+                                 ((giSearchFilter.Statuses == null ||
+                                  giSearchFilter.Statuses.Contains(gi.Status))
+                                
                                  &&
                                  (giSearchFilter.FromCreatedDate == null ||
                                   (gi.CreatedDate >= DateTime.Parse(giSearchFilter.FromCreatedDate) &&
@@ -93,7 +93,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                                  (giSearchFilter.FromDeliveryDate == null ||
                                   (gi.DeliveryDate >= DateTime.Parse(giSearchFilter.FromDeliveryDate) &&
                                    gi.DeliveryDate <= DateTime.Parse(giSearchFilter.ToDeliveryDate))) 
-                             )
+                             ))
                              .ToList();
                          return ros;
                      }
@@ -113,11 +113,11 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                                  
                                  &&
                                  (productSearchFilter.Category == null ||
-                                  (product.Category == productSearchFilter.Category) 
+                                  (product.Category == productSearchFilter.Category) )
                                  
                                   &&
                                   (productSearchFilter.Strategy == null ||
-                                   (product.Strategy == productSearchFilter.Strategy) 
+                                   (product.Strategy == productSearchFilter.Strategy) )
                                  
                                    &&
                                    (productSearchFilter.CreatedByName == null || product.CreatedByName == productSearchFilter.CreatedByName)
@@ -133,7 +133,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                                     ) )
                                    &&
                                    (productSearchFilter.Brand == null || product.Brand == productSearchFilter.Brand)
-                                  ))))
+                                  ))
                              .ToList();
                          return pos;
                      }
@@ -176,13 +176,12 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                                  
                                  &&
                                  (packageSearchFilter.LocationId == null  ||
-                                  (package.Location.Id == packageSearchFilter.LocationId) 
+                                  (package.Location.Id == packageSearchFilter.LocationId) )
                                  
                                   &&
                                   ((packageSearchFilter.ProductVariantID == null ) ||
-                                   (package.ProductVariantId == packageSearchFilter.ProductVariantID) 
-                     
-                                  ))))
+                                   (package.ProductVariantId == packageSearchFilter.ProductVariantID))
+                                 ))
                              .ToList();
                          return packages;
                      }
@@ -200,11 +199,11 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                                    product.ModifiedDate <= DateTime.Parse(productSearchFilter.ToModifiedDate))) 
                                  &&
                                  (productSearchFilter.Category == null ||
-                                  (product.Category == productSearchFilter.Category) 
+                                  (product.Category == productSearchFilter.Category))
                                  
                                   &&
                                   (productSearchFilter.Strategy == null ||
-                                   (product.Strategy == productSearchFilter.Strategy) 
+                                   (product.Strategy == productSearchFilter.Strategy))
                                  
                                    &&
                                    (productSearchFilter.CreatedByName == null || product.CreatedByName == productSearchFilter.CreatedByName)
@@ -213,7 +212,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                                    (productSearchFilter.ModifiedByName == null || product.ModifiedByName == productSearchFilter.ModifiedByName)
                                    &&
                                    (productSearchFilter.Brand == null || product.Brand == productSearchFilter.Brand)
-                                  ))))
+                                  ))
                              .ToList();
                          return pos;
                      }

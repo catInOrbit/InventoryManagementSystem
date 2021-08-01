@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Notifications;
 using InventoryManagementSystem.ApplicationCore.Entities.RedisMessages;
+using InventoryManagementSystem.ApplicationCore.Extensions;
 
 namespace InventoryManagementSystem.ApplicationCore.Interfaces
 {
@@ -26,6 +27,11 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         Task ClearNotification(string keyId);
 
         Task<bool> AddProductUpdateMessage(string keyId, ProductUpdateMessage productUpdateMessage);
+        Task<bool> AddStockTakeAdjustMessage(StockTakeAdjustItemInfo stockTakeAdjustItemInfo);
+        
+        Task<List<StockTakeAdjustItemInfo>> GetStockTakeAdjustMessage();
+        Task<bool> DeleteStockTakeAdjustMessage();
+        
         Task<bool> RemoveProductUpdateMessage(string keyId, string productVariantId);
 
         Task<List<ProductUpdateMessage>> GetProductUpdateMessage(string keyId);

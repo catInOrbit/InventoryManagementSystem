@@ -13,19 +13,24 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
             Id = Guid.NewGuid().ToString();
         }
 
+        [NotMapped]
         public string PackageId { get; set; }
-        [JsonIgnore] public virtual Package Package { get; set; }
+        // [JsonIgnore] public virtual Package Package { get; set; }
+        
+        public string ProductVariantName { get; set; }
+        public string SKU { get; set; }
+        public int StorageQuantity { get; set; }
         public int ActualQuantity { get; set; }
         public string Note { get; set; }
 
         [JsonIgnore] public string StockTakeOrderId { get; set; }
         [JsonIgnore] public virtual StockTakeOrder StockTakeOrder { get; set; }
 
-        [JsonIgnore] [Ignore] [NotMapped] public bool IsShowingPackageDetail { get; set; } = false;
+        [JsonIgnore] [Ignore] [NotMapped] public bool IsShowingPackageId { get; set; } = false;
 
-        public bool ShouldSerializePackage()
+        public bool ShouldSerializePackageId()
         {
-            if (IsShowingPackageDetail)
+            if (IsShowingPackageId)
                 return true;
             return false;
         }

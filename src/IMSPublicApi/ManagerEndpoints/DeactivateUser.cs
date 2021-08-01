@@ -12,7 +12,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
-    public class DeactivateUser : BaseAsyncEndpoint.WithRequest<DeactivateUserRequest>.WithResponse<UserAndRole>
+    public class DeactivateUser : BaseAsyncEndpoint.WithRequest<DeactivateUserRequest>.WithResponse<DeactivateUserResponse>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
@@ -33,19 +33,23 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             OperationId = "manager.deactivate",
             Tags = new[] { "ManagerEndpoints" })
         ]
-        public override async Task<ActionResult<UserAndRole>> HandleAsync(DeactivateUserRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<DeactivateUserResponse>> HandleAsync(DeactivateUserRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.USERDETAIL, UserOperations.Update))
                 return Unauthorized();
 
-            var response = new UserAndRole();
+            var response = new DeactivateUserResponse();
             
+
             var userGet = await _userManager.FindByIdAsync(request.UserId);
             userGet.IsActive = request.IsDeactivated;
-            response.ImsUser = userGet;
-            response.UserRole = (await _userManager.GetRolesAsync(userGet))[0];
-            response.RoleID = (await _roleManager.FindByNameAsync(response.UserRole)).Id;
+            response.UserAndRole = new UserAndRole
+            {
+                ImsUser = userGet,
+                UserRole = (await _userManager.GetRolesAsync(userGet))[0],
+            };
+            response.UserAndRole.RoleID = (await _roleManager.FindByNameAsync(response.UserAndRole.UserRole)).Id;
             await _userManager.UpdateAsync(userGet);
             return Ok(response);
         }

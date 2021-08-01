@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InventoryManagementSystem.PublicApi.Migrations
 {
     [DbContext(typeof(IdentityAndProductDbContext))]
-    [Migration("20210726090611_Creation")]
+    [Migration("20210801095638_Creation")]
     partial class Creation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -144,12 +144,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("CustomerName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CustomerPhoneNumber")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DeliveryAddress")
                         .HasColumnType("nvarchar(max)");
@@ -376,8 +370,11 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PackageId")
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("ProductVariantName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SKU")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StockTakeGroupLocationId")
                         .HasColumnType("nvarchar(50)");
@@ -385,9 +382,10 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("StockTakeOrderId")
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                    b.Property<int>("StorageQuantity")
+                        .HasColumnType("int");
 
-                    b.HasIndex("PackageId");
+                    b.HasKey("Id");
 
                     b.HasIndex("StockTakeGroupLocationId");
 
@@ -931,10 +929,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeItem", b =>
                 {
-                    b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Products.Package", "Package")
-                        .WithMany()
-                        .HasForeignKey("PackageId");
-
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeGroupLocation", null)
                         .WithMany("CheckItems")
                         .HasForeignKey("StockTakeGroupLocationId");
@@ -942,8 +936,6 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.HasOne("InventoryManagementSystem.ApplicationCore.Entities.Orders.StockTakeOrder", "StockTakeOrder")
                         .WithMany()
                         .HasForeignKey("StockTakeOrderId");
-
-                    b.Navigation("Package");
 
                     b.Navigation("StockTakeOrder");
                 });

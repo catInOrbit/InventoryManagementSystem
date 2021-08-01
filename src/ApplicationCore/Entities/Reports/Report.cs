@@ -80,8 +80,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Reports
         public string ProductName { get; set; }
         public int StorageQuantity { get; set; }
         public int ActualQuantity { get; set; }
-        [Column(TypeName = "decimal(16,3)")]
-        public decimal Value { get; set; }
+        // [Column(TypeName = "decimal(16,3)")]
+        // public decimal Value { get; set; }
     }
 
     public class TopSellingReport : BaseEntity

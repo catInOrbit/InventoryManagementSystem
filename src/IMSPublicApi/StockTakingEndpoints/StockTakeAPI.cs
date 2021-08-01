@@ -12,6 +12,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
+using InventoryManagementSystem.ApplicationCore.Extensions;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.ApplicationCore.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
@@ -82,12 +83,13 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
         private readonly IAsyncRepository<StockTakeOrder> _asyncRepository;
         private readonly IAsyncRepository<ProductVariant> _pvasyncRepository;
         private IElasticAsyncRepository<StockTakeSearchIndex> _stSearchasyncRepository;
+        private IAsyncRepository<Package> _packageAsyncRepository;
 
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserSession _userAuthentication;
         private readonly INotificationService _notificationService;
 
-        public StockTakeUpdate(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductVariant> pvasyncRepository, INotificationService notificationService, IElasticAsyncRepository<StockTakeSearchIndex> stSearchasyncRepository1)
+        public StockTakeUpdate(IAsyncRepository<StockTakeOrder> asyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<ProductVariant> pvasyncRepository, INotificationService notificationService, IElasticAsyncRepository<StockTakeSearchIndex> stSearchasyncRepository1, IAsyncRepository<Package> packageAsyncRepository)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
@@ -95,6 +97,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
             _pvasyncRepository = pvasyncRepository;
             _notificationService = notificationService;
             _stSearchasyncRepository = stSearchasyncRepository1;
+            _packageAsyncRepository = packageAsyncRepository;
         }
 
         [HttpPut("api/stocktake/updatesingle")]
@@ -123,7 +126,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                     storderCheckItem.Note = request.Note;
                     storderCheckItem.ActualQuantity = request.ActualQuantity;
 
-                    var productVariant = await _pvasyncRepository.GetByIdAsync(storderCheckItem.Package.ProductVariantId);
+                    var packageGet = await _packageAsyncRepository.GetByIdAsync(storderCheckItem.PackageId);
+                    var productVariant = await _pvasyncRepository.GetByIdAsync(packageGet.ProductVariantId);
                     
                     var packages = await _asyncRepository.GetPackagesFromProductVariantId(productVariant.Id);
                     Console.WriteLine("Number of packages found: " + packages.Count);
@@ -157,12 +161,12 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
          private readonly IAsyncRepository<Package> _packageAsyncRepository;
          private readonly IAuthorizationService _authorizationService;
 
-         
          private readonly IUserSession _userAuthentication;
-
          private readonly INotificationService _notificationService;
 
-         public StockTakeAddProduct(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, IElasticAsyncRepository<StockTakeSearchIndex> stSearchAsyncRepository1)
+         private readonly IRedisRepository _redisRepository;
+
+         public StockTakeAddProduct(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, IElasticAsyncRepository<StockTakeSearchIndex> stSearchAsyncRepository1, IRedisRepository redisRepository)
          {
              _stAsyncRepository = stAsyncRepository;
              _productAsyncRepository = productAsyncRepository;
@@ -172,6 +176,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              _packageAsyncRepository = packageAsyncRepository;
              _authorizationService = authorizationService;
              _stSearchAsyncRepository = stSearchAsyncRepository1;
+             _redisRepository = redisRepository;
          }
 
 
@@ -228,6 +233,14 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                      var package = await _packageAsyncRepository.GetByIdAsync(stockTakeItem.PackageId);
                      if (stockTakeItem.ActualQuantity != package.Quantity)
                          response.MismatchQuantityPackageIds.Add(package.Id);
+
+                     await _redisRepository.AddStockTakeAdjustMessage(new StockTakeAdjustItemInfo()
+                     {
+                         PackageId = stockTakeItem.PackageId,
+                         QuantityToAdjust = stockTakeItem.ActualQuantity,
+                         StockTakeId = stockTakeOrder.Id,
+                         StockTakeItemId = stockTakeItem.Id
+                     });
                  }
              }
              
@@ -276,10 +289,10 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
          private readonly IAuthorizationService _authorizationService;
 
          private readonly IUserSession _userAuthentication;
-
+         private readonly IRedisRepository _redisRepository;
          private readonly INotificationService _notificationService;
 
-         public StockTakeAdjust(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, IElasticAsyncRepository<StockTakeSearchIndex> stSearchAsyncRepository1)
+         public StockTakeAdjust(IAsyncRepository<StockTakeOrder> stAsyncRepository, IAsyncRepository<ProductVariant> productAsyncRepository, IAsyncRepository<Location> locationAsyncRepository, IUserSession userAuthentication, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, IElasticAsyncRepository<StockTakeSearchIndex> stSearchAsyncRepository1, IRedisRepository redisRepository)
          {
              _stAsyncRepository = stAsyncRepository;
              _productAsyncRepository = productAsyncRepository;
@@ -289,6 +302,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              _packageAsyncRepository = packageAsyncRepository;
              _authorizationService = authorizationService;
              _stSearchAsyncRepository = stSearchAsyncRepository1;
+             _redisRepository = redisRepository;
          }
          [HttpPost("api/stocktake/adjust")]
          [SwaggerOperation(
@@ -304,23 +318,42 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              
              Dictionary<ProductVariant, int> quantityUpdateProductDict = new Dictionary<ProductVariant, int>();
              var stockTakeOrder = await _stAsyncRepository.GetByIdAsync(request.StockTakeId);
-             foreach (var stockTakeGroupLocation in stockTakeOrder.GroupLocations)
+             var stockTakeMessageGroup = await _redisRepository.GetStockTakeAdjustMessage();
+             
+             // foreach (var stockTakeGroupLocation in stockTakeOrder.GroupLocations)
+             // {
+             //     foreach (var stockTakeItem in stockTakeGroupLocation.CheckItems)
+             //     {
+             //         var package = await _packageAsyncRepository.GetByIdAsync(stockTakeItem.PackageId);
+             //         package.Quantity = stockTakeItem.ActualQuantity;
+             //         
+             //         var productVariant = package.ProductVariant;
+             //         
+             //         // productVariant.StorageQuantity += package.Quantity;
+             //         
+             //         if (quantityUpdateProductDict.ContainsKey(productVariant))
+             //             quantityUpdateProductDict[productVariant] += package.Quantity;
+             //         else
+             //             quantityUpdateProductDict.Add(productVariant, package.Quantity);
+             //     }
+             // }
+             
+             foreach (var stockTakeAdjustItemInfo in stockTakeMessageGroup)
              {
-                 foreach (var stockTakeItem in stockTakeGroupLocation.CheckItems)
-                 {
-                     var package = await _packageAsyncRepository.GetByIdAsync(stockTakeItem.PackageId);
-                     package.Quantity = stockTakeItem.ActualQuantity;
-                     
-                     var productVariant = package.ProductVariant;
-                     
-                     // productVariant.StorageQuantity += package.Quantity;
-                     
-                     if (quantityUpdateProductDict.ContainsKey(productVariant))
-                         quantityUpdateProductDict[productVariant] += package.Quantity;
-                     else
-                         quantityUpdateProductDict.Add(productVariant, package.Quantity);
-                 }
+                 var package = await _packageAsyncRepository.GetByIdAsync(stockTakeAdjustItemInfo.PackageId);
+                 package.Quantity = stockTakeAdjustItemInfo.QuantityToAdjust;
+                 
+                 var productVariant = package.ProductVariant;
+                 
+                 // productVariant.StorageQuantity += package.Quantity;
+                 
+                 if (quantityUpdateProductDict.ContainsKey(productVariant))
+                     quantityUpdateProductDict[productVariant] += package.Quantity;
+                 else
+                     quantityUpdateProductDict.Add(productVariant, package.Quantity);
              }
+
+             await _redisRepository.DeleteStockTakeAdjustMessage();
              
              foreach (var keyValuePair in quantityUpdateProductDict)
              {

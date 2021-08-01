@@ -1,9 +1,12 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
+using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.ApplicationCore.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
@@ -16,12 +19,15 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
     public class GetGoodsIssueById : BaseAsyncEndpoint.WithRequest<GiIdRequest>.WithResponse<GiSearchResponse>
     {
         private IAsyncRepository<GoodsIssueOrder> _asyncRepository;
+        private IAsyncRepository<Package> _packageAsyncRepository;
+
         private readonly IAuthorizationService _authorizationService;
 
-        public GetGoodsIssueById(IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService)
+        public GetGoodsIssueById(IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, IAsyncRepository<Package> packageAsyncRepository)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
+            _packageAsyncRepository = packageAsyncRepository;
         }
         [HttpGet("api/goodsissue/{IssueId}")]
         [SwaggerOperation(
@@ -38,6 +44,13 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
             var response = new GiSearchResponse();
             response.IsForDisplay = false;
             response.GoodsIssueOrder = await _asyncRepository.GetByIdAsync(request.IssueId);
+            if (response.GoodsIssueOrder.GoodsIssueType == GoodsIssueStatusType.Packing)
+            {
+                response.IsSearializingProductPackageFifo = true;
+                GoodsIssueBusinessService gis = new GoodsIssueBusinessService(_packageAsyncRepository);
+                response.ProductPackageFIFO = await gis.FifoPackageCalculate(response.GoodsIssueOrder.GoodsIssueProducts.ToList()); 
+            }
+            
             foreach (var goodsIssueProduct in response.GoodsIssueOrder.GoodsIssueProducts)
             {
                 goodsIssueProduct.IsShowingProductVariant = true;

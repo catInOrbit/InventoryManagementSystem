@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Notifications;
 using InventoryManagementSystem.ApplicationCore.Entities.RedisMessages;
+using InventoryManagementSystem.ApplicationCore.Extensions;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using StackExchange.Redis;
 
@@ -149,6 +150,47 @@ namespace Infrastructure.Services
             return await database.StringSetAsync(keyId, JsonSerializer.Serialize(productGroup));
             await database.StringSetAsync(keyId, JsonSerializer.Serialize(productUpdateMessage));
         }
+
+        public async Task<bool> AddStockTakeAdjustMessage(StockTakeAdjustItemInfo stockTakeAdjustItemInfo)
+        {
+            var data = await database.StringGetAsync("StockTakeMessage");
+            if (data.IsNullOrEmpty)
+            {
+                var stockTakeInfo = new StockTakeAdjustInfo
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    StockTakeAdjustItemsInfos = new List<StockTakeAdjustItemInfo>()
+                };
+                
+                await database.StringSetAsync("StockTakeMessage", JsonSerializer.Serialize(stockTakeInfo));
+            }
+            
+            data = await database.StringGetAsync("StockTakeMessage");
+            
+            var stockTakeMessage = JsonSerializer.Deserialize<StockTakeAdjustInfo>(data);
+            
+            if(!stockTakeMessage.StockTakeAdjustItemsInfos.Contains(stockTakeAdjustItemInfo))
+                stockTakeMessage.StockTakeAdjustItemsInfos.Add(stockTakeAdjustItemInfo);
+            
+            return await database.StringSetAsync("StockTakeMessage", JsonSerializer.Serialize(stockTakeMessage));
+        }
+
+        public async Task<List<StockTakeAdjustItemInfo>> GetStockTakeAdjustMessage()
+        {
+            var data = await database.StringGetAsync("StockTakeMessage");
+            var message = JsonSerializer.Deserialize<StockTakeAdjustInfo>(data);
+            return message.StockTakeAdjustItemsInfos;
+        }
+
+        public async Task<bool> DeleteStockTakeAdjustMessage()
+        {
+            var data = await database.StringGetAsync("StockTakeMessage");
+            var message = JsonSerializer.Deserialize<StockTakeAdjustInfo>(data);
+            message.StockTakeAdjustItemsInfos.Clear();
+            
+            return await database.StringSetAsync("StockTakeMessage", JsonSerializer.Serialize(message));
+        }
+
 
         public async Task<bool> RemoveProductUpdateMessage(string keyId, string productVariantId)
         {

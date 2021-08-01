@@ -43,12 +43,24 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         [Ignore]
         [NotMapped]
         public bool IsShowingTransaction { get; set; }
+        
+        [JsonIgnore]
+        [Ignore]
+        [NotMapped]
+        public bool IsShowingProductVariant { get; set; }
 
         [JsonIgnore]
         [Ignore]
         [NotMapped]
         public bool IsDisplayingDetail { get; set; }
 
+        public bool ShouldSerializeProductVariant()
+        {
+            if (IsShowingProductVariant)
+                return true;
+            return false;
+        }
+        
         public bool ShouldSerializeGoodsReceiptOrder()
         {
             if (IsDisplayingDetail)

@@ -6,6 +6,7 @@ using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
+using InventoryManagementSystem.ApplicationCore.Extensions;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 
 namespace InventoryManagementSystem.ApplicationCore.Services
@@ -32,16 +33,67 @@ namespace InventoryManagementSystem.ApplicationCore.Services
         }
         
         //Dictionary<Packge, Number of product to get> in FIFO pattern
-        public async Task<Dictionary<string, int>> FifoPackagesSuggestion(List<OrderItem> orderItems)
+        // public async Task<Dictionary<string, int>> FifoPackageCalculate(List<OrderItem> orderItems)
+        // {
+        //     Dictionary<string, int> numProductInPackageFIFO = new Dictionary<string, int>();
+        //     List<Package> packages = new List<Package>();
+        //     foreach (var orderItem in orderItems)
+        //     {
+        //         packages = (await _packageAsyncRepository.ListAllAsync(new PagingOption<Package>(0, 0))).ResultList
+        //             .Where(package => package.ProductVariantId == orderItem.ProductVariantId).OrderBy(package => package.ImportedDate).ToList();
+        //         var temPackages = new List<Package>(packages);
+        //         var quantityToDeduce = orderItem.OrderQuantity;
+        //         
+        //         for (var i = 0; i < temPackages.Count; i++)
+        //         {
+        //             if (quantityToDeduce > 0)
+        //             {
+        //                 if (temPackages[i].Quantity >= quantityToDeduce)
+        //                 {
+        //                     if (numProductInPackageFIFO.ContainsKey(packages[i].Id))
+        //                         numProductInPackageFIFO[packages[i].Id] = quantityToDeduce;
+        //                     else
+        //                         numProductInPackageFIFO.Add(packages[i].Id, quantityToDeduce);
+        //                 }
+        //                 
+        //                 else
+        //                 {
+        //                     quantityToDeduce -= temPackages[i].Quantity;
+        //                     if (numProductInPackageFIFO.ContainsKey(packages[i].Id))
+        //                         numProductInPackageFIFO[packages[i].Id] = temPackages[i].Quantity;
+        //                     else
+        //                       numProductInPackageFIFO.Add(packages[i].Id, temPackages[i].Quantity);
+        //                 }
+        //             }
+        //         }
+        //     }
+        //     return numProductInPackageFIFO;
+        // }
+
+        public async Task<List<FifoPackageSuggestion>> FifoPackageCalculate(List<OrderItem> orderItems)
         {
             Dictionary<string, int> numProductInPackageFIFO = new Dictionary<string, int>();
+            Dictionary<string, int> ProductAndOrderAmount = new Dictionary<string, int>();
+
+            
+            List<FifoPackageSuggestion> suggestions = new List<FifoPackageSuggestion>(); 
             List<Package> packages = new List<Package>();
+            
             foreach (var orderItem in orderItems)
             {
+                var key = ProductAndOrderAmount.Keys.FirstOrDefault(k => k == orderItem.ProductVariantId);
+                if (key != null)
+                    ProductAndOrderAmount[key] += orderItem.OrderQuantity;
+                else
+                    ProductAndOrderAmount.Add(orderItem.ProductVariantId, orderItem.OrderQuantity);
+            }
+            
+            foreach (var productAndOrder in ProductAndOrderAmount)
+            {
                 packages = (await _packageAsyncRepository.ListAllAsync(new PagingOption<Package>(0, 0))).ResultList
-                    .Where(package => package.ProductVariantId == orderItem.ProductVariantId).OrderBy(package => package.ImportedDate).ToList();
+                    .Where(package => package.ProductVariantId == productAndOrder.Key).OrderBy(package => package.ImportedDate).ToList();
                 var temPackages = new List<Package>(packages);
-                var quantityToDeduce = orderItem.OrderQuantity;
+                var quantityToDeduce = productAndOrder.Value;
                 
                 for (var i = 0; i < temPackages.Count; i++)
                 {
@@ -61,14 +113,49 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                             if (numProductInPackageFIFO.ContainsKey(packages[i].Id))
                                 numProductInPackageFIFO[packages[i].Id] = temPackages[i].Quantity;
                             else
-                              numProductInPackageFIFO.Add(packages[i].Id, temPackages[i].Quantity);
+                                numProductInPackageFIFO.Add(packages[i].Id, temPackages[i].Quantity);
                         }
                     }
                 }
+                
+                var fifopackage = new FifoPackageSuggestion();
+                fifopackage.ProductVariant = orderItems.FirstOrDefault(o => o.ProductVariantId == productAndOrder.Key).ProductVariant;
+                foreach (var keyValuePair in numProductInPackageFIFO)
+                {
+                    var package = (await _packageAsyncRepository.GetByIdAsync(keyValuePair.Key));
+                    if (fifopackage.ProductVariant.Packages.Contains(package))
+                    {
+                        fifopackage.PackagesAndQuantities.Add(new PackageAndQuantity
+                        {
+                            Package = package,
+                            Quantity = keyValuePair.Value
+                        });
+                    }
+                }
+                suggestions.Add(fifopackage);
             }
-            return numProductInPackageFIFO;
+            //
+            // foreach (var orderItem in orderItems)
+            // {
+            //     var fifopackage = new FifoPackageSuggestion();
+            //     fifopackage.ProductVariant = orderItem.ProductVariant;
+            //     foreach (var keyValuePair in numProductInPackageFIFO)
+            //     {
+            //         var package = (await _packageAsyncRepository.GetByIdAsync(keyValuePair.Key));
+            //         if (fifopackage.ProductVariant.Packages.Contains(package))
+            //         {
+            //             fifopackage.PackagesAndQuantities.Add(new PackageAndQuantity
+            //             {
+            //                 Package = package,
+            //                 Quantity = keyValuePair.Value
+            //             });
+            //         }
+            //     }
+            //     suggestions.Add(fifopackage);
+            // }
+            
+            return suggestions;
         }
-
         public async Task UpdatePackageFromGoodsIssue(GoodsIssueOrder gio)
         {
             foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
@@ -108,7 +195,9 @@ namespace InventoryManagementSystem.ApplicationCore.Services
 
                 foreach (var i in listIndexPackageToRemove)
                 {
+                    listPackages[i].Transaction.TransactionStatus = false;
                     await _packageIndexAsyncRepository.ElasticDeleteSingleAsync(listPackages[i], ElasticIndexConstant.PACKAGES);
+
                     await _packageAsyncRepository.DeleteAsync(listPackages[i]);
                 }
             }

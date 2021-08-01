@@ -12,6 +12,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
+using InventoryManagementSystem.ApplicationCore.Extensions;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.ApplicationCore.Services;
 using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
@@ -78,16 +79,17 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 // foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
                 //     productVariantIds.Add(gioGoodsIssueProduct.ProductVariantId);
                 
-                var nDictionary = await goodsIssueService.FifoPackagesSuggestion(gio.GoodsIssueProducts.ToList());
+                response.ProductPackageFIFO = await goodsIssueService.FifoPackageCalculate(gio.GoodsIssueProducts.ToList());
                 
-                foreach (var keyValuePair in nDictionary)
-                {
-                    response.NumOfProductToGetInPackage.Add(new PackageSuggestion
-                    {
-                        Package = await _packageAsyncRepository.GetByIdAsync(keyValuePair.Key),
-                        NumberOfProductToGet = keyValuePair.Value
-                    });
-                }
+                // foreach (var keyValuePair in nDictionary)
+                // {
+                //     
+                //     response.ProductPackageFIFO.Add(new FifoPackageSuggestion
+                //     {
+                //         Packages = await _packageAsyncRepository.GetByIdAsync(keyValuePair.Key),
+                //         NumberOfProductToGet = keyValuePair.Value
+                //     });
+                // }
                 
                 await _asyncRepository.UpdateAsync(gio);
                 await _goodIssueasyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.GoodsIssueSearchIndexHelper(gio), ElasticIndexConstant.GOODS_ISSUE_ORDERS);

@@ -2,7 +2,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
 {
     public class GISearchFilter
     {
-        public string FromStatus { get; set; }
+        public string[] Statuses { get; set; }
         public string ToStatus { get; set; }
         public string FromCreatedDate { get; set; }
         public string ToCreatedDate { get; set; }
@@ -117,4 +117,5 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string[] Role { get; set; }
         public bool[] Status { get; set; }
     }
+ 
 }

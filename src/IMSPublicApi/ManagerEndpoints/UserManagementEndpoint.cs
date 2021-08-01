@@ -13,15 +13,19 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
 {
-    public class UserManagementEndpoint : BaseAsyncEndpoint.WithRequest<UserManagementRequest>.WithoutResponse
+    public class UserManagementEndpoint : BaseAsyncEndpoint.WithRequest<UserManagementRequest>.WithResponse<UserManagementResponse>
     {
         private readonly IAuthorizationService _authorizationService;
         private UserRoleModificationService _userRoleModificationService;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public UserManagementEndpoint(IAuthorizationService authorizationService, UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager)
         {
             _authorizationService = authorizationService;
+            _userManager = userManager;
+            _roleManager = roleManager;
             _userRoleModificationService = new UserRoleModificationService(roleManager, userManager);
         }
         
@@ -33,7 +37,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             Tags = new[] { "ManagerEndpoints" })
         ]
 
-        public override async Task<ActionResult> HandleAsync(UserManagementRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<UserManagementResponse>> HandleAsync(UserManagementRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.USERDETAIL, UserOperations.Update))
                 return Unauthorized();
@@ -78,12 +82,20 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             await _userRoleModificationService.UserManager.RemoveFromRoleAsync(user, role.Name);
             await _userRoleModificationService.RoleManager.DeleteAsync(role);
             var result = await _userRoleModificationService.RoleCreatingHelper(user.Id, role.Name);
-
+    
+            var userRole = (await _userManager.GetRolesAsync(user))[0];
+            var roleId = (await _roleManager.FindByNameAsync(userRole)).Id;
+            
             if (result.Succeeded)
             {
                 response.Status = true;
                 response.Verbose = "User updated";
-                response.UserUpdated = user;
+                response.UserAndRole = new UserAndRole
+                {
+                  ImsUser  = user,
+                  UserRole = userRole,
+                  RoleID = roleId
+                } ;
                 return Ok(response);
             }
             

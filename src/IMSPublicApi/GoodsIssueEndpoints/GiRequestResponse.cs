@@ -4,32 +4,18 @@ using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
+using InventoryManagementSystem.ApplicationCore.Extensions;
 using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
 {
-    public class GIAllRequest : BaseRequest
-    {
-        public GISearchFilter GiSearchFilter { get; set; }
-        public int CurrentPage { get; set; }
-        public int SizePerPage { get; set; }
-    }
-    
-    public class GISearchRequest : BaseRequest
+    public class GIAllRequest : GISearchFilter
     {
         public string SearchQuery { get; set; }
         public int CurrentPage { get; set; }
         public int SizePerPage { get; set; }
-        
-        public string FromStatus { get; set; }
-        public string ToStatus { get; set; }
-        public string FromCreatedDate { get; set; }
-        public string ToCreatedDate { get; set; }
-        public string CreatedByName { get; set; }
-        public string DeliveryMethod { get; set; }
-        public string FromDeliveryDate { get; set; }
-        public string ToDeliveryDate { get; set; }
     }
+    
     
     public class GiSearchResponse : BaseResponse
     {
@@ -48,8 +34,6 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 return true;
             return false;
         }
-        
-        
         public virtual bool ShouldSerializePaging()
         {
             if(IsForDisplay)
@@ -57,21 +41,33 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             return false;
         }
         
+        public virtual bool ShouldSerializeProductPackageFIFO()
+        {
+            if(IsSearializingProductPackageFifo)
+                return true;
+            return false;
+        }
+        
         public GoodsIssueOrder GoodsIssueOrder { get; set; }
-        // public List<GIDisplay> GoodsIssueOrdersDisplays { get; set; } = new List<GIDisplay>();
+        public List<FifoPackageSuggestion> ProductPackageFIFO { get; set; } =
+            new List<FifoPackageSuggestion>();
      
         public PagingOption<GoodsIssueSearchIndex> Paging { get; set; }
   
         [JsonIgnore]
         public bool IsForDisplay { get; set; }
+
+        [JsonIgnore]
+        public bool IsSearializingProductPackageFifo { get; set; } = false;
+
     }
   
     public class GiResponse : BaseResponse
     {
         public GoodsIssueOrder GoodsIssueOrder { get; set; }
 
-        public List<PackageSuggestion> NumOfProductToGetInPackage { get; set; } =
-            new List<PackageSuggestion>();
+        public List<FifoPackageSuggestion> ProductPackageFIFO { get; set; } =
+            new List<FifoPackageSuggestion>();
     }
 
     public class PackageSuggestion

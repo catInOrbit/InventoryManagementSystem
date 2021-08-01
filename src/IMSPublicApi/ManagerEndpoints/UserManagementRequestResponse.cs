@@ -20,8 +20,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
     {
         public bool Status { get; set; }
         public string Verbose { get; set; }
-        
-        public ApplicationUser UserUpdated { get; set; }
 
+        public UserAndRole UserAndRole { get; set; }
     }
 }

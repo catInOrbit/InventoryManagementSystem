@@ -17,7 +17,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
 {
-    public class SearchGoodsIssue : BaseAsyncEndpoint.WithRequest<GISearchRequest>.WithResponse<GiSearchResponse>
+    public class SearchGoodsIssue : BaseAsyncEndpoint.WithRequest<GIAllRequest>.WithResponse<GiSearchResponse>
     {
         private IAsyncRepository<GoodsIssueOrder> _asyncRepository;
         private readonly IAuthorizationService _authorizationService;
@@ -40,7 +40,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
             Tags = new[] { "GoodsIssueEndpoints" })
         ]
         [HttpGet("api/goodsissue/search")]
-        public override async Task<ActionResult<GiSearchResponse>> HandleAsync([FromQuery]GISearchRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<GiSearchResponse>> HandleAsync([FromQuery]GIAllRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSISSUE, UserOperations.Read))
                 return Unauthorized();
@@ -51,17 +51,6 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
             response.IsForDisplay = true;
             
             
-            var searchFilter = new GISearchFilter
-            {
-                FromStatus = request.FromStatus,
-                ToStatus = request.ToStatus,
-                CreatedByName = request.CreatedByName,
-                FromCreatedDate = request.FromCreatedDate,
-                FromDeliveryDate = request.FromDeliveryDate,
-                ToCreatedDate = request.ToCreatedDate,
-                ToDeliveryDate = request.ToDeliveryDate,
-                DeliveryMethod = request.DeliveryMethod
-            };
 
             
             ISearchResponse<GoodsIssueSearchIndex> responseElastic;
@@ -70,7 +59,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints.Search
                 ElasticIndexConstant.GOODS_ISSUE_ORDERS);
             responseElastic = await elasticSearchHelper.GetDocuments();
 
-            pagingOption.ResultList = FilteringService.GoodsIssueIndexFiltering(responseElastic.Documents.ToList(), searchFilter,
+            pagingOption.ResultList = FilteringService.GoodsIssueIndexFiltering(responseElastic.Documents.ToList(), request,
                 new CancellationToken());
             
             pagingOption.ExecuteResourcePaging();

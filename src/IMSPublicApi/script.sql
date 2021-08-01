@@ -4,7 +4,7 @@ BEGIN
         [MigrationId] nvarchar(150) NOT NULL,
         [ProductVersion] nvarchar(32) NOT NULL,
         CONSTRAINT [PK___EFMigrationsHistory] PRIMARY KEY ([MigrationId])
-    );
+    )
 END;
 GO
 
@@ -214,8 +214,6 @@ CREATE TABLE [GoodsIssueOrder] (
     [RequestId] nvarchar(max) NULL,
     [DeliveryMethod] nvarchar(max) NULL,
     [DeliveryAddress] nvarchar(max) NULL,
-    [CustomerName] nvarchar(max) NULL,
-    [CustomerPhoneNumber] nvarchar(max) NULL,
     [SupplierId] nvarchar(50) NULL,
     [TransactionId] nvarchar(50) NULL,
     [GoodsIssueType] int NOT NULL,
@@ -261,6 +259,21 @@ CREATE TABLE [ProductVariant] (
     CONSTRAINT [PK_ProductVariant] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_ProductVariant_Product_ProductId] FOREIGN KEY ([ProductId]) REFERENCES [Product] ([Id]) ON DELETE NO ACTION,
     CONSTRAINT [FK_ProductVariant_Transaction_TransactionId] FOREIGN KEY ([TransactionId]) REFERENCES [Transaction] ([Id]) ON DELETE NO ACTION
+);
+GO
+
+CREATE TABLE [StockTakeItem] (
+    [Id] nvarchar(50) NOT NULL,
+    [ProductVariantName] nvarchar(max) NULL,
+    [SKU] nvarchar(max) NULL,
+    [StorageQuantity] int NOT NULL,
+    [ActualQuantity] int NOT NULL,
+    [Note] nvarchar(max) NULL,
+    [StockTakeOrderId] nvarchar(50) NULL,
+    [StockTakeGroupLocationId] nvarchar(50) NULL,
+    CONSTRAINT [PK_StockTakeItem] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_StockTakeItem_StockTakeGroupLocation_StockTakeGroupLocationId] FOREIGN KEY ([StockTakeGroupLocationId]) REFERENCES [StockTakeGroupLocation] ([Id]) ON DELETE NO ACTION,
+    CONSTRAINT [FK_StockTakeItem_StockTakeOrder_StockTakeOrderId] FOREIGN KEY ([StockTakeOrderId]) REFERENCES [StockTakeOrder] ([Id]) ON DELETE NO ACTION
 );
 GO
 
@@ -328,20 +341,6 @@ CREATE TABLE [Package] (
     CONSTRAINT [FK_Package_ProductVariant_ProductVariantId] FOREIGN KEY ([ProductVariantId]) REFERENCES [ProductVariant] ([Id]) ON DELETE NO ACTION,
     CONSTRAINT [FK_Package_Supplier_SupplierId] FOREIGN KEY ([SupplierId]) REFERENCES [Supplier] ([Id]) ON DELETE NO ACTION,
     CONSTRAINT [FK_Package_Transaction_TransactionId] FOREIGN KEY ([TransactionId]) REFERENCES [Transaction] ([Id]) ON DELETE NO ACTION
-);
-GO
-
-CREATE TABLE [StockTakeItem] (
-    [Id] nvarchar(50) NOT NULL,
-    [PackageId] nvarchar(50) NULL,
-    [ActualQuantity] int NOT NULL,
-    [Note] nvarchar(max) NULL,
-    [StockTakeOrderId] nvarchar(50) NULL,
-    [StockTakeGroupLocationId] nvarchar(50) NULL,
-    CONSTRAINT [PK_StockTakeItem] PRIMARY KEY ([Id]),
-    CONSTRAINT [FK_StockTakeItem_Package_PackageId] FOREIGN KEY ([PackageId]) REFERENCES [Package] ([Id]) ON DELETE NO ACTION,
-    CONSTRAINT [FK_StockTakeItem_StockTakeGroupLocation_StockTakeGroupLocationId] FOREIGN KEY ([StockTakeGroupLocationId]) REFERENCES [StockTakeGroupLocation] ([Id]) ON DELETE NO ACTION,
-    CONSTRAINT [FK_StockTakeItem_StockTakeOrder_StockTakeOrderId] FOREIGN KEY ([StockTakeOrderId]) REFERENCES [StockTakeOrder] ([Id]) ON DELETE NO ACTION
 );
 GO
 
@@ -432,9 +431,6 @@ GO
 CREATE INDEX [IX_StockTakeGroupLocation_StockTakeOrderId] ON [StockTakeGroupLocation] ([StockTakeOrderId]);
 GO
 
-CREATE INDEX [IX_StockTakeItem_PackageId] ON [StockTakeItem] ([PackageId]);
-GO
-
 CREATE INDEX [IX_StockTakeItem_StockTakeGroupLocationId] ON [StockTakeItem] ([StockTakeGroupLocationId]);
 GO
 
@@ -469,7 +465,7 @@ CREATE INDEX [IX_UserRole_RoleId] ON [UserRole] ([RoleId]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20210726090611_Creation', N'5.0.5');
+VALUES (N'20210801095638_Creation', N'5.0.5');
 GO
 
 COMMIT;
