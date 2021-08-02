@@ -23,12 +23,10 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
     [AllowAnonymous]
     public class Authentication : BaseAsyncEndpoint.WithRequest<AuthenticateRequest>.WithResponse<AuthenticateResponse>
     {
-
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ITokenClaimsService _tokenClaimsService;
         private readonly IUserSession _userAuthentication;
         private readonly IRedisRepository _redisRepository;
-
 
         private readonly UserRoleModificationService _userRoleModificationService;
         public UserInfoAuth UserInfo { get; set; } = new UserInfoAuth();
@@ -69,11 +67,11 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                 
                 if (result.Succeeded)
                 {
-                    var jwttoken = await _tokenClaimsService.GetTokenAsync(user.Email);
-                    var jwtRefreshtoken = await _tokenClaimsService.GetRefreshTokenAsync(user.Email);
+                    // var jwttoken = await _tokenClaimsService.GetTokenAsync(user.Email);
+                    var jwtRefreshtoken = await _tokenClaimsService.GenerateRefreshTokenAsync(user.Email);
                     await _tokenClaimsService.SaveRefreshTokenForUser(user, jwtRefreshtoken);
 
-                    response.Token = jwttoken;
+                    response.Token = jwtRefreshtoken;
                     response.Verbose = "Success";
                     var userGet = await _userRoleModificationService.UserManager.FindByIdAsync(user.Id);
                     var roleIdentity = await _userRoleModificationService.RoleManager.FindByNameAsync(roles[0]);

@@ -76,18 +76,18 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
                 response.Verbose = "Info updated, But Role of user tmh1799@gmail.com: Manager can not be changed";
                 return Ok(response);
             }
+
+            var oldRoles = (await _userManager.GetRolesAsync(user));
+            var newRole = await _userRoleModificationService.RoleManager.FindByIdAsync(request.RoleId);
             
-            var role = await _userRoleModificationService.RoleManager.FindByIdAsync(request.RoleId);
-            
-            await _userRoleModificationService.UserManager.RemoveFromRoleAsync(user, role.Name);
-            await _userRoleModificationService.RoleManager.DeleteAsync(role);
-            var result = await _userRoleModificationService.RoleCreatingHelper(user.Id, role.Name);
-    
-            var userRole = (await _userManager.GetRolesAsync(user))[0];
-            var roleId = (await _roleManager.FindByNameAsync(userRole)).Id;
-            
+            if(oldRoles.Count > 0)
+                await _userRoleModificationService.UserManager.RemoveFromRoleAsync(user, oldRoles[0]);
+            var result = await _userRoleModificationService.UserManager.AddToRoleAsync(user, newRole.Name);
             if (result.Succeeded)
             {
+                var userRole = (await _userManager.GetRolesAsync(user))[0];
+                var roleId = (await _roleManager.FindByNameAsync(userRole)).Id;
+                
                 response.Status = true;
                 response.Verbose = "User updated";
                 response.UserAndRole = new UserAndRole

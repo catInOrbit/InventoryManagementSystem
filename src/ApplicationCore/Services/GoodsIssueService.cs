@@ -70,6 +70,19 @@ namespace InventoryManagementSystem.ApplicationCore.Services
         //     return numProductInPackageFIFO;
         // }
 
+
+        public string ValidateGoodsIssue(GoodsIssueOrder gi)
+        {
+            var productVariantIdList = new List<string>();
+            foreach (var giGoodsIssueProduct in gi.GoodsIssueProducts)
+                productVariantIdList.Add(giGoodsIssueProduct.ProductVariantId);
+            
+            if(productVariantIdList.Count != productVariantIdList.Distinct().Count())
+                return "Duplicate product found in issue order";
+            return null;
+        }
+
+        
         public async Task<List<FifoPackageSuggestion>> FifoPackageCalculate(List<OrderItem> orderItems)
         {
             Dictionary<string, int> numProductInPackageFIFO = new Dictionary<string, int>();
@@ -85,7 +98,9 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                 if (key != null)
                     ProductAndOrderAmount[key] += orderItem.OrderQuantity;
                 else
+                {
                     ProductAndOrderAmount.Add(orderItem.ProductVariantId, orderItem.OrderQuantity);
+                }
             }
             
             foreach (var productAndOrder in ProductAndOrderAmount)
@@ -119,16 +134,16 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                 }
                 
                 var fifopackage = new FifoPackageSuggestion();
-                fifopackage.ProductVariant = orderItems.FirstOrDefault(o => o.ProductVariantId == productAndOrder.Key).ProductVariant;
+                fifopackage.OrderItem = orderItems.FirstOrDefault(o => o.ProductVariantId == productAndOrder.Key);
                 foreach (var keyValuePair in numProductInPackageFIFO)
                 {
                     var package = (await _packageAsyncRepository.GetByIdAsync(keyValuePair.Key));
-                    if (fifopackage.ProductVariant.Packages.Contains(package))
+                    if (fifopackage.OrderItem.ProductVariant.Packages.Contains(package))
                     {
-                        fifopackage.PackagesAndQuantities.Add(new PackageAndQuantity
+                        fifopackage.PackagesAndQuantitiesToGet.Add(new PackageAndQuantity
                         {
-                            Package = package,
-                            Quantity = keyValuePair.Value
+                            PackageToGet = package,
+                            QuantityToGet = keyValuePair.Value
                         });
                     }
                 }

@@ -8,6 +8,7 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
     {
         void InvalidateSession();
         Task SaveUserAsync(ApplicationUser userGet, string role);
+        Task RemoveUserAsync(ApplicationUser user);
 
         Task<ApplicationUser> GetCurrentSessionUser();
         Task<string> GetCurrentSessionUserRole();

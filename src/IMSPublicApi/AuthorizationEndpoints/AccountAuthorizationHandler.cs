@@ -27,6 +27,7 @@ namespace InventoryManagementSystem.PublicApi.AuthorizationEndpoints
         {
             // var user = await _userManager.GetUserAsync(context.User);
             var user = await _userAuthentication.GetCurrentSessionUser();
+            
             if(user == null)
                 return Task.CompletedTask;
             var userRoles = await _userManager.GetRolesAsync(user);

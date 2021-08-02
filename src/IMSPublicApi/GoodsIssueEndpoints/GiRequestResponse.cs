@@ -68,6 +68,14 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
 
         public List<FifoPackageSuggestion> ProductPackageFIFO { get; set; } =
             new List<FifoPackageSuggestion>();
+
+        [JsonIgnore] public bool IsShowingPackageSuggestion { get; set; }
+        public bool ShouldSerializeProductPackageFIFO()
+        {
+            if (IsShowingPackageSuggestion) return true;
+            return false;
+        }
+
     }
 
     public class PackageSuggestion

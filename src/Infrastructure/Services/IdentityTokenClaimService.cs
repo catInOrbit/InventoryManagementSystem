@@ -14,7 +14,7 @@ namespace Infrastructure.Services
     public class IdentityTokenClaimService : ITokenClaimsService
     {
         private readonly UserManager<ApplicationUser> _userManager;
-
+        
         public IdentityTokenClaimService(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
@@ -28,14 +28,15 @@ namespace Infrastructure.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-                Expires = DateTime.UtcNow.AddDays(2),
+                Expires = DateTime.UtcNow.AddHours(1),
+                // Expires = TimeZone.CurrentTimeZone.ToLocalTime(DateTime.UtcNow).ToLocalTime().AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
         
-        public async Task<string> GetRefreshTokenAsync(string email)
+        public async Task<string> GenerateRefreshTokenAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -43,13 +44,19 @@ namespace Infrastructure.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddHours(1),
+                // Expires = TimeZone.CurrentTimeZone.ToLocalTime(DateTime.UtcNow).ToLocalTime().AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return  tokenHandler.WriteToken(token);
         }
-        
+
+        public async Task<string> GetRefreshTokenAsync(ApplicationUser user)
+        {
+            return await _userManager.GetAuthenticationTokenAsync(user, "IMSPublicAPI", "RefreshToken");
+        }
+
         public async Task SaveRefreshTokenForUser(ApplicationUser user, string tokenRefresh)
         {
             if (await _userManager.GetAuthenticationTokenAsync(user, "IMSPublicAPI", "RefreshToken") != null)

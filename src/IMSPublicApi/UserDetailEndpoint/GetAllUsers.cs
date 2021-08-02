@@ -19,17 +19,19 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
     public class GetAllUsers : BaseAsyncEndpoint.WithRequest<GetAllUserRequest>.WithResponse<UsersResponse>
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         private readonly IAuthorizationService _authorizationService;
         private IUserSession _userAuthentication;
 
         public ApplicationUser UserInfo { get; set; } = new ApplicationUser();
 
-        public GetAllUsers(UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService, IUserSession userAuthentication)
+        public GetAllUsers(UserManager<ApplicationUser> userManager, IAuthorizationService authorizationService, IUserSession userAuthentication, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
+            _roleManager = roleManager;
         }
 
         [HttpGet("api/users")]
@@ -63,7 +65,14 @@ namespace InventoryManagementSystem.PublicApi.UserDetailEndpoint
                 {
                     var userAndRole = new UserAndRole();
                     userAndRole.ImsUser = applicationUser;
-                    userAndRole.UserRole = (await _userManager.GetRolesAsync(applicationUser))[0];
+                    var userRoles = await _userManager.GetRolesAsync(applicationUser);
+                    if (userRoles.Count != 0)
+                    {
+                        userAndRole.UserRole =  (await _userManager.GetRolesAsync(applicationUser))[0];
+                        var getRole = await _roleManager.FindByNameAsync(userAndRole.UserRole);
+                        userAndRole.RoleID = getRole.Id;
+                    }
+                    
                     pagingOption.ResultList.Add(userAndRole);
                 }
 

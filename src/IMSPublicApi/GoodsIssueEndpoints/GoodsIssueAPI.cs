@@ -70,6 +70,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 
                 gio.GoodsIssueType = GoodsIssueStatusType.Packing;
                 response.GoodsIssueOrder = gio;
+                response.IsShowingPackageSuggestion = true;
                 
                 //-------------
                 GoodsIssueBusinessService goodsIssueService =
@@ -189,11 +190,15 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
 
             BigQueryService bigQueryService = new BigQueryService();
             var response = new GiResponse();
-
+            response.IsShowingPackageSuggestion = false;
+            GoodsIssueBusinessService gis = new GoodsIssueBusinessService(_asyncRepository, _productVariantAsyncRepository,
+                _packageAsyncRepository, _packageIndexAsyncRepository);
             if (gio.GoodsIssueType == GoodsIssueStatusType.Shipping)
             {
-                GoodsIssueBusinessService gis = new GoodsIssueBusinessService(_asyncRepository, _productVariantAsyncRepository,
-                    _packageAsyncRepository, _packageIndexAsyncRepository);
+                var error = gis.ValidateGoodsIssue(gio);
+                if (error != null)
+                    return BadRequest(error);
+                
                 await gis.UpdatePackageFromGoodsIssue(gio);
             }
 

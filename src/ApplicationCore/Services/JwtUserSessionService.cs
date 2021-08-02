@@ -14,6 +14,11 @@ namespace InventoryManagementSystem.ApplicationCore.Services
 
         private string CurrentUserRole { get; set; }
 
+        public Task RemoveUserAsync(ApplicationUser user)
+        {
+           return Task.FromResult(currentLoggedIn = null);
+        }
+
         public async Task<ApplicationUser> GetCurrentSessionUser()
         {
             return await Task.FromResult(currentLoggedIn);

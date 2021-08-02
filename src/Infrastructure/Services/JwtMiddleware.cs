@@ -37,11 +37,14 @@ namespace WebApi.Helpers
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(AuthorizationConstants.JWT_SECRET_KEY);
+            ApplicationUser currentUser = null;
             try
             {
                 ValidateToken(tokenHandler, token, key);
-                var currentUser = await userManager.FindByIdAsync(_userId);
+                currentUser = await userManager.FindByIdAsync(_userId);
                 await userAuthentication.SaveUserAsync(currentUser, (await userManager.GetRolesAsync(currentUser))[0]);
+                var newToken = await tokenClaimsService.GenerateRefreshTokenAsync((await userAuthentication.GetCurrentSessionUser()).Email);
+                await tokenClaimsService.SaveRefreshTokenForUser(currentUser, newToken);
             }
             catch
             {
@@ -49,23 +52,32 @@ namespace WebApi.Helpers
                 {
                     context.Request.Headers.Remove("Authorization");
                     
-                    var tokenRefresh = await tokenClaimsService.GetRefreshTokenAsync((await userAuthentication.GetCurrentSessionUser()).Email);
+                    // var tokenRefresh = await tokenClaimsService.GenerateRefreshTokenAsync((await userAuthentication.GetCurrentSessionUser()).Email);
+                    var tokenRefresh = await tokenClaimsService.GetRefreshTokenAsync((await userAuthentication.GetCurrentSessionUser()));
+
                     if (tokenRefresh != null)
                     {
                         try
                         {
                             ValidateToken(tokenHandler, tokenRefresh, key);
-                            context.Request.Headers.Add("Authorization",tokenRefresh);
+                            currentUser = await userManager.FindByIdAsync(_userId);
+                            var newToken = await tokenClaimsService.GenerateRefreshTokenAsync((await userAuthentication.GetCurrentSessionUser()).Email);
+                            await tokenClaimsService.SaveRefreshTokenForUser(currentUser, newToken);
+                            context.Request.Headers.Add("Authorization",newToken);
                         }
                         catch (Exception e)
                         {
+                            await userAuthentication.RemoveUserAsync(currentUser);
                             context.Items["User"] = null;
                         }
                     }
                 }
 
                 else
+                {
+                    await userAuthentication.RemoveUserAsync(currentUser);
                     context.Items["User"] = null;
+                }
             }
         }
 

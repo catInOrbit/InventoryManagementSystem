@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -87,7 +88,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     Name = productVairantRequestInfo.Name,
                     Sku = productVairantRequestInfo.Sku,
                     IsVariantType = product.IsVariantType,
-                    Barcode = productVairantRequestInfo.Barcode,
+                    Barcode = "BC" + Guid.NewGuid().ToString().Substring(0, 10).ToUpper(),
                     Price = productVairantRequestInfo.Price,
                     Cost = productVairantRequestInfo.SalePrice,  
                     Product =  product
@@ -213,7 +214,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                             productVariantSystemList.Name = productVairantRequestInfo.Name;
                             productVariantSystemList.Sku = productVairantRequestInfo.Sku;
                             productVariantSystemList.IsVariantType = product.IsVariantType;
-                            productVariantSystemList.Barcode = productVairantRequestInfo.Barcode;
+                            // productVariantSystemList.Barcode = productVairantRequestInfo.Barcode;
                             productVariantSystemList.Price = productVairantRequestInfo.Price;
 
                             if (productVairantRequestInfo.ProductVariantImageLink != null)
@@ -237,7 +238,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                         Name = productVairantRequestInfo.Name,
                         Sku = productVairantRequestInfo.Sku,    
                         IsVariantType = product.IsVariantType,
-                        Barcode = productVairantRequestInfo.Barcode,
+                        Barcode = "BC" + Guid.NewGuid().ToString().Substring(0, 10).ToUpper(),
                         Price = productVairantRequestInfo.Price,
                         ProductId = product.Id,
                     };
@@ -289,7 +290,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     Name = productVairantUpdateRequestInfo.Name,
                     Sku = productVairantUpdateRequestInfo.Sku,
                     IsVariantType = product.IsVariantType,
-                    Barcode = productVairantUpdateRequestInfo.Barcode,
+                    Barcode = "BC" + Guid.NewGuid().ToString().Substring(0, 10).ToUpper(),
                     Price = productVairantUpdateRequestInfo.Price,
                     ProductId = product.Id,
                     Product = product
