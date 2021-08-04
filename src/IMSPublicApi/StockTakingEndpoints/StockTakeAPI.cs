@@ -60,7 +60,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                 return Unauthorized();
             
             stockTakeOrder.StockTakeOrderType = StockTakeOrderType.AwaitingAdjustment;
-            stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Submit,
+            stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Submit,TransactionType.StockTake,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, stockTakeOrder.Id, "");
             
             
@@ -141,7 +141,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
             }
             
             storder.StockTakeOrderType = StockTakeOrderType.Progressing;
-            storder.Transaction = TransactionUpdateHelper.UpdateTransaction(storder.Transaction,UserTransactionActionType.Modify,
+            storder.Transaction = TransactionUpdateHelper.UpdateTransaction(storder.Transaction,UserTransactionActionType.Modify,TransactionType.StockTake,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, storder.Id, "");
             await _asyncRepository.UpdateAsync(storder);
             await _stSearchasyncRepository.ElasticSaveSingleAsync(false,
@@ -250,7 +250,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                  stockTakeOrder.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.StockTake,stockTakeOrder.Id,
                      (await _userAuthentication.GetCurrentSessionUser()).Id);
              else
-                 stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Modify,
+                 stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Modify,TransactionType.StockTake,
                      (await _userAuthentication.GetCurrentSessionUser()).Id, stockTakeOrder.Id, "");
              try
              {
@@ -364,7 +364,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
             
              stockTakeOrder.StockTakeOrderType = StockTakeOrderType.Completed;
 
-             stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Modify,
+             stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Modify,TransactionType.StockTake,
                  (await _userAuthentication.GetCurrentSessionUser()).Id, stockTakeOrder.Id, "");
              
              await _stAsyncRepository.UpdateAsync(stockTakeOrder);
@@ -412,7 +412,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
            
              stockTakeOrder.StockTakeOrderType = StockTakeOrderType.Cancel;
 
-             stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Reject,
+             stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Reject,TransactionType.StockTake,
                  (await _userAuthentication.GetCurrentSessionUser()).Id, stockTakeOrder.Id, request.CancelReason);
              
              await _stAsyncRepository.UpdateAsync(stockTakeOrder);

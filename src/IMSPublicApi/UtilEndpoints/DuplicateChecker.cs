@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
+using Castle.Core.Internal;
 using Infrastructure.Services;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
+using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Nest;
 using Swashbuckle.AspNetCore.Annotations;
@@ -40,18 +42,21 @@ namespace InventoryManagementSystem.PublicApi.UtilEndpoints
             if (responseElastic.Documents.Count > 0)
             {
                 response.HasMatch = true;
-                response.MatchList.AddRange(responseElastic.Documents.GroupBy(x => x.Name).Select(x=> x.First()));
+                response.DatabaseMatchList.AddRange(responseElastic.Documents.GroupBy(x => x.Name).Select(x=> x.First()));
             }
             return Ok(response);
         }
     }
     
-    public class DuplicateProductVariantChecker : BaseAsyncEndpoint.WithRequest<DuplicateCheckerRequest>.WithResponse<DuplicateCheckerResponse>
+    public class DuplicateProductVariantChecker : BaseAsyncEndpoint.WithRequest<DuplicateCheckerRequest>.WithResponse<DuplicateProductVariantCheckerResponse>
     {
         private readonly IElasticClient _elasticClient;
-        public DuplicateProductVariantChecker(IElasticClient elasticClient)
+        private readonly IRedisRepository _iRedisRepository;
+
+        public DuplicateProductVariantChecker(IElasticClient elasticClient, IRedisRepository iRedisRepository)
         {
             _elasticClient = elasticClient;
+            _iRedisRepository = iRedisRepository;
         }
         
         [HttpPost("api/dupcheck/productvariant")]
@@ -61,17 +66,26 @@ namespace InventoryManagementSystem.PublicApi.UtilEndpoints
             OperationId = "dupcheck.productvariant",
             Tags = new[] { "UtilsEndpoints" })
         ]
-        public override async Task<ActionResult<DuplicateCheckerResponse>> HandleAsync(DuplicateCheckerRequest request, CancellationToken cancellationToken = new CancellationToken())
+        public override async Task<ActionResult<DuplicateProductVariantCheckerResponse>> HandleAsync(DuplicateCheckerRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            var response = new DuplicateCheckerResponse();
+            var response = new DuplicateProductVariantCheckerResponse();
             ElasticSearchHelper<ProductVariantSearchIndex> elasticSearchHelper =
                 new ElasticSearchHelper<ProductVariantSearchIndex>(_elasticClient);
 
             var responseElastic = await elasticSearchHelper.CheckFieldExistProductVariant(request.Value);
+            
+            var redisData = await _iRedisRepository.GetProductUpdateMessage();
+
+            if (!redisData.IsNullOrEmpty())
+            {
+                response.HasMatch = true;
+                response.RedisMatchList = redisData.Where(r => r.Sku == request.Value).ToList();
+            }
+
             if (responseElastic.Documents.Count > 0)
             {
                 response.HasMatch = true;
-                response.MatchList.AddRange(responseElastic.Documents.GroupBy(x => x.Name).Select(x=> x.First()));
+                response.DatabaseMatchList.AddRange(responseElastic.Documents.GroupBy(x => x.Name).Select(x=> x.First()));
             }
             return Ok(response);
         }
@@ -102,7 +116,7 @@ namespace InventoryManagementSystem.PublicApi.UtilEndpoints
             if (responseElastic.Documents.Count > 0)
             {
                 response.HasMatch = true;
-                response.MatchList.AddRange(responseElastic.Documents.GroupBy(x => x.LocationName).Select(x=> x.First()));
+                response.DatabaseMatchList.AddRange(responseElastic.Documents.GroupBy(x => x.LocationName).Select(x=> x.First()));
             }
             return Ok(response);
         }
@@ -133,7 +147,7 @@ namespace InventoryManagementSystem.PublicApi.UtilEndpoints
             if (responseElastic.Documents.Count > 0)
             {
                 response.HasMatch = true;
-                response.MatchList.AddRange(responseElastic.Documents.GroupBy(x => x.CategoryName).Select(x=> x.First()));
+                response.DatabaseMatchList.AddRange(responseElastic.Documents.GroupBy(x => x.CategoryName).Select(x=> x.First()));
             }
             return Ok(response);
         }
@@ -164,7 +178,7 @@ namespace InventoryManagementSystem.PublicApi.UtilEndpoints
             if (responseElastic.Documents.Count > 0)
             {
                 response.HasMatch = true;
-                response.MatchList.AddRange(responseElastic.Documents.GroupBy(x => x.SupplierName).Select(x=> x.First()));
+                response.DatabaseMatchList.AddRange(responseElastic.Documents.GroupBy(x => x.SupplierName).Select(x=> x.First()));
             }
             return Ok(response);
         }

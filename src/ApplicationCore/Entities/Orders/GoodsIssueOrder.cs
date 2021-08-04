@@ -16,6 +16,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public string DeliveryMethod { get; set; }
         public string DeliveryAddress { get; set; }
         public string SupplierId { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerPhoneNumber { get; set; }
         public virtual Supplier Supplier { get; set; }
         public string TransactionId { get; set; }
         public virtual Transaction Transaction { get; set; }

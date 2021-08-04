@@ -80,7 +80,7 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                             Fullname =  request.FullName,
                             PhoneNumber =  request.PhoneNumber,
                             Email = request.Email,
-                            UserName = request.FullName.Replace(" ",""),
+                            UserName = request.Email,
                             Address =  request.Address,
                             IsActive =  true,
                             DateOfBirth = request.DateOfBirth,

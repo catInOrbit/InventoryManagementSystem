@@ -19,6 +19,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         [JsonIgnore]
         public virtual ProductVariant ProductVariant { get; set; }
         public int OrderQuantity { get; set; }
+        public int QuantityLeftAfterReceived { get; set; }
         public string Unit { get; set; }
         [Column(TypeName = "decimal(16,3)")]
         public decimal Price { get; set; }
@@ -34,6 +35,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         [NotMapped] [Ignore] [JsonIgnore] public bool IsShowingProductVariant { get; set; } = false;
         [NotMapped] [Ignore] [JsonIgnore] public bool IsShowingProductVariantDetail { get; set; } = false;
 
+        [NotMapped] [Ignore] [JsonIgnore] public bool IsShowing { get; set; } = false;
 
         public bool ShouldSerializeProductVariant()
         {

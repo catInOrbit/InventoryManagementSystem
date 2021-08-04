@@ -143,6 +143,12 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("CustomerName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerPhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DeliveryAddress")
                         .HasColumnType("nvarchar(max)");
 
@@ -264,6 +270,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.Property<string>("PurchaseOrderId")
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("QuantityLeftAfterReceived")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("SalePrice")
                         .HasColumnType("decimal(16,3)");
 
@@ -319,6 +328,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.Property<decimal>("TotalOrderAmount")
                         .HasColumnType("decimal(16,3)");
+
+                    b.Property<int>("TotalProductAmount")
+                        .HasColumnType("int");
 
                     b.Property<string>("TransactionId")
                         .HasColumnType("nvarchar(50)");
@@ -453,11 +465,11 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("CurrentType")
+                        .HasColumnType("int");
+
                     b.Property<bool>("TransactionStatus")
                         .HasColumnType("bit");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -484,6 +496,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
 
                     b.Property<string>("TransactionId")
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<int>("UserTransactionActionType")
                         .HasColumnType("int");

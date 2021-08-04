@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.ApplicationCore.Services;
@@ -35,7 +36,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Update))
                 return Unauthorized();
             var response = new ProductUpdateMessageResponse();
-            response.ProductUpdateMessages =  await _redisRepository.GetProductUpdateMessage("ProductUpdateMessage");
+            response.ProductUpdateMessages =  await _redisRepository.GetProductUpdateMessage();
             return Ok(response);
         }
     }

@@ -17,6 +17,8 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         List<MergedOrderIdList> GetMergedPurchaseOrders(string parentOrderId,CancellationToken cancellationToken = default);
         
         GoodsIssueOrder GetGoodsIssueOrderByNumber(string goodsIssueOrderId,  CancellationToken cancellationToken = default);
+        Task<List<GoodsReceiptOrder>> GetAllGoodsReceiptsOfPurchaseOrder(string purchaseOrderId,  CancellationToken cancellationToken = default);
+
         Task<PagingOption<Category>> GetCategory(PagingOption<Category> pagingOption, CancellationToken cancellationToken = default);
 
         Task<List<Package>> GetPackagesFromProductVariantId(string productVariantId,  CancellationToken cancellationToken = default);

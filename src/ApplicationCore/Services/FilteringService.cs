@@ -141,16 +141,6 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                      public static List<Package> PackageIndexFiltering(List<Package> resource, PackageSearchFilter packageSearchFilter,
                          CancellationToken cancellationToken)
                      {
-                         foreach (var package in resource)
-                         {
-                             if(package.Location == null)
-                                 Console.WriteLine(package.Id);
-                             if(package.ProductVariant == null)
-                                 Console.WriteLine(package.Id);
-                             if(package.ProductVariantId == null)
-                                 Console.WriteLine(package.Id);
-                         }
-                         
                          var packages = resource.Where(package =>
                              ( 
                                  package.Location!=null 

@@ -54,14 +54,17 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
     {
 
         private readonly IAsyncRepository<Package> _packageAsyncRepository;
+        private readonly IAsyncRepository<ProductVariant> _productVariantAsyncRepository;
+
         private readonly IAuthorizationService _authorizationService;
         private readonly IElasticClient _elasticClient;
 
-        public SearchPackage(IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, IElasticClient elasticClient)
+        public SearchPackage(IAsyncRepository<Package> packageAsyncRepository, IAuthorizationService authorizationService, IElasticClient elasticClient, IAsyncRepository<ProductVariant> productVariantAsyncRepository)
         {
             _packageAsyncRepository = packageAsyncRepository;
             _authorizationService = authorizationService;
             _elasticClient = elasticClient;
+            _productVariantAsyncRepository = productVariantAsyncRepository;
         }
 
         
@@ -103,6 +106,14 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
 
                 pagingOptionPackage.ResultList = FilteringService.PackageIndexFiltering(resource, request,
                     new CancellationToken());
+
+                foreach (var package in pagingOptionPackage.ResultList)
+                {
+                    package.IsShowingProductVariant = true;
+                    package.ProductVariant = await _productVariantAsyncRepository.GetByIdAsync(package.ProductVariantId);
+                    package.ProductVariant.IsShowingPackage = false;
+                    package.ProductVariant.IsShowingTransaction = false;
+                }
             
                 pagingOptionPackage.ExecuteResourcePaging();
                 response.Paging = pagingOptionPackage;

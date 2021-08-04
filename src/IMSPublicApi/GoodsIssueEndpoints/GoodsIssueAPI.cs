@@ -160,7 +160,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                     gio.GoodsIssueType = GoodsIssueStatusType.Completed;
                     break;
             }
-            gio.Transaction = TransactionUpdateHelper.UpdateTransaction(gio.Transaction, UserTransactionActionType.Modify,
+            gio.Transaction = TransactionUpdateHelper.UpdateTransaction(gio.Transaction, UserTransactionActionType.Modify,TransactionType.GoodsIssue,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, gio.Id, "");
             
             
@@ -257,6 +257,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
         private readonly IUserSession _userAuthentication;
         private readonly IAsyncRepository<GoodsIssueOrder> _asyncRepository;
         private readonly IAsyncRepository<ProductVariant> _productVariantAsyncRepository;
+        private readonly IElasticAsyncRepository<GoodsIssueSearchIndex> _goodIssueElasticAsyncRepository;
 
         private readonly IAsyncRepository<GoodsIssueSearchIndex> _goodIssueasyncRepository;
 
@@ -266,7 +267,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
         private INotificationService _notificationService;
 
 
-        public GoodsIssueCancel(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAsyncRepository<GoodsIssueSearchIndex> goodIssueasyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository)
+        public GoodsIssueCancel(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAuthorizationService authorizationService, INotificationService notificationService, IAsyncRepository<Package> packageAsyncRepository, IAsyncRepository<GoodsIssueSearchIndex> goodIssueasyncRepository, IAsyncRepository<ProductVariant> productVariantAsyncRepository, IElasticAsyncRepository<GoodsIssueSearchIndex> goodIssueElasticAsyncRepository)
         {
             _userAuthentication = userAuthentication;
             _asyncRepository = asyncRepository;
@@ -275,6 +276,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             _packageAsyncRepository = packageAsyncRepository;
             _goodIssueasyncRepository = goodIssueasyncRepository;
             _productVariantAsyncRepository = productVariantAsyncRepository;
+            _goodIssueElasticAsyncRepository = goodIssueElasticAsyncRepository;
         }
 
         [HttpPut("api/goodsissue/reject")]
@@ -291,8 +293,10 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             
             var gio = _asyncRepository.GetGoodsIssueOrderByNumber(request.IssueNumber);
             gio.GoodsIssueType = GoodsIssueStatusType.Cancel;
+            await _goodIssueElasticAsyncRepository.ElasticSaveSingleAsync(false,
+                IndexingHelper.GoodsIssueSearchIndexHelper(gio), ElasticIndexConstant.GOODS_ISSUE_ORDERS);
         
-            gio.Transaction = TransactionUpdateHelper.UpdateTransaction(gio.Transaction, UserTransactionActionType.Reject,
+            gio.Transaction = TransactionUpdateHelper.UpdateTransaction(gio.Transaction, UserTransactionActionType.Reject,TransactionType.GoodsIssue,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, gio.Id, request.CancelReason);
 
             await _asyncRepository.UpdateAsync(gio);

@@ -37,7 +37,13 @@
             var keyValues = new object[] { id };
             return await _identityAndProductDbContext.Set<T>().FindAsync(keyValues, cancellationToken);
         }
-        
+
+        public async Task<List<GoodsReceiptOrder>> GetAllGoodsReceiptsOfPurchaseOrder(string purchaseOrderId, CancellationToken cancellationToken = default)
+        {
+            return await _identityAndProductDbContext.Set<GoodsReceiptOrder>()
+                .Where(gr => gr.PurchaseOrderId == purchaseOrderId).ToListAsync();
+        }
+
         public async Task<PagingOption<Category>> GetCategory(PagingOption<Category> pagingOption, CancellationToken cancellationToken = default)
         {
             var listCategory = await _identityAndProductDbContext.Category.Where( ca => ca.Transaction.TransactionRecord.Count > 0 ).ToListAsync();
@@ -118,7 +124,7 @@
         {
             var list = await _identityAndProductDbContext.Supplier.Where(s =>
                 s.Transaction.TransactionRecord.Count > 0 && s.Transaction.TransactionStatus != false &&
-                s.Transaction.Type != TransactionType.Deleted).ToListAsync();
+                s.Transaction.CurrentType != TransactionType.Deleted).ToListAsync();
 
             list = list.OrderByDescending(s =>
                 s.Transaction.TransactionRecord[s.Transaction.TransactionRecord.Count - 1].Date).ToList();

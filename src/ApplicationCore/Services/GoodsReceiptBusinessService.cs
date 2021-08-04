@@ -16,23 +16,55 @@ namespace InventoryManagementSystem.ApplicationCore.Services
         private readonly IAsyncRepository<ProductVariant> _productVariantRepository;
         private readonly IAsyncRepository<GoodsReceiptOrder> _roRepository;
         private readonly IAsyncRepository<Package> _packageRepository;
+        private readonly IAsyncRepository<PurchaseOrder> _poAsyncRepository;
 
         private readonly IElasticAsyncRepository<ProductVariantSearchIndex> _productVariantEls;
         private readonly IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> _roEls;
+        private readonly IElasticAsyncRepository<PurchaseOrderSearchIndex> _poEls;
+
+        private readonly IRedisRepository _redisRepository;
+
+        public GoodsReceiptBusinessService(IRedisRepository redisRepository, IAsyncRepository<GoodsReceiptOrder> roRepository, IElasticAsyncRepository<PurchaseOrderSearchIndex> poEls)
+        {
+            _redisRepository = redisRepository;
+            _roRepository = roRepository;
+            _poEls = poEls;
+        }
 
         public GoodsReceiptBusinessService(
             IAsyncRepository<ProductVariant> productVariantRepository, 
-             IAsyncRepository<GoodsReceiptOrder> roRepository, IAsyncRepository<Package> packageRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantEls, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> roEls)
+             IAsyncRepository<GoodsReceiptOrder> roRepository, IAsyncRepository<Package> packageRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantEls, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> roEls, IAsyncRepository<PurchaseOrder> poAsyncRepository)
         {
             _productVariantRepository = productVariantRepository;
             _roRepository = roRepository;
             _packageRepository = packageRepository;
             _productVariantEls = productVariantEls;
             _roEls = roEls;
+            _poAsyncRepository = poAsyncRepository;
+        }
+        
+        public GoodsReceiptBusinessService(IAsyncRepository<GoodsReceiptOrder> roRepository, IAsyncRepository<PurchaseOrder> poAsyncRepository)
+        {
+            _roRepository = roRepository;
+            _poAsyncRepository = poAsyncRepository;
         }
 
-        public async Task<GoodsReceiptOrder> ReceiveProducts(GoodsReceiptOrder ro, List<ReceivingOrderUpdateInfo> updateItems)
+        public async Task<GoodsReceiptOrder> ReceiveProducts(GoodsReceiptOrder ro, List<ReceivingOrderProductUpdateInfo> updateItems)
         {
+            var po = await _poAsyncRepository.GetByIdAsync(ro.PurchaseOrderId);
+            foreach (var item in updateItems)
+            {
+                var orderItem =
+                    po.PurchaseOrderProduct.FirstOrDefault(o => o.ProductVariantId == item.ProductVariantId);
+                if (item.QuantityReceived >= orderItem.QuantityLeftAfterReceived)
+                    orderItem.QuantityLeftAfterReceived = 0;
+
+                else
+                    orderItem.QuantityLeftAfterReceived -= item.QuantityReceived;
+            }
+
+            await _poAsyncRepository.UpdateAsync(po);
+                        
             ro.ReceivedOrderItems.Clear();
             foreach (var item in updateItems)
             {
@@ -53,12 +85,6 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                     if (item.Sku != null)
                     {
                         productVariant.Sku = item.Sku;
-                        initiateUpdate = true;
-                    }
-
-                    if (item.Barcode != null)
-                    {
-                        productVariant.Barcode = item.Barcode;
                         initiateUpdate = true;
                     }
 
@@ -100,5 +126,67 @@ namespace InventoryManagementSystem.ApplicationCore.Services
             return ro;
         }
 
+        public async Task<List<string>> CheckSufficientReceiptQuantity(GoodsReceiptOrder goodsReceiptOrder)
+        {
+            var allRosOfPo = await _roRepository.GetAllGoodsReceiptsOfPurchaseOrder(goodsReceiptOrder.PurchaseOrderId);
+            var po = await _poAsyncRepository.GetByIdAsync(goodsReceiptOrder.PurchaseOrderId);
+
+            List<string> insufficientVariantIds = new List<string>();
+            Dictionary<string, int> ProductVariantAndQuantityReceived = new Dictionary<string, int>();
+            
+            foreach (var receiptOrder in allRosOfPo)
+            {
+                foreach (var roi in receiptOrder.ReceivedOrderItems)
+                {
+                    if (ProductVariantAndQuantityReceived.ContainsKey(roi.ProductVariantId))
+                    {
+                        ProductVariantAndQuantityReceived.TryGetValue(roi.ProductVariantId, out var quantityDic);
+                        var newQuantity = roi.QuantityReceived + quantityDic;
+                        ProductVariantAndQuantityReceived.Add(roi.ProductVariantId, newQuantity);
+                    }
+
+                    else
+                    {
+                        var newQuantity = roi.QuantityReceived;
+                        ProductVariantAndQuantityReceived.Add(roi.ProductVariantId, newQuantity);
+                    }
+                }
+            }
+            
+            foreach (var orderItem in po.PurchaseOrderProduct)
+            {
+                if (ProductVariantAndQuantityReceived.ContainsKey(orderItem.ProductVariantId))
+                {
+                    if (ProductVariantAndQuantityReceived[orderItem.ProductVariantId] < orderItem.OrderQuantity)
+                    {
+                        if (!insufficientVariantIds.Contains(orderItem.ProductVariantId))
+                            insufficientVariantIds.Add(orderItem.ProductVariantId);
+                    }
+                }
+            }
+
+            return insufficientVariantIds;
+        }
+        
+        public async Task<List<ExistRedisVariantSKU>> CheckSkuExistance(GoodsReceiptOrder go)
+        {
+            var redisData = await _redisRepository.GetProductUpdateMessage();
+            List<ExistRedisVariantSKU> returnList = new List<ExistRedisVariantSKU>();
+            foreach (var goodsReceiptOrderItem in go.ReceivedOrderItems)
+            {
+                var productVariantSKU = goodsReceiptOrderItem.ProductVariant.Sku;
+                var redisSKUForVariant =
+                    redisData.FirstOrDefault(r => r.ProductVariantId == goodsReceiptOrderItem.ProductVariantId); 
+                if(string.IsNullOrEmpty(productVariantSKU) && 
+                   redisSKUForVariant !=null)
+                    returnList.Add(new ExistRedisVariantSKU
+                    {
+                        ProductVariantId = goodsReceiptOrderItem.ProductVariantId,
+                        RedisSKU = redisSKUForVariant.Sku
+                    });
+            }
+
+            return returnList;
+        }
     }
 }

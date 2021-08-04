@@ -27,6 +27,16 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         public string ReceivingOrderId { get; set; }
     }
     
+    public class ROSKUExistanceRequest : BaseRequest
+    {
+        public string ReceivingOrderId { get; set; }
+    }
+    
+    public class ROSKUExistanceResponse : BaseResponse
+    {
+        public List<ExistRedisVariantSKU> ExistRedisVariantSkus { get; set; }
+    }
+    
     public class ROCancelRequest : BaseRequest
     {
         public string ReceivingOrderId { get; set; }
@@ -44,7 +54,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
     {
         public string PurchaseOrderNumber { get; set; }
         public string LocationId { get; set; }
-        public List<ReceivingOrderUpdateInfo> UpdateItems { get; set; }
+        public List<ReceivingOrderProductUpdateInfo> UpdateItems { get; set; }
     }
     
     public class ROUpdateResponse : BaseRequest
@@ -59,9 +69,6 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
     {
         public string ProductVariantId { get; set; }
         public string Sku { get; set; }
-        
-        public string Barcode { get; set; }
-
     }
 
 }

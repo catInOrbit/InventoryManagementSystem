@@ -54,15 +54,17 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
               po.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Requisition, po.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
 
               po.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionCreated;
-              
+
               foreach (var requestOrderItem in request.OrderItems)
               {
                   requestOrderItem.OrderId = po.Id;
                   requestOrderItem.ProductVariant = await _pvasyncRepository.GetByIdAsync(requestOrderItem.ProductVariantId);
                   requestOrderItem.TotalAmount = requestOrderItem.OrderQuantity * requestOrderItem.Price;
+                  requestOrderItem.QuantityLeftAfterReceived = requestOrderItem.OrderQuantity;
                   requestOrderItem.Unit = requestOrderItem.Unit;
+                  po.TotalProductAmount += 1;
               }
-              
+
               po.PurchaseOrderProduct = request.OrderItems;
               po.Deadline = request.Deadline;
               
@@ -116,7 +118,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             
             var po = await _asyncRepository.GetByIdAsync(request.Id);
 
-            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,TransactionType.Requisition,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
 
             po.PurchaseOrderStatus = PurchaseOrderStatusType.Requisition;
@@ -175,11 +177,14 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
                 return Unauthorized();
                 
             var po = await _asyncRepository.GetByIdAsync(request.RequisitionId);
+            
             foreach (var requestOrderItem in request.OrderItems)
             {
                 requestOrderItem.OrderId = po.Id;
                 requestOrderItem.ProductVariant = await _pvasyncRepository.GetByIdAsync(requestOrderItem.ProductVariantId);
                 requestOrderItem.TotalAmount = requestOrderItem.OrderQuantity * requestOrderItem.Price;
+                requestOrderItem.QuantityLeftAfterReceived = requestOrderItem.OrderQuantity;
+                po.TotalProductAmount += 1;
             }
 
             var oldOrderItems = new List<OrderItem>(po.PurchaseOrderProduct);
@@ -188,7 +193,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
             po.PurchaseOrderProduct.Clear();
             po.PurchaseOrderProduct = request.OrderItems;
             
-            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Modify,
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Modify,TransactionType.Requisition,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
             po.Deadline = request.Deadline;
             

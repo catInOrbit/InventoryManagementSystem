@@ -70,7 +70,7 @@ GO
 
 CREATE TABLE [Transaction] (
     [Id] nvarchar(50) NOT NULL,
-    [Type] int NOT NULL,
+    [CurrentType] int NOT NULL,
     [TransactionStatus] bit NOT NULL,
     CONSTRAINT [PK_Transaction] PRIMARY KEY ([Id])
 );
@@ -172,6 +172,7 @@ CREATE TABLE [TransactionRecord] (
     [Id] nvarchar(50) NOT NULL,
     [Date] datetime2 NOT NULL,
     [TransactionId] nvarchar(50) NULL,
+    [Type] int NOT NULL,
     [OrderId] nvarchar(max) NULL,
     [Name] nvarchar(max) NULL,
     [ApplicationUserId] nvarchar(450) NULL,
@@ -215,6 +216,8 @@ CREATE TABLE [GoodsIssueOrder] (
     [DeliveryMethod] nvarchar(max) NULL,
     [DeliveryAddress] nvarchar(max) NULL,
     [SupplierId] nvarchar(50) NULL,
+    [CustomerName] nvarchar(max) NULL,
+    [CustomerPhoneNumber] nvarchar(max) NULL,
     [TransactionId] nvarchar(50) NULL,
     [GoodsIssueType] int NOT NULL,
     [DeliveryDate] datetime2 NOT NULL,
@@ -235,6 +238,7 @@ CREATE TABLE [PurchaseOrder] (
     [PurchaseOrderStatus] int NOT NULL,
     [TotalDiscountAmount] decimal(16,3) NOT NULL,
     [TotalOrderAmount] decimal(16,3) NOT NULL,
+    [TotalProductAmount] int NOT NULL,
     [TransactionId] nvarchar(50) NULL,
     [Deadline] datetime2 NOT NULL,
     [HasSentMail] bit NOT NULL,
@@ -298,6 +302,7 @@ CREATE TABLE [OrderItem] (
     [OrderId] nvarchar(max) NULL,
     [ProductVariantId] nvarchar(50) NULL,
     [OrderQuantity] int NOT NULL,
+    [QuantityLeftAfterReceived] int NOT NULL,
     [Unit] nvarchar(max) NULL,
     [Price] decimal(16,3) NOT NULL,
     [SalePrice] decimal(16,3) NOT NULL,
@@ -465,7 +470,7 @@ CREATE INDEX [IX_UserRole_RoleId] ON [UserRole] ([RoleId]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20210801095638_Creation', N'5.0.5');
+VALUES (N'20210804163406_Creation', N'5.0.5');
 GO
 
 COMMIT;

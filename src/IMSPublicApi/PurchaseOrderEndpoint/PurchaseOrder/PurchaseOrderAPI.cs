@@ -71,7 +71,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             // if((int)po.PurchaseOrderStatus == 0)
             //     po.PurchaseOrderStatus = PurchaseOrderStatusType.RequisitionCanceled;
             
-            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Reject,
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Reject,TransactionType.Purchase,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, request.CancelReason);
             
            await _asyncRepository.UpdateAsync(po,cancellationToken);
@@ -135,7 +135,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             await _purchaseOrderRepos.UpdateAsync(po);
             await _poSearchRepos.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
 
-            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Confirm,
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Confirm,TransactionType.Purchase,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
             
             // var currentUser = await _userAuthentication.GetCurrentSessionUser();
@@ -193,9 +193,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
 
             var poData = await _purchaseOrderRepos.GetByIdAsync(request.PurchaseOrderNumber);
             poData.PurchaseOrderStatus = PurchaseOrderStatusType.PurchaseOrder;
-            poData.Transaction.Type = TransactionType.Purchase;
+            poData.Transaction.CurrentType = TransactionType.Purchase;
 
-            poData.Transaction = TransactionUpdateHelper.UpdateTransaction(poData.Transaction,UserTransactionActionType.Modify,
+            poData.Transaction = TransactionUpdateHelper.UpdateTransaction(poData.Transaction,UserTransactionActionType.Create,TransactionType.Purchase,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, poData.Id, "");
             response.PurchaseOrder = poData;
             await _purchaseOrderRepos.UpdateAsync(poData);
@@ -253,7 +253,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             {
                 var po = await _asyncRepository.GetByIdAsync(request.PurchaseOrderNumber);
                 po.PurchaseOrderStatus = PurchaseOrderStatusType.POWaitingConfirmation;
-                po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,
+                po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,TransactionType.Purchase,
                     (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
                 
                 foreach (var orderItem in po.PurchaseOrderProduct)
@@ -339,8 +339,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 return Unauthorized();
 
             var po =  await _purchaseOrderRepos.GetByIdAsync(request.PurchaseOrderNumber);
-            po .Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction, UserTransactionActionType.Modify,
-                (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
+           
             
             po.PurchaseOrderProduct.Clear();
             foreach (var requestOrderItemInfo in request.OrderItemInfos)
@@ -352,7 +351,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 po.PurchaseOrderProduct.Add(requestOrderItemInfo);
                 po.MailDescription = request.MailDescription;
             }
-
+            po .Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction, UserTransactionActionType.Modify,TransactionType.Purchase,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
             await _purchaseOrderRepos.UpdateAsync(po);
             await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false,IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
             response.PurchaseOrder = po;

@@ -59,7 +59,7 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
                 try
                 {
                     var trans =  dbContext.Transaction.FirstOrDefault(e => e.Id == request.Id);
-                    if ((int)trans.Type == 7)
+                    if ((int)trans.CurrentType == 7)
                     {
                         var productVariants = await dbContext.ProductVariant.Where(e => e.TransactionId == trans.Id).ToListAsync(cancellationToken: cancellationToken);
                         foreach (var productVariant in productVariants)
@@ -80,7 +80,7 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
                         }
                     }
                     
-                    else if ((int)trans.Type == 6)
+                    else if ((int)trans.CurrentType == 6)
                     {
                         var product = await dbContext.Product.FirstOrDefaultAsync(e => e.Transaction.Id == trans.Id);
                         if (trans.TransactionStatus)
@@ -97,7 +97,7 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
                         }
                     }
 
-                    else if ((int)trans.Type == 9)
+                    else if ((int)trans.CurrentType == 9)
                     {
                         var category = await dbContext.Category.FirstOrDefaultAsync(e => e.Transaction.Id == trans.Id);
                         if (trans.TransactionStatus)
@@ -106,7 +106,7 @@ namespace InventoryManagementSystem.PublicApi.TransactionGeneral
                             category.Transaction.TransactionStatus = true;
                     }
                     
-                    else if ((int)trans.Type == 8)
+                    else if ((int)trans.CurrentType == 8)
                     {
                         var supplier = await dbContext.Supplier.FirstOrDefaultAsync(e => e.Transaction.Id == trans.Id);
                         if (trans.TransactionStatus)

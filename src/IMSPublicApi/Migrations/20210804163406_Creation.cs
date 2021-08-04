@@ -89,7 +89,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false),
+                    CurrentType = table.Column<int>(type: "int", nullable: false),
                     TransactionStatus = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -293,6 +293,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     Id = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TransactionId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    Type = table.Column<int>(type: "int", nullable: false),
                     OrderId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
@@ -386,6 +387,8 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     DeliveryMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DeliveryAddress = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SupplierId = table.Column<string>(type: "nvarchar(50)", nullable: true),
+                    CustomerName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CustomerPhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TransactionId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     GoodsIssueType = table.Column<int>(type: "int", nullable: false),
                     DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -421,6 +424,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     PurchaseOrderStatus = table.Column<int>(type: "int", nullable: false),
                     TotalDiscountAmount = table.Column<decimal>(type: "decimal(16,3)", nullable: false),
                     TotalOrderAmount = table.Column<decimal>(type: "decimal(16,3)", nullable: false),
+                    TotalProductAmount = table.Column<int>(type: "int", nullable: false),
                     TransactionId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     Deadline = table.Column<DateTime>(type: "datetime2", nullable: false),
                     HasSentMail = table.Column<bool>(type: "bit", nullable: false)
@@ -554,6 +558,7 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     OrderId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProductVariantId = table.Column<string>(type: "nvarchar(50)", nullable: true),
                     OrderQuantity = table.Column<int>(type: "int", nullable: false),
+                    QuantityLeftAfterReceived = table.Column<int>(type: "int", nullable: false),
                     Unit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(16,3)", nullable: false),
                     SalePrice = table.Column<decimal>(type: "decimal(16,3)", nullable: false),

@@ -69,7 +69,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                 
                 pos = posDBAll.
                     Where(variant => variant.Transaction.TransactionRecord.Count > 0 && variant.Transaction.TransactionStatus!=false 
-                        && variant.Transaction.Type!=TransactionType.Deleted
+                        && variant.Transaction.CurrentType!=TransactionType.Deleted
                     ).ToList();
 
                 foreach (var po in pos)
@@ -94,7 +94,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
            {
                var rosDbAll = (await _grRepository.ListAllAsync(new PagingOption<GoodsReceiptOrder>(0, 0))).ResultList;
                List<GoodsReceiptOrder> ros = rosDbAll.
-                   Where(variant => variant.Transaction.TransactionRecord.Count > 0 &&variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).ToList();
+                   Where(variant => variant.Transaction.TransactionRecord.Count > 0 &&variant.Transaction.TransactionStatus!=false && variant.Transaction.CurrentType!=TransactionType.Deleted).ToList();
                ros = ros.OrderByDescending(e =>
                    e.Transaction.TransactionRecord[e.Transaction.TransactionRecord.Count - 1].Date).ToList();
 
@@ -119,7 +119,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
              {
                  var gisDbAll = (await _giRepository.ListAllAsync(new PagingOption<GoodsIssueOrder>(0, 0))).ResultList;
             List<GoodsIssueOrder> gis =gisDbAll.
-                Where(variant => variant.Transaction.TransactionRecord.Count > 0 &&variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).
+                Where(variant => variant.Transaction.TransactionRecord.Count > 0 &&variant.Transaction.TransactionStatus!=false && variant.Transaction.CurrentType!=TransactionType.Deleted).
                 ToList();
             gis = gis.OrderByDescending(e =>
                 e.Transaction.TransactionRecord[e.Transaction.TransactionRecord.Count - 1].Date).ToList();
@@ -145,7 +145,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
             var stsDbAll = (await _stRepository.ListAllAsync(new PagingOption<StockTakeOrder>(0, 0))).ResultList;
             
             List<StockTakeOrder> sts = stsDbAll.
-                Where(variant =>variant.Transaction.TransactionRecord.Count > 0 && variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).ToList();
+                Where(variant =>variant.Transaction.TransactionRecord.Count > 0 && variant.Transaction.TransactionStatus!=false && variant.Transaction.CurrentType!=TransactionType.Deleted).ToList();
             
             sts = sts.OrderByDescending(e =>
                 e.Transaction.TransactionRecord[e.Transaction.TransactionRecord.Count - 1].Date).ToList();
@@ -174,7 +174,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                      .ResultList;
                     List<Product> products = productsDBAll.Where(product =>
                         product.Transaction.TransactionRecord.Count > 0 && product.Transaction.TransactionStatus != false &&
-                        product.Transaction.Type != TransactionType.Deleted).ToList();
+                        product.Transaction.CurrentType != TransactionType.Deleted).ToList();
         
                     products = products.OrderByDescending(e =>
                         e.Transaction.TransactionRecord[e.Transaction.TransactionRecord.Count - 1].Date).ToList();
@@ -206,7 +206,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                         (await _productVariantRepository.ListAllAsync(new PagingOption<ProductVariant>(0, 0)))
                         .ResultList;
                     List<ProductVariant> variants =  productVariantDBAll.
-                        Where(variant => variant.Transaction.TransactionRecord.Count > 0 && variant.Transaction.TransactionStatus!=false && variant.Transaction.Type!=TransactionType.Deleted).ToList();
+                        Where(variant => variant.Transaction.TransactionRecord.Count > 0 && variant.Transaction.TransactionStatus!=false && variant.Transaction.CurrentType!=TransactionType.Deleted).ToList();
                     variants = variants.OrderByDescending(e =>
                         e.Transaction.TransactionRecord[e.Transaction.TransactionRecord.Count - 1].Date).ToList();
                     foreach (var productVariant in variants)

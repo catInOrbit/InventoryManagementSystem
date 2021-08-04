@@ -83,7 +83,7 @@ namespace InventoryManagementSystem.PublicApi
                         ElasticSaveBulkAsync((await elasticLocationRepos.ListAllAsync(new PagingOption<Location>(0,0))).ResultList.ToArray(), ElasticIndexConstant.LOCATIONS);
                     await new ElasticClientService<Category>(services.GetRequiredService<ILogger<ElasticClientService<Category>>>(), elasticClient).ElasticSaveBulkAsync((await elasticCategoryRepos.ListAllAsync(new PagingOption<Category>(0,0))).ResultList.ToArray(), ElasticIndexConstant.CATEGORIES);
 
-                    await SeedRole.Initialize(services, "test@12345Aha");
+                    await SeedRole.Initialize(services);
                     
                     // BigQueryService bigQueryService = new BigQueryService();
                     // bigQueryService.Get3LinesData();

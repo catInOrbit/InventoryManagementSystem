@@ -172,7 +172,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
 
            var product = await _asyncRepository.GetByIdAsync(request.ProductId);
                
-           product.Transaction = TransactionUpdateHelper.UpdateTransaction(product.Transaction,UserTransactionActionType.Modify,
+           product.Transaction = TransactionUpdateHelper.UpdateTransaction(product.Transaction,UserTransactionActionType.Modify,TransactionType.Product,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, product.Id, "");
 
             product.TransactionId = product.Transaction.Id;
@@ -194,7 +194,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                         productProductVariant.Transaction.TransactionStatus = false;
                         await _productVariantIndexAsyncRepositoryRepos.ElasticDeleteSingleAsync(IndexingHelper.ProductVariantSearchIndex(productProductVariant),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
 
-                        productProductVariant.Transaction.Type = TransactionType.Deleted;
+                        productProductVariant.Transaction.CurrentType = TransactionType.Deleted;
                         await _productVariantAsyncRepository.UpdateAsync(productProductVariant);
                     }
                     product.ProductVariants.Clear();
@@ -228,7 +228,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                             listNewVariant.Remove(productVairantRequestInfo);
                         }
                     }
-                    await _redisRepository.RemoveProductUpdateMessage("ProductUpdateMessage", productVairantRequestInfo.Id);
+                    await _redisRepository.RemoveProductUpdateMessage(productVairantRequestInfo.Id);
                 }
 
                 foreach (var productVairantRequestInfo in listNewVariant)
@@ -278,7 +278,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     productProductVariant.Transaction.TransactionStatus = false;
                     await _productVariantIndexAsyncRepositoryRepos.ElasticDeleteSingleAsync(IndexingHelper.ProductVariantSearchIndex(productProductVariant),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
 
-                    productProductVariant.Transaction.Type = TransactionType.Deleted;
+                    productProductVariant.Transaction.CurrentType = TransactionType.Deleted;
                     await _productVariantAsyncRepository.UpdateAsync(productProductVariant);
                 }
                 product.ProductVariants.Clear();
@@ -318,7 +318,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                 product.ProductVariants.Add(productVariant);
                 
                 await _productVariantIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(true, IndexingHelper.ProductVariantSearchIndex(productVariant),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
-                await _redisRepository.RemoveProductUpdateMessage("ProductUpdateMessage", productVariant.Id);
+                await _redisRepository.RemoveProductUpdateMessage( productVariant.Id);
             }
             
             await _asyncRepository.UpdateAsync(product);
@@ -378,7 +378,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
            // foreach (var productProductVariant in product.ProductVariants)
            //     productProductVariant.Unit = product.Unit;
            
-           product.Transaction = TransactionUpdateHelper.UpdateTransaction(product.Transaction,UserTransactionActionType.Modify,
+           product.Transaction = TransactionUpdateHelper.UpdateTransaction(product.Transaction,UserTransactionActionType.Modify,TransactionType.Product,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, product.Id, "");
 
             product.TransactionId = product.Transaction.Id;
@@ -436,7 +436,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
            if (product != null)
            {
                product.ProductImageLink = request.ImageLink;
-               product.Transaction = TransactionUpdateHelper.UpdateTransaction(product.Transaction,UserTransactionActionType.Modify,
+               product.Transaction = TransactionUpdateHelper.UpdateTransaction(product.Transaction,UserTransactionActionType.Modify,TransactionType.Product,
                    (await _userAuthentication.GetCurrentSessionUser()).Id, product.Id, "");
                product.TransactionId = product.Transaction.Id;
                await _asyncRepository.UpdateAsync(product);
@@ -456,7 +456,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
            if (productVariant != null)
            {
                productVariant.VariantImageLink = request.ImageLink;
-               productVariant.Transaction = TransactionUpdateHelper.UpdateTransaction(productVariant.Transaction,UserTransactionActionType.Modify,
+               productVariant.Transaction = TransactionUpdateHelper.UpdateTransaction(productVariant.Transaction,UserTransactionActionType.Modify,TransactionType.Product,
                    (await _userAuthentication.GetCurrentSessionUser()).Id, productVariant.Id, "");
                productVariant.TransactionId = productVariant.Transaction.Id;
                await _productVariantAsyncRepository.UpdateAsync(productVariant);

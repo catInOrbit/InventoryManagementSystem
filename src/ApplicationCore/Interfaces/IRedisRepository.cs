@@ -26,15 +26,15 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
 
         Task ClearNotification(string keyId);
 
-        Task<bool> AddProductUpdateMessage(string keyId, ProductUpdateMessage productUpdateMessage);
+        Task<bool> AddProductUpdateMessage( ProductUpdateMessage productUpdateMessage);
         Task<bool> AddStockTakeAdjustMessage(StockTakeAdjustItemInfo stockTakeAdjustItemInfo);
         
         Task<List<StockTakeAdjustItemInfo>> GetStockTakeAdjustMessage();
         Task<bool> DeleteStockTakeAdjustMessage();
         
-        Task<bool> RemoveProductUpdateMessage(string keyId, string productVariantId);
+        Task<bool> RemoveProductUpdateMessage( string productVariantId);
 
-        Task<List<ProductUpdateMessage>> GetProductUpdateMessage(string keyId);
+        Task<List<ProductUpdateMessage>> GetProductUpdateMessage();
 
     }
 }

@@ -105,7 +105,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Location
 
             location.LocationName = request.LocationName;
             var userId = (await _userAuthentication.GetCurrentSessionUser()).Id;
-            location.Transaction = TransactionUpdateHelper.UpdateTransaction(location.Transaction, UserTransactionActionType.Modify, userId, location.Id, "");
+            location.Transaction = TransactionUpdateHelper.UpdateTransaction(location.Transaction, UserTransactionActionType.Modify,TransactionType.Location, userId, location.Id, "");
             
             await _locationAsyncRepository.UpdateAsync(location);
                         

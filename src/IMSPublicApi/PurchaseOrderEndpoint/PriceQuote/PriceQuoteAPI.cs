@@ -58,13 +58,13 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             
             // po.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.PriceQuote, po.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
             
-            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Modify,
+            po.PurchaseOrderStatus = PurchaseOrderStatusType.PriceQuote;
+
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Create,TransactionType.PriceQuote,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
 
-            po.PurchaseOrderStatus = PurchaseOrderStatusType.PriceQuote;
                             
             response.PurchaseOrder = po;
-            Console.WriteLine(po.ToString());
             
             await _asyncRepository.UpdateAsync(po);
             await _indexAsyncRepository.ElasticSaveSingleAsync(false,IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
@@ -121,11 +121,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
 
             var po = await _asyncRepository.GetByIdAsync(request.PurchaseOrderNumber);
             
-            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction, UserTransactionActionType.Modify,
-                (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
-
             po.PurchaseOrderProduct.Clear();
-            po.TotalOrderAmount = 0;
             foreach (var requestOrderItemInfo in request.OrderItemInfos)
             {
                 requestOrderItemInfo.OrderId = po.Id;
@@ -133,9 +129,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 requestOrderItemInfo.TotalAmount = requestOrderItemInfo.Price * requestOrderItemInfo.OrderQuantity;
                 po.TotalOrderAmount += requestOrderItemInfo.TotalAmount;
                 po.PurchaseOrderProduct.Add(requestOrderItemInfo);
+                po.TotalProductAmount += 1;
             }
             
-            Console.WriteLine(po.ToString());
             ApplicationUser currentUser;
             string messageNotification;
             bool mergePerformed = false;
@@ -165,6 +161,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             po.MailDescription = request.MailDescription;
             po.SupplierId = request.SupplierId;
             po.Deadline = request.Deadline;
+            
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction, UserTransactionActionType.Modify,TransactionType.PriceQuote,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
             
             await _asyncRepository.UpdateAsync(po);
             await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
@@ -227,10 +226,6 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             var po = await _asyncRepository.GetByIdAsync(request.OrderNumber);
             po.PurchaseOrderStatus = PurchaseOrderStatusType.PurchaseOrder;
             
-            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,
-                (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
-            
-            
             await _asyncRepository.UpdateAsync(po);
             
             // var subject = "REQUEST FOR QUOTATION-" + DateTime.UtcNow.ToString("dd/MM//yyyy") + " FROM IMS Inventory";
@@ -238,6 +233,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             // var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
             // var message = new EmailMessage(request.To, subject, request.Content, files);
             // await _emailSender.SendEmailAsync(message);
+            
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction, UserTransactionActionType.Modify,TransactionType.PriceQuote,
+                (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
             await _asyncRepository.UpdateAsync(po);
             await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
 

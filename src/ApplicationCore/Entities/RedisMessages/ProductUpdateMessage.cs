@@ -7,7 +7,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.RedisMessages
         public string Id { get; set; }
         public string ProductVariantId { get; set; }
         public string Sku { get; set; }
-        public string Barcode { get; set; }
 
         public ProductUpdateMessage()
         {

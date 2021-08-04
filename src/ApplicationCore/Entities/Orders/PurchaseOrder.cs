@@ -38,6 +38,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         public decimal TotalDiscountAmount { get; set; }
         [Column(TypeName = "decimal(16,3)")]
         public decimal TotalOrderAmount { get; set; }
+
+        public int TotalProductAmount { get; set; } = 0;
         public virtual ICollection<OrderItem> PurchaseOrderProduct { get; set; } = new List<OrderItem>();
         public string TransactionId { get; set; }
         public DateTime Deadline { get; set; }
@@ -48,12 +50,15 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         [OnSerializing]
         public void FormatResponse(StreamingContext context)
         {
+            TotalProductAmount = 0;
             PurchaseOrderStatusString = PurchaseOrderStatus.ToString();
             foreach (var orderItem in PurchaseOrderProduct)
             {
                 orderItem.ProductVariant.IsShowingTransaction = false;
                 foreach (var productVariantPackage in orderItem.ProductVariant.Packages)
                     productVariantPackage.IsShowingTransaction = false;
+                
+                TotalProductAmount += 1;
             }
         }
         

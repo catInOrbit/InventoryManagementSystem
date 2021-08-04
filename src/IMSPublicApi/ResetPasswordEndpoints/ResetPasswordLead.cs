@@ -44,8 +44,6 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
                 var token =  await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callback = token;
                 var message = new EmailMessage(new string[] { user.Email }, "Reset password token", callback, null);
-                Console.WriteLine(user.Email);
-                Console.WriteLine(token);
                 await _emailSender.SendEmailAsync(message);
                 response.Result = true;
                 response.Verbose = "Password reset sent to: " + user.Email;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
@@ -14,7 +15,7 @@ namespace InventoryManagementSystem.PublicApi
 
             var transaction = new Transaction
             {
-                Type = transactionType,
+                CurrentType = transactionType,
                 TransactionStatus = true,
                 TransactionRecord = new List<TransactionRecord>()
             };
@@ -40,7 +41,7 @@ namespace InventoryManagementSystem.PublicApi
 
             var transaction = new Transaction
             {
-                Type = transactionType,
+                CurrentType = transactionType,
                 TransactionStatus = true,
                 TransactionRecord = new List<TransactionRecord>()
             };
@@ -63,15 +64,15 @@ namespace InventoryManagementSystem.PublicApi
         
         
         public static Transaction UpdateTransaction(Transaction transaction,
-            UserTransactionActionType userTransactionActionType, string userId, string objectId, string reason)
+            UserTransactionActionType userTransactionActionType, TransactionType transactionType, string userId, string objectId, string reason)
         {
-            var latestRecord = transaction.TransactionRecord[^1];
+            var latestRecord = transaction.TransactionRecord.FirstOrDefault(r => r.Type == transactionType);
             
-            
-            string actionName = String.Format("{0} {1}, ID: {2}",userTransactionActionType.ToString() ,latestRecord.Transaction.Type.ToString(),objectId);
+            string actionName = String.Format("{0} {1}, ID: {2}",userTransactionActionType.ToString() , transaction.CurrentType.ToString(),objectId);
             if (userTransactionActionType == UserTransactionActionType.Reject)
-                actionName += ".Reason: " + reason;
+                actionName += " .Reason: " + reason;
             
+            transaction.TransactionRecord.Remove(latestRecord);
             transaction.TransactionRecord.Add(new 
                 TransactionRecord
                 {
@@ -81,9 +82,10 @@ namespace InventoryManagementSystem.PublicApi
                     TransactionId = transaction.Id,
                     Name = actionName,
                     ApplicationUserId = userId,
-                    UserTransactionActionType = userTransactionActionType
+                    UserTransactionActionType = userTransactionActionType,
+                    Type = transactionType
                 });
-            
+
             return transaction;
         }
         

@@ -52,7 +52,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
                 Email = request.Email,
                 PhoneNumber = request.PhoneNumber,
                 SalePersonName = request.SalePersonName,
-                SupplierName = request.SupplierName
+                SupplierName = request.SupplierName 
             };
             
             supplier.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Supplier, supplier.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
@@ -108,7 +108,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             var supplier = await _supplierAsyncRepository.GetByIdAsync(request.SupplierId);
 
                                             
-            supplier.Transaction = TransactionUpdateHelper.UpdateTransaction(supplier.Transaction,UserTransactionActionType.Modify,
+            supplier.Transaction = TransactionUpdateHelper.UpdateTransaction(supplier.Transaction,UserTransactionActionType.Modify,TransactionType.Supplier,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, supplier.Id, "");
 
             supplier.Description = request.Description;
@@ -137,46 +137,4 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
             return Ok(response);
         }
     }
-    
-    
-    //  public class SupplierDelete: BaseAsyncEndpoint.WithRequest<SupplierDeleteRequest>.WithoutResponse
-    // {
-    //     private readonly IAuthorizationService _authorizationService;
-    //     private readonly IAsyncRepository<Supplier> _supplierAsyncRepository;
-    //     private readonly IUserSession _userAuthentication;
-    //     private readonly INotificationService _notificationService;
-    //     public SupplierDelete(IAsyncRepository<Supplier> supplierAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, INotificationService notificationService)
-    //     {
-    //         _supplierAsyncRepository = supplierAsyncRepository;
-    //         _authorizationService = authorizationService;
-    //         _userAuthentication = userAuthentication;
-    //         _notificationService = notificationService;
-    //     }
-    //
-    //     [HttpPut("api/supplier/deactivate/{Id}")]
-    //     [SwaggerOperation(
-    //         Summary = "Edit supplier",
-    //         Description = "Edit supplier",
-    //         OperationId = "sup.edit",
-    //         Tags = new[] { "SupplierEndpoints" })
-    //     ]
-    //     public override async Task<ActionResult> HandleAsync([FromRoute]SupplierDeleteRequest request, CancellationToken cancellationToken = new CancellationToken())
-    //     {
-    //         if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.SUPPLIER, UserOperations.Delete))
-    //             return Unauthorized();
-    //
-    //         var supplierToDelete = await _supplierAsyncRepository.GetByIdAsync(request.Id); 
-    //         await _supplierAsyncRepository.DeleteAsync(supplierToDelete);
-    //         await _supplierAsyncRepository.ElasticDeleteSingleAsync(supplierToDelete, ElasticIndexConstant.SUPPLIERS);
-    //
-    //         var currentUser = await _userAuthentication.GetCurrentSessionUser();
-    //               
-    //         var messageNotification =
-    //             _notificationService.CreateMessage(currentUser.Fullname, "Delete","Supplier", request.Id);
-    //             
-    //         await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-    //             currentUser.Id, messageNotification);
-    //         return Ok();
-    //     }
-    // }
 }
