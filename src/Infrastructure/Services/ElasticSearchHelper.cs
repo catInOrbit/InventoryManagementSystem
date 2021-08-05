@@ -10,9 +10,8 @@ namespace Infrastructure.Services
 {
     public class ElasticSearchHelper<T> where T: BaseSearchIndex
     {
-        private readonly string SearchQuery;
-        private readonly string FieldToCheckExisting;
-        private readonly string Index;
+        private readonly string _searchQuery;
+        private readonly string _index;
 
         private readonly IElasticClient _elasticClient;
         
@@ -20,8 +19,8 @@ namespace Infrastructure.Services
         public ElasticSearchHelper(IElasticClient elasticClient, string searchQuery, string index)
         {
             _elasticClient = elasticClient;
-            SearchQuery = searchQuery;
-            Index = index;
+            _searchQuery = searchQuery;
+            _index = index;
         }
         
         public ElasticSearchHelper(IElasticClient elasticClient)
@@ -33,11 +32,11 @@ namespace Infrastructure.Services
         {
             ISearchResponse<T> responseElastic;
 
-            if (SearchQuery == null)
+            if (_searchQuery == null)
             {
                 responseElastic = await _elasticClient.SearchAsync<T>
                 (
-                    s => s.Sort(ss => ss.Descending(p => p.LatestUpdateDate)).Size(2000).Index(Index).MatchAll());
+                    s => s.Sort(ss => ss.Descending(p => p.LatestUpdateDate)).Size(2000).Index(_index).MatchAll());
                     
                 return responseElastic;
             }
@@ -46,9 +45,9 @@ namespace Infrastructure.Services
             {
                 responseElastic = await _elasticClient.SearchAsync<T>
                 (
-                    s => s.Size(2000).Index(Index).
+                    s => s.Size(2000).Index(_index).
                         Query(q =>q.
-                            QueryString(d =>d.Query('*' + SearchQuery + '*'))));
+                            QueryString(d =>d.Query('*' + _searchQuery + '*'))));
 
                 return responseElastic;
             }
@@ -60,7 +59,7 @@ namespace Infrastructure.Services
 
             responseElastic = await _elasticClient.SearchAsync<T>
             (
-                s => s.Sort(ss => ss.Ascending(p => p.LatestUpdateDate)).Size(2000).Index(Index).MatchAll());
+                s => s.Sort(ss => ss.Ascending(p => p.LatestUpdateDate)).Size(2000).Index(_index).MatchAll());
                 
             return responseElastic;
         }

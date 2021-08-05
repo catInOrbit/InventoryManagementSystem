@@ -38,10 +38,11 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> _recevingOrderSearchIndexRepository;
 
         private readonly IUserSession _userAuthentication;
-        
+        private readonly IRedisRepository _redisRepository;
+
         private readonly INotificationService _notificationService;
 
-        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IUserSession userAuthentication,  IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository, IAsyncRepository<ProductVariant> productVariantRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantElasticRepository1, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository1)
+        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IUserSession userAuthentication,  IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository, IAsyncRepository<ProductVariant> productVariantRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantElasticRepository1, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository1, IRedisRepository redisRepository)
         {
             _authorizationService = authorizationService;
             _recevingOrderRepository = recevingOrderRepository;
@@ -53,6 +54,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             _productVariantRepository = productVariantRepository;
             _productVariantElasticRepository = productVariantElasticRepository1;
             _recevingOrderSearchIndexRepository = recevingOrderSearchIndexRepository1;
+            _redisRepository = redisRepository;
         }
         
         [HttpPut("api/goodsreceipt/update")]
@@ -81,6 +83,9 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 (await _userAuthentication.GetCurrentSessionUser()).Id, ro.Id, "");
             
             var purhchaseOrder = await _poRepository.GetByIdAsync(request.PurchaseOrderNumber);
+            if (purhchaseOrder == null)
+                return NotFound("Can not find PurchaseOrder of id :" + request.PurchaseOrderNumber);
+            
             ro.SupplierId = purhchaseOrder.SupplierId;
             ro.PurchaseOrderId = request.PurchaseOrderNumber;
 
@@ -95,7 +100,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             //Data of receipt order is from frontend
 
            GoodsReceiptBusinessService gbs = new GoodsReceiptBusinessService( _productVariantRepository, _recevingOrderRepository, _packageRepository, _productVariantElasticRepository,
-               _recevingOrderSearchIndexRepository, _poRepository);
+               _recevingOrderSearchIndexRepository, _poRepository,_redisRepository);
            ro = await gbs.ReceiveProducts(ro, request.UpdateItems);
             await _recevingOrderSearchIndexRepository.ElasticSaveSingleAsync(true,IndexingHelper.GoodsReceiptOrderSearchIndex(ro), ElasticIndexConstant.RECEIVING_ORDERS);
 
@@ -194,6 +199,9 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 return Unauthorized();
             
             var ro = await _roAsyncRepository.GetByIdAsync(request.ReceivingOrderId);
+            if (ro == null)
+                return NotFound("Can not find GoodsReceipt of id :" + request.ReceivingOrderId);
+            
             var po = await _poAsyncRepository.GetByIdAsync(ro.PurchaseOrderId);
             ro.Transaction = TransactionUpdateHelper.UpdateTransaction(ro.Transaction,UserTransactionActionType.Submit,TransactionType.GoodsReceipt,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, ro.Id, "");
@@ -254,17 +262,20 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
     public class ReceivingOrderSkuExistanceCheck : BaseAsyncEndpoint.WithRequest<ROSKUExistanceRequest>.WithResponse<ROSKUExistanceResponse>
     {
         private readonly IAsyncRepository<GoodsReceiptOrder> _roAsyncRepository;
+        private readonly IAsyncRepository<PurchaseOrder> _poAsyncRepository;
+
         private readonly IElasticAsyncRepository<PurchaseOrderSearchIndex> _poElasticRepository;
 
         private readonly IRedisRepository _redisRepository;        
         private readonly IAuthorizationService _authorizationService;
 
-        public ReceivingOrderSkuExistanceCheck(IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IRedisRepository redisRepository, IAuthorizationService authorizationService, IElasticAsyncRepository<PurchaseOrderSearchIndex> poElasticRepository)
+        public ReceivingOrderSkuExistanceCheck(IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IRedisRepository redisRepository, IAuthorizationService authorizationService, IElasticAsyncRepository<PurchaseOrderSearchIndex> poElasticRepository, IAsyncRepository<PurchaseOrder> poAsyncRepository)
         {
             _roAsyncRepository = roAsyncRepository;
             _redisRepository = redisRepository;
             _authorizationService = authorizationService;
             _poElasticRepository = poElasticRepository;
+            _poAsyncRepository = poAsyncRepository;
         }
 
         [HttpPost("api/goodsreceipt/skuexistance")]
@@ -279,13 +290,21 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Read))
                 return Unauthorized();
             
-            var ro = await _roAsyncRepository.GetByIdAsync(request.ReceivingOrderId);
-
+            // var ro = await _roAsyncRepository.GetByIdAsync(request.ReceiptPurchaseOrderId);
+            // if (ro == null)
+            //     return NotFound("Can not found goods receipt with ID: " + request.ReceiptPurchaseOrderId);
+            
+            var po = await _poAsyncRepository.GetByIdAsync(request.ReceiptPurchaseOrderId);
+            
+            if (po == null)
+                return NotFound("Can not find purchase order from goodsReceipt");
+            
+            
             GoodsReceiptBusinessService gbs = new GoodsReceiptBusinessService(
                 _redisRepository, _roAsyncRepository, _poElasticRepository);
 
             var response = new ROSKUExistanceResponse();
-            response.ExistRedisVariantSkus = await gbs.CheckSkuExistance(ro);
+            response.ExistRedisVariantSkus = await gbs.CheckSkuExistance(po);
             
             return Ok(response);
         }

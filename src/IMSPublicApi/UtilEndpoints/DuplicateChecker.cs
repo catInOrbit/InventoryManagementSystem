@@ -78,8 +78,9 @@ namespace InventoryManagementSystem.PublicApi.UtilEndpoints
 
             if (!redisData.IsNullOrEmpty())
             {
-                response.HasMatch = true;
                 response.RedisMatchList = redisData.Where(r => r.Sku == request.Value).ToList();
+                if(response.RedisMatchList.Count > 0 )
+                    response.HasMatch = true;
             }
 
             if (responseElastic.Documents.Count > 0)

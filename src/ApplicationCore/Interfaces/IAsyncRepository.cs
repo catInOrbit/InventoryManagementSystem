@@ -37,7 +37,7 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         Task UpdateAsync(T entity, CancellationToken cancellationToken = default);
         Task DeleteAsync(T entity, CancellationToken cancellationToken = default);
         
-        Notification GetNotificationInfoFromUserId(string userId);
+        ApplicationUser GetUserInfoFromUserId(string userId);
 
     }
 }

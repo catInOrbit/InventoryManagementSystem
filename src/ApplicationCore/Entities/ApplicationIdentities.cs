@@ -21,6 +21,41 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
             return false;
         }
         
+        public bool ShouldSerializePhoneNumberConfirmed()
+        {
+            return false;
+        }
+        
+        public bool ShouldSerializeTwoFactorEnabled()
+        {
+            return false;
+        }
+        
+        public bool ShouldSerializeLockOutEnd()
+        {
+            return false;
+        }
+        
+        public bool ShouldSerializeLockoutEnabled()
+        {
+            return false;
+        }
+        
+        public bool ShouldSerializeAccessFailedCount()
+        {
+            return false;
+        }
+        
+        public bool ShouldSerializeEmailConfirmed()
+        {
+            return false;
+        }
+        
+        public bool ShouldSerializeLockoutEnd()
+        {
+            return false;
+        }
+        
         [JsonIgnore]
         public string OwnerID { get; set; }
         public string Fullname { get; set; }

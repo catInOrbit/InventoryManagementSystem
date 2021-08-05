@@ -67,12 +67,12 @@ namespace InventoryManagementSystem.PublicApi
             UserTransactionActionType userTransactionActionType, TransactionType transactionType, string userId, string objectId, string reason)
         {
             var latestRecord = transaction.TransactionRecord.FirstOrDefault(r => r.Type == transactionType);
-            
+
+            transaction.CurrentType = transactionType;
             string actionName = String.Format("{0} {1}, ID: {2}",userTransactionActionType.ToString() , transaction.CurrentType.ToString(),objectId);
             if (userTransactionActionType == UserTransactionActionType.Reject)
                 actionName += " .Reason: " + reason;
             
-            transaction.TransactionRecord.Remove(latestRecord);
             transaction.TransactionRecord.Add(new 
                 TransactionRecord
                 {

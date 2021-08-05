@@ -55,7 +55,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             
             var response = new PQCreateResponse();
             var po = await _asyncRepository.GetByIdAsync(request.Id);
-            
+            if (po == null)
+                return NotFound("Can not find PriceQuote of id :" + request.Id);
+                        
             // po.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.PriceQuote, po.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
             
             po.PurchaseOrderStatus = PurchaseOrderStatusType.PriceQuote;
@@ -120,7 +122,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 return Unauthorized();
 
             var po = await _asyncRepository.GetByIdAsync(request.PurchaseOrderNumber);
-            
+            if (po == null)
+                return NotFound("Can not find PriceQuote of id :" + request.PurchaseOrderNumber);
+
             po.PurchaseOrderProduct.Clear();
             foreach (var requestOrderItemInfo in request.OrderItemInfos)
             {
@@ -224,6 +228,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 return Unauthorized();
             var response = new PQSubmitResponse();
             var po = await _asyncRepository.GetByIdAsync(request.OrderNumber);
+            if (po == null)
+                return NotFound("Can not find PriceQuote of id :" + request.OrderNumber);
+            
             po.PurchaseOrderStatus = PurchaseOrderStatusType.PurchaseOrder;
             
             await _asyncRepository.UpdateAsync(po);

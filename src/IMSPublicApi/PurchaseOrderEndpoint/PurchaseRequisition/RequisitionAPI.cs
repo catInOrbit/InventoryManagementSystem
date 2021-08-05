@@ -117,7 +117,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
                 return Unauthorized();
             
             var po = await _asyncRepository.GetByIdAsync(request.Id);
-
+            if (po == null)
+                return NotFound("Can not find Requisition of id :" + request.Id);
+            
             po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,TransactionType.Requisition,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
 
@@ -177,6 +179,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseRequ
                 return Unauthorized();
                 
             var po = await _asyncRepository.GetByIdAsync(request.RequisitionId);
+            if (po == null)
+                return NotFound("Can not find Requisition of id :" + request.RequisitionId);
             
             foreach (var requestOrderItem in request.OrderItems)
             {

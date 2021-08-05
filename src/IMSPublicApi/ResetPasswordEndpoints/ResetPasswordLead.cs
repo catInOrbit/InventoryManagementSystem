@@ -57,4 +57,5 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
             return response;
         }
     }
+    
 }

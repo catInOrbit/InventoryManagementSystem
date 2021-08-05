@@ -106,7 +106,8 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.Create
                 return Unauthorized();
             
             var supplier = await _supplierAsyncRepository.GetByIdAsync(request.SupplierId);
-
+            if (supplier == null)
+                return NotFound("Can not find Supplier of id :" + request.SupplierId);
                                             
             supplier.Transaction = TransactionUpdateHelper.UpdateTransaction(supplier.Transaction,UserTransactionActionType.Modify,TransactionType.Supplier,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, supplier.Id, "");

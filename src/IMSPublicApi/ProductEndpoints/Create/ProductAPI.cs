@@ -171,7 +171,9 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             return Unauthorized();
 
            var product = await _asyncRepository.GetByIdAsync(request.ProductId);
-               
+           if (product == null)
+               return NotFound("Can not find Product of id :" + request.ProductId);
+           
            product.Transaction = TransactionUpdateHelper.UpdateTransaction(product.Transaction,UserTransactionActionType.Modify,TransactionType.Product,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, product.Id, "");
 
@@ -366,7 +368,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             return Unauthorized();
 
            var product = await _asyncRepository.GetByIdAsync(request.Id);
-               
+           if (product == null)
+               return NotFound("Can not find Product of id :" + request.Id);
            product.Name = request.Name;
            product.Brand.BrandName = request.BrandName;
            product.Brand.BrandDescription = request.BrandDescription;
@@ -431,8 +434,12 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             return Unauthorized();
 
            var product = await _asyncRepository.GetByIdAsync(request.Id);
+           if (product == null)
+               return NotFound("Can not find Product of id :" + request.Id);
            var productVariant = await _productVariantAsyncRepository.GetByIdAsync(request.Id);
-
+           if (productVariant == null)
+               return NotFound("Can not find ProductVariant of id :" + request.Id);
+           
            if (product != null)
            {
                product.ProductImageLink = request.ImageLink;

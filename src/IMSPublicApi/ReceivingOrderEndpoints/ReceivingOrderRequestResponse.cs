@@ -29,7 +29,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
     
     public class ROSKUExistanceRequest : BaseRequest
     {
-        public string ReceivingOrderId { get; set; }
+        public string ReceiptPurchaseOrderId { get; set; }
     }
     
     public class ROSKUExistanceResponse : BaseResponse

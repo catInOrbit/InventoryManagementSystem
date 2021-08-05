@@ -13,14 +13,14 @@ namespace InventoryManagementSystem.PublicApi.UtilEndpoints
     
     public class DuplicateCheckerResponse : BaseResponse
     {
-        public bool HasMatch { get; set; }
+        public bool HasMatch { get; set; } = false;
         public List<BaseSearchIndex> DatabaseMatchList { get; set; } = new List<BaseSearchIndex>();
         
     }
     
     public class DuplicateProductVariantCheckerResponse : BaseResponse
     {
-        public bool HasMatch { get; set; }
+        public bool HasMatch { get; set; } = false;
         public List<BaseSearchIndex> DatabaseMatchList { get; set; } = new List<BaseSearchIndex>();
         public List<ProductUpdateMessage> RedisMatchList { get; set; } = new List<ProductUpdateMessage>();
 

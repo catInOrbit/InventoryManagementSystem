@@ -222,7 +222,7 @@ namespace InventoryManagementSystem.PublicApi
             services.AddScoped<IAuthorizationHandler,
                 AccountAuthorizationHandler>();
             
-            services.AddSingleton<IUserSession, UserSessionService>();
+            services.AddScoped<IUserSession, UserSessionService>();
             services.AddSignalR();
             
             services.AddTransient<IRedisRepository, RedisRepository>();

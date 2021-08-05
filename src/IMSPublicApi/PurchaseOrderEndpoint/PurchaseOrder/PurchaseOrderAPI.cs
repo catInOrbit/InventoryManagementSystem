@@ -51,6 +51,8 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 return Unauthorized();
 
             var po = await _asyncRepository.GetByIdAsync(request.Id);
+            if (po == null)
+                return NotFound("Can not find PurchaseOrder of id :" + request.Id);
             
             po.Transaction.TransactionStatus = false;
 
@@ -131,6 +133,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 return Unauthorized();
             
             var po = await _purchaseOrderRepos.GetByIdAsync(request.PurchaseOrderNumber);
+            if (po == null)
+                return NotFound("Can not find PurchaseOrder of id :" + request.PurchaseOrderNumber);
+            
             po.PurchaseOrderStatus = PurchaseOrderStatusType.POConfirm;
             await _purchaseOrderRepos.UpdateAsync(po);
             await _poSearchRepos.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
@@ -192,6 +197,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             
 
             var poData = await _purchaseOrderRepos.GetByIdAsync(request.PurchaseOrderNumber);
+            if (poData == null)
+                return NotFound("Can not find PurchaseOrder of id :" + request.PurchaseOrderNumber);
+            
             poData.PurchaseOrderStatus = PurchaseOrderStatusType.PurchaseOrder;
             poData.Transaction.CurrentType = TransactionType.Purchase;
 
@@ -252,6 +260,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             try
             {
                 var po = await _asyncRepository.GetByIdAsync(request.PurchaseOrderNumber);
+                if (po == null)
+                    return NotFound("Can not find PurchaseOrder of id :" + request.PurchaseOrderNumber);
+                
                 po.PurchaseOrderStatus = PurchaseOrderStatusType.POWaitingConfirmation;
                 po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Submit,TransactionType.Purchase,
                     (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
@@ -339,7 +350,9 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 return Unauthorized();
 
             var po =  await _purchaseOrderRepos.GetByIdAsync(request.PurchaseOrderNumber);
-           
+            if (po == null)
+                return NotFound("Can not find PurchaseOrder of id :" + request.PurchaseOrderNumber);          
+
             
             po.PurchaseOrderProduct.Clear();
             foreach (var requestOrderItemInfo in request.OrderItemInfos)

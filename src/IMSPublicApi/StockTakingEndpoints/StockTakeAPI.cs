@@ -54,6 +54,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
         {
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
             var stockTakeOrder = await _asyncRepository.GetByIdAsync(request.Id);
+            if (stockTakeOrder == null)
+                return NotFound("Can not find StockTake of id :" + request.Id);
                 
             if (!await UserAuthorizationService.AuthorizeWithUserId(_authorizationService,currentUser.Id, stockTakeOrder.Transaction.TransactionRecord[^1].ApplicationUserId, HttpContext.User,
                 PageConstant.STOCKTAKEORDER, UserOperations.Update))
@@ -318,6 +320,9 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              
              Dictionary<ProductVariant, int> quantityUpdateProductDict = new Dictionary<ProductVariant, int>();
              var stockTakeOrder = await _stAsyncRepository.GetByIdAsync(request.StockTakeId);
+             if (stockTakeOrder == null)
+                 return NotFound("Can not find StockTake of id :" + request.StockTakeId);
+             
              var stockTakeMessageGroup = await _redisRepository.GetStockTakeAdjustMessage();
              
              // foreach (var stockTakeGroupLocation in stockTakeOrder.GroupLocations)
@@ -409,7 +414,9 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                  return Unauthorized();
              
              var stockTakeOrder = await _stAsyncRepository.GetByIdAsync(request.StockTakeId);
-           
+             if (stockTakeOrder == null)
+                 return NotFound("Can not find StockTake of id :" + request.StockTakeId);
+             
              stockTakeOrder.StockTakeOrderType = StockTakeOrderType.Cancel;
 
              stockTakeOrder.Transaction = TransactionUpdateHelper.UpdateTransaction(stockTakeOrder.Transaction,UserTransactionActionType.Reject,TransactionType.StockTake,

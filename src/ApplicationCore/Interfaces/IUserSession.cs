@@ -17,6 +17,5 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         Task<bool> RemoveUserFromResource(string userId, string resourceId);
 
         Task<Dictionary<string,string>> GetUserResourceDictionary();
-
     }
 }

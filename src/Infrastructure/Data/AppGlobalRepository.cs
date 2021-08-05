@@ -306,10 +306,10 @@
         //     await _identityAndProductDbContext.SaveChangesAsync(cancellationToken);
         // }
 
-        public Notification GetNotificationInfoFromUserId(string userId)
+        public ApplicationUser GetUserInfoFromUserId(string userId)
         {
-            return _identityAndProductDbContext.Notification
-                .FirstOrDefault(noti => noti.UserId == userId);
+            return _identityAndProductDbContext.Users
+                .FirstOrDefault(u => u.Id == userId);
         }
     }
 }

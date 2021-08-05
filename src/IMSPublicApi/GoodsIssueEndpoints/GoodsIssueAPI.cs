@@ -151,6 +151,9 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 return Unauthorized();
             
             var gio = _asyncRepository.GetGoodsIssueOrderByNumber(request.IssueNumber);
+            if (gio == null)
+                return NotFound("Can not find GoodsIssue of id :" + request.IssueNumber);
+            
             switch (request.ChangeStatusTo)
             {
                 case "Shipping":
@@ -292,6 +295,9 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 return Unauthorized();
             
             var gio = _asyncRepository.GetGoodsIssueOrderByNumber(request.IssueNumber);
+            if (gio == null)
+                return NotFound("Can not find GoodsIssue of id :" + request.IssueNumber);
+            
             gio.GoodsIssueType = GoodsIssueStatusType.Cancel;
             await _goodIssueElasticAsyncRepository.ElasticSaveSingleAsync(false,
                 IndexingHelper.GoodsIssueSearchIndexHelper(gio), ElasticIndexConstant.GOODS_ISSUE_ORDERS);
