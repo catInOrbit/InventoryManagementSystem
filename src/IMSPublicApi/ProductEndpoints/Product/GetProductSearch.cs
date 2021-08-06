@@ -79,7 +79,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
 
         public override async Task<ActionResult<GetProductVariantSearchResponse>> HandleAsync([FromQuery]GetProductVariantSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT_SEARCH, UserOperations.Read))
                 return Unauthorized();
             var response = new GetProductVariantSearchResponse();
 
@@ -162,7 +162,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
 
         public override async Task<ActionResult<GetProductSearchResponse>> HandleAsync([FromQuery]GetProductSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT_SEARCH, UserOperations.Read))
                 return Unauthorized();
             var response = new GetProductSearchResponse();
 
@@ -234,7 +234,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
 
         public override async Task<ActionResult<GetBrandResponse>> HandleAsync([FromQuery]GetBrandRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT_SEARCH, UserOperations.Read))
                 return Unauthorized();
             var response = new GetBrandResponse();
 

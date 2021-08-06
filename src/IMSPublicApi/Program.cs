@@ -24,7 +24,7 @@ namespace InventoryManagementSystem.PublicApi
         {
             var host = CreateHostBuilder(args)
                         .Build();
-
+            
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -94,8 +94,9 @@ namespace InventoryManagementSystem.PublicApi
                     logger.LogError(ex, "An error occurred seeding the DB.");
                 }
             }
-
-            host.Run();
+            
+            await host.RunAsync();
+           
         }
 
 

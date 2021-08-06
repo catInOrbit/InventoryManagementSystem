@@ -189,7 +189,17 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                     
                     IsVariantType = product.IsVariantType,
                 };
-
+                
+                foreach (var productProductVariant in product.ProductVariants)
+                {
+                    index.ProductVariantInfos.Add(new ProductVariantInfoInProductIndex
+                    {
+                        VariantId = productProductVariant.Id,
+                        Barcode = productProductVariant.Barcode,
+                        VariantName = productProductVariant.Name,
+                        Sku = productProductVariant.Sku
+                    });
+                }
 
                 index.CreatedByName =
                     (product.Transaction.TransactionRecord.Count > 0 &&
@@ -219,8 +229,8 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                     index.LatestUpdateDate = index.CreatedDate;
 
 
-                foreach (var productProductVariant in product.ProductVariants)
-                    index.VariantIds.Add(productProductVariant.Id);
+                // foreach (var productProductVariant in product.ProductVariants)
+                //     index.VariantIds.Add(productProductVariant.Id);
                 
                 index.FillSuggestion();
                 

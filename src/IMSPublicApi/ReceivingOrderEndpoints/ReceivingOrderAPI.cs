@@ -41,8 +41,9 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly IRedisRepository _redisRepository;
 
         private readonly INotificationService _notificationService;
+        private ILogger<ReceivingOrderUpdate> _logger;
 
-        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IUserSession userAuthentication,  IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository, IAsyncRepository<ProductVariant> productVariantRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantElasticRepository1, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository1, IRedisRepository redisRepository)
+        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IUserSession userAuthentication,  IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository, IAsyncRepository<ProductVariant> productVariantRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantElasticRepository1, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository1, IRedisRepository redisRepository, ILogger<ReceivingOrderUpdate> logger)
         {
             _authorizationService = authorizationService;
             _recevingOrderRepository = recevingOrderRepository;
@@ -55,9 +56,10 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             _productVariantElasticRepository = productVariantElasticRepository1;
             _recevingOrderSearchIndexRepository = recevingOrderSearchIndexRepository1;
             _redisRepository = redisRepository;
+            _logger = logger;
         }
         
-        [HttpPut("api/goodsreceipt/update")]
+        [HttpPost("api/goodsreceipt/create")]
         [SwaggerOperation(
             Summary = "Update Receiving Order",
             Description = "Update Receiving Order",
@@ -102,11 +104,53 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
            GoodsReceiptBusinessService gbs = new GoodsReceiptBusinessService( _productVariantRepository, _recevingOrderRepository, _packageRepository, _productVariantElasticRepository,
                _recevingOrderSearchIndexRepository, _poRepository,_redisRepository);
            ro = await gbs.ReceiveProducts(ro, request.UpdateItems);
+           if (ro == null)
+               return BadRequest("Unable to update GoodsReceipt, check for correct PurchaseOrder ID");
             await _recevingOrderSearchIndexRepository.ElasticSaveSingleAsync(true,IndexingHelper.GoodsReceiptOrderSearchIndex(ro), ElasticIndexConstant.RECEIVING_ORDERS);
 
             var response = new ROUpdateResponse();
             response.CreatedGoodsReceiptId = ro.Id;
             response.TransactionId = ro.TransactionId;
+            
+            // ------------------------------------------
+
+            var po = await _poRepository.GetByIdAsync(ro.PurchaseOrderId);
+            if (po == null)
+                return NotFound("Can not find ID of purchase order ");
+            
+            var insufficientVariantsId = (await gbs.CheckSufficientReceiptQuantity(ro)); 
+            
+            if(insufficientVariantsId.Count == 0)
+                po.PurchaseOrderStatus = PurchaseOrderStatusType.Done;
+            
+            BigQueryService bigQueryService = new BigQueryService();
+
+            foreach (var goodsReceiptOrderItem in ro.ReceivedOrderItems)
+            {
+                try
+                {
+                    bigQueryService.InsertProductRowBQ(goodsReceiptOrderItem.ProductVariant, ro.PurchaseOrder.PurchaseOrderProduct.FirstOrDefault(p => p.ProductVariantId == goodsReceiptOrderItem.ProductVariantId).Price
+                        , ro.Location.LocationName, goodsReceiptOrderItem.QuantityReceived , 0, 0, "In Storage", ro.Supplier.SupplierName);
+                    _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
+                }
+                catch
+                {
+                    _logger.LogError("Error updating BigQuery on " + this.GetType().ToString());
+                }
+            }
+            
+            await _poRepository.UpdateAsync(po);
+             
+            var currentUser = await _userAuthentication.GetCurrentSessionUser();
+
+            var messageNotification =
+                _notificationService.CreateMessage(currentUser.Fullname, "Submit","Goods Receipt", ro.Id);
+                
+            await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.MANAGER,
+                currentUser.Id, messageNotification, PageConstant.GOODSRECEIPT, po.Id);
+            
+            await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
+                currentUser.Id, messageNotification, PageConstant.GOODSRECEIPT, po.Id);
 
             return Ok(response);
         }
@@ -147,117 +191,121 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Update))
                 return Unauthorized();
 
-
+            var productVariant = await _productVariantRepository.GetByIdAsync(request.ProductVariantId);
+            if(productVariant == null)
+                return NotFound("Can not find productVariant with id" + productVariant);
+            
             await _redisRepository.AddProductUpdateMessage(new ProductUpdateMessage
             {
                 Sku = request.Sku,
-                ProductVariantId = request.ProductVariantId
+                ProductVariantId = request.ProductVariantId,
+                ProductVariantName = productVariant.Name
             });
          
             return Ok();
         }
     }
      
-      public class ReceivingOrderSubmit : BaseAsyncEndpoint.WithRequest<ROSubmitRequest>.WithoutResponse
-    {
-        private IAsyncRepository<GoodsReceiptOrder> _roAsyncRepository;
-        private readonly ILogger<ReceivingOrderSubmit> _logger;
-        private readonly IAuthorizationService _authorizationService;
-
-
-        private IAsyncRepository<PurchaseOrder> _poAsyncRepository;
-        private IElasticAsyncRepository<PurchaseOrderSearchIndex> _poSearchIndexAsyncRepository;
-        private IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> _roSearchIndexAsyncRepository;
-        
-        private readonly INotificationService _notificationService;
-        private readonly IUserSession _userAuthentication;
-
-
-        public ReceivingOrderSubmit(IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<PurchaseOrder> poAsyncRepository, INotificationService notificationService, IUserSession userAuthentication, ILogger<ReceivingOrderSubmit> logger, IElasticAsyncRepository<PurchaseOrderSearchIndex> poSearchIndexAsyncRepository1, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> roSearchIndexAsyncRepository1, IAuthorizationService authorizationService)
-        {
-            _roAsyncRepository = roAsyncRepository;
-            _poAsyncRepository = poAsyncRepository;
-            _notificationService = notificationService;
-            _userAuthentication = userAuthentication;
-            _logger = logger;
-            _poSearchIndexAsyncRepository = poSearchIndexAsyncRepository1;
-            _roSearchIndexAsyncRepository = roSearchIndexAsyncRepository1;
-            _authorizationService = authorizationService;
-        }
-
-        [HttpPost("api/goodsreceipt/submit")]
-        [SwaggerOperation(
-            Summary = "Submit Goods Receipt Order",
-            Description = "Submit Goods Receipt Order",
-            OperationId = "gr.submit",
-            Tags = new[] { "GoodsReceiptOrders" })
-        ]
-        public override async Task<ActionResult> HandleAsync(ROSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
-        {
-            
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Approve))
-                return Unauthorized();
-            
-            var ro = await _roAsyncRepository.GetByIdAsync(request.ReceivingOrderId);
-            if (ro == null)
-                return NotFound("Can not find GoodsReceipt of id :" + request.ReceivingOrderId);
-            
-            var po = await _poAsyncRepository.GetByIdAsync(ro.PurchaseOrderId);
-            ro.Transaction = TransactionUpdateHelper.UpdateTransaction(ro.Transaction,UserTransactionActionType.Submit,TransactionType.GoodsReceipt,
-                (await _userAuthentication.GetCurrentSessionUser()).Id, ro.Id, "");
-
-            var response = new ROSubmitResponse();
-            BigQueryService bigQueryService = new BigQueryService();
-
-            GoodsReceiptBusinessService gbs = new GoodsReceiptBusinessService(
-                _roAsyncRepository, _poAsyncRepository);
-
-            var insufficientVariantsId = (await gbs.CheckSufficientReceiptQuantity(ro)); 
-            if (insufficientVariantsId.Count > 0)
-            {
-                response.IncompletePurchaseOrderId = po.Id;
-                response.IncompleteVariantId = insufficientVariantsId;
-            }
-            
-            foreach (var goodsReceiptOrderItem in ro.ReceivedOrderItems)
-            {
-                try
-                {
-                    bigQueryService.InsertProductRowBQ(goodsReceiptOrderItem.ProductVariant, ro.PurchaseOrder.PurchaseOrderProduct.FirstOrDefault(p => p.ProductVariantId == goodsReceiptOrderItem.ProductVariantId).Price
-                        , ro.Location.LocationName, goodsReceiptOrderItem.QuantityReceived , 0, 0, "In Storage", ro.Supplier.SupplierName);
-                    _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
-                }
-                catch
-                {
-                    _logger.LogError("Error updating BigQuery on " + this.GetType().ToString());
-                }
-            }
-            
-            if(response.IncompleteVariantId.IsNullOrEmpty())
-                po.PurchaseOrderStatus = PurchaseOrderStatusType.Done;
-            
-            await _poAsyncRepository.UpdateAsync(po);
-            await _roAsyncRepository.UpdateAsync(ro);
-            await _poSearchIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po),ElasticIndexConstant.PURCHASE_ORDERS);
-            await _roSearchIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.GoodsReceiptOrderSearchIndex(ro),ElasticIndexConstant.RECEIVING_ORDERS);
-            
-             
-            var currentUser = await _userAuthentication.GetCurrentSessionUser();
-
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Submit","Goods Receipt", ro.Id);
-                
-            await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.MANAGER,
-                currentUser.Id, messageNotification, PageConstant.GOODSRECEIPT, po.Id);
-            
-            await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
-                currentUser.Id, messageNotification, PageConstant.GOODSRECEIPT, po.Id);
-            
-            if(!response.IncompleteVariantId.IsNullOrEmpty())
-                return Ok(response);
-            return Ok();
-        }
-    }
+    //   public class ReceivingOrderSubmit : BaseAsyncEndpoint.WithRequest<ROSubmitRequest>.WithoutResponse
+    // {
+    //     private IAsyncRepository<GoodsReceiptOrder> _roAsyncRepository;
+    //     private readonly ILogger<ReceivingOrderSubmit> _logger;
+    //     private readonly IAuthorizationService _authorizationService;
+    //
+    //
+    //     private IAsyncRepository<PurchaseOrder> _poAsyncRepository;
+    //     private IElasticAsyncRepository<PurchaseOrderSearchIndex> _poSearchIndexAsyncRepository;
+    //     private IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> _roSearchIndexAsyncRepository;
+    //     
+    //     private readonly INotificationService _notificationService;
+    //     private readonly IUserSession _userAuthentication;
+    //
+    //
+    //     public ReceivingOrderSubmit(IAsyncRepository<GoodsReceiptOrder> roAsyncRepository, IAsyncRepository<PurchaseOrder> poAsyncRepository, INotificationService notificationService, IUserSession userAuthentication, ILogger<ReceivingOrderSubmit> logger, IElasticAsyncRepository<PurchaseOrderSearchIndex> poSearchIndexAsyncRepository1, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> roSearchIndexAsyncRepository1, IAuthorizationService authorizationService)
+    //     {
+    //         _roAsyncRepository = roAsyncRepository;
+    //         _poAsyncRepository = poAsyncRepository;
+    //         _notificationService = notificationService;
+    //         _userAuthentication = userAuthentication;
+    //         _logger = logger;
+    //         _poSearchIndexAsyncRepository = poSearchIndexAsyncRepository1;
+    //         _roSearchIndexAsyncRepository = roSearchIndexAsyncRepository1;
+    //         _authorizationService = authorizationService;
+    //     }
+    //
+    //     [HttpPost("api/goodsreceipt/submit")]
+    //     [SwaggerOperation(
+    //         Summary = "Submit Goods Receipt Order",
+    //         Description = "Submit Goods Receipt Order",
+    //         OperationId = "gr.submit",
+    //         Tags = new[] { "GoodsReceiptOrders" })
+    //     ]
+    //     public override async Task<ActionResult> HandleAsync(ROSubmitRequest request, CancellationToken cancellationToken = new CancellationToken())
+    //     {
+    //         
+    //         if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSRECEIPT, UserOperations.Approve))
+    //             return Unauthorized();
+    //         
+    //         var ro = await _roAsyncRepository.GetByIdAsync(request.ReceivingOrderId);
+    //         if (ro == null)
+    //             return NotFound("Can not find GoodsReceipt of id :" + request.ReceivingOrderId);
+    //         
+    //         var po = await _poAsyncRepository.GetByIdAsync(ro.PurchaseOrderId);
+    //         ro.Transaction = TransactionUpdateHelper.UpdateTransaction(ro.Transaction,UserTransactionActionType.Submit,TransactionType.GoodsReceipt,
+    //             (await _userAuthentication.GetCurrentSessionUser()).Id, ro.Id, "");
+    //
+    //         var response = new ROSubmitResponse();
+    //         BigQueryService bigQueryService = new BigQueryService();
+    //
+    //         GoodsReceiptBusinessService gbs = new GoodsReceiptBusinessService(
+    //             _roAsyncRepository, _poAsyncRepository);
+    //
+    //         var insufficientVariantsId = (await gbs.CheckSufficientReceiptQuantity(ro)); 
+    //         if (insufficientVariantsId.Count > 0)
+    //         {
+    //             response.IncompletePurchaseOrderId = po.Id;
+    //             response.IncompleteVariantId = insufficientVariantsId;
+    //         }
+    //         
+    //         foreach (var goodsReceiptOrderItem in ro.ReceivedOrderItems)
+    //         {
+    //             try
+    //             {
+    //                 bigQueryService.InsertProductRowBQ(goodsReceiptOrderItem.ProductVariant, ro.PurchaseOrder.PurchaseOrderProduct.FirstOrDefault(p => p.ProductVariantId == goodsReceiptOrderItem.ProductVariantId).Price
+    //                     , ro.Location.LocationName, goodsReceiptOrderItem.QuantityReceived , 0, 0, "In Storage", ro.Supplier.SupplierName);
+    //                 _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
+    //             }
+    //             catch
+    //             {
+    //                 _logger.LogError("Error updating BigQuery on " + this.GetType().ToString());
+    //             }
+    //         }
+    //         
+    //         if(response.IncompleteVariantId.Count == 0)
+    //             po.PurchaseOrderStatus = PurchaseOrderStatusType.Done;
+    //         
+    //         await _poAsyncRepository.UpdateAsync(po);
+    //         await _roAsyncRepository.UpdateAsync(ro);
+    //         await _poSearchIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po),ElasticIndexConstant.PURCHASE_ORDERS);
+    //         await _roSearchIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.GoodsReceiptOrderSearchIndex(ro),ElasticIndexConstant.RECEIVING_ORDERS);
+    //         
+    //          
+    //         var currentUser = await _userAuthentication.GetCurrentSessionUser();
+    //
+    //         var messageNotification =
+    //             _notificationService.CreateMessage(currentUser.Fullname, "Submit","Goods Receipt", ro.Id);
+    //             
+    //         await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.MANAGER,
+    //             currentUser.Id, messageNotification, PageConstant.GOODSRECEIPT, po.Id);
+    //         
+    //         await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
+    //             currentUser.Id, messageNotification, PageConstant.GOODSRECEIPT, po.Id);
+    //         
+    //         if(!response.IncompleteVariantId.IsNullOrEmpty())
+    //             return Ok(response);
+    //         return Ok();
+    //     }
+    // }
       
     public class ReceivingOrderSkuExistanceCheck : BaseAsyncEndpoint.WithRequest<ROSKUExistanceRequest>.WithResponse<ROSKUExistanceResponse>
     {

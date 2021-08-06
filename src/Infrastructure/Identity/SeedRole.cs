@@ -328,6 +328,19 @@ namespace Infrastructure.Identity
             }
 
             IdentityRole identityRole;
+            
+            if (!await roleManager.RoleExistsAsync(AuthorizedRoleConstants.MANAGER))
+            {
+                identityRole = new IdentityRole
+                {
+                    Id = "IMS_MN",
+                    Name = AuthorizedRoleConstants.MANAGER,
+                    NormalizedName = AuthorizedRoleConstants.MANAGER.ToUpper(),
+                    ConcurrencyStamp = Guid.NewGuid().ToString()
+                };
+                
+                IR = await roleManager.CreateAsync(identityRole);
+            }
 
             if (!await roleManager.RoleExistsAsync(AuthorizedRoleConstants.SALEMAN))
             {
@@ -342,6 +355,8 @@ namespace Infrastructure.Identity
                 IR = await roleManager.CreateAsync(identityRole);
                 
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.REQUISITION, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PRODUCT_SEARCH, ""));
+
             }
             
             if (!await roleManager.RoleExistsAsync(AuthorizedRoleConstants.ACCOUNTANT))
@@ -361,6 +376,9 @@ namespace Infrastructure.Identity
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.GOODSRECEIPT, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.GOODSISSUE, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.STOCKTAKEORDER, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PRODUCT_SEARCH, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PACKAGE_SEARCH, ""));
+
             }
             
             if (!await roleManager.RoleExistsAsync(AuthorizedRoleConstants.STOCKKEEPER))
@@ -377,6 +395,9 @@ namespace Infrastructure.Identity
                 
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.GOODSRECEIPT, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.GOODSISSUE, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PRODUCT_SEARCH, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PACKAGE_SEARCH, ""));
+
             }
           
             return IR;

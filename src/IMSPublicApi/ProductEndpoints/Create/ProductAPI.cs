@@ -59,7 +59,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                 return Unauthorized();
                
             var category = await _categoryAsyncRepository.GetByIdAsync(request.CategoryId);
-
+            if (category == null)
+                return BadRequest("Please input valid category ID");
             ApplicationCore.Entities.Products.Product product = new ApplicationCore.Entities.Products.Product
             {
                 Name = request.Name,
@@ -188,19 +189,19 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             var response = new ProductUpdateResponse();
             if (product.IsVariantType)
             {
-                if (!productWasVariantType)
-                {
-                    //Purge First index
-                    foreach (var productProductVariant in product.ProductVariants)
-                    {
-                        productProductVariant.Transaction.TransactionStatus = false;
-                        await _productVariantIndexAsyncRepositoryRepos.ElasticDeleteSingleAsync(IndexingHelper.ProductVariantSearchIndex(productProductVariant),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
-
-                        productProductVariant.Transaction.CurrentType = TransactionType.Deleted;
-                        await _productVariantAsyncRepository.UpdateAsync(productProductVariant);
-                    }
-                    product.ProductVariants.Clear();
-                }
+                // if (!productWasVariantType)
+                // {
+                //     //Purge First index
+                //     foreach (var productProductVariant in product.ProductVariants)
+                //     {
+                //         productProductVariant.Transaction.TransactionStatus = false;
+                //         await _productVariantIndexAsyncRepositoryRepos.ElasticDeleteSingleAsync(IndexingHelper.ProductVariantSearchIndex(productProductVariant),ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+                //
+                //         productProductVariant.Transaction.CurrentType = TransactionType.Deleted;
+                //         await _productVariantAsyncRepository.UpdateAsync(productProductVariant);
+                //     }
+                //     product.ProductVariants.Clear();
+                // }
                                 
                 foreach (var productVairantRequestInfo in request.ProductVariantsUpdate)
                 {
@@ -374,6 +375,8 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
            product.Brand.BrandName = request.BrandName;
            product.Brand.BrandDescription = request.BrandDescription;
            product.CategoryId = request.CategoryId;
+           if(product.CategoryId == null)
+               return BadRequest("Please input valid CategoryId");
            product.Unit = request.Unit;
 
            if (request.ProductImageLink != null) product.ProductImageLink = product.ProductImageLink;

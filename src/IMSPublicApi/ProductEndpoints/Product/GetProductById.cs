@@ -33,7 +33,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
         ]
         public override async Task<ActionResult<GetProductResponse>> HandleAsync([FromRoute] GetProductRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT_SEARCH, UserOperations.Read))
                 return Unauthorized();
             
             
@@ -66,7 +66,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
         ]
         public override async Task<ActionResult<GetProductResponse>> HandleAsync([FromRoute] GetProductVariantRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT_SEARCH, UserOperations.Read))
                 return Unauthorized();
             
             var response = new GetProductResponse();

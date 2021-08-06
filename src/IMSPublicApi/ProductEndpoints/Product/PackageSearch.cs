@@ -39,7 +39,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
 
         public override async Task<ActionResult<PackageResponse>> HandleAsync([FromRoute]PackageRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PACKAGE_SEARCH, UserOperations.Read))
                 return Unauthorized();
             var response = new PackageResponse();
 
@@ -77,7 +77,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
         ]
         public override async Task<ActionResult<PackageResponse>> HandleAsync([FromQuery]PackageSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PACKAGE_SEARCH, UserOperations.Read))
                 return Unauthorized();
             
             PagingOption<Package> pagingOptionPackage =

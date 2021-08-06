@@ -131,6 +131,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
                 requestOrderItemInfo.OrderId = po.Id;
                 requestOrderItemInfo.ProductVariant = await _productVariantRepos.GetByIdAsync(requestOrderItemInfo.ProductVariantId);
                 requestOrderItemInfo.TotalAmount = requestOrderItemInfo.Price * requestOrderItemInfo.OrderQuantity;
+                requestOrderItemInfo.QuantityLeftAfterReceived = requestOrderItemInfo.OrderQuantity;
                 po.TotalOrderAmount += requestOrderItemInfo.TotalAmount;
                 po.PurchaseOrderProduct.Add(requestOrderItemInfo);
                 po.TotalProductAmount += 1;
@@ -233,15 +234,12 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PriceQuote
             
             po.PurchaseOrderStatus = PurchaseOrderStatusType.PurchaseOrder;
             
-            await _asyncRepository.UpdateAsync(po);
-            
-            // var subject = "REQUEST FOR QUOTATION-" + DateTime.UtcNow.ToString("dd/MM//yyyy") + " FROM IMS Inventory";
             
             // var files = Request.Form.Files.Any() ? Request.Form.Files : new FormFileCollection();
             // var message = new EmailMessage(request.To, subject, request.Content, files);
             // await _emailSender.SendEmailAsync(message);
             
-            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction, UserTransactionActionType.Modify,TransactionType.PriceQuote,
+            po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction, UserTransactionActionType.Create,TransactionType.Purchase,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
             await _asyncRepository.UpdateAsync(po);
             await _indexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);

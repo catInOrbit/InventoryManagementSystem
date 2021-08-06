@@ -235,6 +235,8 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                      var package = await _packageAsyncRepository.GetByIdAsync(stockTakeItem.PackageId);
                      if (stockTakeItem.ActualQuantity != package.Quantity)
                          response.MismatchQuantityPackageIds.Add(package.Id);
+                     stockTakeItem.StockTakeOrderId = stockTakeOrder.Id;
+                     stockTakeItem.IsShowingPackageId = true;
 
                      await _redisRepository.AddStockTakeAdjustMessage(new StockTakeAdjustItemInfo()
                      {

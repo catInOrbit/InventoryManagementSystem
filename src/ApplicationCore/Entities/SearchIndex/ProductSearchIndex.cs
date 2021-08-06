@@ -50,6 +50,14 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
             
         }
     }
+
+    public class ProductVariantInfoInProductIndex
+    {
+        public string VariantId { get; set; }
+        public string VariantName { get; set; }
+        public string Sku { get; set; }
+        public string Barcode { get; set; }
+    }
     
     public class ProductSearchIndex : BaseSearchIndex
     {
@@ -73,7 +81,11 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public bool  IsDeactivated { get; set; }
         public string ProductImageLink { get; set; }
 
-        public List<string> VariantIds { get; set; } = new List<string>();
+        [Nest.Nested]
+        public List<ProductVariantInfoInProductIndex>
+            ProductVariantInfos { get; set; } = new List<ProductVariantInfoInProductIndex>();
+        
+        // public List<string> VariantIds { get; set; } = new List<string>();
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         public CompletionField Suggest { get; set; }

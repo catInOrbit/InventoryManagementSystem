@@ -359,6 +359,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             {
                 requestOrderItemInfo.OrderId = po.Id;
                 requestOrderItemInfo.ProductVariant = await _productVariantRepos.GetByIdAsync(requestOrderItemInfo.ProductVariantId);
+                requestOrderItemInfo.QuantityLeftAfterReceived = requestOrderItemInfo.OrderQuantity;
                 po.TotalOrderAmount += requestOrderItemInfo.Price;
                 po.TotalDiscountAmount += requestOrderItemInfo.DiscountAmount;
                 po.PurchaseOrderProduct.Add(requestOrderItemInfo);

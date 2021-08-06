@@ -33,7 +33,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
         ]
         public override async Task<ActionResult<ProductUpdateMessageResponse>> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Update))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT_SEARCH, UserOperations.Update))
                 return Unauthorized();
             var response = new ProductUpdateMessageResponse();
             response.ProductUpdateMessages =  await _redisRepository.GetProductUpdateMessage();

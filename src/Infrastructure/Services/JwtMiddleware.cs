@@ -41,13 +41,16 @@ namespace WebApi.Helpers
             try
             {
                 ValidateToken(tokenHandler, token, key);
+
                 currentUser = await userManager.FindByIdAsync(_userId);
                 await userAuthentication.SaveUserAsync(currentUser, (await userManager.GetRolesAsync(currentUser))[0]);
                 var newToken = await tokenClaimsService.GenerateRefreshTokenAsync((await userAuthentication.GetCurrentSessionUser()).Email);
+                
                 await tokenClaimsService.SaveRefreshTokenForUser(currentUser, newToken);
             }
             catch
             {
+
                 if ((await userAuthentication.GetCurrentSessionUser()) != null)
                 {
                     context.Request.Headers.Remove("Authorization");
@@ -57,11 +60,13 @@ namespace WebApi.Helpers
 
                     if (tokenRefresh != null)
                     {
+
                         try
                         {
                             ValidateToken(tokenHandler, tokenRefresh, key);
                             currentUser = await userManager.FindByIdAsync(_userId);
                             var newToken = await tokenClaimsService.GenerateRefreshTokenAsync((await userAuthentication.GetCurrentSessionUser()).Email);
+
                             await tokenClaimsService.SaveRefreshTokenForUser(currentUser, newToken);
                             context.Request.Headers.Add("Authorization",newToken);
                         }

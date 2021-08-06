@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.RedisMessages;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
@@ -54,19 +55,23 @@ namespace InventoryManagementSystem.ApplicationCore.Services
         public async Task<GoodsReceiptOrder> ReceiveProducts(GoodsReceiptOrder ro, List<ReceivingOrderProductUpdateInfo> updateItems)
         {
             var po = await _poAsyncRepository.GetByIdAsync(ro.PurchaseOrderId);
+            if (po == null)
+                return null;
             foreach (var item in updateItems)
             {
                 var orderItem =
                     po.PurchaseOrderProduct.FirstOrDefault(o => o.ProductVariantId == item.ProductVariantId);
                 if (item.QuantityReceived >= orderItem.QuantityLeftAfterReceived)
+                {
                     orderItem.QuantityLeftAfterReceived = 0;
+                }
 
                 else
                     orderItem.QuantityLeftAfterReceived -= item.QuantityReceived;
             }
 
             await _poAsyncRepository.UpdateAsync(po);
-                        
+            
             ro.ReceivedOrderItems.Clear();
             foreach (var item in updateItems)
             {
@@ -89,7 +94,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                         var skuRedisList = await CheckSkuExistance(po);
                         var skuExist = skuRedisList.FirstOrDefault(s => s.ProductVariantId == productVariant.Id);
 
-                        if(productVariant.Sku!= null && skuExist == null)
+                        if(!string.IsNullOrEmpty(productVariant.Sku) && skuExist == null)
                         {
                             productVariant.Sku = item.Sku;
                             initiateUpdate = true;
@@ -100,15 +105,11 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                             await _redisRepository.AddProductUpdateMessage(new ProductUpdateMessage
                             {
                                 Sku = item.Sku,
-                                ProductVariantId = productVariant.Id
+                                ProductVariantId = productVariant.Id,
+                                ProductVariantName = productVariant.Name
                             });
                         }
-                        
-                        
-                      
-                        
                         // if (productVariant.Sku== null && skuExist != null)
-                      
                     }
 
                     if (initiateUpdate)
@@ -151,42 +152,53 @@ namespace InventoryManagementSystem.ApplicationCore.Services
 
         public async Task<List<string>> CheckSufficientReceiptQuantity(GoodsReceiptOrder goodsReceiptOrder)
         {
-            var allRosOfPo = await _roRepository.GetAllGoodsReceiptsOfPurchaseOrder(goodsReceiptOrder.PurchaseOrderId);
+            // var allRosOfPo = await _roRepository.GetAllGoodsReceiptsOfPurchaseOrder(goodsReceiptOrder.PurchaseOrderId);
             var po = await _poAsyncRepository.GetByIdAsync(goodsReceiptOrder.PurchaseOrderId);
 
+            bool hasNotCompleted = true;
             List<string> insufficientVariantIds = new List<string>();
-            Dictionary<string, int> ProductVariantAndQuantityReceived = new Dictionary<string, int>();
-            
-            foreach (var receiptOrder in allRosOfPo)
-            {
-                foreach (var roi in receiptOrder.ReceivedOrderItems)
-                {
-                    if (ProductVariantAndQuantityReceived.ContainsKey(roi.ProductVariantId))
-                    {
-                        ProductVariantAndQuantityReceived.TryGetValue(roi.ProductVariantId, out var quantityDic);
-                        var newQuantity = roi.QuantityReceived + quantityDic;
-                        ProductVariantAndQuantityReceived.Add(roi.ProductVariantId, newQuantity);
-                    }
 
-                    else
-                    {
-                        var newQuantity = roi.QuantityReceived;
-                        ProductVariantAndQuantityReceived.Add(roi.ProductVariantId, newQuantity);
-                    }
-                }
-            }
-            
             foreach (var orderItem in po.PurchaseOrderProduct)
             {
-                if (ProductVariantAndQuantityReceived.ContainsKey(orderItem.ProductVariantId))
+                if (orderItem.QuantityLeftAfterReceived > 0)
                 {
-                    if (ProductVariantAndQuantityReceived[orderItem.ProductVariantId] < orderItem.OrderQuantity)
-                    {
-                        if (!insufficientVariantIds.Contains(orderItem.ProductVariantId))
-                            insufficientVariantIds.Add(orderItem.ProductVariantId);
-                    }
+                    hasNotCompleted = true;
+                    insufficientVariantIds.Add(orderItem.ProductVariantId);
                 }
             }
+            
+            // Dictionary<string, int> ProductVariantAndQuantityReceived = new Dictionary<string, int>();
+            //
+            // foreach (var receiptOrder in allRosOfPo)
+            // {
+            //     foreach (var roi in receiptOrder.ReceivedOrderItems)
+            //     {
+            //         if (ProductVariantAndQuantityReceived.ContainsKey(roi.ProductVariantId))
+            //         {
+            //             ProductVariantAndQuantityReceived.TryGetValue(roi.ProductVariantId, out var quantityDic);
+            //             var newQuantity = roi.QuantityReceived + quantityDic;
+            //             ProductVariantAndQuantityReceived.Add(roi.ProductVariantId, newQuantity);
+            //         }
+            //
+            //         else
+            //         {
+            //             var newQuantity = roi.QuantityReceived;
+            //             ProductVariantAndQuantityReceived.Add(roi.ProductVariantId, newQuantity);
+            //         }
+            //     }
+            // }
+            //
+            // foreach (var orderItem in po.PurchaseOrderProduct)
+            // {
+            //     if (ProductVariantAndQuantityReceived.ContainsKey(orderItem.ProductVariantId))
+            //     {
+            //         if (ProductVariantAndQuantityReceived[orderItem.ProductVariantId] < orderItem.OrderQuantity)
+            //         {
+            //             if (!insufficientVariantIds.Contains(orderItem.ProductVariantId))
+            //                 insufficientVariantIds.Add(orderItem.ProductVariantId);
+            //         }
+            //     }
+            // }
 
             return insufficientVariantIds;
         }
