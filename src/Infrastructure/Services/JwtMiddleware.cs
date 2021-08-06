@@ -50,22 +50,21 @@ namespace WebApi.Helpers
             }
             catch
             {
-
-                if ((await userAuthentication.GetCurrentSessionUser()) != null)
+                currentUser = await userManager.FindByIdAsync(_userId);
+                if (currentUser != null)
                 {
                     context.Request.Headers.Remove("Authorization");
                     
                     // var tokenRefresh = await tokenClaimsService.GenerateRefreshTokenAsync((await userAuthentication.GetCurrentSessionUser()).Email);
-                    var tokenRefresh = await tokenClaimsService.GetRefreshTokenAsync((await userAuthentication.GetCurrentSessionUser()));
+                    var tokenRefresh = await tokenClaimsService.GetRefreshTokenAsync((currentUser));
 
                     if (tokenRefresh != null)
                     {
-
                         try
                         {
                             ValidateToken(tokenHandler, tokenRefresh, key);
                             currentUser = await userManager.FindByIdAsync(_userId);
-                            var newToken = await tokenClaimsService.GenerateRefreshTokenAsync((await userAuthentication.GetCurrentSessionUser()).Email);
+                            var newToken = await tokenClaimsService.GenerateRefreshTokenAsync((currentUser).Email);
 
                             await tokenClaimsService.SaveRefreshTokenForUser(currentUser, newToken);
                             context.Request.Headers.Add("Authorization",newToken);
@@ -88,6 +87,11 @@ namespace WebApi.Helpers
 
         private void ValidateToken(JwtSecurityTokenHandler tokenHandler, string token, byte[] key)
         {
+
+            var tokenRead = tokenHandler.ReadToken(token);
+            var tokenJWT = tokenRead as JwtSecurityToken;
+            if (tokenJWT != null) _userId = tokenJWT.Claims.FirstOrDefault(x => x.Type == "id").Value.ToString();
+
             tokenHandler.ValidateToken(token, new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,

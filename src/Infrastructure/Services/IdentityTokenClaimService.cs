@@ -28,8 +28,10 @@ namespace Infrastructure.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-                Expires = DateTime.UtcNow.AddHours(1),
-                // Expires = TimeZone.CurrentTimeZone.ToLocalTime(DateTime.UtcNow).ToLocalTime().AddHours(1),
+                // Expires = DateTime.UtcNow.AddSeconds(30),
+                Expires = DateTime.Now.AddHours(1),
+
+                // Expires = TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now).ToLocalTime().AddSeconds(30),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -44,8 +46,10 @@ namespace Infrastructure.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-                Expires = DateTime.UtcNow.AddHours(1),
-                // Expires = TimeZone.CurrentTimeZone.ToLocalTime(DateTime.UtcNow).ToLocalTime().AddHours(1),
+                // Expires = DateTime.UtcNow.AddHours(1),
+                Expires = DateTime.Now.AddHours(1),
+
+                // Expires = TimeZone.CurrentTimeZone.ToLocalTime(DateTime.Now).ToLocalTime().AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

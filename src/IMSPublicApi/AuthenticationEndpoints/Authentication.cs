@@ -68,10 +68,10 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                 if (result.Succeeded)
                 {
                     // var jwttoken = await _tokenClaimsService.GetTokenAsync(user.Email);
-                    var jwtRefreshtoken = await _tokenClaimsService.GenerateRefreshTokenAsync(user.Email);
-                    await _tokenClaimsService.SaveRefreshTokenForUser(user, jwtRefreshtoken);
+                    var jwtToken = await _tokenClaimsService.GetTokenAsync(user.Email);
+                    await _tokenClaimsService.SaveRefreshTokenForUser(user, jwtToken);
 
-                    response.Token = jwtRefreshtoken;
+                    response.Token = jwtToken;
                     response.Verbose = "Success";
                     var userGet = await _userRoleModificationService.UserManager.FindByIdAsync(user.Id);
                     var roleIdentity = await _userRoleModificationService.RoleManager.FindByNameAsync(roles[0]);
