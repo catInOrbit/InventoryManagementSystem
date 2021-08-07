@@ -105,6 +105,29 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                     b.ToTable("SystemUser");
                 });
 
+            modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.CompanyInfo", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CompanyProfilePic")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CompanyInfo");
+                });
+
             modelBuilder.Entity("InventoryManagementSystem.ApplicationCore.Entities.Notification", b =>
                 {
                     b.Property<string>("Id")
@@ -378,6 +401,9 @@ namespace InventoryManagementSystem.PublicApi.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PkgId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProductVariantName")

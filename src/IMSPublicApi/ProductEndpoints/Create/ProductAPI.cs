@@ -290,7 +290,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                 
                 var productVariant = new ProductVariant
                 {
-                    Name = productVairantUpdateRequestInfo.Name,
+                    Name = product.Name,
                     Sku = productVairantUpdateRequestInfo.Sku,
                     IsVariantType = product.IsVariantType,
                     Barcode = "BC" + Guid.NewGuid().ToString().Substring(0, 10).ToUpper(),
@@ -434,7 +434,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
         public override async Task<ActionResult> HandleAsync(ProductImageRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Update))
-            return Unauthorized();
+                 return Unauthorized();
 
            var product = await _asyncRepository.GetByIdAsync(request.Id);
            if (product == null)

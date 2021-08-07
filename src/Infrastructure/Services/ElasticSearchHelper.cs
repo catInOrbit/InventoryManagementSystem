@@ -62,7 +62,6 @@ namespace Infrastructure.Services
                 s => s.Size(2000).Index(_index).Query(q => q.Nested(n =>
                     n.Path(p => p.ProductVariantInfos).Query(d =>
                         d.QueryString(d => d.Query('*' + _searchQuery + '*'))))));
-
             return responseElastic;
         }
         

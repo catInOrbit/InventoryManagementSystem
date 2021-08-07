@@ -21,5 +21,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public static string CATEGORY = "Category";
         public static string LOCATION = "Location";
         public static string REPORT = "Report";
+        public static string COMPANY_INFO = "Company_Info";
+
     }
 }

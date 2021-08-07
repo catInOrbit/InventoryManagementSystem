@@ -20,6 +20,7 @@ namespace Infrastructure.Identity.DbContexts
             
         }
 
+        public DbSet<CompanyInfo> CompanyInfo { get; set; }
         public DbSet<Brand> Brand { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<Supplier> Supplier { get; set; }

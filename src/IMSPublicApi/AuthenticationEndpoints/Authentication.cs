@@ -24,20 +24,23 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
     public class Authentication : BaseAsyncEndpoint.WithRequest<AuthenticateRequest>.WithResponse<AuthenticateResponse>
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
+
         private readonly ITokenClaimsService _tokenClaimsService;
         private readonly IUserSession _userAuthentication;
         private readonly IRedisRepository _redisRepository;
+        private readonly IAsyncRepository<CompanyInfo> _companyRepository;
 
         private readonly UserRoleModificationService _userRoleModificationService;
         public UserInfoAuth UserInfo { get; set; } = new UserInfoAuth();
 
         public Authentication(SignInManager<ApplicationUser> signInManager,
-            ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IUserSession userAuthentication, IRedisRepository redisRepository)
+            ITokenClaimsService tokenClaimsService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IUserSession userAuthentication, IRedisRepository redisRepository, IAsyncRepository<CompanyInfo> companyRepository)
         {
             _signInManager = signInManager;
             _tokenClaimsService = tokenClaimsService;
             _userAuthentication = userAuthentication;
             _redisRepository = redisRepository;
+            _companyRepository = companyRepository;
             _userRoleModificationService = new UserRoleModificationService(roleManager, userManager);
         }
 
@@ -94,10 +97,11 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
 
                     await _userAuthentication.SaveUserAsync(user, roles[0]);
                     await _redisRepository.AddUserToGroup(roles[0], new NotificationUser(user, roles[0]));
-                    
+
+                    response.CompanyInfo = await _companyRepository.GetByIdAsync("CPM_INFO");
                     return Ok(response);
                 }
-
+                
             return Unauthorized(response);
 
         }
