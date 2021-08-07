@@ -13,8 +13,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
             Id = Guid.NewGuid().ToString();
         }
 
-        [NotMapped]
-        public string PackageId { get; set; }
+        public string PkgId { get; set; }
         // [JsonIgnore] public virtual Package Package { get; set; }
         
         public string ProductVariantName { get; set; }

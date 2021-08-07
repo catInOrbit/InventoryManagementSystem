@@ -154,6 +154,9 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints.Search
            {
                receiveingOrderReceivedOrderItem.ProductVariantName =
                    receiveingOrderReceivedOrderItem.ProductVariant.Name;
+               receiveingOrderReceivedOrderItem.VariantSku = receiveingOrderReceivedOrderItem.ProductVariant.Sku;
+               receiveingOrderReceivedOrderItem.VariantBarcode =
+                   receiveingOrderReceivedOrderItem.ProductVariant.Barcode;
            }
            return Ok(response);
        }

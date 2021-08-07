@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
@@ -17,11 +18,13 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
     {
         private readonly IAsyncRepository<StockTakeOrder> _asyncRepository;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IRedisRepository _redisRepository;
 
-        public GetStockTakeOrderById(IAuthorizationService authorizationService, IAsyncRepository<StockTakeOrder> asyncRepository)
+        public GetStockTakeOrderById(IAuthorizationService authorizationService, IAsyncRepository<StockTakeOrder> asyncRepository, IRedisRepository redisRepository)
         {
             _authorizationService = authorizationService;
             _asyncRepository = asyncRepository;
+            _redisRepository = redisRepository;
         }
         
         [HttpGet("api/stocktake/{Id}")]
@@ -38,10 +41,13 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints.Search
             
             var response = new STIdResponse();
             var order = await _asyncRepository.GetByIdAsync(request.Id);
+            var stockTakeMessages = await _redisRepository.GetStockTakeAdjustMessage();
             foreach (var stockTakeGroupLocation in order.GroupLocations)
             {
                 foreach (var stockTakeItem in stockTakeGroupLocation.CheckItems)
+                {
                     stockTakeItem.IsShowingPackageId = true;
+                }
             }
             response.IsDisplayingAll = false;
             response.SingleResult = order;

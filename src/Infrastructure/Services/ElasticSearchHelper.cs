@@ -53,6 +53,19 @@ namespace Infrastructure.Services
             }
         }
         
+        public async Task<ISearchResponse<ProductSearchIndex>> GetProductsNested()
+        {
+            ISearchResponse<ProductSearchIndex> responseElastic;
+         
+            responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
+            (
+                s => s.Size(2000).Index(_index).Query(q => q.Nested(n =>
+                    n.Path(p => p.ProductVariantInfos).Query(d =>
+                        d.QueryString(d => d.Query('*' + _searchQuery + '*'))))));
+
+            return responseElastic;
+        }
+        
         public async Task<ISearchResponse<T>> GetDocumentsOldestFirst()
         {
             ISearchResponse<T> responseElastic;

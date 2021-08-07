@@ -173,11 +173,11 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                 
                 
                 ISearchResponse<ProductSearchIndex> responseElastic;
-
+                ElasticSearchHelper<ProductSearchIndex> elasticSearchHelper = new ElasticSearchHelper<ProductSearchIndex>(_elasticClient, request.SearchQuery,
+                    ElasticIndexConstant.PRODUCT_INDICES);
                 if (!request.SearchNameOnly)
                 {
-                    ElasticSearchHelper<ProductSearchIndex> elasticSearchHelper = new ElasticSearchHelper<ProductSearchIndex>(_elasticClient, request.SearchQuery,
-                        ElasticIndexConstant.PRODUCT_INDICES);
+                  
                 
                     responseElastic = await elasticSearchHelper.GetDocuments();
     
@@ -191,6 +191,11 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                             Query(q =>q.
                                 QueryString(d =>d.Fields(f => 
                                     f.Field(p => p.Name)).Query('*' + request.SearchQuery + '*'))));
+
+                    // if (responseElastic.Documents.Count == 0)
+                    // {
+                    //     responseElastic = await elasticSearchHelper.GetProductsNested();
+                    // }
                 }
                 
         

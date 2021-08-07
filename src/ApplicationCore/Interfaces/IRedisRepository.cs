@@ -30,8 +30,12 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         Task<bool> AddStockTakeAdjustMessage(StockTakeAdjustItemInfo stockTakeAdjustItemInfo);
         
         Task<List<StockTakeAdjustItemInfo>> GetStockTakeAdjustMessage();
+        Task<StockTakeAdjustInfo> GetStockTakeAdjustInfo();
+
         Task<bool> DeleteStockTakeAdjustMessage();
-        
+        Task<bool> ReUpdateStockTakeAdjustMessage(StockTakeAdjustInfo stockTakeAdjustInfo);
+
+
         Task<bool> RemoveProductUpdateMessage( string productVariantId);
 
         Task<List<ProductUpdateMessage>> GetProductUpdateMessage();

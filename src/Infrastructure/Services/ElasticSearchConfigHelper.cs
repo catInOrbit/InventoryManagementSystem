@@ -104,7 +104,8 @@ namespace Infrastructure.Services
                 index 
                     => index.Map<ProductSearchIndex>(x 
                         => x.AutoMap().Properties(ps 
-                            => ps.Completion(c 
+                            => ps.Nested<ProductVariantInfoInProductIndex>(ps => 
+                                ps.Name(nn => nn.ProductVariantInfos).AutoMap()).Completion(c 
                                 => c.Name(n => n.Suggest))))
             );
             

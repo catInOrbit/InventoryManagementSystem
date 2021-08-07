@@ -183,6 +183,12 @@ namespace Infrastructure.Services
             return message.StockTakeAdjustItemsInfos;
         }
 
+        public async Task<StockTakeAdjustInfo> GetStockTakeAdjustInfo()
+        {
+            var data = await database.StringGetAsync("StockTakeMessage");
+            return JsonSerializer.Deserialize<StockTakeAdjustInfo>(data);
+        }
+
         public async Task<bool> DeleteStockTakeAdjustMessage()
         {
             var data = await database.StringGetAsync("StockTakeMessage");
@@ -190,6 +196,11 @@ namespace Infrastructure.Services
             message.StockTakeAdjustItemsInfos.Clear();
             
             return await database.StringSetAsync("StockTakeMessage", JsonSerializer.Serialize(message));
+        }
+
+        public async Task<bool> ReUpdateStockTakeAdjustMessage(StockTakeAdjustInfo stockTakeAdjustInfo)
+        {
+            return await database.StringSetAsync("StockTakeMessage", JsonSerializer.Serialize(stockTakeAdjustInfo));
         }
 
 

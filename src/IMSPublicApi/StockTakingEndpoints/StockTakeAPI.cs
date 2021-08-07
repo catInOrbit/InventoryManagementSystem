@@ -128,7 +128,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                     storderCheckItem.Note = request.Note;
                     storderCheckItem.ActualQuantity = request.ActualQuantity;
 
-                    var packageGet = await _packageAsyncRepository.GetByIdAsync(storderCheckItem.PackageId);
+                    var packageGet = await _packageAsyncRepository.GetByIdAsync(storderCheckItem.PkgId);
                     var productVariant = await _pvasyncRepository.GetByIdAsync(packageGet.ProductVariantId);
                     
                     var packages = await _asyncRepository.GetPackagesFromProductVariantId(productVariant.Id);
@@ -232,7 +232,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              {
                  foreach (var stockTakeItem in stockTakeGroupLocation.CheckItems)
                  {
-                     var package = await _packageAsyncRepository.GetByIdAsync(stockTakeItem.PackageId);
+                     var package = await _packageAsyncRepository.GetByIdAsync(stockTakeItem.PkgId);
                      if (stockTakeItem.ActualQuantity != package.Quantity)
                          response.MismatchQuantityPackageIds.Add(package.Id);
                      stockTakeItem.StockTakeOrderId = stockTakeOrder.Id;
@@ -240,7 +240,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
 
                      await _redisRepository.AddStockTakeAdjustMessage(new StockTakeAdjustItemInfo()
                      {
-                         PackageId = stockTakeItem.PackageId,
+                         PackageId = stockTakeItem.PkgId,
                          QuantityToAdjust = stockTakeItem.ActualQuantity,
                          StockTakeId = stockTakeOrder.Id,
                          StockTakeItemId = stockTakeItem.Id
@@ -326,7 +326,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                  return NotFound("Can not find StockTake of id :" + request.StockTakeId);
              
              var stockTakeMessageGroup = await _redisRepository.GetStockTakeAdjustMessage();
-             
+             var stockTakeAdjustInfo = await _redisRepository.GetStockTakeAdjustInfo();
              // foreach (var stockTakeGroupLocation in stockTakeOrder.GroupLocations)
              // {
              //     foreach (var stockTakeItem in stockTakeGroupLocation.CheckItems)
@@ -344,23 +344,34 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
              //             quantityUpdateProductDict.Add(productVariant, package.Quantity);
              //     }
              // }
-             
-             foreach (var stockTakeAdjustItemInfo in stockTakeMessageGroup)
-             {
-                 var package = await _packageAsyncRepository.GetByIdAsync(stockTakeAdjustItemInfo.PackageId);
-                 package.Quantity = stockTakeAdjustItemInfo.QuantityToAdjust;
-                 
-                 var productVariant = package.ProductVariant;
-                 
-                 // productVariant.StorageQuantity += package.Quantity;
-                 
-                 if (quantityUpdateProductDict.ContainsKey(productVariant))
-                     quantityUpdateProductDict[productVariant] += package.Quantity;
-                 else
-                     quantityUpdateProductDict.Add(productVariant, package.Quantity);
-             }
 
-             await _redisRepository.DeleteStockTakeAdjustMessage();
+             List<StockTakeAdjustItemInfo> deleteIndex = new List<StockTakeAdjustItemInfo>();
+             for (var i = 0; i < stockTakeAdjustInfo.StockTakeAdjustItemsInfos.Count; i++)
+             {
+                 if (stockTakeAdjustInfo.StockTakeAdjustItemsInfos[i].StockTakeId == stockTakeOrder.Id)
+                 {
+                     var package = await _packageAsyncRepository.GetByIdAsync(stockTakeAdjustInfo.StockTakeAdjustItemsInfos[i].PackageId);
+                     package.Quantity = stockTakeAdjustInfo.StockTakeAdjustItemsInfos[i].QuantityToAdjust;
+                 
+                     var productVariant = package.ProductVariant;
+                 
+                     // productVariant.StorageQuantity += package.Quantity;
+                 
+                     if (quantityUpdateProductDict.ContainsKey(productVariant))
+                         quantityUpdateProductDict[productVariant] += package.Quantity;
+                     else
+                         quantityUpdateProductDict.Add(productVariant, package.Quantity);    
+                     
+                     deleteIndex.Add(stockTakeAdjustInfo.StockTakeAdjustItemsInfos[i]);
+                 }
+             }
+             
+             foreach (var stockTakeAdjustItemInfo in deleteIndex)
+             {
+                 stockTakeAdjustInfo.StockTakeAdjustItemsInfos.Remove(stockTakeAdjustItemInfo);
+             }
+             
+             await _redisRepository.ReUpdateStockTakeAdjustMessage(stockTakeAdjustInfo);
              
              foreach (var keyValuePair in quantityUpdateProductDict)
              {
