@@ -62,7 +62,7 @@ namespace InventoryManagementSystem.PublicApi.EmailEndpoints
                     
                     foreach (var orderItem in po.PurchaseOrderProduct)
                         orderItem.IsShowingProductVariant = true;
-
+                    await _emailSender.SendEmailAsync(message);
                     return Ok(response);
                 }
                 catch

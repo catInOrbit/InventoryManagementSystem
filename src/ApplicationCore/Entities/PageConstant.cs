@@ -13,8 +13,11 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
 
         public static string PRICEQUOTEORDER = "PriceQuoteOrder";
         public static string PURCHASEORDER = "PurchaseOrder";
+        public static string PURCHASEORDER_SEARCH = "PurchaseOrder_Search";
         public static string REQUISITION = "Requisition";
         public static string SUPPLIER = "Supplier";
+        public static string SUPPLIER_SEARCH = "Supplier_Search";
+
         public static string GOODSRECEIPT = "GoodsReceipt";
         public static string TRANSACTION = "Transaction";
         public static string REGISTRATION = "Registration";

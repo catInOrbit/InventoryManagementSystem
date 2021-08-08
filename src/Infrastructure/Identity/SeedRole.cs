@@ -356,7 +356,8 @@ namespace Infrastructure.Identity
                 
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.REQUISITION, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PRODUCT_SEARCH, ""));
-
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PURCHASEORDER_SEARCH, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.SUPPLIER_SEARCH, ""));
             }
             
             if (!await roleManager.RoleExistsAsync(AuthorizedRoleConstants.ACCOUNTANT))
@@ -378,7 +379,8 @@ namespace Infrastructure.Identity
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.STOCKTAKEORDER, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PRODUCT_SEARCH, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PACKAGE_SEARCH, ""));
-
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.SUPPLIER_SEARCH, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PURCHASEORDER_SEARCH, ""));
             }
             
             if (!await roleManager.RoleExistsAsync(AuthorizedRoleConstants.STOCKKEEPER))
@@ -397,7 +399,7 @@ namespace Infrastructure.Identity
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.GOODSISSUE, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PRODUCT_SEARCH, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PACKAGE_SEARCH, ""));
-
+                
             }
           
             return IR;

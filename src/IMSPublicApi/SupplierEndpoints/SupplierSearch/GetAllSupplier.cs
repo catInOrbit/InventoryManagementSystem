@@ -80,7 +80,7 @@ namespace InventoryManagementSystem.PublicApi.SupplierEndpoints.SupplierSearch
         ]
         public override async Task<ActionResult<GetSupplierResponse>> HandleAsync([FromQuery]SupplierSearchRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.SUPPLIER, UserOperations.Read))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.SUPPLIER_SEARCH, UserOperations.Read))
                 return Unauthorized();
             
             var response = new GetSupplierResponse();
