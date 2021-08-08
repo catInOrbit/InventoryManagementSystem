@@ -56,6 +56,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             user.DateOfBirth = request.DateOfBirth;
             user.DateOfBirthNormalizedString = string.Format("{0}-{1}-{2}", request.DateOfBirth.Month,
                 request.DateOfBirth.Day, request.DateOfBirth.Year);
+            user.ProfileImageLink = request.ProfileImageLink;
 
             await _userRoleModificationService.UserManager.UpdateAsync(user);
             

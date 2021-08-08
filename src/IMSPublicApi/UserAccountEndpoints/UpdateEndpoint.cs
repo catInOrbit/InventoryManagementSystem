@@ -96,9 +96,10 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
         {
             var response = new UpdateResponse();
 
-            var userSystemGet = await _userAuthentication.GetCurrentSessionUser();
+            // var userSystemGet = await _userAuthentication.GetCurrentSessionUser();
+            var userSystemGet = await _userManager.FindByIdAsync(request.UserId);
             if(userSystemGet == null)
-                return Unauthorized(response);  
+                return NotFound("Can find user with id: " + request.UserId);  
 
             var userInfoGet = await _userManager.FindByIdAsync(userSystemGet.Id);
 

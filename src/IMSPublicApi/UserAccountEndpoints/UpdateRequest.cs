@@ -19,6 +19,7 @@ namespace InventoryManagementSystem.PublicApi.UserAccountEndpoints
     
     public class UpdateImageRequest : BaseRequest
     {
+        public string UserId { get; set; }
         public string ProfileImageLink { get; set; }
     }
 }

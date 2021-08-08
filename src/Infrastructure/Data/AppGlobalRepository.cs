@@ -21,15 +21,10 @@
     public class AppGlobalRepository<T> : IAsyncRepository<T> where T : BaseEntity
     {
         private readonly IdentityAndProductDbContext _identityAndProductDbContext;
-        private readonly IElasticClient _elasticClient;
-        private readonly ILogger<AppGlobalRepository<T>> _logger;
 
-
-        public AppGlobalRepository(IdentityAndProductDbContext identityAndProductDbContext, IElasticClient elasticClient, ILogger<AppGlobalRepository<T>> logger)
+        public AppGlobalRepository(IdentityAndProductDbContext identityAndProductDbContext)
         {
             _identityAndProductDbContext = identityAndProductDbContext;
-            _elasticClient = elasticClient;
-            _logger = logger;
         }
 
         public async Task<T> GetByIdAsync(string id, CancellationToken cancellationToken = default)
