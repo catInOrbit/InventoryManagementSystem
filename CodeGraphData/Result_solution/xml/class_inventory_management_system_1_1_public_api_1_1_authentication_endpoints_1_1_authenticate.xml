@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate" kind="class" prot="public">
+    <compoundname>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::Authenticate</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">BaseAsyncEndpointWithRequest&lt; AuthenticateRequest &gt;WithResponse&lt; AuthenticateResponse &gt;</basecompoundref>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1a214b6a2a16688f16e8acc9ecdac539e8" prot="private" static="no" mutable="no">
+        <type>readonly SignInManager&lt; IdentityUser &gt;</type>
+        <definition>readonly SignInManager&lt;IdentityUser&gt; InventoryManagementSystem.PublicApi.AuthenticationEndpoints.Authenticate._signInManager</definition>
+        <argsstring></argsstring>
+        <name>_signInManager</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/Authenticate.cs" line="15" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/Authenticate.cs" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1a9a9d9d4522923929177c53353e9f55ab" prot="private" static="no" mutable="no">
+        <type>readonly <ref refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_token_claims_service" kindref="compound">ITokenClaimsService</ref></type>
+        <definition>readonly ITokenClaimsService InventoryManagementSystem.PublicApi.AuthenticationEndpoints.Authenticate._tokenClaimsService</definition>
+        <argsstring></argsstring>
+        <name>_tokenClaimsService</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/Authenticate.cs" line="16" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/Authenticate.cs" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1a533349942e66853a679220234159fb65" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>InventoryManagementSystem.PublicApi.AuthenticationEndpoints.Authenticate.Authenticate</definition>
+        <argsstring>(SignInManager&lt; IdentityUser &gt; signInManager, ITokenClaimsService tokenClaimsService)</argsstring>
+        <name>Authenticate</name>
+        <param>
+          <type>SignInManager&lt; IdentityUser &gt;</type>
+          <declname>signInManager</declname>
+        </param>
+        <param>
+          <type><ref refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_token_claims_service" kindref="compound">ITokenClaimsService</ref></type>
+          <declname>tokenClaimsService</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/Authenticate.cs" line="18" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/Authenticate.cs" bodystart="18" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1abdff97564d0dcb4874017d78d3e9e033" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>override async Task&lt; ActionResult&lt; <ref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response" kindref="compound">AuthenticateResponse</ref> &gt; &gt;</type>
+        <definition>override async Task&lt;ActionResult&lt;AuthenticateResponse&gt; &gt; InventoryManagementSystem.PublicApi.AuthenticationEndpoints.Authenticate.HandleAsync</definition>
+        <argsstring>(AuthenticateRequest request, CancellationToken cancellationToken)</argsstring>
+        <name>HandleAsync</name>
+        <param>
+          <type><ref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request" kindref="compound">AuthenticateRequest</ref></type>
+          <declname>request</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/Authenticate.cs" line="32" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/Authenticate.cs" bodystart="32" bodyend="53"/>
+        <references refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1ac2ad0cd8ef8cb4ed8249ed6a67083c50">InventoryManagementSystem.PublicApi.BaseMessage.CorrelationId</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="11">
+        <label>BaseAsyncEndpointWithRequest&lt; AuthenticateRequest &gt;WithResponse&lt; AuthenticateResponse &gt;</label>
+      </node>
+      <node id="10">
+        <label>InventoryManagementSystem.PublicApi.AuthenticationEndpoints.Authenticate</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="14">
+        <label>Microsoft.eShopWeb.ApplicationCore.Interfaces.ITokenClaimsService</label>
+        <link refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_token_claims_service"/>
+      </node>
+      <node id="13">
+        <label>BaseAsyncEndpointWithRequest&lt; AuthenticateRequest &gt;WithResponse&lt; AuthenticateResponse &gt;</label>
+      </node>
+      <node id="12">
+        <label>InventoryManagementSystem.PublicApi.AuthenticationEndpoints.Authenticate</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>_tokenClaimsService</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/Authenticate.cs" line="14" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/Authenticate.cs" bodystart="11" bodyend="56"/>
+    <listofallmembers>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1a214b6a2a16688f16e8acc9ecdac539e8" prot="private" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::Authenticate</scope><name>_signInManager</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1a9a9d9d4522923929177c53353e9f55ab" prot="private" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::Authenticate</scope><name>_tokenClaimsService</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1a533349942e66853a679220234159fb65" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::Authenticate</scope><name>Authenticate</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_1abdff97564d0dcb4874017d78d3e9e033" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::Authenticate</scope><name>HandleAsync</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

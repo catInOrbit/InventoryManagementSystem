@@ -1,0 +1,52 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Ardalis.Specification" Version="4.2.0" />
+      <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" Version="4.2.0" />
+      <PackageReference Include="CsvHelper" Version="27.0.4" />
+      <PackageReference Include="Google.Apis.Auth" Version="1.52.0" />
+      <PackageReference Include="Google.Apis.Bigquery.v2" Version="1.52.0.2340" />
+      <PackageReference Include="Google.Apis.Sheets.v4" Version="1.52.0.2371" />
+      <PackageReference Include="Google.Cloud.BigQuery.V2" Version="2.2.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.5" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
+      <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+      <PackageReference Include="Microsoft.AspNetCore.SignalR.Core" Version="1.1.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.5" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.5" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.5">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="NEST" Version="7.13.0" />
+      <PackageReference Include="StackExchange.Redis" Version="2.2.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ApplicationCore\ApplicationCore.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Authorization, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+        <HintPath>..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\5.0.6\Microsoft.AspNetCore.Authorization.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="imswarehouse-70a47bcd9c79.json">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
+</Project>

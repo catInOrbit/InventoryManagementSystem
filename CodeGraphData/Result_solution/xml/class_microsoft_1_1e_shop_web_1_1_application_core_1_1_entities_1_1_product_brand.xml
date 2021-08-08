@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand" kind="class" prot="public">
+    <compoundname>Microsoft::eShopWeb::ApplicationCore::Entities::ProductBrand</compoundname>
+    <basecompoundref refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_base_entity" prot="public" virt="non-virtual">Microsoft.eShopWeb.ApplicationCore.Entities.BaseEntity</basecompoundref>
+      <sectiondef kind="property">
+      <memberdef kind="property" id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand_1a06a04c55882520bd09938cb000a1525e" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string Microsoft.eShopWeb.ApplicationCore.Entities.ProductBrand.Brand</definition>
+        <argsstring></argsstring>
+        <name>Brand</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Entities/ProductBrand.cs" line="7" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Entities/ProductBrand.cs" bodystart="7" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand_1abef85e1231cf12742cc1619879e27fe6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Microsoft.eShopWeb.ApplicationCore.Entities.ProductBrand.ProductBrand</definition>
+        <argsstring>(string brand)</argsstring>
+        <name>ProductBrand</name>
+        <param>
+          <type>string</type>
+          <declname>brand</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Entities/ProductBrand.cs" line="8" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Entities/ProductBrand.cs" bodystart="8" bodyend="11"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="156">
+        <label>Microsoft.eShopWeb.ApplicationCore.Entities.ProductBrand</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand"/>
+        <childnode refid="157" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="157">
+        <label>BaseEntity</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_base_entity"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="158">
+        <label>Microsoft.eShopWeb.ApplicationCore.Entities.ProductBrand</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand"/>
+        <childnode refid="159" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="159">
+        <label>BaseEntity</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_base_entity"/>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/Entities/ProductBrand.cs" line="6" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Entities/ProductBrand.cs" bodystart="5" bodyend="12"/>
+    <listofallmembers>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand_1a06a04c55882520bd09938cb000a1525e" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Entities::ProductBrand</scope><name>Brand</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_base_entity_1aa04e812984e24978c2e8d1ef287b90e6" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Entities::ProductBrand</scope><name>Id</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_product_brand_1abef85e1231cf12742cc1619879e27fe6" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Entities::ProductBrand</scope><name>ProductBrand</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

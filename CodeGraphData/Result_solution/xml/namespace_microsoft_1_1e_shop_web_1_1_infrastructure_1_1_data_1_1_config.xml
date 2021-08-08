@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="namespace_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config" kind="namespace">
+    <compoundname>Microsoft::eShopWeb::Infrastructure::Data::Config</compoundname>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_brand_configuration" prot="public">Microsoft::eShopWeb::Infrastructure::Data::Config::CatalogBrandConfiguration</innerclass>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_item_configuration" prot="public">Microsoft::eShopWeb::Infrastructure::Data::Config::CatalogItemConfiguration</innerclass>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_config_1_1_catalog_type_configuration" prot="public">Microsoft::eShopWeb::Infrastructure::Data::Config::CatalogTypeConfiguration</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/Config/CatalogBrandConfiguration.cs" line="6" column="1"/>
+  </compounddef>
+</doxygen>

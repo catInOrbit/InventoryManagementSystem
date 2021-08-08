@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="dir_35cb2d1382b0776e30b0bfe91f143d6a" kind="dir">
+    <compoundname>C:/InventoryManagementSystem/src/Infrastructure/Identity</compoundname>
+    <innerdir refid="dir_2d3fc79343c2a709779515f6dda2b820">C:/InventoryManagementSystem/src/Infrastructure/Identity/Migrations</innerdir>
+    <innerfile refid="_app_identity_db_context_8cs">AppIdentityDbContext.cs</innerfile>
+    <innerfile refid="_app_identity_db_context_seed_8cs">AppIdentityDbContextSeed.cs</innerfile>
+    <innerfile refid="_identity_token_claim_service_8cs">IdentityTokenClaimService.cs</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Identity/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer" kind="class" prot="public">
+    <compoundname>Microsoft::eShopWeb::ApplicationCore::Services::UriComposer</compoundname>
+    <basecompoundref refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_uri_composer" prot="public" virt="non-virtual">Microsoft.eShopWeb.ApplicationCore.Interfaces.IUriComposer</basecompoundref>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer_1ad5bd1290a5f5562865b912c9c982c885" prot="private" static="no" mutable="no">
+        <type>readonly <ref refid="class_microsoft_1_1e_shop_web_1_1_catalog_settings" kindref="compound">CatalogSettings</ref></type>
+        <definition>readonly CatalogSettings Microsoft.eShopWeb.ApplicationCore.Services.UriComposer._catalogSettings</definition>
+        <argsstring></argsstring>
+        <name>_catalogSettings</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Services/UriComposer.cs" line="7" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Services/UriComposer.cs" bodystart="7" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer_1a20db62de7918729f20b21c1ce5bab936" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Microsoft.eShopWeb.ApplicationCore.Services.UriComposer.UriComposer</definition>
+        <argsstring>(CatalogSettings catalogSettings)</argsstring>
+        <name>UriComposer</name>
+        <param>
+          <type><ref refid="class_microsoft_1_1e_shop_web_1_1_catalog_settings" kindref="compound">CatalogSettings</ref></type>
+          <declname>catalogSettings</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Services/UriComposer.cs" line="9" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer_1ab8397bd1806b9e0935a31b617f1a1156" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>string</type>
+        <definition>string Microsoft.eShopWeb.ApplicationCore.Services.UriComposer.ComposePicUri</definition>
+        <argsstring>(string uriTemplate)</argsstring>
+        <name>ComposePicUri</name>
+        <reimplements refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_uri_composer_1a78f59c8126f4b336db8067f85cbbd622">ComposePicUri</reimplements>
+        <param>
+          <type>string</type>
+          <declname>uriTemplate</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Services/UriComposer.cs" line="11" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Services/UriComposer.cs" bodystart="11" bodyend="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="189">
+        <label>Microsoft.eShopWeb.ApplicationCore.Services.UriComposer</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer"/>
+        <childnode refid="190" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="190">
+        <label>IUriComposer</label>
+        <link refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_uri_composer"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="191">
+        <label>Microsoft.eShopWeb.ApplicationCore.Services.UriComposer</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer"/>
+        <childnode refid="192" relation="public-inheritance">
+        </childnode>
+        <childnode refid="193" relation="usage">
+          <edgelabel>_catalogSettings</edgelabel>
+        </childnode>
+      </node>
+      <node id="193">
+        <label>Microsoft.eShopWeb.CatalogSettings</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_catalog_settings"/>
+      </node>
+      <node id="192">
+        <label>IUriComposer</label>
+        <link refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_uri_composer"/>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/Services/UriComposer.cs" line="6" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Services/UriComposer.cs" bodystart="5" bodyend="15"/>
+    <listofallmembers>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer_1ad5bd1290a5f5562865b912c9c982c885" prot="private" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Services::UriComposer</scope><name>_catalogSettings</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer_1ab8397bd1806b9e0935a31b617f1a1156" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Services::UriComposer</scope><name>ComposePicUri</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_services_1_1_uri_composer_1a20db62de7918729f20b21c1ce5bab936" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Services::UriComposer</scope><name>UriComposer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

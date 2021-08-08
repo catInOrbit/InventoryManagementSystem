@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_microsoft_1_1e_shop_web_1_1_json_extensions" kind="class" prot="public">
+    <compoundname>Microsoft::eShopWeb::JsonExtensions</compoundname>
+      <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="class_microsoft_1_1e_shop_web_1_1_json_extensions_1a50e73b5b99222c89e63ac18d1d51bfeb" prot="private" static="yes" mutable="no">
+        <type>readonly JsonSerializerOptions</type>
+        <definition>readonly JsonSerializerOptions Microsoft.eShopWeb.JsonExtensions._jsonOptions</definition>
+        <argsstring></argsstring>
+        <name>_jsonOptions</name>
+        <initializer>= new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Extensions/JsonExtensions.cs" line="7" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Extensions/JsonExtensions.cs" bodystart="7" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_json_extensions_1a502dedd5044c4ca7817a1e7570736da3" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>T</type>
+        <definition>static T Microsoft.eShopWeb.JsonExtensions.FromJson&lt; T &gt;</definition>
+        <argsstring>(this string json)</argsstring>
+        <name>FromJson&lt; T &gt;</name>
+        <param>
+          <type>this string</type>
+          <declname>json</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Extensions/JsonExtensions.cs" line="12" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_json_extensions_1abbceb422228e9f73f6d0b06cf2ebe724" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>string</type>
+        <definition>static string Microsoft.eShopWeb.JsonExtensions.ToJson&lt; T &gt;</definition>
+        <argsstring>(this T obj)</argsstring>
+        <name>ToJson&lt; T &gt;</name>
+        <param>
+          <type>this T</type>
+          <declname>obj</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Extensions/JsonExtensions.cs" line="15" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/Extensions/JsonExtensions.cs" line="6" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Extensions/JsonExtensions.cs" bodystart="5" bodyend="17"/>
+    <listofallmembers>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_json_extensions_1a50e73b5b99222c89e63ac18d1d51bfeb" prot="private" virt="non-virtual"><scope>Microsoft::eShopWeb::JsonExtensions</scope><name>_jsonOptions</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_json_extensions_1a502dedd5044c4ca7817a1e7570736da3" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::JsonExtensions</scope><name>FromJson&lt; T &gt;</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_json_extensions_1abbceb422228e9f73f6d0b06cf2ebe724" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::JsonExtensions</scope><name>ToJson&lt; T &gt;</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

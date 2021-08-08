@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_inventory_management_system_1_1_public_api_1_1_program" kind="class" prot="public">
+    <compoundname>InventoryManagementSystem::PublicApi::Program</compoundname>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_program_1aa4f0df81f56abb5925eaa8025f94e016" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>async Task</type>
+        <definition>static async Task InventoryManagementSystem.PublicApi.Program.Main</definition>
+        <argsstring>(string[] args)</argsstring>
+        <name>Main</name>
+        <param>
+          <type>string[]</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Program.cs" line="15" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Program.cs" bodystart="15" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_program_1a5fc837e5093725ae729bf21b2584f2a9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>IHostBuilder</type>
+        <definition>static IHostBuilder InventoryManagementSystem.PublicApi.Program.CreateHostBuilder</definition>
+        <argsstring>(string[] args)</argsstring>
+        <name>CreateHostBuilder</name>
+        <param>
+          <type>string[]</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Program.cs" line="44" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Program.cs" line="14" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Program.cs" bodystart="13" bodyend="50"/>
+    <listofallmembers>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_program_1a5fc837e5093725ae729bf21b2584f2a9" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::Program</scope><name>CreateHostBuilder</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_program_1aa4f0df81f56abb5925eaa8025f94e016" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::Program</scope><name>Main</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

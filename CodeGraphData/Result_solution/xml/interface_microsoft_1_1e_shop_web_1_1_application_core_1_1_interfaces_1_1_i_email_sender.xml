@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_email_sender" kind="interface" prot="public">
+    <compoundname>Microsoft::eShopWeb::ApplicationCore::Interfaces::IEmailSender</compoundname>
+    <derivedcompoundref refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_email_sender" prot="public" virt="non-virtual">Microsoft.eShopWeb.Infrastructure.Services.EmailSender</derivedcompoundref>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_email_sender_1a426f191e8be27268457ca781e419ea8b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Task</type>
+        <definition>Task Microsoft.eShopWeb.ApplicationCore.Interfaces.IEmailSender.SendEmailAsync</definition>
+        <argsstring>(string email, string subject, string message)</argsstring>
+        <name>SendEmailAsync</name>
+        <reimplementedby refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_email_sender_1a6e45e41465fc4b6dc525190f3c86b4af">SendEmailAsync</reimplementedby>
+        <param>
+          <type>string</type>
+          <declname>email</declname>
+        </param>
+        <param>
+          <type>string</type>
+          <declname>subject</declname>
+        </param>
+        <param>
+          <type>string</type>
+          <declname>message</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/ApplicationCore/Interfaces/IEmailSender.cs" line="8" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="124">
+        <label>Microsoft.eShopWeb.ApplicationCore.Interfaces.IEmailSender</label>
+        <link refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_email_sender"/>
+      </node>
+      <node id="125">
+        <label>Microsoft.eShopWeb.Infrastructure.Services.EmailSender</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services_1_1_email_sender"/>
+        <childnode refid="124" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/Interfaces/IEmailSender.cs" line="7" column="1" bodyfile="C:/InventoryManagementSystem/src/ApplicationCore/Interfaces/IEmailSender.cs" bodystart="6" bodyend="9"/>
+    <listofallmembers>
+      <member refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_email_sender_1a426f191e8be27268457ca781e419ea8b" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::ApplicationCore::Interfaces::IEmailSender</scope><name>SendEmailAsync</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="namespace_inventory_management_system_1_1_public_api_1_1_registration_endpoints" kind="namespace">
+    <compoundname>InventoryManagementSystem::PublicApi::RegistrationEndpoints</compoundname>
+    <innerclass refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register" prot="public">InventoryManagementSystem::PublicApi::RegistrationEndpoints::Register</innerclass>
+    <innerclass refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request" prot="public">InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterRequest</innerclass>
+    <innerclass refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response" prot="public">InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterResponse</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" line="12" column="1"/>
+  </compounddef>
+</doxygen>

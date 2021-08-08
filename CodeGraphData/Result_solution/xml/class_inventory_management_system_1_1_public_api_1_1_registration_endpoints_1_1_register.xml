@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register" kind="class" prot="public">
+    <compoundname>InventoryManagementSystem::PublicApi::RegistrationEndpoints::Register</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">WithRequest&lt; RegisterRequest &gt;WithResponse&lt; RegisterResponse &gt;</basecompoundref>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1ae12c95155f212bfc7e5e201374b6608b" prot="private" static="no" mutable="no">
+        <type>readonly <ref refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_token_claims_service" kindref="compound">ITokenClaimsService</ref></type>
+        <definition>readonly ITokenClaimsService InventoryManagementSystem.PublicApi.RegistrationEndpoints.Register._tokenClaimsService</definition>
+        <argsstring></argsstring>
+        <name>_tokenClaimsService</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" line="15" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a0ed5122eb98256f0c6989dcf777fb5be" prot="private" static="no" mutable="no">
+        <type>readonly UserManager&lt; IdentityUser &gt;</type>
+        <definition>readonly UserManager&lt;IdentityUser&gt; InventoryManagementSystem.PublicApi.RegistrationEndpoints.Register._userManager</definition>
+        <argsstring></argsstring>
+        <name>_userManager</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" line="16" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a12cc38ea400b210f4b908521178b79b1" prot="private" static="no" mutable="no">
+        <type>readonly RoleManager&lt; IdentityRole &gt;</type>
+        <definition>readonly RoleManager&lt;IdentityRole&gt; InventoryManagementSystem.PublicApi.RegistrationEndpoints.Register._roleManager</definition>
+        <argsstring></argsstring>
+        <name>_roleManager</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" line="17" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a96e45535695c4460ee1a5b55b179ca17" prot="private" static="no" mutable="no">
+        <type>readonly IServiceProvider</type>
+        <definition>readonly IServiceProvider InventoryManagementSystem.PublicApi.RegistrationEndpoints.Register._serviceProvider</definition>
+        <argsstring></argsstring>
+        <name>_serviceProvider</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" line="18" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1adae4ac71e35e69d14db60f2f2eb2d199" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>InventoryManagementSystem.PublicApi.RegistrationEndpoints.Register.Register</definition>
+        <argsstring>(UserManager&lt; IdentityUser &gt; userManager, ITokenClaimsService tokenClaimsService, RoleManager&lt; IdentityRole &gt; roleManager, IServiceProvider serviceProvider)</argsstring>
+        <name>Register</name>
+        <param>
+          <type>UserManager&lt; IdentityUser &gt;</type>
+          <declname>userManager</declname>
+        </param>
+        <param>
+          <type><ref refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_token_claims_service" kindref="compound">ITokenClaimsService</ref></type>
+          <declname>tokenClaimsService</declname>
+        </param>
+        <param>
+          <type>RoleManager&lt; IdentityRole &gt;</type>
+          <declname>roleManager</declname>
+        </param>
+        <param>
+          <type>IServiceProvider</type>
+          <declname>serviceProvider</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" line="20" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" bodystart="20" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a0a45deabd9785235b206455b424dca10" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>override async Task&lt; ActionResult&lt; <ref refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response" kindref="compound">RegisterResponse</ref> &gt; &gt;</type>
+        <definition>override async Task&lt;ActionResult&lt;RegisterResponse&gt; &gt; InventoryManagementSystem.PublicApi.RegistrationEndpoints.Register.HandleAsync</definition>
+        <argsstring>(RegisterRequest request, CancellationToken cancellationToken)</argsstring>
+        <name>HandleAsync</name>
+        <param>
+          <type><ref refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request" kindref="compound">RegisterRequest</ref></type>
+          <declname>request</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" line="36" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" bodystart="36" bodyend="56"/>
+        <references refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1ac2ad0cd8ef8cb4ed8249ed6a67083c50">InventoryManagementSystem.PublicApi.BaseMessage.CorrelationId</references>
+        <references refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request_1ae90efcd5282b562658d7b631ce47bd92" compoundref="_register_request_8cs" startline="6">InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterRequest.Password</references>
+        <references refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request_1aa72bd54006953abb0563187e38be8867" compoundref="_register_request_8cs" startline="8">InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterRequest.RoleName</references>
+        <references refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request_1ac073df7118b7bb8580a89e7345a2d142" compoundref="_register_request_8cs" startline="5">InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterRequest.Username</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a6ca37dafc82ba1f3ef4e86f245de7ed6" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>async Task&lt; string &gt;</type>
+        <definition>async Task&lt;string&gt; InventoryManagementSystem.PublicApi.RegistrationEndpoints.Register.UserCreatimgHelper</definition>
+        <argsstring>(IServiceProvider serviceProvider, string password, string username)</argsstring>
+        <name>UserCreatimgHelper</name>
+        <param>
+          <type>IServiceProvider</type>
+          <declname>serviceProvider</declname>
+        </param>
+        <param>
+          <type>string</type>
+          <declname>password</declname>
+        </param>
+        <param>
+          <type>string</type>
+          <declname>username</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" line="58" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" bodystart="58" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1afd19ba06d20871bd74a12a8e0fd76297" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>async Task&lt; IdentityResult &gt;</type>
+        <definition>async Task&lt;IdentityResult&gt; InventoryManagementSystem.PublicApi.RegistrationEndpoints.Register.RoleCreatingHelper</definition>
+        <argsstring>(IServiceProvider serviceProvider, string uid, string role)</argsstring>
+        <name>RoleCreatingHelper</name>
+        <param>
+          <type>IServiceProvider</type>
+          <declname>serviceProvider</declname>
+        </param>
+        <param>
+          <type>string</type>
+          <declname>uid</declname>
+        </param>
+        <param>
+          <type>string</type>
+          <declname>role</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" line="76" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" bodystart="76" bodyend="104"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="163">
+        <label>BaseAsyncEndpoint::WithRequest&lt; RegisterRequest &gt;WithResponse&lt; RegisterResponse &gt;</label>
+      </node>
+      <node id="162">
+        <label>InventoryManagementSystem.PublicApi.RegistrationEndpoints.Register</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register"/>
+        <childnode refid="163" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="166">
+        <label>Microsoft.eShopWeb.ApplicationCore.Interfaces.ITokenClaimsService</label>
+        <link refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_token_claims_service"/>
+      </node>
+      <node id="165">
+        <label>BaseAsyncEndpoint::WithRequest&lt; RegisterRequest &gt;WithResponse&lt; RegisterResponse &gt;</label>
+      </node>
+      <node id="164">
+        <label>InventoryManagementSystem.PublicApi.RegistrationEndpoints.Register</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register"/>
+        <childnode refid="165" relation="public-inheritance">
+        </childnode>
+        <childnode refid="166" relation="usage">
+          <edgelabel>_tokenClaimsService</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" line="14" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/Register.cs" bodystart="13" bodyend="105"/>
+    <listofallmembers>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a12cc38ea400b210f4b908521178b79b1" prot="private" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::Register</scope><name>_roleManager</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a96e45535695c4460ee1a5b55b179ca17" prot="private" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::Register</scope><name>_serviceProvider</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1ae12c95155f212bfc7e5e201374b6608b" prot="private" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::Register</scope><name>_tokenClaimsService</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a0ed5122eb98256f0c6989dcf777fb5be" prot="private" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::Register</scope><name>_userManager</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a0a45deabd9785235b206455b424dca10" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::Register</scope><name>HandleAsync</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1adae4ac71e35e69d14db60f2f2eb2d199" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::Register</scope><name>Register</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1afd19ba06d20871bd74a12a8e0fd76297" prot="private" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::Register</scope><name>RoleCreatingHelper</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a6ca37dafc82ba1f3ef4e86f245de7ed6" prot="private" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::Register</scope><name>UserCreatimgHelper</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

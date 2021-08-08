@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="namespace_microsoft_1_1e_shop_web_1_1_application_core_1_1_constants" kind="namespace">
+    <compoundname>Microsoft::eShopWeb::ApplicationCore::Constants</compoundname>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_constants_1_1_authorization_constants" prot="public">Microsoft::eShopWeb::ApplicationCore::Constants::AuthorizationConstants</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/ApplicationCore/Constants/AuthorizationConstants.cs" line="2" column="1"/>
+  </compounddef>
+</doxygen>

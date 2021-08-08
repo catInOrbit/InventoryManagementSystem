@@ -1,0 +1,331 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4" kind="class" prot="public">
+    <compoundname>Microsoft::eShopWeb::Infrastructure::Data::EfRepository&lt; T &gt;</compoundname>
+    <basecompoundref refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4" prot="public" virt="non-virtual">Microsoft.eShopWeb.ApplicationCore.Interfaces.IAsyncRepository&lt; T &gt;</basecompoundref>
+    <templateparamlist>
+      <param>
+        <type>T</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a76864bb74ee2b8498c7df417b159e755" prot="protected" static="no" mutable="no">
+        <type>readonly <ref refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_catalog_context" kindref="compound">CatalogContext</ref></type>
+        <definition>readonly CatalogContext Microsoft.eShopWeb.Infrastructure.Data.EfRepository&lt; T &gt;._dbContext</definition>
+        <argsstring></argsstring>
+        <name>_dbContext</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" line="20" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a5542a7aaad462a098dea83ddd46be736" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Microsoft.eShopWeb.Infrastructure.Data.EfRepository&lt; T &gt;.EfRepository</definition>
+        <argsstring>(CatalogContext dbContext)</argsstring>
+        <name>EfRepository</name>
+        <param>
+          <type><ref refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_catalog_context" kindref="compound">CatalogContext</ref></type>
+          <declname>dbContext</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" line="22" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" bodystart="22" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a931f2126ce8c6d56122c8cecec2865d6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>async Task&lt; T &gt;</type>
+        <definition>virtual async Task&lt;T&gt; Microsoft.eShopWeb.Infrastructure.Data.EfRepository&lt; T &gt;.GetByIdAsync</definition>
+        <argsstring>(int id, CancellationToken cancellationToken=default)</argsstring>
+        <name>GetByIdAsync</name>
+        <reimplements refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a8714b6aaedbb4ada99f4f897579b175d">GetByIdAsync</reimplements>
+        <param>
+          <type>int</type>
+          <declname>id</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" line="27" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" bodystart="27" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a3dbb92febc6e7914f215aebcaf73501a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>async Task&lt; IReadOnlyList&lt; T &gt; &gt;</type>
+        <definition>async Task&lt;IReadOnlyList&lt;T&gt; &gt; Microsoft.eShopWeb.Infrastructure.Data.EfRepository&lt; T &gt;.ListAllAsync</definition>
+        <argsstring>(CancellationToken cancellationToken=default)</argsstring>
+        <name>ListAllAsync</name>
+        <reimplements refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a3d375dca36b64cd7a28d1dee256f8862">ListAllAsync</reimplements>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" line="33" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" bodystart="33" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a15e92d19c7df35a9c6d13e7ea757ae69" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>async Task&lt; IReadOnlyList&lt; T &gt; &gt;</type>
+        <definition>async Task&lt;IReadOnlyList&lt;T&gt; &gt; Microsoft.eShopWeb.Infrastructure.Data.EfRepository&lt; T &gt;.ListAsync</definition>
+        <argsstring>(ISpecification&lt; T &gt; spec, CancellationToken cancellationToken=default)</argsstring>
+        <name>ListAsync</name>
+        <reimplements refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1aaac2dcd8b2a346f8cd7ddfcaa16273a6">ListAsync</reimplements>
+        <param>
+          <type>ISpecification&lt; T &gt;</type>
+          <declname>spec</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" line="38" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" bodystart="38" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1af9881f2b3caf7219f46d6a1b4458c87a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>async Task&lt; int &gt;</type>
+        <definition>async Task&lt;int&gt; Microsoft.eShopWeb.Infrastructure.Data.EfRepository&lt; T &gt;.CountAsync</definition>
+        <argsstring>(ISpecification&lt; T &gt; spec, CancellationToken cancellationToken=default)</argsstring>
+        <name>CountAsync</name>
+        <reimplements refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a5244e7758feebd17f22100415deb2ed6">CountAsync</reimplements>
+        <param>
+          <type>ISpecification&lt; T &gt;</type>
+          <declname>spec</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" line="44" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" bodystart="44" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a6c011ef4875aeae091cccafa090b0765" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>async Task&lt; T &gt;</type>
+        <definition>async Task&lt;T&gt; Microsoft.eShopWeb.Infrastructure.Data.EfRepository&lt; T &gt;.AddAsync</definition>
+        <argsstring>(T entity, CancellationToken cancellationToken=default)</argsstring>
+        <name>AddAsync</name>
+        <reimplements refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a685572d3af9c21d8c45a9fc326775e12">AddAsync</reimplements>
+        <param>
+          <type>T</type>
+          <declname>entity</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" line="50" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" bodystart="50" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1afe0c2848b12beaaa86f8274a5c59172a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>async Task</type>
+        <definition>async Task Microsoft.eShopWeb.Infrastructure.Data.EfRepository&lt; T &gt;.UpdateAsync</definition>
+        <argsstring>(T entity, CancellationToken cancellationToken=default)</argsstring>
+        <name>UpdateAsync</name>
+        <reimplements refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a804f3108ec7642080a87907150dace99">UpdateAsync</reimplements>
+        <param>
+          <type>T</type>
+          <declname>entity</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" line="58" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" bodystart="58" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1aad0126e9447262672e794dcd594cca92" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>async Task</type>
+        <definition>async Task Microsoft.eShopWeb.Infrastructure.Data.EfRepository&lt; T &gt;.DeleteAsync</definition>
+        <argsstring>(T entity, CancellationToken cancellationToken=default)</argsstring>
+        <name>DeleteAsync</name>
+        <reimplements refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1ac28f09d5b0b6d5402d0c81556c89b786">DeleteAsync</reimplements>
+        <param>
+          <type>T</type>
+          <declname>entity</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" line="64" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" bodystart="64" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a8c058b139df5074715edafdd5facd25f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>async Task&lt; T &gt;</type>
+        <definition>async Task&lt;T&gt; Microsoft.eShopWeb.Infrastructure.Data.EfRepository&lt; T &gt;.FirstAsync</definition>
+        <argsstring>(ISpecification&lt; T &gt; spec, CancellationToken cancellationToken=default)</argsstring>
+        <name>FirstAsync</name>
+        <reimplements refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a5633ffdcb1651d06e3b091df4d89418d">FirstAsync</reimplements>
+        <param>
+          <type>ISpecification&lt; T &gt;</type>
+          <declname>spec</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" line="70" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" bodystart="70" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a6ae5a6f2ef503499c24a821aabc1a185" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>async Task&lt; T &gt;</type>
+        <definition>async Task&lt;T&gt; Microsoft.eShopWeb.Infrastructure.Data.EfRepository&lt; T &gt;.FirstOrDefaultAsync</definition>
+        <argsstring>(ISpecification&lt; T &gt; spec, CancellationToken cancellationToken=default)</argsstring>
+        <name>FirstOrDefaultAsync</name>
+        <reimplements refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4_1a2e4375a2c1635b15883a345c972be256">FirstOrDefaultAsync</reimplements>
+        <param>
+          <type>ISpecification&lt; T &gt;</type>
+          <declname>spec</declname>
+        </param>
+        <param>
+          <type>CancellationToken</type>
+          <declname>cancellationToken</declname>
+          <defval>default</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" line="76" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" bodystart="76" bodyend="80"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1afd3092b35b7fd1c1d4f71af36b9385a3" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>IQueryable&lt; T &gt;</type>
+        <definition>IQueryable&lt;T&gt; Microsoft.eShopWeb.Infrastructure.Data.EfRepository&lt; T &gt;.ApplySpecification</definition>
+        <argsstring>(ISpecification&lt; T &gt; spec)</argsstring>
+        <name>ApplySpecification</name>
+        <param>
+          <type>ISpecification&lt; T &gt;</type>
+          <declname>spec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" line="82" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" bodystart="82" bodyend="86"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>&quot;There&apos;s some repetition here - couldn&apos;t we have some the sync methods call the async?&quot; <ulink url="https://blogs.msdn.microsoft.com/pfxteam/2012/04/13/should-i-expose-synchronous-wrappers-for-asynchronous-methods/">https://blogs.msdn.microsoft.com/pfxteam/2012/04/13/should-i-expose-synchronous-wrappers-for-asynchronous-methods/</ulink> </para>    </briefdescription>
+    <detaileddescription>
+<para><parameterlist kind="templateparam"><parameteritem>
+<parameternamelist>
+<parametername>T</parametername>
+</parameternamelist>
+<parameterdescription>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>    </detaileddescription>
+    <inheritancegraph>
+      <node id="103">
+        <label>IAsyncRepository&lt; T &gt;</label>
+        <link refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4"/>
+      </node>
+      <node id="102">
+        <label>Microsoft.eShopWeb.Infrastructure.Data.EfRepository&lt; T &gt;</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4"/>
+        <childnode refid="103" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="105">
+        <label>IAsyncRepository&lt; T &gt;</label>
+        <link refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_async_repository_3_01_t_01_4"/>
+      </node>
+      <node id="107">
+        <label>DbContext</label>
+      </node>
+      <node id="106">
+        <label>Microsoft.eShopWeb.Infrastructure.Data.CatalogContext</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_catalog_context"/>
+        <childnode refid="107" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="104">
+        <label>Microsoft.eShopWeb.Infrastructure.Data.EfRepository&lt; T &gt;</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4"/>
+        <childnode refid="105" relation="public-inheritance">
+        </childnode>
+        <childnode refid="106" relation="usage">
+          <edgelabel>_dbContext</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" line="19" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Data/EfRepository.cs" bodystart="18" bodyend="87"/>
+    <listofallmembers>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a76864bb74ee2b8498c7df417b159e755" prot="protected" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::EfRepository&lt; T &gt;</scope><name>_dbContext</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a6c011ef4875aeae091cccafa090b0765" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::EfRepository&lt; T &gt;</scope><name>AddAsync</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1afd3092b35b7fd1c1d4f71af36b9385a3" prot="private" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::EfRepository&lt; T &gt;</scope><name>ApplySpecification</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1af9881f2b3caf7219f46d6a1b4458c87a" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::EfRepository&lt; T &gt;</scope><name>CountAsync</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1aad0126e9447262672e794dcd594cca92" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::EfRepository&lt; T &gt;</scope><name>DeleteAsync</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a5542a7aaad462a098dea83ddd46be736" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::EfRepository&lt; T &gt;</scope><name>EfRepository</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a8c058b139df5074715edafdd5facd25f" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::EfRepository&lt; T &gt;</scope><name>FirstAsync</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a6ae5a6f2ef503499c24a821aabc1a185" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::EfRepository&lt; T &gt;</scope><name>FirstOrDefaultAsync</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a931f2126ce8c6d56122c8cecec2865d6" prot="public" virt="virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::EfRepository&lt; T &gt;</scope><name>GetByIdAsync</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a3dbb92febc6e7914f215aebcaf73501a" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::EfRepository&lt; T &gt;</scope><name>ListAllAsync</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1a15e92d19c7df35a9c6d13e7ea757ae69" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::EfRepository&lt; T &gt;</scope><name>ListAsync</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data_1_1_ef_repository_3_01_t_01_4_1afe0c2848b12beaaa86f8274a5c59172a" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Data::EfRepository&lt; T &gt;</scope><name>UpdateAsync</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

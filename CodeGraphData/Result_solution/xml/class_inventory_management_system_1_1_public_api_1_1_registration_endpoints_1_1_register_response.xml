@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response" kind="class" prot="public">
+    <compoundname>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterResponse</compoundname>
+    <basecompoundref refid="class_inventory_management_system_1_1_public_api_1_1_base_response" prot="public" virt="non-virtual">InventoryManagementSystem.PublicApi.BaseResponse</basecompoundref>
+      <sectiondef kind="property">
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1a980a2ba0a21d5fac8415f2f6b1371e57" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>bool</type>
+        <definition>bool InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterResponse.Result</definition>
+        <argsstring></argsstring>
+        <name>Result</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" line="15" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1afb91691064f83c377b85598e608e0365" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterResponse.Token</definition>
+        <argsstring></argsstring>
+        <name>Token</name>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" line="16" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1a04bb5638b36485cf36778553770a69be" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterResponse.Username</definition>
+        <argsstring></argsstring>
+        <name>Username</name>
+        <initializer>= string.Empty</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" line="17" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1af8f3baf4660273ca9b1b9aeaf4ced544" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>bool</type>
+        <definition>bool InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterResponse.IsLockedOut</definition>
+        <argsstring></argsstring>
+        <name>IsLockedOut</name>
+        <initializer>= string.Empty</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" line="18" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1a0260d6c650b1a998ce8fe6533d294900" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>bool</type>
+        <definition>bool InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterResponse.IsNotAllowed</definition>
+        <argsstring></argsstring>
+        <name>IsNotAllowed</name>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" line="19" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1a7df619f6f04812e708aab47f9a2e2f69" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>bool</type>
+        <definition>bool InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterResponse.RequiresTwoFactor</definition>
+        <argsstring></argsstring>
+        <name>RequiresTwoFactor</name>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" line="20" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1af6f5742837fdccf605c9a0cb6a68b736" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterResponse.RegisterResponse</definition>
+        <argsstring>(Guid correlationId)</argsstring>
+        <name>RegisterResponse</name>
+        <param>
+          <type>Guid</type>
+          <declname>correlationId</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" line="7" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" bodystart="7" bodyend="9"/>
+      </memberdef>
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1a7b0ca8373eed8e048b76fb11fb1eb5eb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterResponse.RegisterResponse</definition>
+        <argsstring>()</argsstring>
+        <name>RegisterResponse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" line="11" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" bodystart="11" bodyend="13"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="175">
+        <label>BaseMessage</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_message"/>
+      </node>
+      <node id="173">
+        <label>InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterResponse</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response"/>
+        <childnode refid="174" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="174">
+        <label>BaseResponse</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_response"/>
+        <childnode refid="175" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="178">
+        <label>BaseMessage</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_message"/>
+      </node>
+      <node id="176">
+        <label>InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterResponse</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response"/>
+        <childnode refid="177" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="177">
+        <label>BaseResponse</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_response"/>
+        <childnode refid="178" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" line="6" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterResponse.cs" bodystart="5" bodyend="21"/>
+    <listofallmembers>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1a957ab0420a8796545fa44dfd85f37d77" prot="protected" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterResponse</scope><name>_correlationId</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_response_1ade56cf54c8e9ece0d5e938717a7bd46a" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterResponse</scope><name>BaseResponse</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_response_1a0e194d464f1d529ec2bc139cfa0d01fa" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterResponse</scope><name>BaseResponse</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1ac2ad0cd8ef8cb4ed8249ed6a67083c50" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterResponse</scope><name>CorrelationId</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1af8f3baf4660273ca9b1b9aeaf4ced544" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterResponse</scope><name>IsLockedOut</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1a0260d6c650b1a998ce8fe6533d294900" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterResponse</scope><name>IsNotAllowed</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1af6f5742837fdccf605c9a0cb6a68b736" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterResponse</scope><name>RegisterResponse</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1a7b0ca8373eed8e048b76fb11fb1eb5eb" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterResponse</scope><name>RegisterResponse</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1a7df619f6f04812e708aab47f9a2e2f69" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterResponse</scope><name>RequiresTwoFactor</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1a980a2ba0a21d5fac8415f2f6b1371e57" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterResponse</scope><name>Result</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1afb91691064f83c377b85598e608e0365" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterResponse</scope><name>Token</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_response_1a04bb5638b36485cf36778553770a69be" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterResponse</scope><name>Username</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

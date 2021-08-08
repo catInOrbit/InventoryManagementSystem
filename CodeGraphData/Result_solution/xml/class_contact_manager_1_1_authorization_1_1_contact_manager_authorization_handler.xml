@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_contact_manager_1_1_authorization_1_1_contact_manager_authorization_handler" kind="class" prot="public">
+    <compoundname>ContactManager::Authorization::ContactManagerAuthorizationHandler</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">AuthorizationHandler&lt; OperationAuthorizationRequirement, IMSUser &gt;</basecompoundref>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="class_contact_manager_1_1_authorization_1_1_contact_manager_authorization_handler_1a37cc6ed77046db457e86832c7148b126" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>override Task</type>
+        <definition>override Task ContactManager.Authorization.ContactManagerAuthorizationHandler.HandleRequirementAsync</definition>
+        <argsstring>(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, IMSUser resource)</argsstring>
+        <name>HandleRequirementAsync</name>
+        <param>
+          <type>AuthorizationHandlerContext</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>OperationAuthorizationRequirement</type>
+          <declname>requirement</declname>
+        </param>
+        <param>
+          <type><ref refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user" kindref="compound">IMSUser</ref></type>
+          <declname>resource</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactManagerAuthorizationHandler.cs" line="13" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactManagerAuthorizationHandler.cs" bodystart="13" bodyend="36"/>
+        <references refid="class_contact_manager_1_1_authorization_1_1_constants_1a0113ace7622ec48838d668b05fd14eb3" compoundref="_contact_operations_8cs" startline="27">ContactManager.Authorization.Constants.ApproveOperationName</references>
+        <references refid="class_contact_manager_1_1_authorization_1_1_constants_1a3a9877e7a5daff4aab578ab6bc871cd0" compoundref="_contact_operations_8cs" startline="32">ContactManager.Authorization.Constants.IMSManagersRole</references>
+        <references refid="class_contact_manager_1_1_authorization_1_1_constants_1a0b5818006e3e789c15872d41d3f08266" compoundref="_contact_operations_8cs" startline="28">ContactManager.Authorization.Constants.RejectOperationName</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="93">
+        <label>AuthorizationHandler&lt; OperationAuthorizationRequirement, IMSUser &gt;</label>
+      </node>
+      <node id="92">
+        <label>ContactManager.Authorization.ContactManagerAuthorizationHandler</label>
+        <link refid="class_contact_manager_1_1_authorization_1_1_contact_manager_authorization_handler"/>
+        <childnode refid="93" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="95">
+        <label>AuthorizationHandler&lt; OperationAuthorizationRequirement, IMSUser &gt;</label>
+      </node>
+      <node id="94">
+        <label>ContactManager.Authorization.ContactManagerAuthorizationHandler</label>
+        <link refid="class_contact_manager_1_1_authorization_1_1_contact_manager_authorization_handler"/>
+        <childnode refid="95" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactManagerAuthorizationHandler.cs" line="11" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactManagerAuthorizationHandler.cs" bodystart="9" bodyend="37"/>
+    <listofallmembers>
+      <member refid="class_contact_manager_1_1_authorization_1_1_contact_manager_authorization_handler_1a37cc6ed77046db457e86832c7148b126" prot="protected" virt="non-virtual"><scope>ContactManager::Authorization::ContactManagerAuthorizationHandler</scope><name>HandleRequirementAsync</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

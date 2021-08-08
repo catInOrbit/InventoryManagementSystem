@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response" kind="class" prot="public">
+    <compoundname>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateResponse</compoundname>
+    <basecompoundref refid="class_inventory_management_system_1_1_public_api_1_1_base_response" prot="public" virt="non-virtual">InventoryManagementSystem.PublicApi.BaseResponse</basecompoundref>
+      <sectiondef kind="property">
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1af24dab69357bd938df2412d33fb0b017" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>bool</type>
+        <definition>bool InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateResponse.Result</definition>
+        <argsstring></argsstring>
+        <name>Result</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" line="14" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" bodystart="14" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1a1cc0fc7878ea9b0f4cfbeb52c33e70a4" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateResponse.Token</definition>
+        <argsstring></argsstring>
+        <name>Token</name>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" line="15" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1aa094ef6d03198e6bfe4f447f48f18de8" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateResponse.Username</definition>
+        <argsstring></argsstring>
+        <name>Username</name>
+        <initializer>= string.Empty</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" line="16" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1af2ca39653e096b7eb35d94b2c43fde0f" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>bool</type>
+        <definition>bool InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateResponse.IsLockedOut</definition>
+        <argsstring></argsstring>
+        <name>IsLockedOut</name>
+        <initializer>= string.Empty</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" line="17" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1ab63410fe2e2fdf7b9a976631fbbc1a2d" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>bool</type>
+        <definition>bool InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateResponse.IsNotAllowed</definition>
+        <argsstring></argsstring>
+        <name>IsNotAllowed</name>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" line="18" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1a3b1ee44c41473ddafcef1647c8361353" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>bool</type>
+        <definition>bool InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateResponse.RequiresTwoFactor</definition>
+        <argsstring></argsstring>
+        <name>RequiresTwoFactor</name>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" line="19" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1a45c2a98c8045280843ffa4a5c9040657" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateResponse.AuthenticateResponse</definition>
+        <argsstring>(Guid correlationId)</argsstring>
+        <name>AuthenticateResponse</name>
+        <param>
+          <type>Guid</type>
+          <declname>correlationId</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" line="7" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" bodystart="7" bodyend="9"/>
+      </memberdef>
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1a1266a704805ed43cb557c44c97d4121e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateResponse.AuthenticateResponse</definition>
+        <argsstring>()</argsstring>
+        <name>AuthenticateResponse</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" line="11" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" bodystart="11" bodyend="13"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="23">
+        <label>BaseMessage</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_message"/>
+      </node>
+      <node id="21">
+        <label>InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateResponse</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response"/>
+        <childnode refid="22" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>BaseResponse</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_response"/>
+        <childnode refid="23" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="26">
+        <label>BaseMessage</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_message"/>
+      </node>
+      <node id="24">
+        <label>InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateResponse</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response"/>
+        <childnode refid="25" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>BaseResponse</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_response"/>
+        <childnode refid="26" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" line="6" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateResponse.cs" bodystart="5" bodyend="20"/>
+    <listofallmembers>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1a957ab0420a8796545fa44dfd85f37d77" prot="protected" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateResponse</scope><name>_correlationId</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1a45c2a98c8045280843ffa4a5c9040657" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateResponse</scope><name>AuthenticateResponse</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1a1266a704805ed43cb557c44c97d4121e" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateResponse</scope><name>AuthenticateResponse</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_response_1ade56cf54c8e9ece0d5e938717a7bd46a" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateResponse</scope><name>BaseResponse</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_response_1a0e194d464f1d529ec2bc139cfa0d01fa" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateResponse</scope><name>BaseResponse</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1ac2ad0cd8ef8cb4ed8249ed6a67083c50" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateResponse</scope><name>CorrelationId</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1af2ca39653e096b7eb35d94b2c43fde0f" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateResponse</scope><name>IsLockedOut</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1ab63410fe2e2fdf7b9a976631fbbc1a2d" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateResponse</scope><name>IsNotAllowed</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1a3b1ee44c41473ddafcef1647c8361353" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateResponse</scope><name>RequiresTwoFactor</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1af24dab69357bd938df2412d33fb0b017" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateResponse</scope><name>Result</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1a1cc0fc7878ea9b0f4cfbeb52c33e70a4" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateResponse</scope><name>Token</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_response_1aa094ef6d03198e6bfe4f447f48f18de8" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateResponse</scope><name>Username</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

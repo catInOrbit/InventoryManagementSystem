@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request" kind="class" prot="public">
+    <compoundname>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateRequest</compoundname>
+    <basecompoundref refid="class_inventory_management_system_1_1_public_api_1_1_base_request" prot="public" virt="non-virtual">InventoryManagementSystem.PublicApi.BaseRequest</basecompoundref>
+      <sectiondef kind="property">
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request_1addac0ec09ba83089330615d52b146405" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateRequest.Username</definition>
+        <argsstring></argsstring>
+        <name>Username</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateRequest.cs" line="5" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateRequest.cs" bodystart="5" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request_1ac9f95227af2a4f0dba175a4cc03a8d95" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateRequest.Password</definition>
+        <argsstring></argsstring>
+        <name>Password</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateRequest.cs" line="6" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateRequest.cs" bodystart="6" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="17">
+        <label>BaseMessage</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_message"/>
+      </node>
+      <node id="16">
+        <label>BaseRequest</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_request"/>
+        <childnode refid="17" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateRequest</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="20">
+        <label>BaseMessage</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_message"/>
+      </node>
+      <node id="19">
+        <label>BaseRequest</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_request"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>InventoryManagementSystem.PublicApi.AuthenticationEndpoints.AuthenticateRequest</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request"/>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateRequest.cs" line="4" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateRequest.cs" bodystart="3" bodyend="7"/>
+    <listofallmembers>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1a957ab0420a8796545fa44dfd85f37d77" prot="protected" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateRequest</scope><name>_correlationId</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1ac2ad0cd8ef8cb4ed8249ed6a67083c50" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateRequest</scope><name>CorrelationId</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request_1ac9f95227af2a4f0dba175a4cc03a8d95" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateRequest</scope><name>Password</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request_1addac0ec09ba83089330615d52b146405" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateRequest</scope><name>Username</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

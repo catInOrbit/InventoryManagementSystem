@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_identity_token_claim_service" kind="class" prot="public">
+    <compoundname>Microsoft::eShopWeb::Infrastructure::Identity::IdentityTokenClaimService</compoundname>
+    <basecompoundref refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_token_claims_service" prot="public" virt="non-virtual">Microsoft.eShopWeb.ApplicationCore.Interfaces.ITokenClaimsService</basecompoundref>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_identity_token_claim_service_1a0eb3c6c4a208bdd834d76ab384a8e336" prot="private" static="no" mutable="no">
+        <type>readonly UserManager&lt; IdentityUser &gt;</type>
+        <definition>readonly UserManager&lt;IdentityUser&gt; Microsoft.eShopWeb.Infrastructure.Identity.IdentityTokenClaimService._userManager</definition>
+        <argsstring></argsstring>
+        <name>_userManager</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Identity/IdentityTokenClaimService.cs" line="16" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Identity/IdentityTokenClaimService.cs" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_identity_token_claim_service_1a2883052c1eee047c0d0a5c7e2aeafa65" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Microsoft.eShopWeb.Infrastructure.Identity.IdentityTokenClaimService.IdentityTokenClaimService</definition>
+        <argsstring>(UserManager&lt; IdentityUser &gt; userManager)</argsstring>
+        <name>IdentityTokenClaimService</name>
+        <param>
+          <type>UserManager&lt; IdentityUser &gt;</type>
+          <declname>userManager</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Identity/IdentityTokenClaimService.cs" line="18" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Identity/IdentityTokenClaimService.cs" bodystart="18" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_identity_token_claim_service_1a365d02de3430a5a67e6f8db0de0b3cfe" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>async Task&lt; string &gt;</type>
+        <definition>async Task&lt;string&gt; Microsoft.eShopWeb.Infrastructure.Identity.IdentityTokenClaimService.GetTokenAsync</definition>
+        <argsstring>(string userName)</argsstring>
+        <name>GetTokenAsync</name>
+        <reimplements refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_token_claims_service_1a16cc6f9675b288cddcffc7ca7a684ecf">GetTokenAsync</reimplements>
+        <param>
+          <type>string</type>
+          <declname>userName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Identity/IdentityTokenClaimService.cs" line="23" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Identity/IdentityTokenClaimService.cs" bodystart="23" bodyend="44"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="120">
+        <label>Microsoft.eShopWeb.Infrastructure.Identity.IdentityTokenClaimService</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_identity_token_claim_service"/>
+        <childnode refid="121" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="121">
+        <label>ITokenClaimsService</label>
+        <link refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_token_claims_service"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="122">
+        <label>Microsoft.eShopWeb.Infrastructure.Identity.IdentityTokenClaimService</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_identity_token_claim_service"/>
+        <childnode refid="123" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="123">
+        <label>ITokenClaimsService</label>
+        <link refid="interface_microsoft_1_1e_shop_web_1_1_application_core_1_1_interfaces_1_1_i_token_claims_service"/>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Identity/IdentityTokenClaimService.cs" line="15" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Identity/IdentityTokenClaimService.cs" bodystart="14" bodyend="45"/>
+    <listofallmembers>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_identity_token_claim_service_1a0eb3c6c4a208bdd834d76ab384a8e336" prot="private" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Identity::IdentityTokenClaimService</scope><name>_userManager</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_identity_token_claim_service_1a365d02de3430a5a67e6f8db0de0b3cfe" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Identity::IdentityTokenClaimService</scope><name>GetTokenAsync</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_identity_token_claim_service_1a2883052c1eee047c0d0a5c7e2aeafa65" prot="public" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Identity::IdentityTokenClaimService</scope><name>IdentityTokenClaimService</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="namespace_microsoft_1_1e_shop_web_1_1_infrastructure" kind="namespace">
+    <compoundname>Microsoft::eShopWeb::Infrastructure</compoundname>
+    <innerclass refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_constants" prot="public">Microsoft::eShopWeb::Infrastructure::Constants</innerclass>
+    <innernamespace refid="namespace_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_data">Microsoft::eShopWeb::Infrastructure::Data</innernamespace>
+    <innernamespace refid="namespace_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity">Microsoft::eShopWeb::Infrastructure::Identity</innernamespace>
+    <innernamespace refid="namespace_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_logging">Microsoft::eShopWeb::Infrastructure::Logging</innernamespace>
+    <innernamespace refid="namespace_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_services">Microsoft::eShopWeb::Infrastructure::Services</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="[generated]" line="1" column="1"/>
+  </compounddef>
+</doxygen>

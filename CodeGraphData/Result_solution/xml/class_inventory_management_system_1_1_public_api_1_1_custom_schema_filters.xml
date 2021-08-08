@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_inventory_management_system_1_1_public_api_1_1_custom_schema_filters" kind="class" prot="public">
+    <compoundname>InventoryManagementSystem::PublicApi::CustomSchemaFilters</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">ISchemaFilter</basecompoundref>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_custom_schema_filters_1aa714ac1abbcf21c1d5eda29c53f2319b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void InventoryManagementSystem.PublicApi.CustomSchemaFilters.Apply</definition>
+        <argsstring>(OpenApiSchema schema, SchemaFilterContext context)</argsstring>
+        <name>Apply</name>
+        <param>
+          <type>OpenApiSchema</type>
+          <declname>schema</declname>
+        </param>
+        <param>
+          <type>SchemaFilterContext</type>
+          <declname>context</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/CustomSchemaFilters.cs" line="8" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/CustomSchemaFilters.cs" bodystart="8" bodyend="15"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="98">
+        <label>InventoryManagementSystem.PublicApi.CustomSchemaFilters</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_custom_schema_filters"/>
+        <childnode refid="99" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="99">
+        <label>ISchemaFilter</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="100">
+        <label>InventoryManagementSystem.PublicApi.CustomSchemaFilters</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_custom_schema_filters"/>
+        <childnode refid="101" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="101">
+        <label>ISchemaFilter</label>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/CustomSchemaFilters.cs" line="7" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/CustomSchemaFilters.cs" bodystart="6" bodyend="16"/>
+    <listofallmembers>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_custom_schema_filters_1aa714ac1abbcf21c1d5eda29c53f2319b" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::CustomSchemaFilters</scope><name>Apply</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

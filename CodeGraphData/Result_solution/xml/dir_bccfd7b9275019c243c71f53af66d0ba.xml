@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="dir_bccfd7b9275019c243c71f53af66d0ba" kind="dir">
+    <compoundname>C:/InventoryManagementSystem</compoundname>
+    <innerdir refid="dir_37b011f3a5b47d323e79eefc578bd5e7">C:/InventoryManagementSystem/src</innerdir>
+    <innerdir refid="dir_f79eb792eb07ba18d7aa15c4a7a18aba">C:/InventoryManagementSystem/test</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/"/>
+  </compounddef>
+</doxygen>

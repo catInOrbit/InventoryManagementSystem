@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="dir_60c8d875d7469348d93f7cc2c5e45846" kind="dir">
+    <compoundname>C:/InventoryManagementSystem/src/IMSPublicApi/StockkeeperEndpoints</compoundname>
+    <innerfile refid="_add_product_8cs">AddProduct.cs</innerfile>
+    <innerfile refid="_add_product_request_8cs">AddProductRequest.cs</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/StockkeeperEndpoints/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value" kind="class" prot="public">
+    <compoundname>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::ClaimValue</compoundname>
+      <sectiondef kind="property">
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1a4661e796d36ab04b4b7a08f2f8c863e7" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string InventoryManagementSystem.PublicApi.AuthenticationEndpoints.ClaimValue.Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/ClaimValue.cs" line="15" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/ClaimValue.cs" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1aa7187e90a4b8fe2754e16b785d6de896" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string InventoryManagementSystem.PublicApi.AuthenticationEndpoints.ClaimValue.Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/ClaimValue.cs" line="16" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/ClaimValue.cs" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1af64cc4a4e1b3dbc880fc7145d9a6bb46" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>InventoryManagementSystem.PublicApi.AuthenticationEndpoints.ClaimValue.ClaimValue</definition>
+        <argsstring>()</argsstring>
+        <name>ClaimValue</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/ClaimValue.cs" line="5" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/ClaimValue.cs" bodystart="5" bodyend="7"/>
+      </memberdef>
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1ad33b1dbd89aaf78dfbb3dacd45f73e52" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>InventoryManagementSystem.PublicApi.AuthenticationEndpoints.ClaimValue.ClaimValue</definition>
+        <argsstring>(string type, string value)</argsstring>
+        <name>ClaimValue</name>
+        <param>
+          <type>string</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>string</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/ClaimValue.cs" line="9" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/ClaimValue.cs" bodystart="9" bodyend="13"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/ClaimValue.cs" line="4" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/ClaimValue.cs" bodystart="3" bodyend="17"/>
+    <listofallmembers>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1af64cc4a4e1b3dbc880fc7145d9a6bb46" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::ClaimValue</scope><name>ClaimValue</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1ad33b1dbd89aaf78dfbb3dacd45f73e52" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::ClaimValue</scope><name>ClaimValue</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1a4661e796d36ab04b4b7a08f2f8c863e7" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::ClaimValue</scope><name>Type</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1aa7187e90a4b8fe2754e16b785d6de896" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::AuthenticationEndpoints::ClaimValue</scope><name>Value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

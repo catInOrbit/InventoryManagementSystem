@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_migrations_1_1_initial_identity_model" kind="class" prot="public">
+    <compoundname>Microsoft::eShopWeb::Infrastructure::Identity::Migrations::InitialIdentityModel</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Migration</basecompoundref>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_migrations_1_1_initial_identity_model_1a26336a8045a6fcd70014bda4fcf6859c" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>override void</type>
+        <definition>override void Microsoft.eShopWeb.Infrastructure.Identity.Migrations.InitialIdentityModel.Up</definition>
+        <argsstring>(MigrationBuilder migrationBuilder)</argsstring>
+        <name>Up</name>
+        <param>
+          <type>MigrationBuilder</type>
+          <declname>migrationBuilder</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Identity/Migrations/20201202111612_InitialIdentityModel.cs" line="8" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Identity/Migrations/20201202111612_InitialIdentityModel.cs" bodystart="8" bodyend="193"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_migrations_1_1_initial_identity_model_1a14ae6ae5f2d478bfaa804853013c0838" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>override void</type>
+        <definition>override void Microsoft.eShopWeb.Infrastructure.Identity.Migrations.InitialIdentityModel.Down</definition>
+        <argsstring>(MigrationBuilder migrationBuilder)</argsstring>
+        <name>Down</name>
+        <param>
+          <type>MigrationBuilder</type>
+          <declname>migrationBuilder</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Identity/Migrations/20201202111612_InitialIdentityModel.cs" line="195" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Identity/Migrations/20201202111612_InitialIdentityModel.cs" bodystart="195" bodyend="217"/>
+      </memberdef>
+      <memberdef kind="function" id="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_migrations_1_1_initial_identity_model_1a730ef132a3033b52ba0f64af8437a13f" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>override void</type>
+        <definition>override void Microsoft.eShopWeb.Infrastructure.Identity.Migrations.InitialIdentityModel.BuildTargetModel</definition>
+        <argsstring>(ModelBuilder modelBuilder)</argsstring>
+        <name>BuildTargetModel</name>
+        <param>
+          <type>ModelBuilder</type>
+          <declname>modelBuilder</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/Infrastructure/Identity/Migrations/20201202111612_InitialIdentityModel.Designer.cs" line="16" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Identity/Migrations/20201202111612_InitialIdentityModel.Designer.cs" bodystart="16" bodyend="271"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="136">
+        <label>Microsoft.eShopWeb.Infrastructure.Identity.Migrations.InitialIdentityModel</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_migrations_1_1_initial_identity_model"/>
+        <childnode refid="137" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="137">
+        <label>Migration</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="138">
+        <label>Microsoft.eShopWeb.Infrastructure.Identity.Migrations.InitialIdentityModel</label>
+        <link refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_migrations_1_1_initial_identity_model"/>
+        <childnode refid="139" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="139">
+        <label>Migration</label>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Identity/Migrations/20201202111612_InitialIdentityModel.cs" line="7" column="1" bodyfile="C:/InventoryManagementSystem/src/Infrastructure/Identity/Migrations/20201202111612_InitialIdentityModel.cs" bodystart="6" bodyend="218"/>
+    <listofallmembers>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_migrations_1_1_initial_identity_model_1a730ef132a3033b52ba0f64af8437a13f" prot="protected" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Identity::Migrations::InitialIdentityModel</scope><name>BuildTargetModel</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_migrations_1_1_initial_identity_model_1a14ae6ae5f2d478bfaa804853013c0838" prot="protected" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Identity::Migrations::InitialIdentityModel</scope><name>Down</name></member>
+      <member refid="class_microsoft_1_1e_shop_web_1_1_infrastructure_1_1_identity_1_1_migrations_1_1_initial_identity_model_1a26336a8045a6fcd70014bda4fcf6859c" prot="protected" virt="non-virtual"><scope>Microsoft::eShopWeb::Infrastructure::Identity::Migrations::InitialIdentityModel</scope><name>Up</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

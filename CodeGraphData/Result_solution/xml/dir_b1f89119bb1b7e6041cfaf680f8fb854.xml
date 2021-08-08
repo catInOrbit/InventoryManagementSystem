@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="dir_b1f89119bb1b7e6041cfaf680f8fb854" kind="dir">
+    <compoundname>C:/InventoryManagementSystem/src/Infrastructure/Data</compoundname>
+    <innerdir refid="dir_652a0452712aa28e2f587d037e3a7088">C:/InventoryManagementSystem/src/Infrastructure/Data/Config</innerdir>
+    <innerfile refid="_catalog_context_8cs">CatalogContext.cs</innerfile>
+    <innerfile refid="_ef_repository_8cs">EfRepository.cs</innerfile>
+    <innerfile refid="_file_item_8cs">FileItem.cs</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/Infrastructure/Data/"/>
+  </compounddef>
+</doxygen>

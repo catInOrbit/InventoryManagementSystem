@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="dir_fc65e7301c449c4400ffe479460c9ca4" kind="dir">
+    <compoundname>C:/InventoryManagementSystem/src/IMSPublicApi</compoundname>
+    <innerdir refid="dir_189e9d5c0fafb04a815a2e765c8ed741">C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints</innerdir>
+    <innerdir refid="dir_7be4310ac3adcbca957fa9e4ee8644a7">C:/InventoryManagementSystem/src/IMSPublicApi/Authorization</innerdir>
+    <innerdir refid="dir_336be27069f8dc2bd5138047e0857b70">C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints</innerdir>
+    <innerdir refid="dir_60c8d875d7469348d93f7cc2c5e45846">C:/InventoryManagementSystem/src/IMSPublicApi/StockkeeperEndpoints</innerdir>
+    <innerfile refid="_base_message_8cs">BaseMessage.cs</innerfile>
+    <innerfile refid="_base_request_8cs">BaseRequest.cs</innerfile>
+    <innerfile refid="_base_response_8cs">BaseResponse.cs</innerfile>
+    <innerfile refid="_base_url_configuration_8cs">BaseUrlConfiguration.cs</innerfile>
+    <innerfile refid="_custom_schema_filters_8cs">CustomSchemaFilters.cs</innerfile>
+    <innerfile refid="_image_validators_8cs">ImageValidators.cs</innerfile>
+    <innerfile refid="_program_8cs">Program.cs</innerfile>
+    <innerfile refid="_service_page_model_8cs">ServicePageModel.cs</innerfile>
+    <innerfile refid="_startup_8cs">Startup.cs</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/"/>
+  </compounddef>
+</doxygen>

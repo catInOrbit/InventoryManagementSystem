@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_inventory_management_system_1_1_public_api_1_1_image_validators" kind="class" prot="public">
+    <compoundname>InventoryManagementSystem::PublicApi::ImageValidators</compoundname>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_inventory_management_system_1_1_public_api_1_1_image_validators_1a67cd3642cf56c93af54da29519883524" prot="private" static="no" mutable="no">
+        <type>const int</type>
+        <definition>const int InventoryManagementSystem.PublicApi.ImageValidators.ImageMaximumBytes</definition>
+        <argsstring></argsstring>
+        <name>ImageMaximumBytes</name>
+        <initializer>= 512000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/ImageValidators.cs" line="8" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/ImageValidators.cs" bodystart="8" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_image_validators_1ab62fc41ef7c8ba77aa8493bc50621d96" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool InventoryManagementSystem.PublicApi.ImageValidators.IsValidImage</definition>
+        <argsstring>(this byte[] postedFile, string fileName)</argsstring>
+        <name>IsValidImage</name>
+        <param>
+          <type>this byte[]</type>
+          <declname>postedFile</declname>
+        </param>
+        <param>
+          <type>string</type>
+          <declname>fileName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/ImageValidators.cs" line="10" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/ImageValidators.cs" bodystart="10" bodyend="13"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="class_inventory_management_system_1_1_public_api_1_1_image_validators_1a5a7da982e3e4eb20ef33a79777560593" prot="private" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool InventoryManagementSystem.PublicApi.ImageValidators.IsExtensionValid</definition>
+        <argsstring>(string fileName)</argsstring>
+        <name>IsExtensionValid</name>
+        <param>
+          <type>string</type>
+          <declname>fileName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/ImageValidators.cs" line="15" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/ImageValidators.cs" bodystart="15" bodyend="23"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/ImageValidators.cs" line="7" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/ImageValidators.cs" bodystart="6" bodyend="24"/>
+    <listofallmembers>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_image_validators_1a67cd3642cf56c93af54da29519883524" prot="private" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::ImageValidators</scope><name>ImageMaximumBytes</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_image_validators_1a5a7da982e3e4eb20ef33a79777560593" prot="private" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::ImageValidators</scope><name>IsExtensionValid</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_image_validators_1ab62fc41ef7c8ba77aa8493bc50621d96" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::ImageValidators</scope><name>IsValidImage</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

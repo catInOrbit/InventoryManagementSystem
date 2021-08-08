@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_contact_manager_1_1_authorization_1_1_constants" kind="class" prot="public">
+    <compoundname>ContactManager::Authorization::Constants</compoundname>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="class_contact_manager_1_1_authorization_1_1_constants_1a0f9197d3147ab57d2082da6457f7e16e" prot="public" static="yes" mutable="no">
+        <type>readonly string</type>
+        <definition>readonly string ContactManager.Authorization.Constants.CreateOperationName</definition>
+        <argsstring></argsstring>
+        <name>CreateOperationName</name>
+        <initializer>= &quot;Create&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" line="23" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" bodystart="23" bodyend="-1"/>
+        <referencedby refid="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler_1a5eff2d9812df54184d9d4503d2f22173" compoundref="_contact_is_owner_authorization_handler_8cs" startline="21" endline="46">ContactManager.Authorization.ContactIsOwnerAuthorizationHandler.HandleRequirementAsync</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="class_contact_manager_1_1_authorization_1_1_constants_1afd339ea3f39ef06967c203fb4b3fcce5" prot="public" static="yes" mutable="no">
+        <type>readonly string</type>
+        <definition>readonly string ContactManager.Authorization.Constants.ReadOperationName</definition>
+        <argsstring></argsstring>
+        <name>ReadOperationName</name>
+        <initializer>= &quot;Read&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" line="24" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" bodystart="24" bodyend="-1"/>
+        <referencedby refid="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler_1a5eff2d9812df54184d9d4503d2f22173" compoundref="_contact_is_owner_authorization_handler_8cs" startline="21" endline="46">ContactManager.Authorization.ContactIsOwnerAuthorizationHandler.HandleRequirementAsync</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="class_contact_manager_1_1_authorization_1_1_constants_1a733e3ac382073c3c376f6493a4866efe" prot="public" static="yes" mutable="no">
+        <type>readonly string</type>
+        <definition>readonly string ContactManager.Authorization.Constants.UpdateOperationName</definition>
+        <argsstring></argsstring>
+        <name>UpdateOperationName</name>
+        <initializer>= &quot;Update&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" line="25" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" bodystart="25" bodyend="-1"/>
+        <referencedby refid="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler_1a5eff2d9812df54184d9d4503d2f22173" compoundref="_contact_is_owner_authorization_handler_8cs" startline="21" endline="46">ContactManager.Authorization.ContactIsOwnerAuthorizationHandler.HandleRequirementAsync</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="class_contact_manager_1_1_authorization_1_1_constants_1a3edbae8318d7cc03f36c7b8c73a48c8b" prot="public" static="yes" mutable="no">
+        <type>readonly string</type>
+        <definition>readonly string ContactManager.Authorization.Constants.DeleteOperationName</definition>
+        <argsstring></argsstring>
+        <name>DeleteOperationName</name>
+        <initializer>= &quot;Delete&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" line="26" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" bodystart="26" bodyend="-1"/>
+        <referencedby refid="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler_1a5eff2d9812df54184d9d4503d2f22173" compoundref="_contact_is_owner_authorization_handler_8cs" startline="21" endline="46">ContactManager.Authorization.ContactIsOwnerAuthorizationHandler.HandleRequirementAsync</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="class_contact_manager_1_1_authorization_1_1_constants_1a0113ace7622ec48838d668b05fd14eb3" prot="public" static="yes" mutable="no">
+        <type>readonly string</type>
+        <definition>readonly string ContactManager.Authorization.Constants.ApproveOperationName</definition>
+        <argsstring></argsstring>
+        <name>ApproveOperationName</name>
+        <initializer>= &quot;Approve&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" line="27" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" bodystart="27" bodyend="-1"/>
+        <referencedby refid="class_contact_manager_1_1_authorization_1_1_contact_manager_authorization_handler_1a37cc6ed77046db457e86832c7148b126" compoundref="_contact_manager_authorization_handler_8cs" startline="13" endline="36">ContactManager.Authorization.ContactManagerAuthorizationHandler.HandleRequirementAsync</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="class_contact_manager_1_1_authorization_1_1_constants_1a0b5818006e3e789c15872d41d3f08266" prot="public" static="yes" mutable="no">
+        <type>readonly string</type>
+        <definition>readonly string ContactManager.Authorization.Constants.RejectOperationName</definition>
+        <argsstring></argsstring>
+        <name>RejectOperationName</name>
+        <initializer>= &quot;Reject&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" line="28" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" bodystart="28" bodyend="-1"/>
+        <referencedby refid="class_contact_manager_1_1_authorization_1_1_contact_manager_authorization_handler_1a37cc6ed77046db457e86832c7148b126" compoundref="_contact_manager_authorization_handler_8cs" startline="13" endline="36">ContactManager.Authorization.ContactManagerAuthorizationHandler.HandleRequirementAsync</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="class_contact_manager_1_1_authorization_1_1_constants_1a7e06413f34f99adaed5caede50fbf821" prot="public" static="yes" mutable="no">
+        <type>readonly string</type>
+        <definition>readonly string ContactManager.Authorization.Constants.IMSAccountantRole</definition>
+        <argsstring></argsstring>
+        <name>IMSAccountantRole</name>
+        <initializer>= 
+                                                              &quot;IMSAccountant&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" line="30" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" bodystart="30" bodyend="-1"/>
+        <referencedby refid="class_contact_manager_1_1_authorization_1_1_contact_administrators_authorization_handler_1ad61b7e2332d14d41f36a39613103f388" compoundref="_contact_administrators_authorization_handler_8cs" startline="11" endline="28">ContactManager.Authorization.ContactAdministratorsAuthorizationHandler.HandleRequirementAsync</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="class_contact_manager_1_1_authorization_1_1_constants_1a3a9877e7a5daff4aab578ab6bc871cd0" prot="public" static="yes" mutable="no">
+        <type>readonly string</type>
+        <definition>readonly string ContactManager.Authorization.Constants.IMSManagersRole</definition>
+        <argsstring></argsstring>
+        <name>IMSManagersRole</name>
+        <initializer>= &quot;IMSManager&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" line="32" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" bodystart="32" bodyend="-1"/>
+        <referencedby refid="class_contact_manager_1_1_authorization_1_1_contact_manager_authorization_handler_1a37cc6ed77046db457e86832c7148b126" compoundref="_contact_manager_authorization_handler_8cs" startline="13" endline="36">ContactManager.Authorization.ContactManagerAuthorizationHandler.HandleRequirementAsync</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="class_contact_manager_1_1_authorization_1_1_constants_1a4e7c0323ff5e9cf7e7dc72b6f21044bb" prot="public" static="yes" mutable="no">
+        <type>readonly string</type>
+        <definition>readonly string ContactManager.Authorization.Constants.IMSStockKeeperRole</definition>
+        <argsstring></argsstring>
+        <name>IMSStockKeeperRole</name>
+        <initializer>= &quot;IMSStockKeeper&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" line="34" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_contact_manager_1_1_authorization_1_1_constants_1aee23ae389807268af4bd6883536ecda0" prot="public" static="yes" mutable="no">
+        <type>readonly string</type>
+        <definition>readonly string ContactManager.Authorization.Constants.IMSEmployee</definition>
+        <argsstring></argsstring>
+        <name>IMSEmployee</name>
+        <initializer>= &quot;IMSEmployee&quot;</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" line="36" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" line="22" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactOperations.cs" bodystart="21" bodyend="39"/>
+    <listofallmembers>
+      <member refid="class_contact_manager_1_1_authorization_1_1_constants_1a0113ace7622ec48838d668b05fd14eb3" prot="public" virt="non-virtual"><scope>ContactManager::Authorization::Constants</scope><name>ApproveOperationName</name></member>
+      <member refid="class_contact_manager_1_1_authorization_1_1_constants_1a0f9197d3147ab57d2082da6457f7e16e" prot="public" virt="non-virtual"><scope>ContactManager::Authorization::Constants</scope><name>CreateOperationName</name></member>
+      <member refid="class_contact_manager_1_1_authorization_1_1_constants_1a3edbae8318d7cc03f36c7b8c73a48c8b" prot="public" virt="non-virtual"><scope>ContactManager::Authorization::Constants</scope><name>DeleteOperationName</name></member>
+      <member refid="class_contact_manager_1_1_authorization_1_1_constants_1a7e06413f34f99adaed5caede50fbf821" prot="public" virt="non-virtual"><scope>ContactManager::Authorization::Constants</scope><name>IMSAccountantRole</name></member>
+      <member refid="class_contact_manager_1_1_authorization_1_1_constants_1aee23ae389807268af4bd6883536ecda0" prot="public" virt="non-virtual"><scope>ContactManager::Authorization::Constants</scope><name>IMSEmployee</name></member>
+      <member refid="class_contact_manager_1_1_authorization_1_1_constants_1a3a9877e7a5daff4aab578ab6bc871cd0" prot="public" virt="non-virtual"><scope>ContactManager::Authorization::Constants</scope><name>IMSManagersRole</name></member>
+      <member refid="class_contact_manager_1_1_authorization_1_1_constants_1a4e7c0323ff5e9cf7e7dc72b6f21044bb" prot="public" virt="non-virtual"><scope>ContactManager::Authorization::Constants</scope><name>IMSStockKeeperRole</name></member>
+      <member refid="class_contact_manager_1_1_authorization_1_1_constants_1afd339ea3f39ef06967c203fb4b3fcce5" prot="public" virt="non-virtual"><scope>ContactManager::Authorization::Constants</scope><name>ReadOperationName</name></member>
+      <member refid="class_contact_manager_1_1_authorization_1_1_constants_1a0b5818006e3e789c15872d41d3f08266" prot="public" virt="non-virtual"><scope>ContactManager::Authorization::Constants</scope><name>RejectOperationName</name></member>
+      <member refid="class_contact_manager_1_1_authorization_1_1_constants_1a733e3ac382073c3c376f6493a4866efe" prot="public" virt="non-virtual"><scope>ContactManager::Authorization::Constants</scope><name>UpdateOperationName</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

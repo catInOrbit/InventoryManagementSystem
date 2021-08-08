@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="_authenticate_request_8cs" kind="file">
+    <compoundname>AuthenticateRequest.cs</compoundname>
+    <innerclass refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request" prot="public">InventoryManagementSystem::PublicApi::AuthenticationEndpoints::AuthenticateRequest</innerclass>
+    <innernamespace refid="namespace_inventory_management_system_1_1_public_api_1_1_authentication_endpoints">InventoryManagementSystem::PublicApi::AuthenticationEndpoints</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">InventoryManagementSystem.PublicApi.AuthenticationEndpoints</highlight></codeline>
+<codeline lineno="2"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="3" refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request" kindref="compound">AuthenticateRequest</ref><sp/>:<sp/><ref refid="class_inventory_management_system_1_1_public_api_1_1_base_request" kindref="compound">BaseRequest</ref><sp/></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="5" refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request_1addac0ec09ba83089330615d52b146405" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>Username<sp/>{<sp/></highlight><highlight class="keyword">get</highlight><highlight class="normal">;<sp/>set;<sp/>}</highlight></codeline>
+<codeline lineno="6" refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_authenticate_request_1ac9f95227af2a4f0dba175a4cc03a8d95" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>Password<sp/>{<sp/></highlight><highlight class="keyword">get</highlight><highlight class="normal">;<sp/>set;<sp/>}</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="8"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/AuthenticateRequest.cs"/>
+  </compounddef>
+</doxygen>

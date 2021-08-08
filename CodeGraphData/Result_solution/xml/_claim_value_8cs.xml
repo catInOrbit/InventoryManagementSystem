@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="_claim_value_8cs" kind="file">
+    <compoundname>ClaimValue.cs</compoundname>
+    <innerclass refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value" prot="public">InventoryManagementSystem::PublicApi::AuthenticationEndpoints::ClaimValue</innerclass>
+    <innernamespace refid="namespace_inventory_management_system_1_1_public_api_1_1_authentication_endpoints">InventoryManagementSystem::PublicApi::AuthenticationEndpoints</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">InventoryManagementSystem.PublicApi.AuthenticationEndpoints</highlight></codeline>
+<codeline lineno="2"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="3" refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value" kindref="compound">ClaimValue</ref></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="5" refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1af64cc4a4e1b3dbc880fc7145d9a6bb46" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1af64cc4a4e1b3dbc880fc7145d9a6bb46" kindref="member">ClaimValue</ref>()</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9" refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1ad33b1dbd89aaf78dfbb3dacd45f73e52" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/><ref refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1ad33b1dbd89aaf78dfbb3dacd45f73e52" kindref="member">ClaimValue</ref>(</highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>type,<sp/></highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>value)</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Type<sp/>=<sp/>type;</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Value<sp/>=<sp/>value;</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15" refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1a4661e796d36ab04b4b7a08f2f8c863e7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>Type<sp/>{<sp/></highlight><highlight class="keyword">get</highlight><highlight class="normal">;<sp/>set;<sp/>}</highlight></codeline>
+<codeline lineno="16" refid="class_inventory_management_system_1_1_public_api_1_1_authentication_endpoints_1_1_claim_value_1aa7187e90a4b8fe2754e16b785d6de896" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">string</highlight><highlight class="normal"><sp/>Value<sp/>{<sp/></highlight><highlight class="keyword">get</highlight><highlight class="normal">;<sp/>set;<sp/>}</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="18"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/AuthenticationEndpoints/ClaimValue.cs"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler" kind="class" prot="public">
+    <compoundname>ContactManager::Authorization::ContactIsOwnerAuthorizationHandler</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">AuthorizationHandler&lt; OperationAuthorizationRequirement, IMSUser &gt;</basecompoundref>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler_1a3508166dabb496aecde63e97f61d9bfb" prot="private" static="no" mutable="no">
+        <type>UserManager&lt; IdentityUser &gt;</type>
+        <definition>UserManager&lt;IdentityUser&gt; ContactManager.Authorization.ContactIsOwnerAuthorizationHandler._userManager</definition>
+        <argsstring></argsstring>
+        <name>_userManager</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactIsOwnerAuthorizationHandler.cs" line="12" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactIsOwnerAuthorizationHandler.cs" bodystart="12" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler_1a62a34b405623fb35299e5bab776f9fa3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>ContactManager.Authorization.ContactIsOwnerAuthorizationHandler.ContactIsOwnerAuthorizationHandler</definition>
+        <argsstring>(UserManager&lt; IdentityUser &gt; userManager)</argsstring>
+        <name>ContactIsOwnerAuthorizationHandler</name>
+        <param>
+          <type>UserManager&lt; IdentityUser &gt;</type>
+          <declname>userManager</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactIsOwnerAuthorizationHandler.cs" line="14" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactIsOwnerAuthorizationHandler.cs" bodystart="14" bodyend="18"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler_1a5eff2d9812df54184d9d4503d2f22173" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>override Task</type>
+        <definition>override Task ContactManager.Authorization.ContactIsOwnerAuthorizationHandler.HandleRequirementAsync</definition>
+        <argsstring>(AuthorizationHandlerContext context, OperationAuthorizationRequirement requirement, IMSUser resource)</argsstring>
+        <name>HandleRequirementAsync</name>
+        <param>
+          <type>AuthorizationHandlerContext</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>OperationAuthorizationRequirement</type>
+          <declname>requirement</declname>
+        </param>
+        <param>
+          <type><ref refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user" kindref="compound">IMSUser</ref></type>
+          <declname>resource</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactIsOwnerAuthorizationHandler.cs" line="21" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactIsOwnerAuthorizationHandler.cs" bodystart="21" bodyend="46"/>
+        <references refid="class_contact_manager_1_1_authorization_1_1_constants_1a0f9197d3147ab57d2082da6457f7e16e" compoundref="_contact_operations_8cs" startline="23">ContactManager.Authorization.Constants.CreateOperationName</references>
+        <references refid="class_contact_manager_1_1_authorization_1_1_constants_1a3edbae8318d7cc03f36c7b8c73a48c8b" compoundref="_contact_operations_8cs" startline="26">ContactManager.Authorization.Constants.DeleteOperationName</references>
+        <references refid="class_microsoft_1_1e_shop_web_1_1_application_core_1_1_entities_1_1_i_m_s_user_1a47d3a2fe9c999c7c3d2126724db4774e" compoundref="_i_m_s_user_8cs" startline="7">Microsoft.eShopWeb.ApplicationCore.Entities.IMSUser.OwnerID</references>
+        <references refid="class_contact_manager_1_1_authorization_1_1_constants_1afd339ea3f39ef06967c203fb4b3fcce5" compoundref="_contact_operations_8cs" startline="24">ContactManager.Authorization.Constants.ReadOperationName</references>
+        <references refid="class_contact_manager_1_1_authorization_1_1_constants_1a733e3ac382073c3c376f6493a4866efe" compoundref="_contact_operations_8cs" startline="25">ContactManager.Authorization.Constants.UpdateOperationName</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="88">
+        <label>ContactManager.Authorization.ContactIsOwnerAuthorizationHandler</label>
+        <link refid="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler"/>
+        <childnode refid="89" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="89">
+        <label>AuthorizationHandler&lt; OperationAuthorizationRequirement, IMSUser &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="90">
+        <label>ContactManager.Authorization.ContactIsOwnerAuthorizationHandler</label>
+        <link refid="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler"/>
+        <childnode refid="91" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="91">
+        <label>AuthorizationHandler&lt; OperationAuthorizationRequirement, IMSUser &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactIsOwnerAuthorizationHandler.cs" line="11" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/Authorization/ContactIsOwnerAuthorizationHandler.cs" bodystart="9" bodyend="47"/>
+    <listofallmembers>
+      <member refid="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler_1a3508166dabb496aecde63e97f61d9bfb" prot="private" virt="non-virtual"><scope>ContactManager::Authorization::ContactIsOwnerAuthorizationHandler</scope><name>_userManager</name></member>
+      <member refid="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler_1a62a34b405623fb35299e5bab776f9fa3" prot="public" virt="non-virtual"><scope>ContactManager::Authorization::ContactIsOwnerAuthorizationHandler</scope><name>ContactIsOwnerAuthorizationHandler</name></member>
+      <member refid="class_contact_manager_1_1_authorization_1_1_contact_is_owner_authorization_handler_1a5eff2d9812df54184d9d4503d2f22173" prot="protected" virt="non-virtual"><scope>ContactManager::Authorization::ContactIsOwnerAuthorizationHandler</scope><name>HandleRequirementAsync</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

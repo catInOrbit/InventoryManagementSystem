@@ -1,0 +1,3 @@
+namespace InventoryManagementSystem.PublicApi.UtilEndpoints
+{
+}

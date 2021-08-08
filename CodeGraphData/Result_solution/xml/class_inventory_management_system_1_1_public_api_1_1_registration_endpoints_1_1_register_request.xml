@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request" kind="class" prot="public">
+    <compoundname>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterRequest</compoundname>
+    <basecompoundref refid="class_inventory_management_system_1_1_public_api_1_1_base_request" prot="public" virt="non-virtual">InventoryManagementSystem.PublicApi.BaseRequest</basecompoundref>
+      <sectiondef kind="property">
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request_1ac073df7118b7bb8580a89e7345a2d142" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterRequest.Username</definition>
+        <argsstring></argsstring>
+        <name>Username</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterRequest.cs" line="5" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterRequest.cs" bodystart="5" bodyend="-1"/>
+        <referencedby refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a0a45deabd9785235b206455b424dca10" compoundref="_register_8cs" startline="36" endline="56">InventoryManagementSystem.PublicApi.RegistrationEndpoints.Register.HandleAsync</referencedby>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request_1ae90efcd5282b562658d7b631ce47bd92" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterRequest.Password</definition>
+        <argsstring></argsstring>
+        <name>Password</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterRequest.cs" line="6" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterRequest.cs" bodystart="6" bodyend="-1"/>
+        <referencedby refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a0a45deabd9785235b206455b424dca10" compoundref="_register_8cs" startline="36" endline="56">InventoryManagementSystem.PublicApi.RegistrationEndpoints.Register.HandleAsync</referencedby>
+      </memberdef>
+      <memberdef kind="property" id="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request_1aa72bd54006953abb0563187e38be8867" prot="public" static="no" readable="no" writable="no" gettable="yes" settable="yes">
+        <type>string</type>
+        <definition>string InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterRequest.RoleName</definition>
+        <argsstring></argsstring>
+        <name>RoleName</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterRequest.cs" line="8" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterRequest.cs" bodystart="8" bodyend="-1"/>
+        <referencedby refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_1a0a45deabd9785235b206455b424dca10" compoundref="_register_8cs" startline="36" endline="56">InventoryManagementSystem.PublicApi.RegistrationEndpoints.Register.HandleAsync</referencedby>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="169">
+        <label>BaseMessage</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_message"/>
+      </node>
+      <node id="167">
+        <label>InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterRequest</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request"/>
+        <childnode refid="168" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="168">
+        <label>BaseRequest</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_request"/>
+        <childnode refid="169" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="172">
+        <label>BaseMessage</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_message"/>
+      </node>
+      <node id="170">
+        <label>InventoryManagementSystem.PublicApi.RegistrationEndpoints.RegisterRequest</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request"/>
+        <childnode refid="171" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="171">
+        <label>BaseRequest</label>
+        <link refid="class_inventory_management_system_1_1_public_api_1_1_base_request"/>
+        <childnode refid="172" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterRequest.cs" line="4" column="1" bodyfile="C:/InventoryManagementSystem/src/IMSPublicApi/RegistrationEndpoints/RegisterRequest.cs" bodystart="3" bodyend="10"/>
+    <listofallmembers>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1a957ab0420a8796545fa44dfd85f37d77" prot="protected" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterRequest</scope><name>_correlationId</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_base_message_1ac2ad0cd8ef8cb4ed8249ed6a67083c50" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterRequest</scope><name>CorrelationId</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request_1ae90efcd5282b562658d7b631ce47bd92" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterRequest</scope><name>Password</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request_1aa72bd54006953abb0563187e38be8867" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterRequest</scope><name>RoleName</name></member>
+      <member refid="class_inventory_management_system_1_1_public_api_1_1_registration_endpoints_1_1_register_request_1ac073df7118b7bb8580a89e7345a2d142" prot="public" virt="non-virtual"><scope>InventoryManagementSystem::PublicApi::RegistrationEndpoints::RegisterRequest</scope><name>Username</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
