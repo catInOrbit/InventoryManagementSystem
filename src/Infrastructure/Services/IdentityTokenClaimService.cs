@@ -7,17 +7,21 @@ using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using ILogger = Castle.Core.Logging.ILogger;
 
 namespace Infrastructure.Services
 {
     public class IdentityTokenClaimService : ITokenClaimsService
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private ILogger<IdentityTokenClaimService> _logger;
         
-        public IdentityTokenClaimService(UserManager<ApplicationUser> userManager)
+        public IdentityTokenClaimService(UserManager<ApplicationUser> userManager, ILogger<IdentityTokenClaimService> logger)
         {
             _userManager = userManager;
+            _logger = logger;
         }
 
         public async Task<string> GetTokenAsync(string email)
@@ -35,6 +39,8 @@ namespace Infrastructure.Services
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
+            _logger.LogInformation("Current server time is: " + DateTime.Now);
+            _logger.LogInformation("Token login generated and expires at: " + tokenDescriptor.Expires);
             return tokenHandler.WriteToken(token);
         }
         
@@ -53,6 +59,8 @@ namespace Infrastructure.Services
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
+            _logger.LogInformation("Current server time is: " + DateTime.Now);
+            _logger.LogInformation("Token refresh generated and expires at: " + tokenDescriptor.Expires);
             return  tokenHandler.WriteToken(token);
         }
 

@@ -43,7 +43,7 @@
         {
             var listCategory = await _identityAndProductDbContext.Category.Where( ca => ca.Transaction.TransactionRecord.Count > 0 ).ToListAsync();
             pagingOption.ResultList = listCategory.OrderByDescending(ca =>
-                ca.Transaction.TransactionRecord[ca.Transaction.TransactionRecord.Count - 1].Date).ToList();
+                ca.Transaction.TransactionRecord[^1].Date).ToList();
             pagingOption.ExecuteResourcePaging();
             return pagingOption;
         }

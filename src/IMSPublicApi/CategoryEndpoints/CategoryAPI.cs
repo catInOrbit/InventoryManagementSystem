@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
@@ -49,8 +50,10 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
             var category = new Category
             {
                 CategoryName = request.CategoryName,
-                CategoryDescription = request.CategoryDescription
+                CategoryDescription = request.CategoryDescription,
+                LatestUpdateDate = DateTime.UtcNow,
             };
+            
             category.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Category, category.Id, (await _userSession.GetCurrentSessionUser()).Id);
             
             await _categoryAsyncRepository.AddAsync(category);
@@ -108,7 +111,8 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
             
             category.CategoryName = request.CategoryName;
             category.CategoryDescription = request.CategoryDescription;
-            
+            category.LatestUpdateDate = DateTime.UtcNow;
+
             await _categoryAsyncRepository.UpdateAsync(category);
             // await _categoryIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.CategorySearchIndex(category),
             //     ElasticIndexConstant.CATEGORIES);
@@ -178,6 +182,10 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
             PagingOption<Category> pagingOption = new PagingOption<Category>(
                 request.CurrentPage, request.SizePerPage);
             response.Paging = (await _asyncRepository.GetCategory(pagingOption, cancellationToken));
+            foreach (var category in response.Paging.ResultList)
+            {
+                Console.WriteLine(category.Transaction.TransactionRecord[^1].Date);
+            }
             return Ok(response);
         }
     }

@@ -218,6 +218,16 @@ namespace Infrastructure.Services
             return await database.StringSetAsync(RedisConstants.REDIS_PRODUCTUPDATEMESSAGE, JsonSerializer.Serialize(productGroupMessage));
         }
 
+        public async Task<bool> DeleteProductUpdateInfo()
+        {
+            var data = await database.StringGetAsync(RedisConstants.REDIS_PRODUCTUPDATEMESSAGE);
+            if (data.IsNullOrEmpty)
+                throw new Exception("Unable to find redis key : " + RedisConstants.REDIS_PRODUCTUPDATEMESSAGE + ". Key may not exist");
+            var productGroupMessage = JsonSerializer.Deserialize<ProductMessageGroup>(data);
+            productGroupMessage.ProductUpdateMessages = new List<ProductUpdateMessage>();
+            return await database.StringSetAsync(RedisConstants.REDIS_PRODUCTUPDATEMESSAGE, JsonSerializer.Serialize(productGroupMessage));
+        }
+
         public async Task<List<ProductUpdateMessage>> GetProductUpdateMessage()
         {
             

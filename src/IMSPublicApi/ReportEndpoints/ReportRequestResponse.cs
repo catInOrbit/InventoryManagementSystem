@@ -23,6 +23,23 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
         public string TopSellingProductName { get; set; }
     }
     
+    public class InventoryCostResponse
+    {
+        public decimal InventoryCostThisMonth { get; set; }
+    }
+    
+    public class QuantityThisMonthResponse
+    {
+        public int SumInventoryCountThisMonth { get; set; }
+    }
+    
+    public class ImportExportThisMonthResponse
+    {
+        public int ImportQuantity { get; set; }
+        public int ExportQuantity { get; set; }
+
+    }
+    
     public class StockReportRequest
     {
         public int CurrentPage { get; set; }

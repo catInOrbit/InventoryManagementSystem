@@ -23,6 +23,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
         private readonly IElasticAsyncRepository<ProductVariantSearchIndex> _productVariantEls;
         private readonly IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> _roEls;
         private readonly IElasticAsyncRepository<PurchaseOrderSearchIndex> _poEls;
+        private readonly IElasticAsyncRepository<Package> _pkgEls;
 
         private readonly IRedisRepository _redisRepository;
 
@@ -35,7 +36,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
 
         public GoodsReceiptBusinessService(
             IAsyncRepository<ProductVariant> productVariantRepository, 
-             IAsyncRepository<GoodsReceiptOrder> roRepository, IAsyncRepository<Package> packageRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantEls, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> roEls, IAsyncRepository<PurchaseOrder> poAsyncRepository, IRedisRepository redisRepository)
+             IAsyncRepository<GoodsReceiptOrder> roRepository, IAsyncRepository<Package> packageRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantEls, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> roEls, IAsyncRepository<PurchaseOrder> poAsyncRepository, IRedisRepository redisRepository, IElasticAsyncRepository<Package> pkgEls)
         {
             _productVariantRepository = productVariantRepository;
             _roRepository = roRepository;
@@ -44,6 +45,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
             _roEls = roEls;
             _poAsyncRepository = poAsyncRepository;
             _redisRepository = redisRepository;
+            _pkgEls = pkgEls;
         }
         
         public GoodsReceiptBusinessService(IAsyncRepository<GoodsReceiptOrder> roRepository, IAsyncRepository<PurchaseOrder> poAsyncRepository)
@@ -142,7 +144,9 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                 package.LatestUpdateDate = DateTime.UtcNow;
 
                 await _packageRepository.AddAsync(package);
+                await _pkgEls.ElasticSaveSingleAsync(false, package, ElasticIndexConstant.PACKAGES);
                 roi.ProductVariant.Packages.Add(package);
+                roi.ProductVariant.StorageQuantity += package.Quantity;
                 //Begin Inserting into bigQuery
             }
             await _roEls.ElasticSaveSingleAsync(true,IndexingHelper.GoodsReceiptOrderSearchIndex(ro), ElasticIndexConstant.RECEIVING_ORDERS);

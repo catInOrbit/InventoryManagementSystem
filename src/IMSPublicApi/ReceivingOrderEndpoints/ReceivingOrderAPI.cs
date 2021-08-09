@@ -36,6 +36,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly IElasticAsyncRepository<ProductVariantSearchIndex> _productVariantElasticRepository;
 
         private readonly IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> _recevingOrderSearchIndexRepository;
+        private readonly IElasticAsyncRepository<Package> _packageElastic;
 
         private readonly IUserSession _userAuthentication;
         private readonly IRedisRepository _redisRepository;
@@ -43,7 +44,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly INotificationService _notificationService;
         private ILogger<ReceivingOrderUpdate> _logger;
 
-        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IUserSession userAuthentication,  IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository, IAsyncRepository<ProductVariant> productVariantRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantElasticRepository1, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository1, IRedisRepository redisRepository, ILogger<ReceivingOrderUpdate> logger)
+        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IUserSession userAuthentication,  IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository, IAsyncRepository<ProductVariant> productVariantRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantElasticRepository1, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository1, IRedisRepository redisRepository, ILogger<ReceivingOrderUpdate> logger, IElasticAsyncRepository<Package> packageElastic)
         {
             _authorizationService = authorizationService;
             _recevingOrderRepository = recevingOrderRepository;
@@ -57,6 +58,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             _recevingOrderSearchIndexRepository = recevingOrderSearchIndexRepository1;
             _redisRepository = redisRepository;
             _logger = logger;
+            _packageElastic = packageElastic;
         }
         
         [HttpPost("api/goodsreceipt/create")]
@@ -74,9 +76,6 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             
             var ro = new GoodsReceiptOrder();
             
-            //Check if creating for first time for elastic and addasync procedure
-
-            //Create new transaction if null
             if (ro.Transaction == null)
                 ro.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.GoodsReceipt, ro.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
             
@@ -97,12 +96,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             
             ro.Location = location;
                 
-            //TODO: Update sku of product in a seperate API
-            
-            //Data of receipt order is from frontend
-
            GoodsReceiptBusinessService gbs = new GoodsReceiptBusinessService( _productVariantRepository, _recevingOrderRepository, _packageRepository, _productVariantElasticRepository,
-               _recevingOrderSearchIndexRepository, _poRepository,_redisRepository);
+               _recevingOrderSearchIndexRepository, _poRepository,_redisRepository, _packageElastic);
            ro = await gbs.ReceiveProducts(ro, request.UpdateItems);
            if (ro == null)
                return BadRequest("Unable to update GoodsReceipt, check for correct PurchaseOrder ID");
@@ -205,6 +200,9 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             return Ok();
         }
     }
+     
+     
+ 
      
     //   public class ReceivingOrderSubmit : BaseAsyncEndpoint.WithRequest<ROSubmitRequest>.WithoutResponse
     // {

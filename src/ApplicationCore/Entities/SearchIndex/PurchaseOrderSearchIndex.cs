@@ -20,6 +20,7 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         public string SupplierId { get; set; }
         public string SupplierPhone { get; set; }
         public string SupplierEmail { get; set; }
+        public DateTime Deadline { get; set; }
         public string CreatedByName { get; set; }
         public string CanceledByName { get; set; }
         public bool HasSentMail { get; set; }

@@ -129,7 +129,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
                             source => source.Includes(
                                 fi => fi.Field(package => package.Location)
                             )
-                        ).
+                        ).Sort(ss => ss.Descending(p => p.LatestUpdateDate)).
                         Query(q =>q.
                             QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));
                 

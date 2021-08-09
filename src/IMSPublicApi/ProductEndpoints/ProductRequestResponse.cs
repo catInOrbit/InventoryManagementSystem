@@ -17,6 +17,12 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
         public string Id { get; set; }
         public string ImageLink { get; set; }
     }
+    
+    
+    public class ProductAutoUpdateRequest : BaseRequest
+    {
+        public bool IsConfirming { get; set; } 
+    }
 
     public class ProductUpdateRequest : BaseRequest
     {
