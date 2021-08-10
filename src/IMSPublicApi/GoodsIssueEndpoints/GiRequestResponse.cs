@@ -101,6 +101,11 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
         
     }
     
+    public class GiDEMORequest : BaseRequest
+    {
+        
+    }
+    
     
     public class GiUpdateRequest : BaseRequest
     {

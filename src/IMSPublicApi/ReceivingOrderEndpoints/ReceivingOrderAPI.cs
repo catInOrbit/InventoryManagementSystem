@@ -36,6 +36,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly IElasticAsyncRepository<ProductVariantSearchIndex> _productVariantElasticRepository;
 
         private readonly IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> _recevingOrderSearchIndexRepository;
+        private readonly IElasticAsyncRepository<PurchaseOrderSearchIndex> _poSearchIndexRepository;
+
         private readonly IElasticAsyncRepository<Package> _packageElastic;
 
         private readonly IUserSession _userAuthentication;
@@ -44,7 +46,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly INotificationService _notificationService;
         private ILogger<ReceivingOrderUpdate> _logger;
 
-        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IUserSession userAuthentication,  IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository, IAsyncRepository<ProductVariant> productVariantRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantElasticRepository1, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository1, IRedisRepository redisRepository, ILogger<ReceivingOrderUpdate> logger, IElasticAsyncRepository<Package> packageElastic)
+        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IUserSession userAuthentication,  IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository, IAsyncRepository<ProductVariant> productVariantRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantElasticRepository1, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository1, IRedisRepository redisRepository, ILogger<ReceivingOrderUpdate> logger, IElasticAsyncRepository<Package> packageElastic, IElasticAsyncRepository<PurchaseOrderSearchIndex> poSearchIndexRepository)
         {
             _authorizationService = authorizationService;
             _recevingOrderRepository = recevingOrderRepository;
@@ -59,6 +61,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             _redisRepository = redisRepository;
             _logger = logger;
             _packageElastic = packageElastic;
+            _poSearchIndexRepository = poSearchIndexRepository;
         }
         
         [HttpPost("api/goodsreceipt/create")]
@@ -113,10 +116,14 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             if (po == null)
                 return NotFound("Can not find ID of purchase order ");
             
-            var insufficientVariantsId = (await gbs.CheckSufficientReceiptQuantity(ro)); 
-            
-            if(insufficientVariantsId.Count == 0)
+            var insufficientVariantsId = (await gbs.CheckSufficientReceiptQuantity(ro));
+
+            if (insufficientVariantsId.Count == 0)
+            {
                 po.PurchaseOrderStatus = PurchaseOrderStatusType.Done;
+                await _poSearchIndexRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po),
+                    ElasticIndexConstant.PURCHASE_ORDERS);
+            }
             
             BigQueryService bigQueryService = new BigQueryService();
 

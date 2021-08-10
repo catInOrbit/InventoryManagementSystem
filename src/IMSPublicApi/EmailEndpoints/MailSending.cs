@@ -8,6 +8,7 @@ using Infrastructure;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using InventoryManagementSystem.ApplicationCore.Services;
@@ -21,14 +22,15 @@ namespace InventoryManagementSystem.PublicApi.EmailEndpoints
     public class SendMail : BaseAsyncEndpoint.WithRequest<MailSendingRequest>.WithoutResponse
     {
         private readonly IEmailSender _emailSender;
-        private IAsyncRepository<PurchaseOrder> _purchaseOrderAsyncRepository;
-        private IElasticAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
-
-        public SendMail(IEmailSender emailSender, IAsyncRepository<PurchaseOrder> purchaseOrderAsyncRepository, IElasticAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository)
+        private readonly IAsyncRepository<PurchaseOrder> _purchaseOrderAsyncRepository;
+        private readonly IElasticAsyncRepository<PurchaseOrderSearchIndex> _indexAsyncRepository;
+        private readonly IUserSession _userSession;
+        public SendMail(IEmailSender emailSender, IAsyncRepository<PurchaseOrder> purchaseOrderAsyncRepository, IElasticAsyncRepository<PurchaseOrderSearchIndex> indexAsyncRepository, IUserSession userSession)
         {
             _emailSender = emailSender;
             _purchaseOrderAsyncRepository = purchaseOrderAsyncRepository;
             _indexAsyncRepository = indexAsyncRepository;
+            _userSession = userSession;
         }
 
 
@@ -62,7 +64,11 @@ namespace InventoryManagementSystem.PublicApi.EmailEndpoints
                     
                     foreach (var orderItem in po.PurchaseOrderProduct)
                         orderItem.IsShowingProductVariant = true;
-                    await _emailSender.SendEmailAsync(message);
+                    var currentSessionUser = await _userSession.GetCurrentSessionUser();
+
+                    po.Transaction = TransactionUpdateHelper.UpdateMailTransaction(po.Transaction,
+                        UserTransactionActionType.Modify,
+                        TransactionType.Purchase, currentSessionUser.Id, po.Id, String.Join(",", request.To));
                     return Ok(response);
                 }
                 catch

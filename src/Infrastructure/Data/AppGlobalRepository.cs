@@ -48,6 +48,21 @@
             return pagingOption;
         }
 
+        public async Task<PagingOption<Location>> GetLocation(PagingOption<Location> pagingOption, CancellationToken cancellationToken = default)
+        {
+            var listLocations = await _identityAndProductDbContext.Location.Where( ca => ca.Transaction.TransactionRecord.Count > 0 ).ToListAsync();
+            foreach (var listLocation in listLocations)
+            {
+                listLocation.LatestUpdateDate = listLocation.Transaction.TransactionRecord[^1].Date;
+            }
+            
+            pagingOption.ResultList = listLocations.OrderByDescending(ca =>
+                ca.Transaction.TransactionRecord[^1].Date).ToList();
+            
+            pagingOption.ExecuteResourcePaging();
+            return pagingOption;
+        }
+
         public async Task<List<Package>> GetPackagesFromProductVariantId(string productVariantId, CancellationToken cancellationToken = default)
         {
             return await _identityAndProductDbContext.Package.Where(package => package.ProductVariantId == productVariantId).OrderByDescending(package => package.ImportedDate)

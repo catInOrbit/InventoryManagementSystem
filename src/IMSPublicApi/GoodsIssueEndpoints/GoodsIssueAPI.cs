@@ -107,6 +107,101 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
             }
         }
      
+     public class GoodsIssueDEMO : BaseAsyncEndpoint.WithoutRequest.WithoutResponse
+        {
+            
+            private readonly IUserSession _userAuthentication;
+            private readonly IAsyncRepository<GoodsIssueOrder> _asyncRepository;
+            private readonly IAsyncRepository<Supplier> _supAsyncRepository;
+            private readonly IAsyncRepository<ProductVariant> _pvAsyncRepository;
+
+            private readonly IElasticAsyncRepository<GoodsIssueSearchIndex> _giEls;
+
+          
+            private readonly IAuthorizationService _authorizationService;
+            
+
+            public GoodsIssueDEMO(IUserSession userAuthentication, IAsyncRepository<GoodsIssueOrder> asyncRepository, IAsyncRepository<Supplier> supAsyncRepository, IElasticAsyncRepository<GoodsIssueSearchIndex> giEls, IAuthorizationService authorizationService, IAsyncRepository<ProductVariant> pvAsyncRepository)
+            {
+                _userAuthentication = userAuthentication;
+                _asyncRepository = asyncRepository;
+                _supAsyncRepository = supAsyncRepository;
+                _giEls = giEls;
+                _authorizationService = authorizationService;
+                _pvAsyncRepository = pvAsyncRepository;
+            }
+
+
+            [HttpPost("api/goodsissue/DEMO")]
+            [SwaggerOperation(
+                Summary = "Create Good issue order",
+                Description = "Create Good issue order",
+                OperationId = "gio.demo",
+                Tags = new[] { "GoodsIssueEndpoints" })
+            ]
+            public override async Task<ActionResult> HandleAsync(CancellationToken cancellationToken = new CancellationToken())
+            {
+                if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.GOODSISSUE, UserOperations.Create))
+                    return Unauthorized();
+                
+                var random = new Random();
+                var supList = (await _supAsyncRepository.ListAllAsync(new PagingOption<Supplier>(0, 0))).ResultList
+                    .ToList();
+                var randomSupplier = supList[random.Next(supList.Count)]; 
+                var gio = new GoodsIssueOrder
+                {
+                    Supplier = randomSupplier,
+                    SupplierId = randomSupplier.Id,
+                    GoodsIssueType = GoodsIssueStatusType.IssueRequisition,
+                    CustomerName = "JakeA",
+                    CustomerPhoneNumber = "12345678",
+                    DeliveryAddress = "Delivery Address",
+                    DeliveryDate = DateTime.Now.AddDays(10),
+                    DeliveryMethod = "Fast Shipping"
+                };
+
+                gio.GoodsIssueProducts = new List<OrderItem>();
+                var variantList = (await _pvAsyncRepository.ListAllAsync(new PagingOption<ProductVariant>(0, 0)))
+                    .ResultList;
+
+                var randomList = new List<ProductVariant>();
+
+                var randomNumOfOrders = random.Next(1, 5);
+                while (randomList.Count <= randomNumOfOrders)
+                {
+                    var randomVariant =  variantList[random.Next(variantList.Count)];
+                    if(!randomList.Contains(randomVariant) && randomVariant.Packages.Count>0)
+                        randomList.Add(randomVariant);
+                }
+         
+                
+                foreach (var productVariant in randomList)
+                {
+                    var orderItem = new OrderItem
+                    {
+                        ProductVariant = productVariant,
+                        ProductVariantId = productVariant.Id,
+                        Unit = "UnitDemo",
+                        DiscountAmount = 0,
+                        OrderQuantity = random.Next(1, 50),
+                        Price = random.Next(1, 100000),
+                        SalePrice = random.Next(1, 100000),
+                    };
+                    orderItem.TotalAmount = orderItem.Price * orderItem.OrderQuantity;
+                    orderItem.QuantityLeftAfterReceived = orderItem.OrderQuantity;
+                    gio.GoodsIssueProducts.Add(orderItem);
+                }
+                
+                gio.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.GoodsIssue, gio.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
+                
+                gio.GoodsIssueType = GoodsIssueStatusType.IssueRequisition;
+
+                await _asyncRepository.AddAsync(gio);
+                await _giEls.ElasticSaveSingleAsync(false, IndexingHelper.GoodsIssueSearchIndexHelper(gio), ElasticIndexConstant.GOODS_ISSUE_ORDERS);
+
+                return Ok(gio.Id);
+            }
+        }
      public class GoodsIssueUpdate : BaseAsyncEndpoint.WithRequest<GiUpdateRequest>.WithResponse<GiResponse>
      {
          private readonly ILogger<GoodsIssueUpdate> _logger;

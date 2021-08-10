@@ -39,11 +39,12 @@ namespace InventoryManagementSystem.PublicApi.ResetPasswordEndpoints
             var response = new ResetPasswordLeadResponse(request.CorrelationId());
             
             var user = await _userManager.FindByEmailAsync(request.Email);
-            if (user != null && await _userManager.IsEmailConfirmedAsync(user))
+            if (user != null)
             {
                 var token =  await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callback = token;
-                var message = new EmailMessage(new string[] { user.Email }, "Reset password token", callback, null);
+                var passwordGen = "NEW#" + Guid.NewGuid().ToString().Substring(0, 12);
+                var message = new EmailMessage(new string[] { user.Email }, "New password: ", passwordGen, null);
+                var result = await _userManager.ResetPasswordAsync(user, token, passwordGen);
                 await _emailSender.SendEmailAsync(message);
                 response.Result = true;
                 response.Verbose = "Password reset sent to: " + user.Email;

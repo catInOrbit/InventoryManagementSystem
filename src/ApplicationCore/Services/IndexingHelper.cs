@@ -30,6 +30,8 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                 Deadline = po.Deadline
             };
 
+            index.TotalProductAmount = po.PurchaseOrderProduct.Count;
+
             if (index.ModifiedDate != DateTime.MinValue)
                 index.LatestUpdateDate = index.ModifiedDate;
             else if(index.CreatedDate != DateTime.MinValue)

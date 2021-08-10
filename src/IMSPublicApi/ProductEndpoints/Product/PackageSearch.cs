@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -122,21 +123,33 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Product
 
             else
             {
-                responseElastic = await _elasticClient.SearchAsync<Package>
+                // responseElastic = await _elasticClient.SearchAsync<Package>
+                // (
+                //     s => s.Size(2000).Index( ElasticIndexConstant.PACKAGES).
+                //         Source(
+                //             source => source.Includes(
+                //                 fi => fi.Field(package => package.Location)
+                //             )
+                //         ).Sort(ss => ss.Descending(p => p.LatestUpdateDate)).
+                //         Query(q =>q.
+                //             QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));
+                ISearchResponse<ApplicationCore.Entities.Products.Location> responseElasticLocation;
+
+                ElasticSearchHelper<ApplicationCore.Entities.Products.Location> elasticSearchHelper = new ElasticSearchHelper<ApplicationCore.Entities.Products.Location>(_elasticClient, request.SearchQuery,
+                    ElasticIndexConstant.LOCATIONS);
+                
+                responseElasticLocation = await _elasticClient.SearchAsync<ApplicationCore.Entities.Products.Location>
                 (
-                    s => s.Size(2000).Index( ElasticIndexConstant.PACKAGES).
-                        Source(
-                            source => source.Includes(
-                                fi => fi.Field(package => package.Location)
-                            )
-                        ).Sort(ss => ss.Descending(p => p.LatestUpdateDate)).
+                    s => s.Size(2000).Index( ElasticIndexConstant.LOCATIONS).
+                       Sort(ss => ss.Descending(p => p.LatestUpdateDate)).
                         Query(q =>q.
                             QueryString(d =>d.Query('*' + request.SearchQuery + '*'))));
+                // responseElasticLocation = await elasticSearchHelper.GetDocuments();
+
                 
-                var locations = responseElastic.Documents.Where(x => x.Location!= null).Select(x => x.Location).ToList();
-                
-                locations = locations.GroupBy(x => x.Id).Select(x => x.FirstOrDefault()).ToList();
-                pagingOptionLocation.ResultList = locations;
+                // var locations = responseElasticLocation.Documents.Where(x => x.Location!= null).Select(x => x.Location).ToList();
+                // locations = locations.GroupBy(x => x.Id).Select(x => x.FirstOrDefault()).ToList();
+                pagingOptionLocation.ResultList = responseElasticLocation.Documents.ToList();
                 pagingOptionLocation.ExecuteResourcePaging(pagingOptionLocation.ResultList.Count);
                 
                 var response = new LocationSearchResponse();

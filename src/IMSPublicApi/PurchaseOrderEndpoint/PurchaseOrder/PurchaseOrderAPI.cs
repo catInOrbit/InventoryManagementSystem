@@ -105,19 +105,20 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _purchaseOrderRepos;
         private readonly IElasticAsyncRepository<PurchaseOrderSearchIndex> _poSearchRepos;
         private readonly IUserSession _userAuthentication;
-
+        private readonly ILogger<PurchaseOrderConfirm> _logger;
 
         private readonly IAuthorizationService _authorizationService;
         
         private INotificationService _notificationService;
 
-        public PurchaseOrderConfirm(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService, INotificationService notificationService, IUserSession userAuthentication, IElasticAsyncRepository<PurchaseOrderSearchIndex> poSearchRepos1)
+        public PurchaseOrderConfirm(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService, INotificationService notificationService, IUserSession userAuthentication, IElasticAsyncRepository<PurchaseOrderSearchIndex> poSearchRepos1, ILogger<PurchaseOrderConfirm> logger)
         {
             _purchaseOrderRepos = purchaseOrderRepos;
             _authorizationService = authorizationService;
             _notificationService = notificationService;
             _userAuthentication = userAuthentication;
             _poSearchRepos = poSearchRepos1;
+            _logger = logger;
         }
 
         [HttpPost("api/po/confirm")]
@@ -142,6 +143,22 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
 
             po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Confirm,TransactionType.Purchase,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
+            
+            BigQueryService bigQueryService = new BigQueryService();
+                
+            try
+            {
+                foreach (var orderItem in po.PurchaseOrderProduct)
+                {
+                    bigQueryService.InsertProductRowBQ(orderItem.ProductVariant, orderItem.Price,null,
+                        orderItem.ProductVariant.StorageQuantity, 0 , 0, "Upcoming Order", po.Supplier.SupplierName);
+                    _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
+                }
+            }
+            catch
+            {
+                _logger.LogError("Error updating BigQuery on " + this.GetType().ToString());
+            }
             
             // var currentUser = await _userAuthentication.GetCurrentSessionUser();
             //     
@@ -272,21 +289,21 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 await _asyncRepository.UpdateAsync(po);
                 await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
                 
-                BigQueryService bigQueryService = new BigQueryService();
-                
-                try
-                {
-                    foreach (var orderItem in po.PurchaseOrderProduct)
-                    {
-                        bigQueryService.InsertProductRowBQ(orderItem.ProductVariant, orderItem.Price,null,
-                            0, 0 , 0, "Upcoming Order", po.Supplier.SupplierName);
-                        _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
-                    }
-                }
-                catch
-                {
-                    _logger.LogError("Error updating BigQuery on " + this.GetType().ToString());
-                }
+                // BigQueryService bigQueryService = new BigQueryService();
+                //
+                // try
+                // {
+                //     foreach (var orderItem in po.PurchaseOrderProduct)
+                //     {
+                //         bigQueryService.InsertProductRowBQ(orderItem.ProductVariant, orderItem.Price,null,
+                //             0, 0 , 0, "Upcoming Order", po.Supplier.SupplierName);
+                //         _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
+                //     }
+                // }
+                // catch
+                // {
+                //     _logger.LogError("Error updating BigQuery on " + this.GetType().ToString());
+                // }
                 
                 var currentUser = await _userAuthentication.GetCurrentSessionUser();
                 

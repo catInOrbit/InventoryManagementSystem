@@ -73,7 +73,7 @@ namespace Infrastructure.Services
 
         public string CreateMessage(string fromUserFullname, string action, string page, string objectId)
         {
-            return fromUserFullname + " " + action + " " + page + " with ID: " + objectId + ", at: " + DateTime.UtcNow;
+            return fromUserFullname + " " + action + " " + page + " with ID: " + objectId;
         }
     }
 }

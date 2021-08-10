@@ -21,7 +21,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
     
     public class ProductAutoUpdateRequest : BaseRequest
     {
-        public bool IsConfirming { get; set; } 
+        public string ProductVariantId { get; set; }
     }
 
     public class ProductUpdateRequest : BaseRequest

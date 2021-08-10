@@ -91,7 +91,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                 
                     var productVariant = await _productVariantRepository.GetByIdAsync(roi.ProductVariantId);
                     bool initiateUpdate = false;
-                    if (item.Sku != null)
+                    if (!string.IsNullOrEmpty(item.Sku))
                     {
                         var skuRedisList = await CheckSkuExistance(po);
                         var skuExist = skuRedisList.FirstOrDefault(s => s.ProductVariantId == productVariant.Id);

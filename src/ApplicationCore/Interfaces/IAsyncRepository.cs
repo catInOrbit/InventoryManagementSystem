@@ -20,6 +20,7 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
         Task<List<GoodsReceiptOrder>> GetAllGoodsReceiptsOfPurchaseOrder(string purchaseOrderId,  CancellationToken cancellationToken = default);
 
         Task<PagingOption<Category>> GetCategory(PagingOption<Category> pagingOption, CancellationToken cancellationToken = default);
+        Task<PagingOption<Location>> GetLocation(PagingOption<Location> pagingOption, CancellationToken cancellationToken = default);
 
         Task<List<Package>> GetPackagesFromProductVariantId(string productVariantId,  CancellationToken cancellationToken = default);
 

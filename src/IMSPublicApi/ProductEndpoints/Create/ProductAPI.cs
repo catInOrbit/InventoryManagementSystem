@@ -412,7 +412,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
         }
     }
     
-     public class ProductAutoSkuUpdate : BaseAsyncEndpoint.WithRequest<ProductAutoUpdateRequest>.WithoutResponse
+     public class AutoAcceptSkuUpdate : BaseAsyncEndpoint.WithRequest<ProductAutoUpdateRequest>.WithoutResponse
      {
          private readonly IAsyncRepository<ProductVariant> _productVariantAsyncRepository;
          private readonly IElasticAsyncRepository<ProductVariantSearchIndex> _productVariantEls;
@@ -421,7 +421,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
 
         private readonly IAuthorizationService _authorizationService;
 
-        public ProductAutoSkuUpdate(IAsyncRepository<ProductVariant> productVariantAsyncRepository, IRedisRepository redisRepository, IAuthorizationService authorizationService, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantEls)
+        public AutoAcceptSkuUpdate(IAsyncRepository<ProductVariant> productVariantAsyncRepository, IRedisRepository redisRepository, IAuthorizationService authorizationService, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantEls)
         {
             _productVariantAsyncRepository = productVariantAsyncRepository;
             _redisRepository = redisRepository;
@@ -430,11 +430,62 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
         }
 
 
-        [HttpPut("api/product/autoupdate")]
+        [HttpPut("api/product/skuaccept")]
         [SwaggerOperation(
             Summary = "Update a new product",
             Description = "Update a new product",
-            OperationId = "product.autoupdate",
+            OperationId = "product.autoaccept",
+            Tags = new[] { "ProductEndpoints" })
+        ]
+        public override async Task<ActionResult> HandleAsync(ProductAutoUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+           if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Update))
+                return Unauthorized();
+
+           var productVariant = await _productVariantAsyncRepository.GetByIdAsync(request.ProductVariantId);
+           if (productVariant == null)
+               return NotFound("Can not find product variant with ID: " + request.ProductVariantId);
+           
+           var redisData = await _redisRepository.GetProductUpdateMessage();
+
+           redisData = redisData.GroupBy(r => r.ProductVariantId).Select(x => x.FirstOrDefault()).ToList();
+        
+        
+
+           var skuMessage = redisData.FirstOrDefault(r => r.ProductVariantId == productVariant.Id);
+           if(skuMessage == null)
+               return NotFound("Can not find sku request message with product variant ID: " + productVariant.Id);
+           productVariant.Sku = skuMessage.Sku;
+           
+           await _productVariantAsyncRepository.UpdateAsync(productVariant);
+           await _productVariantEls.ElasticSaveSingleAsync(false,
+               IndexingHelper.ProductVariantSearchIndex(productVariant),
+               ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+           await _redisRepository.RemoveProductUpdateMessage(skuMessage.ProductVariantId);
+
+           return Ok();
+        }
+    }
+     
+     public class AutoRejectSkuUpdate : BaseAsyncEndpoint.WithRequest<ProductAutoUpdateRequest>.WithoutResponse
+     {
+
+         public readonly IRedisRepository _redisRepository;
+
+        private readonly IAuthorizationService _authorizationService;
+
+        public AutoRejectSkuUpdate(IRedisRepository redisRepository, IAuthorizationService authorizationService)
+        {
+            _redisRepository = redisRepository;
+            _authorizationService = authorizationService;
+        }
+
+
+        [HttpPut("api/product/skureject")]
+        [SwaggerOperation(
+            Summary = "Update a new product",
+            Description = "Update a new product",
+            OperationId = "product.autoreject",
             Tags = new[] { "ProductEndpoints" })
         ]
         public override async Task<ActionResult> HandleAsync(ProductAutoUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
@@ -445,28 +496,11 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
            var redisData = await _redisRepository.GetProductUpdateMessage();
 
            redisData = redisData.GroupBy(r => r.ProductVariantId).Select(x => x.FirstOrDefault()).ToList();
-
-           if (request.IsConfirming)
-           {
-               foreach (var productUpdateMessage in redisData)
-               {
-                   var productVariant = await _productVariantAsyncRepository.GetByIdAsync(productUpdateMessage.ProductVariantId);
-                   if (productVariant != null)
-                   {
-                       productVariant.Sku = productUpdateMessage.Sku;
-                       await _productVariantAsyncRepository.UpdateAsync(productVariant);
-                       await _productVariantEls.ElasticSaveSingleAsync(false,
-                           IndexingHelper.ProductVariantSearchIndex(productVariant),
-                           ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
-                       await _redisRepository.RemoveProductUpdateMessage(productUpdateMessage.ProductVariantId);
-                   }
-               }    
-           }
-
-           else
-           {
-                await _redisRepository.DeleteProductUpdateInfo();
-           }
+        
+           var skuMessage = redisData.FirstOrDefault(r => r.ProductVariantId == request.ProductVariantId );
+           if(skuMessage == null)
+               return NotFound("Can not find sku request message with product variant ID: " + request.ProductVariantId );
+           await _redisRepository.RemoveProductUpdateMessage(skuMessage.ProductVariantId);
 
            return Ok();
         }

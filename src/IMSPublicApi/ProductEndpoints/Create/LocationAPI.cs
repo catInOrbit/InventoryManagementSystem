@@ -59,6 +59,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Location
                 userId);
 
             await _locationAsyncRepository.AddAsync(location);
+            
             await _locationEls.ElasticSaveSingleAsync(false, location, ElasticIndexConstant.LOCATIONS);
             var currentUser = await _userAuthentication.GetCurrentSessionUser();
             
