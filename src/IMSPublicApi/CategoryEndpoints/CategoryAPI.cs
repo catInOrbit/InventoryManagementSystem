@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
@@ -13,6 +16,7 @@ using InventoryManagementSystem.PublicApi.AuthorizationEndpoints;
 using InventoryManagementSystem.PublicApi.ProductEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Nest;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
@@ -21,16 +25,18 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
     {
         private IAsyncRepository<Category> _categoryAsyncRepository;
         private IAsyncRepository<CategorySearchIndex> _categoryIndexAsyncRepository;
+        private IElasticAsyncRepository<Category> _categoryEls;
 
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserSession _userSession;
 
-        public CategoryCreate(IAsyncRepository<Category> categoryAsyncRepository, IAsyncRepository<CategorySearchIndex> categoryIndexAsyncRepository, IAuthorizationService authorizationService, IUserSession userSession)
+        public CategoryCreate(IAsyncRepository<Category> categoryAsyncRepository, IAsyncRepository<CategorySearchIndex> categoryIndexAsyncRepository, IAuthorizationService authorizationService, IUserSession userSession, IElasticAsyncRepository<Category> categoryEls)
         {
             _categoryAsyncRepository = categoryAsyncRepository;
             _categoryIndexAsyncRepository = categoryIndexAsyncRepository;
             _authorizationService = authorizationService;
             _userSession = userSession;
+            _categoryEls = categoryEls;
         }
 
 
@@ -57,8 +63,8 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
             category.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.Category, category.Id, (await _userSession.GetCurrentSessionUser()).Id);
             
             await _categoryAsyncRepository.AddAsync(category);
-            // await _categoryIndexAsyncRepository.ElasticSaveSingleAsync(true, IndexingHelper.CategorySearchIndex(category),
-            //     ElasticIndexConstant.CATEGORIES);
+            await _categoryEls.ElasticSaveSingleAsync(false, category,
+                ElasticIndexConstant.CATEGORIES);
             return Ok();
         }
     }
@@ -70,13 +76,15 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
 
         private readonly IAuthorizationService _authorizationService;
         private readonly IUserSession _userAuthentication;
+        private IElasticAsyncRepository<Category> _categoryEls;
 
-        public CategoryUpdate(IAsyncRepository<Category> categoryAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<CategorySearchIndex> categoryIndexAsyncRepository)
+        public CategoryUpdate(IAsyncRepository<Category> categoryAsyncRepository, IAuthorizationService authorizationService, IUserSession userAuthentication, IAsyncRepository<CategorySearchIndex> categoryIndexAsyncRepository, IElasticAsyncRepository<Category> categoryEls)
         {
             _categoryAsyncRepository = categoryAsyncRepository;
             _authorizationService = authorizationService;
             _userAuthentication = userAuthentication;
             _categoryIndexAsyncRepository = categoryIndexAsyncRepository;
+            _categoryEls = categoryEls;
         }
         [HttpPut]
         [Route("api/category/update")]
@@ -103,8 +111,6 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
 
                 return NotFound(response);
             }
-            
-            
 
             category.Transaction = TransactionUpdateHelper.UpdateTransaction(category.Transaction,UserTransactionActionType.Modify,TransactionType.Category,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, category.Id, "");
@@ -114,8 +120,9 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
             category.LatestUpdateDate = DateTime.UtcNow;
 
             await _categoryAsyncRepository.UpdateAsync(category);
-            // await _categoryIndexAsyncRepository.ElasticSaveSingleAsync(false, IndexingHelper.CategorySearchIndex(category),
-            //     ElasticIndexConstant.CATEGORIES);
+            
+            await _categoryEls.ElasticSaveSingleAsync(false, category,
+                ElasticIndexConstant.CATEGORIES);
             response = new CategoryUpdateResponse
             {
                 Status = true,
@@ -156,11 +163,13 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
     {
         private IAsyncRepository<Category> _asyncRepository;
         private readonly IAuthorizationService _authorizationService;
-
-        public GetAllCategory(IAsyncRepository<Category> asyncRepository, IAuthorizationService authorizationService)
+        private IElasticClient _elasticClient;
+        
+        public GetAllCategory(IAsyncRepository<Category> asyncRepository, IAuthorizationService authorizationService, IElasticClient elasticClient)
         {
             _asyncRepository = asyncRepository;
             _authorizationService = authorizationService;
+            _elasticClient = elasticClient;
         }
         
         [HttpGet("api/category")]
@@ -178,14 +187,19 @@ namespace InventoryManagementSystem.PublicApi.CategoryEndpoints
                 return Unauthorized();
             
             var response = new GetAllCategoryResponse();
-            response.IsDisplayingAll = true;
             PagingOption<Category> pagingOption = new PagingOption<Category>(
                 request.CurrentPage, request.SizePerPage);
-            response.Paging = (await _asyncRepository.GetCategory(pagingOption, cancellationToken));
-            foreach (var category in response.Paging.ResultList)
-            {
-                Console.WriteLine(category.Transaction.TransactionRecord[^1].Date);
-            }
+            response.IsDisplayingAll = true;
+            
+            ISearchResponse<Category> responseElastic;
+
+            ElasticSearchHelper<Category> elasticSearchHelper = new ElasticSearchHelper<Category>(_elasticClient, request.SearchQuery,
+                ElasticIndexConstant.CATEGORIES);
+            responseElastic = await elasticSearchHelper.GetDocuments();
+            
+            pagingOption.ResultList = responseElastic.Documents.ToList();
+            pagingOption.ExecuteResourcePaging();
+            response.Paging = pagingOption;
             return Ok(response);
         }
     }

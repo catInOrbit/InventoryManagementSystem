@@ -65,15 +65,6 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                                       t.Transaction.TransactionRecord.Count > 0
                 ).ToList();
             
-            foreach (var goodsIssueOrder in issues)
-            {
-                foreach (var transactionRecord in goodsIssueOrder.Transaction.TransactionRecord)
-                {
-                    Console.WriteLine(goodsIssueOrder.Id);
-                    Console.WriteLine(transactionRecord.Date);
-                }
-
-            }
             issues = issues.Where(t =>
                 t.Transaction.TransactionRecord[^1].Date.Month == DateTime.UtcNow.Month
                 && t.GoodsIssueType == GoodsIssueStatusType.Completed

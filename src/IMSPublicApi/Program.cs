@@ -82,7 +82,7 @@ namespace InventoryManagementSystem.PublicApi
                     await new ElasticClientService<Location>(services.GetRequiredService<ILogger<ElasticClientService<Location>>>(), elasticClient).
                         ElasticSaveBulkAsync((await elasticLocationRepos.GetLocation(new PagingOption<Location>(0,0))).ResultList.ToArray(), ElasticIndexConstant.LOCATIONS);
                     
-                    await new ElasticClientService<Category>(services.GetRequiredService<ILogger<ElasticClientService<Category>>>(), elasticClient).ElasticSaveBulkAsync((await elasticCategoryRepos.ListAllAsync(new PagingOption<Category>(0,0))).ResultList.ToArray(), ElasticIndexConstant.CATEGORIES);
+                    await new ElasticClientService<Category>(services.GetRequiredService<ILogger<ElasticClientService<Category>>>(), elasticClient).ElasticSaveBulkAsync((await elasticCategoryRepos.GetCategory(new PagingOption<Category>(0,0))).ResultList.ToArray(), ElasticIndexConstant.CATEGORIES);
 
                     await SeedRole.Initialize(services);
                     

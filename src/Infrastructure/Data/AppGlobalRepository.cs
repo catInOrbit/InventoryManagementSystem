@@ -237,25 +237,23 @@
             var nonNullTransaction = await _identityAndProductDbContext.Set<GoodsIssueOrder>()
                 .Where(order => order.Transaction.TransactionRecord.Count > 0).ToListAsync();
 
-            List<GoodsIssueOrder> thisMonthSales = null;
+            List<GoodsIssueOrder> timeFrameProductQuantity = null;
 
             switch (reportType)
             {
                 case ReportType.Month:
-                    thisMonthSales = nonNullTransaction.Where(order => 
+                    timeFrameProductQuantity = nonNullTransaction.Where(order => 
                         order.Transaction.TransactionRecord[order.Transaction.TransactionRecord.Count - 1].Date.Month == DateTime.UtcNow.Month).ToList();
                     break;        
                 
                 case ReportType.Year:
-                    thisMonthSales = nonNullTransaction.Where(order => 
+                    timeFrameProductQuantity = nonNullTransaction.Where(order => 
                         order.Transaction.TransactionRecord[order.Transaction.TransactionRecord.Count - 1].Date.Year == DateTime.UtcNow.Year).ToList();
                     break;
             }
             
             
-            Dictionary<ProductVariant, int> top = new Dictionary<ProductVariant, int>();
-                
-            foreach (var goodsIssueOrder in thisMonthSales)
+            foreach (var goodsIssueOrder in timeFrameProductQuantity)
             {
                 var tempTop = goodsIssueOrder.GoodsIssueProducts.GroupBy(order => order.ProductVariant).Select(
                     g => new {ProductVariant = g.Key, OrderQuantityAggregrated = g.Sum(order => order.OrderQuantity)}
@@ -268,11 +266,13 @@
                         ProductId = x1.ProductVariant.ProductId,
                         ProductName = x1.ProductVariant.Name,
                         TotalSold = x1.OrderQuantityAggregrated,
-                        ReportType = "Month",
+                        ReportType = reportType.ToString(),
                         ReportDate = $"{DateTime.UtcNow.Month}/{DateTime.UtcNow.Year}"
                     });
                 }
             }
+
+            pagingOption.ResultList = pagingOption.ResultList.OrderByDescending(x => x.TotalSold).ToList();
             
             // pagingOption.ResultList = await _identityAndProductDbContext.Set<ProductVariant>().Where(variant => variant.Packages[variant.Packages.Count-1].ImportedDate.Month == DateTime.Now.Month).
             //     OrderByDescending(item =>  item.StorageQuantity).Skip(pagingOption.SkipValue).Take(pagingOption.SizePerPage).ToListAsync();

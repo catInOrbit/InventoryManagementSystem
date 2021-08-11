@@ -40,6 +40,21 @@ namespace InventoryManagementSystem.PublicApi.ReportEndpoints
 
     }
     
+    public class DashboardData
+    {
+
+        public decimal InventoryCostThisMonth { get; set; }
+
+        public int SumInventoryCountThisMonth { get; set; }
+
+        public int ImportQuantity { get; set; }
+        public int ExportQuantity { get; set; }
+        
+        public PagingOption<TopSellingReport> TopSellingMonthPaging { get; set; }
+
+        public PagingOption<TopSellingReport> TopSellingYearPaging { get; set; }
+    }
+    
     public class StockReportRequest
     {
         public int CurrentPage { get; set; }

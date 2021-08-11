@@ -33,7 +33,7 @@ namespace InventoryManagementSystem.PublicApi
 {
     public class Startup
     {
-        private const string CORS_POLICY = "CorsPolicy";
+        private const string CORS_POLICY = "CorsPolicy";    
         public IConfiguration Configuration { get; set; }
 
         // private const string LOCAL_IDENTITY = "IdentityConnection";
