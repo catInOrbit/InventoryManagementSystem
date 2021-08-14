@@ -6,12 +6,12 @@ namespace Infrastructure.Services
 {
     public class NotificationHub : Hub
     {
-        private IUserSession _userSession;
-
-        public NotificationHub(IUserSession userSession)
-        {
-            _userSession = userSession;
-        }
+        // private IUserSession _userSession;
+        //
+        // public NotificationHub(IUserSession userSession)
+        // {
+        //     _userSession = userSession;
+        // }
 
         public async override Task OnConnectedAsync()
         {
@@ -39,21 +39,21 @@ namespace Infrastructure.Services
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, groupName);
         }
         
-        public async Task ConnectWithResource(string userId, string resourceId)
-        {
-            if(await _userSession.SaveUserResourceAccess(userId, resourceId))
-                await Clients.Caller.SendAsync("ResourceChecker", "True, Using resource: " + resourceId);
-            else
-                await Clients.Caller.SendAsync("ResourceChecker", "False, Page already being used");
-        }
-        
-        public async Task DisconnectFromResource(string userId, string resourceId)
-        {
-            if(await _userSession.RemoveUserFromResource(userId, resourceId))
-                await Clients.Caller.SendAsync("ResourceChecker", "True, Remove from resource: " + resourceId);
-            
-            else
-                await Clients.Caller.SendAsync("ResourceChecker", "False, Invalid remove resource operation: " + resourceId);
-        }
+        // public async Task ConnectWithResource(string userId, string resourceId)
+        // {
+        //     if(await _userSession.SaveUserResourceAccess(userId, resourceId))
+        //         await Clients.Caller.SendAsync("ResourceChecker", "True, Using resource: " + resourceId);
+        //     else
+        //         await Clients.Caller.SendAsync("ResourceChecker", "False, Page already being used");
+        // }
+        //
+        // public async Task DisconnectFromResource(string userId, string resourceId)
+        // {
+        //     if(await _userSession.RemoveUserFromResource(userId, resourceId))
+        //         await Clients.Caller.SendAsync("ResourceChecker", "True, Remove from resource: " + resourceId);
+        //     
+        //     else
+        //         await Clients.Caller.SendAsync("ResourceChecker", "False, Invalid remove resource operation: " + resourceId);
+        // }
     }
 }

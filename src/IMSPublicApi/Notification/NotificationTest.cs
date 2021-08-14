@@ -58,4 +58,28 @@ namespace InventoryManagementSystem.PublicApi
             }
         }
     }
+    
+    public class NotificationGroupTest : BaseAsyncEndpoint.WithRequest<NotificationGroupTestRequest>.WithoutResponse
+    {
+        private IHubContext<NotificationHub> _hubContext;
+
+        public NotificationGroupTest(IHubContext<NotificationHub> hubContext)
+        {
+            _hubContext = hubContext;
+        }
+
+        [HttpPost("api/notification_groupsendtest")]
+        [SwaggerOperation(
+            Summary = "Get Notification by latest date",
+            Description = "Get Notification by latest date",
+            OperationId = "noti",
+            Tags = new[] { "Notification" })
+        ]
+        public override async Task<ActionResult> HandleAsync( NotificationGroupTestRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            await _hubContext.Clients.Group(request.Group1).SendAsync("NotificationGroupMessage", request.Message);
+            await _hubContext.Clients.Group(request.Group2).SendAsync("NotificationGroupMessage", request.Message);
+            return Ok();
+        }
+    }
 }

@@ -175,6 +175,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                     await _gioAsyncRepository.GetPackagesFromProductVariantId(gioGoodsIssueProduct.ProductVariantId);
                 var productVariant =
                     await _productVariantAsyncRepository.GetByIdAsync(gioGoodsIssueProduct.ProductVariantId);
+                
                 List<int> listIndexPackageToRemove = new List<int>();
                 var quantityToDeduce = gioGoodsIssueProduct.OrderQuantity;
                 for (var i = 0; i < listPackages.Count; i++)

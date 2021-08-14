@@ -11,6 +11,7 @@ using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Entities.SearchIndex;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Nest;
 using Swashbuckle.AspNetCore.Annotations;
@@ -43,6 +44,36 @@ namespace InventoryManagementSystem.PublicApi.UtilEndpoints
             {
                 response.HasMatch = true;
                 response.DatabaseMatchList.AddRange(responseElastic.Documents.GroupBy(x => x.Name).Select(x=> x.First()));
+            }
+            return Ok(response);
+        }
+    }
+    
+    
+    public class DuplicateAccountChecker : BaseAsyncEndpoint.WithRequest<DuplicateCheckerRequest>.WithResponse<DuplicateCheckerUserResponse>
+    {
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public DuplicateAccountChecker(UserManager<ApplicationUser> userManager)
+        {
+            _userManager = userManager;
+        }
+
+        [HttpPost("api/dupcheck/accountemail")]
+        [SwaggerOperation(
+            Summary = "Check account field for duplication of email",
+            Description = "Check account field for duplication of email",
+            OperationId = "dupcheck.accountemail",
+            Tags = new[] { "UtilsEndpoints" })
+        ]
+        public override async Task<ActionResult<DuplicateCheckerUserResponse>> HandleAsync(DuplicateCheckerRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+            var response = new DuplicateCheckerUserResponse();
+            var user = await _userManager.FindByEmailAsync(request.Value);
+            if (user != null)
+            {
+                response.HasMatch = true;
+                response.MatchedUser = user;
             }
             return Ok(response);
         }

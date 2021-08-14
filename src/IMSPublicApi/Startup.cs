@@ -226,18 +226,19 @@ namespace InventoryManagementSystem.PublicApi
             services.AddSignalR();
             
             services.AddTransient<IRedisRepository, RedisRepository>();
-
+            var customRedisConfig = new CustomRedisConfiguration();
+            Configuration.GetSection("redis").Bind(customRedisConfig, c => c.BindNonPublicProperties = true);
             services.AddSingleton<ConnectionMultiplexer>(sp =>
             {
                 ConfigurationOptions configuration = new ConfigurationOptions()
                 {
-                    AllowAdmin = true,
-                    EndPoints = { { "redis-11726.c258.us-east-1-4.ec2.cloud.redislabs.com", 11726 }},
-                    Password = "6FSKO6Yu0vT8A34f761k84gisHlI5GAt",
-                    ConnectTimeout = 5000,
-                    ConnectRetry = 5,
-                    SyncTimeout = 5000,
-                    AbortOnConnectFail = false,
+                    AllowAdmin = customRedisConfig.AllowAdmin,
+                    EndPoints = { { customRedisConfig.EndPoint, customRedisConfig.Port }},
+                    Password = customRedisConfig.Password,
+                    ConnectTimeout = customRedisConfig.ConnectTimeout,
+                    ConnectRetry = customRedisConfig.ConnectRetry,
+                    SyncTimeout = customRedisConfig.SyncTimeout,
+                    AbortOnConnectFail = customRedisConfig.AbortOnConnectFail,
                 };
 
                 return ConnectionMultiplexer.Connect(configuration);
