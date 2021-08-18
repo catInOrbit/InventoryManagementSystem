@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
@@ -177,13 +178,14 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 
                 foreach (var productVariant in randomList)
                 {
+                    var currentProductQuantity = productVariant.StorageQuantity;
                     var orderItem = new OrderItem
                     {
                         ProductVariant = productVariant,
                         ProductVariantId = productVariant.Id,
                         Unit = "UnitDemo",
                         DiscountAmount = 0,
-                        OrderQuantity = random.Next(1, 50),
+                        OrderQuantity = random.Next(1, currentProductQuantity),
                         Price = random.Next(1, 100000),
                         SalePrice = random.Next(1, 100000),
                     };
@@ -297,7 +299,7 @@ namespace InventoryManagementSystem.PublicApi.GoodsIssueEndpoints
                 if (error != null)
                     return BadRequest(error);
                 
-                await gis.UpdatePackageFromGoodsIssue(gio);
+                await gis.UpdatePackageFromGoodsIssue(gio, (await _userAuthentication.GetCurrentSessionUser()).Id);
             }
 
             foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)

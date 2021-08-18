@@ -7,6 +7,7 @@ using Ardalis.ApiEndpoints;
 using Castle.Core.Internal;
 using Infrastructure;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
@@ -101,7 +102,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
                 
            GoodsReceiptBusinessService gbs = new GoodsReceiptBusinessService( _productVariantRepository, _recevingOrderRepository, _packageRepository, _productVariantElasticRepository,
                _recevingOrderSearchIndexRepository, _poRepository,_redisRepository, _packageElastic);
-           ro = await gbs.ReceiveProducts(ro, request.UpdateItems);
+           ro = await gbs.ReceiveProducts(ro, request.UpdateItems, (await _userAuthentication.GetCurrentSessionUser()).Id);
            if (ro == null)
                return BadRequest("Unable to update GoodsReceipt, check for correct PurchaseOrder ID");
             await _recevingOrderSearchIndexRepository.ElasticSaveSingleAsync(true,IndexingHelper.GoodsReceiptOrderSearchIndex(ro), ElasticIndexConstant.RECEIVING_ORDERS);

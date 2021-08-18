@@ -13,6 +13,7 @@
         Supplier = 8,
         Category = 9,
         Location = 10,
+        Package = 11,
         Deleted = -1,
         TemplateType = -2,
     }

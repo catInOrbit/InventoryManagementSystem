@@ -12,7 +12,12 @@ namespace InventoryManagementSystem.ApplicationCore.Entities
         public static string PACKAGE_SEARCH = "Package_Search";
 
         public static string PRICEQUOTEORDER = "PriceQuoteOrder";
-        public static string PURCHASEORDER = "PurchaseOrder";
+        public static string PURCHASEORDER_PAGENAME = "PurchaseOrder";
+        public static string PURCHASEORDER_CREATE = "PurchaseOrder_Create";
+        public static string PURCHASEORDER_MODIFY = "PurchaseOrder_Modify";
+        public static string PURCHASEORDER_CONFIRM = "PurchaseOrder_Confirm";
+        public static string PURCHASEORDER_REJECT = "PurchaseOrder_Reject";
+
         public static string PURCHASEORDER_SEARCH = "PurchaseOrder_Search";
         public static string REQUISITION = "Requisition";
         public static string SUPPLIER = "Supplier";

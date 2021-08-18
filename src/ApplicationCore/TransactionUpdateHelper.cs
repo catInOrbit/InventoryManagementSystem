@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 
-namespace InventoryManagementSystem.PublicApi
+namespace InventoryManagementSystem.ApplicationCore
 {
     public class TransactionUpdateHelper 
     {

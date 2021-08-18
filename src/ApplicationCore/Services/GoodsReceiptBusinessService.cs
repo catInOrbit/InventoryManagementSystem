@@ -54,7 +54,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
             _poAsyncRepository = poAsyncRepository;
         }
 
-        public async Task<GoodsReceiptOrder> ReceiveProducts(GoodsReceiptOrder ro, List<ReceivingOrderProductUpdateInfo> updateItems)
+        public async Task<GoodsReceiptOrder> ReceiveProducts(GoodsReceiptOrder ro, List<ReceivingOrderProductUpdateInfo> updateItems, string userId)
         {
             var po = await _poAsyncRepository.GetByIdAsync(ro.PurchaseOrderId);
             if (po == null)
@@ -140,6 +140,9 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                     Price = ro.PurchaseOrder.PurchaseOrderProduct.FirstOrDefault(item => item.ProductVariantId == roi.ProductVariantId).Price,
                     SupplierId = ro.SupplierId,
                 };
+
+                package.Transaction =
+                    TransactionUpdateHelper.CreateNewTransaction(TransactionType.Package, package.Id, userId);
                 package.TotalPrice = package.Price * package.Quantity;
                 package.LatestUpdateDate = DateTime.UtcNow;
 

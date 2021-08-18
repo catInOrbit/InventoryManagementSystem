@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
+using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using InventoryManagementSystem.ApplicationCore.Extensions;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
@@ -36,9 +37,13 @@ namespace InventoryManagementSystem.ApplicationCore.Services
         {
             var productVariantIdList = new List<string>();
             foreach (var giGoodsIssueProduct in gi.GoodsIssueProducts)
+            {
                 productVariantIdList.Add(giGoodsIssueProduct.ProductVariantId);
-            
-            if(productVariantIdList.Count != productVariantIdList.Distinct().Count())
+                // if (string.IsNullOrEmpty(giGoodsIssueProduct.ProductVariant.Sku))
+                //     return String.Format("Detected a product variant with empty sku: {0}, please update all products", giGoodsIssueProduct.ProductVariant.Id);
+            }
+
+            if (productVariantIdList.Count != productVariantIdList.Distinct().Count())
                 return "Duplicate product found in issue order";
             return null;
         }
@@ -167,7 +172,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
             
             return suggestions;
         }
-        public async Task UpdatePackageFromGoodsIssue(GoodsIssueOrder gio)
+        public async Task UpdatePackageFromGoodsIssue(GoodsIssueOrder gio, string userId)
         {
             foreach (var gioGoodsIssueProduct in gio.GoodsIssueProducts)
             {
@@ -186,6 +191,9 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                         {
                             listPackages[i].Quantity -= quantityToDeduce;
                             listPackages[i].LatestUpdateDate = DateTime.UtcNow;
+                            listPackages[i].Transaction = TransactionUpdateHelper.UpdateTransaction(
+                                listPackages[i].Transaction, UserTransactionActionType.Modify, TransactionType.Package,
+                                userId, listPackages[i].Id, "");
                             //Remove aggregated quantity of product as well
                             productVariant.StorageQuantity -= quantityToDeduce; 
                         }
@@ -194,6 +202,9 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                             quantityToDeduce -= listPackages[i].Quantity;
                             listPackages[i].Quantity -= listPackages[i].Quantity;
                         
+                            listPackages[i].Transaction = TransactionUpdateHelper.UpdateTransaction(
+                                listPackages[i].Transaction, UserTransactionActionType.Modify, TransactionType.Package,
+                                userId, listPackages[i].Id, "");
                             //Remove aggregated quantity of product as well
                             productVariant.StorageQuantity -= quantityToDeduce; 
                         }

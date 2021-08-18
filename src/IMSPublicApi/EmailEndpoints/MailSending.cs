@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Castle.Core.Internal;
 using Infrastructure;
+using InventoryManagementSystem.ApplicationCore;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
@@ -69,6 +70,8 @@ namespace InventoryManagementSystem.PublicApi.EmailEndpoints
                     po.Transaction = TransactionUpdateHelper.UpdateMailTransaction(po.Transaction,
                         UserTransactionActionType.Modify,
                         TransactionType.Purchase, currentSessionUser.Id, po.Id, String.Join(",", request.To));
+                    
+                    await _emailSender.SendEmailAsync(message);
                     return Ok(response);
                 }
                 catch

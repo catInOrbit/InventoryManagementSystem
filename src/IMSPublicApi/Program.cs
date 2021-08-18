@@ -56,7 +56,7 @@ namespace InventoryManagementSystem.PublicApi
                     var roIndex = await els.IndexReceivingOrder(new PagingOption<GoodsReceiptOrderSearchIndex>(0, 0));
                     var giIndex = await els.IndexGoodsIssue(new PagingOption<GoodsIssueSearchIndex>(0, 0));
                     var stIndex = await els.IndexStockTake(new PagingOption<StockTakeSearchIndex>(0, 0));
-                    
+                    //
                     await new ElasticClientService<ProductSearchIndex>(services.GetRequiredService<ILogger<ElasticClientService<ProductSearchIndex>>>(), elasticClient).
                         ElasticSaveBulkAsync(productIndex.ResultList.ToArray(),    ElasticIndexConstant.PRODUCT_INDICES);
                     

@@ -71,12 +71,11 @@ namespace Infrastructure.Services
                 throw new Exception();
             
             // await _hubContext.Clients.Groups(groupName).SendAsync("NotificationGroupMessage", message);
-
         }
         
         public string CreateMessage(string fromUserFullname, string action, string page, string objectId)
         {
-            return fromUserFullname + " " + action + " " + page + " with ID: " + objectId;
+            return fromUserFullname + " " + action + " " + page + " with ID: " + objectId + " at: " + DateTime.UtcNow ;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
@@ -61,14 +62,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Location
             await _locationAsyncRepository.AddAsync(location);
             
             await _locationEls.ElasticSaveSingleAsync(false, location, ElasticIndexConstant.LOCATIONS);
-            var currentUser = await _userAuthentication.GetCurrentSessionUser();
-            
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Create", "Location", location.Id);
-                
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification,PageConstant.LOCATION, location.Id);
-
+         
             return Ok(new LocationResponse
             {
                 Location = location
@@ -118,15 +112,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Location
             
             await _locationAsyncRepository.UpdateAsync(location);
             await _locationEls.ElasticSaveSingleAsync(false, location, ElasticIndexConstant.LOCATIONS);
-
-            var currentUser = await _userAuthentication.GetCurrentSessionUser();
-            
-            var messageNotification =
-                _notificationService.CreateMessage(currentUser.Fullname, "Update", "LOCATION", location.Id);
-                
-            await _notificationService.SendNotificationGroup(await _userAuthentication.GetCurrentSessionUserRole(),
-                currentUser.Id, messageNotification, PageConstant.LOCATION, location.Id);
-
             return Ok(new LocationResponse
             {
                 Location = location

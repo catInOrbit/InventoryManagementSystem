@@ -30,9 +30,11 @@ namespace Infrastructure.Services
         {
             
             var dataset = _bigQueryClient.ListDatasets(GCC_PROJECTID, new ListDatasetsOptions());
+            
+            Console.WriteLine("Connection established bigquery");
+
             BigQueryTable productTable = null;
             BigQueryTable factTable = null;
-
             
             foreach (var bigQueryDataset in dataset)
             {
@@ -43,8 +45,21 @@ namespace Infrastructure.Services
                 }
             }
             
+            Console.WriteLine("Found productTable: " + productTable);
             BigQueryInsertRow row = new BigQueryInsertRow();
         
+            
+            Console.WriteLine("productvariantid: " + productVariant.Id);
+            Console.WriteLine("productVariant: " + productVariant.Name);
+            Console.WriteLine("category: " + productVariant.Product.Category.CategoryName);
+            Console.WriteLine("supplier: " + supplier);
+            Console.WriteLine("buy_price: " +  Convert.ToSingle(buy_price));
+            Console.WriteLine("sale_price: " + Convert.ToSingle(salePrice));
+            Console.WriteLine("quantityavailable: " + quantityAvailable);
+            Console.WriteLine("quantitysold: " + quantitySold);
+            Console.WriteLine("transactiontype: " + transactionType);
+            Console.WriteLine("date: " + DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"));
+
             row = new BigQueryInsertRow
             {
                 {"productvariantid", productVariant.Id},
@@ -59,24 +74,20 @@ namespace Infrastructure.Services
                 {"transactiontype", transactionType},
                 {"date", DateTime.UtcNow.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'")},
             };
-            // columnValues.Add("productvariantid", productVariant.Id);
-            // columnValues.Add("name", productVariant.Name);
-            // columnValues.Add("category", productVariant.Product.Category.CategoryName);
-            // columnValues.Add("buy_price", Convert.ToSingle(productVariantPackage.Price));
-            // columnValues.Add("storagelocation", productVariantPackage.Location.LocationName);
-            // columnValues.Add("sale_price", Convert.ToSingle(salePrice));
-            // columnValues.Add("quantityavaialble", productVariantPackage.Quantity);
-            // columnValues.Add("quantitysold", quantitySold);
-            // columnValues.Add("transactiontype", transactionType);
-            // columnValues.Add("date", DateTime.Now.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"));
             
-            // row.Add(new Dictionary<string, object>(columnValues));
-            // columnValues.Clear();
-            productTable.InsertRow(row);
-            // _bigQueryClient.InsertRow(productTable.Reference, row);
+            Console.WriteLine("BigQueryRowCreated");
+
+            try
+            {
+                productTable.InsertRow(row);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
             
-            // listRowInser.Add(row);
-            // _bigQueryClient.InsertRows(productTable.Reference, listRowInser);
+            Console.WriteLine("Insert successful");
         }
 
         public BigQueryResults Get3LinesData()
