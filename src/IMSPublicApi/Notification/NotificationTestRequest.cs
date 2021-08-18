@@ -11,7 +11,8 @@ namespace InventoryManagementSystem.PublicApi
     public class NotificationGroupTestRequest
     {
         public string UserId { get; set; }
-        public string Group { get; set; }
+        public string Group1 { get; set; }
+        public string Group2 { get; set; }
         public string Message { get; set; }
     }
     

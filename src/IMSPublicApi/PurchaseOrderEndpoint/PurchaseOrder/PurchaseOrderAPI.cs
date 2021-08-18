@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
@@ -47,7 +48,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         ]
         public override async Task<ActionResult<PORejectResponse>> HandleAsync(PORejectRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER, UserOperations.Reject))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER_REJECT, UserOperations.Reject))
                 return Unauthorized();
 
             var po = await _asyncRepository.GetByIdAsync(request.Id);
@@ -85,10 +86,10 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                _notificationService.CreateMessage(currentUser.Fullname, "Cancel","Purchase Order", po.Id);
            
            await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.ACCOUNTANT,
-               currentUser.Id, messageNotification, PageConstant.PURCHASEORDER, po.Id);
+               currentUser.Id, messageNotification, PageConstant.PURCHASEORDER_PAGENAME, po.Id);
            
            await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.SALEMAN,
-               currentUser.Id, messageNotification, PageConstant.PURCHASEORDER, po.Id);
+               currentUser.Id, messageNotification, PageConstant.PURCHASEORDER_PAGENAME, po.Id);
 
            foreach (var orderItem in po.PurchaseOrderProduct)
                orderItem.IsShowingProductVariant = true;
@@ -105,19 +106,20 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         private readonly IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> _purchaseOrderRepos;
         private readonly IElasticAsyncRepository<PurchaseOrderSearchIndex> _poSearchRepos;
         private readonly IUserSession _userAuthentication;
-
+        private readonly ILogger<PurchaseOrderConfirm> _logger;
 
         private readonly IAuthorizationService _authorizationService;
         
         private INotificationService _notificationService;
 
-        public PurchaseOrderConfirm(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService, INotificationService notificationService, IUserSession userAuthentication, IElasticAsyncRepository<PurchaseOrderSearchIndex> poSearchRepos1)
+        public PurchaseOrderConfirm(IAsyncRepository<ApplicationCore.Entities.Orders.PurchaseOrder> purchaseOrderRepos, IAuthorizationService authorizationService, INotificationService notificationService, IUserSession userAuthentication, IElasticAsyncRepository<PurchaseOrderSearchIndex> poSearchRepos1, ILogger<PurchaseOrderConfirm> logger)
         {
             _purchaseOrderRepos = purchaseOrderRepos;
             _authorizationService = authorizationService;
             _notificationService = notificationService;
             _userAuthentication = userAuthentication;
             _poSearchRepos = poSearchRepos1;
+            _logger = logger;
         }
 
         [HttpPost("api/po/confirm")]
@@ -129,7 +131,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         ]
         public override async Task<ActionResult<POConfirmResponse>> HandleAsync(POConfirmRequest request, CancellationToken cancellationToken = new CancellationToken())
         {
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER, UserOperations.Approve))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER_CONFIRM, UserOperations.Approve))
                 return Unauthorized();
             
             var po = await _purchaseOrderRepos.GetByIdAsync(request.PurchaseOrderNumber);
@@ -142,6 +144,22 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
 
             po.Transaction = TransactionUpdateHelper.UpdateTransaction(po.Transaction,UserTransactionActionType.Confirm,TransactionType.Purchase,
                 (await _userAuthentication.GetCurrentSessionUser()).Id, po.Id, "");
+            
+            BigQueryService bigQueryService = new BigQueryService();
+                
+            try
+            {
+                foreach (var orderItem in po.PurchaseOrderProduct)
+                {
+                    bigQueryService.InsertProductRowBQ(orderItem.ProductVariant, orderItem.Price,null,
+                        orderItem.ProductVariant.StorageQuantity, 0 , 0, "Upcoming Order", po.Supplier.SupplierName);
+                    _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
+                }
+            }
+            catch(Exception e)
+            {
+                _logger.LogError("Error updating BigQuery on " + e.Message);
+            }
             
             // var currentUser = await _userAuthentication.GetCurrentSessionUser();
             //     
@@ -192,7 +210,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         {
             var response = new POCreateResponse();
 
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER, UserOperations.Create))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER_CREATE, UserOperations.Create))
                 return Unauthorized();
             
 
@@ -254,7 +272,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
         {
             var subject = "Purchase Order " + DateTime.UtcNow;
 
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER, UserOperations.Update))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER_MODIFY, UserOperations.Update))
                 return Unauthorized();
 
             try
@@ -272,21 +290,21 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                 await _asyncRepository.UpdateAsync(po);
                 await _poIndexAsyncRepositoryRepos.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po), ElasticIndexConstant.PURCHASE_ORDERS);
                 
-                BigQueryService bigQueryService = new BigQueryService();
-                
-                try
-                {
-                    foreach (var orderItem in po.PurchaseOrderProduct)
-                    {
-                        bigQueryService.InsertProductRowBQ(orderItem.ProductVariant, orderItem.Price,null,
-                            0, 0 , 0, "Upcoming Order", po.Supplier.SupplierName);
-                        _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
-                    }
-                }
-                catch
-                {
-                    _logger.LogError("Error updating BigQuery on " + this.GetType().ToString());
-                }
+                // BigQueryService bigQueryService = new BigQueryService();
+                //
+                // try
+                // {
+                //     foreach (var orderItem in po.PurchaseOrderProduct)
+                //     {
+                //         bigQueryService.InsertProductRowBQ(orderItem.ProductVariant, orderItem.Price,null,
+                //             0, 0 , 0, "Upcoming Order", po.Supplier.SupplierName);
+                //         _logger.LogInformation("Updated BigQuery on " + this.GetType().ToString());
+                //     }
+                // }
+                // catch
+                // {
+                //     _logger.LogError("Error updating BigQuery on " + this.GetType().ToString());
+                // }
                 
                 var currentUser = await _userAuthentication.GetCurrentSessionUser();
                 
@@ -294,7 +312,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
                     _notificationService.CreateMessage(currentUser.Fullname, "Submit","Purchase Order", po.Id);
                 
                 await _notificationService.SendNotificationGroup(AuthorizedRoleConstants.MANAGER,
-                    currentUser.Id, messageNotification, PageConstant.PURCHASEORDER, po.Id);
+                    currentUser.Id, messageNotification, PageConstant.PURCHASEORDER_PAGENAME, po.Id);
 
 
                 var response = new POSubmitResponse();
@@ -346,7 +364,7 @@ namespace InventoryManagementSystem.PublicApi.PurchaseOrderEndpoint.PurchaseOrde
             var response = new POUpdateResponse();
             
             // requires using ContactManager.Authorization;
-            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER, UserOperations.Update))
+            if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PURCHASEORDER_MODIFY, UserOperations.Update))
                 return Unauthorized();
 
             var po =  await _purchaseOrderRepos.GetByIdAsync(request.PurchaseOrderNumber);

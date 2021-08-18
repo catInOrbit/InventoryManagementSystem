@@ -7,6 +7,7 @@ using Ardalis.ApiEndpoints;
 using Castle.Core.Internal;
 using Infrastructure;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
@@ -36,6 +37,9 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly IElasticAsyncRepository<ProductVariantSearchIndex> _productVariantElasticRepository;
 
         private readonly IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> _recevingOrderSearchIndexRepository;
+        private readonly IElasticAsyncRepository<PurchaseOrderSearchIndex> _poSearchIndexRepository;
+
+        private readonly IElasticAsyncRepository<Package> _packageElastic;
 
         private readonly IUserSession _userAuthentication;
         private readonly IRedisRepository _redisRepository;
@@ -43,7 +47,7 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
         private readonly INotificationService _notificationService;
         private ILogger<ReceivingOrderUpdate> _logger;
 
-        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IUserSession userAuthentication,  IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository, IAsyncRepository<ProductVariant> productVariantRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantElasticRepository1, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository1, IRedisRepository redisRepository, ILogger<ReceivingOrderUpdate> logger)
+        public ReceivingOrderUpdate(IAuthorizationService authorizationService, IAsyncRepository<GoodsReceiptOrder> recevingOrderRepository, IUserSession userAuthentication,  IAsyncRepository<PurchaseOrder> poRepository, IAsyncRepository<Package> packageRepository, INotificationService notificationService, IAsyncRepository<Location> locationRepository, IAsyncRepository<ProductVariant> productVariantRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantElasticRepository1, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> recevingOrderSearchIndexRepository1, IRedisRepository redisRepository, ILogger<ReceivingOrderUpdate> logger, IElasticAsyncRepository<Package> packageElastic, IElasticAsyncRepository<PurchaseOrderSearchIndex> poSearchIndexRepository)
         {
             _authorizationService = authorizationService;
             _recevingOrderRepository = recevingOrderRepository;
@@ -57,6 +61,8 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             _recevingOrderSearchIndexRepository = recevingOrderSearchIndexRepository1;
             _redisRepository = redisRepository;
             _logger = logger;
+            _packageElastic = packageElastic;
+            _poSearchIndexRepository = poSearchIndexRepository;
         }
         
         [HttpPost("api/goodsreceipt/create")]
@@ -74,9 +80,6 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             
             var ro = new GoodsReceiptOrder();
             
-            //Check if creating for first time for elastic and addasync procedure
-
-            //Create new transaction if null
             if (ro.Transaction == null)
                 ro.Transaction = TransactionUpdateHelper.CreateNewTransaction(TransactionType.GoodsReceipt, ro.Id, (await _userAuthentication.GetCurrentSessionUser()).Id);
             
@@ -97,13 +100,9 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             
             ro.Location = location;
                 
-            //TODO: Update sku of product in a seperate API
-            
-            //Data of receipt order is from frontend
-
            GoodsReceiptBusinessService gbs = new GoodsReceiptBusinessService( _productVariantRepository, _recevingOrderRepository, _packageRepository, _productVariantElasticRepository,
-               _recevingOrderSearchIndexRepository, _poRepository,_redisRepository);
-           ro = await gbs.ReceiveProducts(ro, request.UpdateItems);
+               _recevingOrderSearchIndexRepository, _poRepository,_redisRepository, _packageElastic);
+           ro = await gbs.ReceiveProducts(ro, request.UpdateItems, (await _userAuthentication.GetCurrentSessionUser()).Id);
            if (ro == null)
                return BadRequest("Unable to update GoodsReceipt, check for correct PurchaseOrder ID");
             await _recevingOrderSearchIndexRepository.ElasticSaveSingleAsync(true,IndexingHelper.GoodsReceiptOrderSearchIndex(ro), ElasticIndexConstant.RECEIVING_ORDERS);
@@ -118,10 +117,14 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             if (po == null)
                 return NotFound("Can not find ID of purchase order ");
             
-            var insufficientVariantsId = (await gbs.CheckSufficientReceiptQuantity(ro)); 
-            
-            if(insufficientVariantsId.Count == 0)
+            var insufficientVariantsId = (await gbs.CheckSufficientReceiptQuantity(ro));
+
+            if (insufficientVariantsId.Count == 0)
+            {
                 po.PurchaseOrderStatus = PurchaseOrderStatusType.Done;
+                await _poSearchIndexRepository.ElasticSaveSingleAsync(false, IndexingHelper.PurchaseOrderSearchIndex(po),
+                    ElasticIndexConstant.PURCHASE_ORDERS);
+            }
             
             BigQueryService bigQueryService = new BigQueryService();
 
@@ -205,6 +208,9 @@ namespace InventoryManagementSystem.PublicApi.ReceivingOrderEndpoints
             return Ok();
         }
     }
+     
+     
+ 
      
     //   public class ReceivingOrderSubmit : BaseAsyncEndpoint.WithRequest<ROSubmitRequest>.WithoutResponse
     // {

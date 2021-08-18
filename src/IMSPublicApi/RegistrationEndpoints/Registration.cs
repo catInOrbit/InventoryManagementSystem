@@ -110,7 +110,6 @@ namespace InventoryManagementSystem.PublicApi.RegistrationEndpoints
                         var result = await _userRoleModificationService.RoleCreatingHelper(newIMSUser.Id, role.Name);
                         
                         response.Result = result.Succeeded;
-                        response.Username = request.FullName;
                         if (result.Succeeded)
                         {
                             response.Token = await _tokenClaimsService.GetTokenAsync(request.Email);

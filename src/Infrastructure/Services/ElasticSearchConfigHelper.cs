@@ -17,10 +17,10 @@ namespace Infrastructure.Services
         {
             var url = configuration["elasticsearch:url"];
             var defaultIndex = configuration["elasticsearch:index"];
-            var priceQuoteIndex = configuration["elasticsearch:priceQuoteIndex"];
-
+            var password = configuration["elasticsearch:password"];
+            var username = configuration["elasticsearch:username"];
             var settings = new ConnectionSettings(new Uri(url))
-                .DefaultIndex(defaultIndex).BasicAuthentication("elastic", "LDBFEOTonZjDL1jueHMlKXcC").DisableDirectStreaming();;
+                .DefaultIndex(defaultIndex).BasicAuthentication("elastic", password).DisableDirectStreaming();;
             AddDefaultMappings(defaultIndex, settings);
 
             var client = new ElasticClient(settings);

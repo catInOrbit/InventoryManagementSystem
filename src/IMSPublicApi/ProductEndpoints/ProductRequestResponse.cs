@@ -17,6 +17,12 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
         public string Id { get; set; }
         public string ImageLink { get; set; }
     }
+    
+    
+    public class ProductAutoUpdateRequest : BaseRequest
+    {
+        public string ProductVariantId { get; set; }
+    }
 
     public class ProductUpdateRequest : BaseRequest
     {
@@ -96,6 +102,7 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints
     
     public class GetCategoryRequest : BaseRequest
     {
+        public string SearchQuery { get; set; }
         public int CurrentPage { get; set; }
         public int SizePerPage { get; set; }
     }

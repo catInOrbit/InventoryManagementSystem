@@ -17,7 +17,9 @@ namespace WebApi.Helpers
     {
         private readonly RequestDelegate _next;
         JwtSecurityToken _jwtToken;
-        string _userId = null;
+        private string _userId = null;
+        private string _expiresTime = null;
+
         public JwtMiddleware(RequestDelegate next)
         {
             _next = next;
@@ -40,37 +42,53 @@ namespace WebApi.Helpers
             ApplicationUser currentUser = null;
             try
             {
+                Console.WriteLine("Validating token");
                 ValidateToken(tokenHandler, token, key);
+
+                Console.WriteLine("Validating successful");
 
                 currentUser = await userManager.FindByIdAsync(_userId);
                 await userAuthentication.SaveUserAsync(currentUser, (await userManager.GetRolesAsync(currentUser))[0]);
+
                 var newToken = await tokenClaimsService.GenerateRefreshTokenAsync((await userAuthentication.GetCurrentSessionUser()).Email);
-                
+
                 await tokenClaimsService.SaveRefreshTokenForUser(currentUser, newToken);
+                Console.WriteLine("New Token Refresh saved: " + newToken);
+
             }
             catch
             {
+                Console.WriteLine("Fail Token Validation");
+
                 currentUser = await userManager.FindByIdAsync(_userId);
                 if (currentUser != null)
                 {
-                    context.Request.Headers.Remove("Authorization");
+                    // context.Request.Headers.Remove("Authorization");
                     
                     // var tokenRefresh = await tokenClaimsService.GenerateRefreshTokenAsync((await userAuthentication.GetCurrentSessionUser()).Email);
                     var tokenRefresh = await tokenClaimsService.GetRefreshTokenAsync((currentUser));
 
                     if (tokenRefresh != null)
                     {
+                        Console.WriteLine("Successfully got token refresh for user in database");
+
                         try
                         {
                             ValidateToken(tokenHandler, tokenRefresh, key);
+                            Console.WriteLine("Successfully validated user token for user in database");
+
                             currentUser = await userManager.FindByIdAsync(_userId);
                             var newToken = await tokenClaimsService.GenerateRefreshTokenAsync((currentUser).Email);
 
                             await tokenClaimsService.SaveRefreshTokenForUser(currentUser, newToken);
-                            context.Request.Headers.Add("Authorization",newToken);
+                            Console.WriteLine("New Token Refresh saved: " + newToken);
+
+                            // context.Request.Headers.Add("Authorization",newToken);
                         }
                         catch (Exception e)
                         {
+                            Console.WriteLine("Fail validation of refresh token");
+
                             await userAuthentication.RemoveUserAsync(currentUser);
                             context.Items["User"] = null;
                         }
@@ -79,6 +97,8 @@ namespace WebApi.Helpers
 
                 else
                 {
+                    Console.WriteLine("Fail validation of token");
+
                     await userAuthentication.RemoveUserAsync(currentUser);
                     context.Items["User"] = null;
                 }
@@ -91,7 +111,7 @@ namespace WebApi.Helpers
             var tokenRead = tokenHandler.ReadToken(token);
             var tokenJWT = tokenRead as JwtSecurityToken;
             if (tokenJWT != null) _userId = tokenJWT.Claims.FirstOrDefault(x => x.Type == "id").Value.ToString();
-
+            
             tokenHandler.ValidateToken(token, new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
@@ -104,6 +124,9 @@ namespace WebApi.Helpers
 
             _jwtToken = (JwtSecurityToken)validatedToken;
             _userId = _jwtToken.Claims.First(x => x.Type == "id").Value;
+            _expiresTime = _jwtToken.Claims.First(x => x.Type == "exp").Value;
+            Console.WriteLine("User ID got from JWT: " + _userId);
+            Console.WriteLine("_expiresTime timespan " + _expiresTime);
         }
 
     }

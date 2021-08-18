@@ -356,7 +356,9 @@ namespace Infrastructure.Identity
                 
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.REQUISITION, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PRODUCT_SEARCH, ""));
-
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PURCHASEORDER_SEARCH, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.SUPPLIER_SEARCH, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.REPORT, ""));
             }
             
             if (!await roleManager.RoleExistsAsync(AuthorizedRoleConstants.ACCOUNTANT))
@@ -371,14 +373,18 @@ namespace Infrastructure.Identity
                 
                 IR = await roleManager.CreateAsync(identityRole);
                 
-                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PURCHASEORDER, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PURCHASEORDER_CREATE, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PURCHASEORDER_MODIFY, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PRICEQUOTEORDER, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.GOODSRECEIPT, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.GOODSISSUE, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.STOCKTAKEORDER, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PRODUCT_SEARCH, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PACKAGE_SEARCH, ""));
-
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.SUPPLIER_SEARCH, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PURCHASEORDER_SEARCH, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.REPORT, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.SUPPLIER, ""));
             }
             
             if (!await roleManager.RoleExistsAsync(AuthorizedRoleConstants.STOCKKEEPER))
@@ -395,9 +401,10 @@ namespace Infrastructure.Identity
                 
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.GOODSRECEIPT, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.GOODSISSUE, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PURCHASEORDER_SEARCH, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PRODUCT_SEARCH, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PACKAGE_SEARCH, ""));
-
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.REPORT, ""));
             }
           
             return IR;

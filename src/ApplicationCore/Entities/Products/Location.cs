@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using Nest;
 using Newtonsoft.Json;
@@ -19,5 +20,6 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Products
         [JsonIgnore]
         [Ignore]
         public virtual Transaction Transaction { get; set; }
+        
     }
 }

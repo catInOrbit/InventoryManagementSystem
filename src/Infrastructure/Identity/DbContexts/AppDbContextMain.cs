@@ -28,6 +28,8 @@ namespace Infrastructure.Identity.DbContexts
         public DbSet<Transaction> Transaction { get; set; }
         public DbSet<TransactionRecord> TransactionRecord { get; set; }
         public DbSet<Product> Product { get; set; }
+        public DbSet<Location> Location { get; set; }
+
         // public DbSet<ProductSerialNumber> ProductSerialNumber { get; set; }
         public DbSet<ProductVariant> ProductVariant { get; set; }
         // public DbSet<VariantValue> VariantValue { get; set; }

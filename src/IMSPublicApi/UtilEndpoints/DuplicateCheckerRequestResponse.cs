@@ -18,6 +18,12 @@ namespace InventoryManagementSystem.PublicApi.UtilEndpoints
         
     }
     
+    public class DuplicateCheckerUserResponse : BaseResponse
+    {
+        public bool HasMatch { get; set; } = false;
+        public ApplicationUser MatchedUser  { get; set; }       
+    }
+    
     public class DuplicateProductVariantCheckerResponse : BaseResponse
     {
         public bool HasMatch { get; set; } = false;

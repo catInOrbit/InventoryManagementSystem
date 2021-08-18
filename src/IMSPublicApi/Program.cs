@@ -56,7 +56,7 @@ namespace InventoryManagementSystem.PublicApi
                     var roIndex = await els.IndexReceivingOrder(new PagingOption<GoodsReceiptOrderSearchIndex>(0, 0));
                     var giIndex = await els.IndexGoodsIssue(new PagingOption<GoodsIssueSearchIndex>(0, 0));
                     var stIndex = await els.IndexStockTake(new PagingOption<StockTakeSearchIndex>(0, 0));
-                    
+                    //
                     await new ElasticClientService<ProductSearchIndex>(services.GetRequiredService<ILogger<ElasticClientService<ProductSearchIndex>>>(), elasticClient).
                         ElasticSaveBulkAsync(productIndex.ResultList.ToArray(),    ElasticIndexConstant.PRODUCT_INDICES);
                     
@@ -80,8 +80,9 @@ namespace InventoryManagementSystem.PublicApi
                     await new ElasticClientService<Package>(services.GetRequiredService<ILogger<ElasticClientService<Package>>>(), elasticClient).
                         ElasticSaveBulkAsync((await elasticPackageRepos.GetPackages(new PagingOption<Package>(0,0))).ResultList.ToArray(), ElasticIndexConstant.PACKAGES);
                     await new ElasticClientService<Location>(services.GetRequiredService<ILogger<ElasticClientService<Location>>>(), elasticClient).
-                        ElasticSaveBulkAsync((await elasticLocationRepos.ListAllAsync(new PagingOption<Location>(0,0))).ResultList.ToArray(), ElasticIndexConstant.LOCATIONS);
-                    await new ElasticClientService<Category>(services.GetRequiredService<ILogger<ElasticClientService<Category>>>(), elasticClient).ElasticSaveBulkAsync((await elasticCategoryRepos.ListAllAsync(new PagingOption<Category>(0,0))).ResultList.ToArray(), ElasticIndexConstant.CATEGORIES);
+                        ElasticSaveBulkAsync((await elasticLocationRepos.GetLocation(new PagingOption<Location>(0,0))).ResultList.ToArray(), ElasticIndexConstant.LOCATIONS);
+                    
+                    await new ElasticClientService<Category>(services.GetRequiredService<ILogger<ElasticClientService<Category>>>(), elasticClient).ElasticSaveBulkAsync((await elasticCategoryRepos.GetCategory(new PagingOption<Category>(0,0))).ResultList.ToArray(), ElasticIndexConstant.CATEGORIES);
 
                     await SeedRole.Initialize(services);
                     

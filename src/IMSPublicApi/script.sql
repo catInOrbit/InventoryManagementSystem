@@ -19,6 +19,16 @@ CREATE TABLE [Brand] (
 );
 GO
 
+CREATE TABLE [CompanyInfo] (
+    [Id] nvarchar(50) NOT NULL,
+    [CompanyName] nvarchar(max) NULL,
+    [PhoneNumber] nvarchar(max) NULL,
+    [Address] nvarchar(max) NULL,
+    [CompanyProfilePic] nvarchar(max) NULL,
+    CONSTRAINT [PK_CompanyInfo] PRIMARY KEY ([Id])
+);
+GO
+
 CREATE TABLE [Notification] (
     [Id] nvarchar(50) NOT NULL,
     [UserId] nvarchar(max) NULL,
@@ -268,6 +278,7 @@ GO
 
 CREATE TABLE [StockTakeItem] (
     [Id] nvarchar(50) NOT NULL,
+    [PkgId] nvarchar(max) NULL,
     [ProductVariantName] nvarchar(max) NULL,
     [SKU] nvarchar(max) NULL,
     [StorageQuantity] int NOT NULL,
@@ -470,7 +481,7 @@ CREATE INDEX [IX_UserRole_RoleId] ON [UserRole] ([RoleId]);
 GO
 
 INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-VALUES (N'20210804163406_Creation', N'5.0.5');
+VALUES (N'20210815050254_Creation', N'5.0.5');
 GO
 
 COMMIT;

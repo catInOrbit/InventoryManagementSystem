@@ -26,8 +26,11 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                 SupplierEmail = (po.Supplier != null) ? po.Supplier.Email : "",
                 SupplierId = (po.Supplier != null) ? po.Supplier.Id : "",
                 SupplierPhone = (po.Supplier != null) ? po.Supplier.PhoneNumber : "",
-                HasSentMail = po.HasSentMail
+                HasSentMail = po.HasSentMail,
+                Deadline = po.Deadline
             };
+
+            index.TotalProductAmount = po.PurchaseOrderProduct.Count;
 
             if (index.ModifiedDate != DateTime.MinValue)
                 index.LatestUpdateDate = index.ModifiedDate;

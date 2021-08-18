@@ -9,7 +9,7 @@ namespace Infrastructure.Services
 {
     public class NotificationService : INotificationService
     {
-        private IHubContext<NotificationHub> _hubContext;
+        private  readonly IHubContext<NotificationHub> _hubContext;
         private readonly IRedisRepository _redisRepository;
         private readonly IAsyncRepository<Notification> _notificationAsyncRepository;
 
@@ -63,17 +63,19 @@ namespace Infrastructure.Services
             };
     
             var isAdded = await _redisRepository.AddNotifications("Notifications", notification);
-
+            
             if (isAdded)
-                await _hubContext.Clients.Groups(groupName).SendAsync("NotificationGroupMessage", message);
+                await _hubContext.Clients.Group(groupName).SendAsync("NotificationGroupMessage", message);
 
             else
                 throw new Exception();
+            
+            // await _hubContext.Clients.Groups(groupName).SendAsync("NotificationGroupMessage", message);
         }
-
+        
         public string CreateMessage(string fromUserFullname, string action, string page, string objectId)
         {
-            return fromUserFullname + " " + action + " " + page + " with ID: " + objectId + ", at: " + DateTime.UtcNow;
+            return fromUserFullname + " " + action + " " + page + " with ID: " + objectId + " at: " + DateTime.UtcNow ;
         }
     }
 }

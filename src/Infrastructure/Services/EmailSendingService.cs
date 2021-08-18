@@ -22,7 +22,6 @@ namespace Infrastructure.Services
         public async Task SendEmailAsync(EmailMessage message)
         {
             var mailMessage = CreateEmailMessage(message);
-
             await SendAsync(mailMessage);
         }
         

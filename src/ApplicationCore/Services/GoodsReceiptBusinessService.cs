@@ -23,6 +23,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
         private readonly IElasticAsyncRepository<ProductVariantSearchIndex> _productVariantEls;
         private readonly IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> _roEls;
         private readonly IElasticAsyncRepository<PurchaseOrderSearchIndex> _poEls;
+        private readonly IElasticAsyncRepository<Package> _pkgEls;
 
         private readonly IRedisRepository _redisRepository;
 
@@ -35,7 +36,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
 
         public GoodsReceiptBusinessService(
             IAsyncRepository<ProductVariant> productVariantRepository, 
-             IAsyncRepository<GoodsReceiptOrder> roRepository, IAsyncRepository<Package> packageRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantEls, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> roEls, IAsyncRepository<PurchaseOrder> poAsyncRepository, IRedisRepository redisRepository)
+             IAsyncRepository<GoodsReceiptOrder> roRepository, IAsyncRepository<Package> packageRepository, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantEls, IElasticAsyncRepository<GoodsReceiptOrderSearchIndex> roEls, IAsyncRepository<PurchaseOrder> poAsyncRepository, IRedisRepository redisRepository, IElasticAsyncRepository<Package> pkgEls)
         {
             _productVariantRepository = productVariantRepository;
             _roRepository = roRepository;
@@ -44,6 +45,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
             _roEls = roEls;
             _poAsyncRepository = poAsyncRepository;
             _redisRepository = redisRepository;
+            _pkgEls = pkgEls;
         }
         
         public GoodsReceiptBusinessService(IAsyncRepository<GoodsReceiptOrder> roRepository, IAsyncRepository<PurchaseOrder> poAsyncRepository)
@@ -52,7 +54,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
             _poAsyncRepository = poAsyncRepository;
         }
 
-        public async Task<GoodsReceiptOrder> ReceiveProducts(GoodsReceiptOrder ro, List<ReceivingOrderProductUpdateInfo> updateItems)
+        public async Task<GoodsReceiptOrder> ReceiveProducts(GoodsReceiptOrder ro, List<ReceivingOrderProductUpdateInfo> updateItems, string userId)
         {
             var po = await _poAsyncRepository.GetByIdAsync(ro.PurchaseOrderId);
             if (po == null)
@@ -89,7 +91,7 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                 
                     var productVariant = await _productVariantRepository.GetByIdAsync(roi.ProductVariantId);
                     bool initiateUpdate = false;
-                    if (item.Sku != null)
+                    if (!string.IsNullOrEmpty(item.Sku))
                     {
                         var skuRedisList = await CheckSkuExistance(po);
                         var skuExist = skuRedisList.FirstOrDefault(s => s.ProductVariantId == productVariant.Id);
@@ -138,11 +140,16 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                     Price = ro.PurchaseOrder.PurchaseOrderProduct.FirstOrDefault(item => item.ProductVariantId == roi.ProductVariantId).Price,
                     SupplierId = ro.SupplierId,
                 };
+
+                package.Transaction =
+                    TransactionUpdateHelper.CreateNewTransaction(TransactionType.Package, package.Id, userId);
                 package.TotalPrice = package.Price * package.Quantity;
                 package.LatestUpdateDate = DateTime.UtcNow;
 
                 await _packageRepository.AddAsync(package);
+                await _pkgEls.ElasticSaveSingleAsync(false, package, ElasticIndexConstant.PACKAGES);
                 roi.ProductVariant.Packages.Add(package);
+                roi.ProductVariant.StorageQuantity += package.Quantity;
                 //Begin Inserting into bigQuery
             }
             await _roEls.ElasticSaveSingleAsync(true,IndexingHelper.GoodsReceiptOrderSearchIndex(ro), ElasticIndexConstant.RECEIVING_ORDERS);

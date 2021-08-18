@@ -37,6 +37,8 @@ namespace InventoryManagementSystem.ApplicationCore.Interfaces
 
 
         Task<bool> RemoveProductUpdateMessage( string productVariantId);
+        Task<bool> DeleteProductUpdateInfo();
+
 
         Task<List<ProductUpdateMessage>> GetProductUpdateMessage();
 

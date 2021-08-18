@@ -14,15 +14,16 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.SearchIndex
         }
         
         public string  TransactionId { get; set; }
-
         
         public string SupplierName { get; set; }
         public string SupplierId { get; set; }
         public string SupplierPhone { get; set; }
         public string SupplierEmail { get; set; }
+        public DateTime Deadline { get; set; }
         public string CreatedByName { get; set; }
         public string CanceledByName { get; set; }
         public bool HasSentMail { get; set; }
+        public int TotalProductAmount { get; set; }
 
         public string ConfirmedByName { get; set; }
         public string Status { get; set; }

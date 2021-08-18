@@ -103,7 +103,6 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                 }
                 
             return Unauthorized(response);
-
         }
 
         private async void CookieSignInAndStore(string email, string fullname, string role)

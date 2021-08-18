@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Infrastructure;
 using Infrastructure.Services;
+using InventoryManagementSystem.ApplicationCore;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
@@ -372,14 +373,24 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
            if (product == null)
                return NotFound("Can not find Product of id :" + request.Id);
            product.Name = request.Name;
+           if (product.IsVariantType == false)
+           {
+               foreach (var productProductVariant in product.ProductVariants)
+               {
+                   productProductVariant.Name = product.Name;
+               }
+           }
+           
            product.Brand.BrandName = request.BrandName;
            product.Brand.BrandDescription = request.BrandDescription;
            product.CategoryId = request.CategoryId;
            if(product.CategoryId == null)
                return BadRequest("Please input valid CategoryId");
            product.Unit = request.Unit;
-
+        
            if (request.ProductImageLink != null) product.ProductImageLink = product.ProductImageLink;
+            
+           
            
            // foreach (var productProductVariant in product.ProductVariants)
            //     productProductVariant.Unit = product.Unit;
@@ -399,6 +410,100 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
             var response = new ProductUpdateResponse();
             response.Product = product;
             return Ok(response);
+        }
+    }
+    
+     public class AutoAcceptSkuUpdate : BaseAsyncEndpoint.WithRequest<ProductAutoUpdateRequest>.WithoutResponse
+     {
+         private readonly IAsyncRepository<ProductVariant> _productVariantAsyncRepository;
+         private readonly IElasticAsyncRepository<ProductVariantSearchIndex> _productVariantEls;
+
+         public readonly IRedisRepository _redisRepository;
+
+        private readonly IAuthorizationService _authorizationService;
+
+        public AutoAcceptSkuUpdate(IAsyncRepository<ProductVariant> productVariantAsyncRepository, IRedisRepository redisRepository, IAuthorizationService authorizationService, IElasticAsyncRepository<ProductVariantSearchIndex> productVariantEls)
+        {
+            _productVariantAsyncRepository = productVariantAsyncRepository;
+            _redisRepository = redisRepository;
+            _authorizationService = authorizationService;
+            _productVariantEls = productVariantEls;
+        }
+
+
+        [HttpPut("api/product/skuaccept")]
+        [SwaggerOperation(
+            Summary = "Update a new product",
+            Description = "Update a new product",
+            OperationId = "product.autoaccept",
+            Tags = new[] { "ProductEndpoints" })
+        ]
+        public override async Task<ActionResult> HandleAsync(ProductAutoUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+           if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Update))
+                return Unauthorized();
+
+           var productVariant = await _productVariantAsyncRepository.GetByIdAsync(request.ProductVariantId);
+           if (productVariant == null)
+               return NotFound("Can not find product variant with ID: " + request.ProductVariantId);
+           
+           var redisData = await _redisRepository.GetProductUpdateMessage();
+
+           redisData = redisData.GroupBy(r => r.ProductVariantId).Select(x => x.FirstOrDefault()).ToList();
+        
+        
+
+           var skuMessage = redisData.FirstOrDefault(r => r.ProductVariantId == productVariant.Id);
+           if(skuMessage == null)
+               return NotFound("Can not find sku request message with product variant ID: " + productVariant.Id);
+           productVariant.Sku = skuMessage.Sku;
+           
+           await _productVariantAsyncRepository.UpdateAsync(productVariant);
+           await _productVariantEls.ElasticSaveSingleAsync(false,
+               IndexingHelper.ProductVariantSearchIndex(productVariant),
+               ElasticIndexConstant.PRODUCT_VARIANT_INDICES);
+           await _redisRepository.RemoveProductUpdateMessage(skuMessage.ProductVariantId);
+
+           return Ok();
+        }
+    }
+     
+     public class AutoRejectSkuUpdate : BaseAsyncEndpoint.WithRequest<ProductAutoUpdateRequest>.WithoutResponse
+     {
+
+         public readonly IRedisRepository _redisRepository;
+
+        private readonly IAuthorizationService _authorizationService;
+
+        public AutoRejectSkuUpdate(IRedisRepository redisRepository, IAuthorizationService authorizationService)
+        {
+            _redisRepository = redisRepository;
+            _authorizationService = authorizationService;
+        }
+
+
+        [HttpPut("api/product/skureject")]
+        [SwaggerOperation(
+            Summary = "Update a new product",
+            Description = "Update a new product",
+            OperationId = "product.autoreject",
+            Tags = new[] { "ProductEndpoints" })
+        ]
+        public override async Task<ActionResult> HandleAsync(ProductAutoUpdateRequest request, CancellationToken cancellationToken = new CancellationToken())
+        {
+           if(! await UserAuthorizationService.Authorize(_authorizationService, HttpContext.User, PageConstant.PRODUCT, UserOperations.Update))
+                return Unauthorized();
+
+           var redisData = await _redisRepository.GetProductUpdateMessage();
+
+           redisData = redisData.GroupBy(r => r.ProductVariantId).Select(x => x.FirstOrDefault()).ToList();
+        
+           var skuMessage = redisData.FirstOrDefault(r => r.ProductVariantId == request.ProductVariantId );
+           if(skuMessage == null)
+               return NotFound("Can not find sku request message with product variant ID: " + request.ProductVariantId );
+           await _redisRepository.RemoveProductUpdateMessage(skuMessage.ProductVariantId);
+
+           return Ok();
         }
     }
     
