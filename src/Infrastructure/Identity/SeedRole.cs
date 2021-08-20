@@ -357,6 +357,7 @@ namespace Infrastructure.Identity
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.REQUISITION, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PRODUCT_SEARCH, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PURCHASEORDER_SEARCH, ""));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.PURCHASEORDER_REJECT, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.SUPPLIER_SEARCH, ""));
                 await roleManager.AddClaimAsync(identityRole, new Claim(PageConstant.REPORT, ""));
             }

@@ -183,6 +183,8 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                 
                 List<int> listIndexPackageToRemove = new List<int>();
                 var quantityToDeduce = gioGoodsIssueProduct.OrderQuantity;
+                productVariant.StorageQuantity =0;
+
                 for (var i = 0; i < listPackages.Count; i++)
                 {
                     if (quantityToDeduce > 0)
@@ -194,8 +196,6 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                             listPackages[i].Transaction = TransactionUpdateHelper.UpdateTransaction(
                                 listPackages[i].Transaction, UserTransactionActionType.Modify, TransactionType.Package,
                                 userId, listPackages[i].Id, "");
-                            //Remove aggregated quantity of product as well
-                            productVariant.StorageQuantity -= quantityToDeduce; 
                         }
                         else
                         {
@@ -205,9 +205,8 @@ namespace InventoryManagementSystem.ApplicationCore.Services
                             listPackages[i].Transaction = TransactionUpdateHelper.UpdateTransaction(
                                 listPackages[i].Transaction, UserTransactionActionType.Modify, TransactionType.Package,
                                 userId, listPackages[i].Id, "");
-                            //Remove aggregated quantity of product as well
-                            productVariant.StorageQuantity -= quantityToDeduce; 
                         }
+                        productVariant.StorageQuantity += listPackages[i].Quantity;
                     }
         
                     if (listPackages[i].Quantity <= 0)
