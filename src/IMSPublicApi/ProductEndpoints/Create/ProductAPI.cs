@@ -258,7 +258,6 @@ namespace InventoryManagementSystem.PublicApi.ProductEndpoints.Create
                     var packages = await _asyncRepository.GetPackagesFromProductVariantId(productVariant.Id);
                     
                     // ElasticSearchHelper<ProductVariantSearchIndex> elasticSearchHelper = new ElasticSearchHelper<ProductVariantSearchIndex>()
-
                     foreach (var package in packages)
                     {
                         productVariant.StorageQuantity += package.Quantity;

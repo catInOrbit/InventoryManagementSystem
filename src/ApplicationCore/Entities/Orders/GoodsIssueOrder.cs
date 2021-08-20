@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.Serialization;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders.Status;
+using Newtonsoft.Json;
 
 namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
 {
@@ -26,6 +27,8 @@ namespace InventoryManagementSystem.ApplicationCore.Entities.Orders
         [NotMapped]
         public string GoodsIssueOrderStatusString { get; set; }
         public DateTime DeliveryDate { get; set; }
+
+ 
         
         [OnSerializing]
         public void FormatResponse(StreamingContext context)

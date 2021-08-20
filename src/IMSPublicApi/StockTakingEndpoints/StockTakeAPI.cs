@@ -353,7 +353,7 @@ namespace InventoryManagementSystem.PublicApi.StockTakingEndpoints
                  {
                      var package = await _packageAsyncRepository.GetByIdAsync(stockTakeAdjustInfo.StockTakeAdjustItemsInfos[i].PackageId);
                      package.Quantity = stockTakeAdjustInfo.StockTakeAdjustItemsInfos[i].QuantityToAdjust;
-                 
+                     package.TotalPrice = package.Price * package.Quantity;
                      var productVariant = package.ProductVariant;
                  
                      // productVariant.StorageQuantity += package.Quantity;

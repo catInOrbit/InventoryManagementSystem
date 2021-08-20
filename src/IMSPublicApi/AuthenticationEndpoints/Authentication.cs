@@ -63,7 +63,13 @@ namespace InventoryManagementSystem.PublicApi.AuthenticationEndpoints
                 response.Verbose = "Can not find user with username" + request.Email;
                 return Unauthorized(response);
             }
-
+            
+            if (user.IsActive == false || user.LockoutEnd != null)
+            {
+                response.Result = false;
+                response.Verbose = "User access has been denied by system";
+                return Unauthorized(response);
+            }
                 var roles = await _userRoleModificationService.UserManager.GetRolesAsync(user);
                 var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, true, true);
 
