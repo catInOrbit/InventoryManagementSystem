@@ -110,16 +110,35 @@ namespace Infrastructure.Services
         {
             ISearchResponse<ProductSearchIndex> responseElastic;
             
+            // responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
+            // (
+            //     s => s.Size(2000).Index(ElasticIndexConstant.PRODUCT_INDICES).Query(q =>
+            //         q.Bool(b =>
+            //             b.Should(
+            //                 s =>
+            //                     s.MultiMatch(t =>
+            //                         t.Query(value).Boost(10).Type(TextQueryType.Phrase).Fields(f => f.Field(f=> f.Name))
+            //                     )))));
+
+            // QueryContainer query = new TermQuery
+            // {
+            //     Field = "name",
+            //     Value = value
+            // };
+            // query.Suffix("keyword");
+            // var searchRequest = new SearchRequest
+            // {
+            //     From = 0,
+            //     Size = 10,
+            //     Query = query
+            // };
+            //
+            // responseElastic = _elasticClient.Search<ProductSearchIndex>(searchRequest); 
+
             responseElastic = await _elasticClient.SearchAsync<ProductSearchIndex>
             (
                 s => s.Size(2000).Index(ElasticIndexConstant.PRODUCT_INDICES).Query(q =>
-                    q.Bool(b =>
-                        b.Should(
-                            s =>
-                                s.MultiMatch(t =>
-                                    t.Query(value).Type(TextQueryType.Phrase).Boost(10).Fields(f => 
-                                        f.Field(f => f.Name)
-                                ))))));
+                    q.MatchPhrase(c => c.Boost(1.0).Field(p => p.Name).Query(value))));
             return responseElastic;
         }
         

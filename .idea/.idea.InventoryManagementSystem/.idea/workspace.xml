@@ -8,13 +8,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e9bb64e3-f5df-4330-ae7e-db06423994ac" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.InventoryManagementSystem/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InventoryManagementSystem/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/IMSPublicApi/ManagerEndpoints/UserManagementEndpoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/IMSPublicApi/ManagerEndpoints/UserManagementEndpoint.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/IMSPublicApi/ManagerEndpoints/UserManagementRequestResponse.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/IMSPublicApi/ManagerEndpoints/UserManagementRequestResponse.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/IMSPublicApi/RegistrationEndpoints/Registration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/IMSPublicApi/RegistrationEndpoints/Registration.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/IMSPublicApi/RegistrationEndpoints/RegistrationRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/IMSPublicApi/RegistrationEndpoints/RegistrationRequest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/IMSPublicApi/UserAccountEndpoints/UpdateEndpoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/IMSPublicApi/UserAccountEndpoints/UpdateEndpoint.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/IMSPublicApi/UserAccountEndpoints/UpdateRequest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/IMSPublicApi/UserAccountEndpoints/UpdateRequest.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Data/AppGlobalRepository.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Data/AppGlobalRepository.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/IMSPublicApi/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/IMSPublicApi/appsettings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/IMSPublicApi/imswarehouse-70a47bcd9c79.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Services/BigQueryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Services/BigQueryService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Services/ElasticSearchConfigHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Services/ElasticSearchConfigHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Services/ElasticSearchHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Services/ElasticSearchHelper.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +64,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/187A6DE7-99CE-4E64-88B5-B6D55E8B7D18/382/MemoryStream.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/EC82BD6D-F324-4BC1-AE2C-F38A1BBAA701/538/Requests.NoNamespace.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../.nuget/packages/microsoft.net.test.sdk/16.7.1/build/netcoreapp2.1/Microsoft.NET.Test.Sdk.Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ec82bd6df3244bc1ae2cf38a1bbaa7014b0a00/ad/6c83d572/TextQueryType.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/53B92D81-C9E0-42BD-9EF0-E70966A02EED/ca/071c3fb6/FromQueryAttribute.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/01ae3607adf645ecb30b3644519a824210400/3/IdentityUser.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
@@ -322,6 +323,13 @@
       <workItem from="1628329502620" duration="7218000" />
       <workItem from="1628353152410" duration="5983000" />
       <workItem from="1628406951120" duration="7228000" />
+      <workItem from="1629456022864" duration="4007000" />
+      <workItem from="1629534248750" duration="852000" />
+      <workItem from="1629538350077" duration="171000" />
+      <workItem from="1629566978815" duration="862000" />
+      <workItem from="1629621869311" duration="3941000" />
+      <workItem from="1629638360890" duration="2055000" />
+      <workItem from="1629644318417" duration="1358000" />
     </task>
     <servers />
   </component>
@@ -425,19 +433,6 @@
           <option name="timeStamp" value="83" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/IMSPublicApi/GoodsIssueEndpoints/GoodsIssueAPI.cs</url>
-          <line>95</line>
-          <properties documentPath="$PROJECT_DIR$/src/IMSPublicApi/GoodsIssueEndpoints/GoodsIssueAPI.cs" initialLine="92" containingFunctionPresentation="method 'HandleAsync'">
-            <startOffsets>
-              <option value="5157" />
-            </startOffsets>
-            <endOffsets>
-              <option value="5212" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="90" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/IMSPublicApi/ProductEndpoints/Create/ProductAPI.cs</url>
           <line>211</line>
           <properties documentPath="$PROJECT_DIR$/src/IMSPublicApi/ProductEndpoints/Create/ProductAPI.cs" initialLine="203" containingFunctionPresentation="method 'HandleAsync'">
@@ -483,29 +478,9 @@
           <option name="timeStamp" value="122" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/IMSPublicApi/PurchaseOrderEndpoint/PriceQuote/PriceQuoteAPI.cs</url>
-          <line>78</line>
-          <properties documentPath="$PROJECT_DIR$/src/IMSPublicApi/PurchaseOrderEndpoint/PriceQuote/PriceQuoteAPI.cs" initialLine="76" containingFunctionPresentation="method 'HandleAsync'">
-            <startOffsets>
-              <option value="4201" />
-            </startOffsets>
-            <endOffsets>
-              <option value="4332" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="124" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/IMSPublicApi/TransactionUpdateHelper.cs</url>
           <line>68</line>
-          <properties documentPath="$PROJECT_DIR$/src/IMSPublicApi/TransactionUpdateHelper.cs" initialLine="68" containingFunctionPresentation="method 'UpdateTransaction'">
-            <startOffsets>
-              <option value="2687" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2783" />
-            </endOffsets>
-          </properties>
+          <properties documentPath="$PROJECT_DIR$/src/IMSPublicApi/TransactionUpdateHelper.cs" initialLine="68" containingFunctionPresentation="method 'UpdateTransaction'" />
           <option name="timeStamp" value="126" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">

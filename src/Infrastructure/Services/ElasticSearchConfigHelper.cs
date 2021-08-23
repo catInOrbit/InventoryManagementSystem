@@ -100,15 +100,26 @@ namespace Infrastructure.Services
             );
             
         
+            // await client.Indices.CreateAsync( ElasticIndexConstant.PRODUCT_INDICES,
+            //     index 
+            //         => index.Map<ProductSearchIndex>(x 
+            //             => x.AutoMap().Properties(ps 
+            //                 => ps.Nested<ProductVariantInfoInProductIndex>(ps => 
+            //                     ps.Name(nn => nn.ProductVariantInfos).AutoMap()).Completion(c 
+            //                     => c.Name(n => n.Suggest))))
+            // );
+            
             await client.Indices.CreateAsync( ElasticIndexConstant.PRODUCT_INDICES,
-                index 
-                    => index.Map<ProductSearchIndex>(x 
+                index
+                    => index.Settings(s => s.Analysis(a => a.Tokenizers(
+                            t => t.Pattern("hyphen_tokenizer", descriptor => descriptor.Pattern(".*-.*"))
+                        )))
+                        .Map<ProductSearchIndex>(x 
                         => x.AutoMap().Properties(ps 
                             => ps.Nested<ProductVariantInfoInProductIndex>(ps => 
                                 ps.Name(nn => nn.ProductVariantInfos).AutoMap()).Completion(c 
                                 => c.Name(n => n.Suggest))))
             );
-            
             await client.Indices.CreateAsync(ElasticIndexConstant.PURCHASE_ORDERS,
                 index => index.Map<PurchaseOrderSearchIndex>(x 
                     => x.AutoMap().Properties(ps 

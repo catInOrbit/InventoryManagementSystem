@@ -50,7 +50,7 @@ namespace InventoryManagementSystem.PublicApi.ManagerEndpoints
             user.Fullname =  request.Fullname;
             user.PhoneNumber =  request.PhoneNumber;
             user.Email = request.Email;
-            user.UserName = request.Fullname.Replace(" ","");
+            user.UserName = user.Email;
             user.Address =  request.Address;
             user.IsActive =  true;
             user.DateOfBirth = request.DateOfBirth;

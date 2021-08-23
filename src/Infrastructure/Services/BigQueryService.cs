@@ -18,7 +18,7 @@ namespace Infrastructure.Services
         private BigQueryClient _bigQueryClient;
         public BigQueryService()
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), @"imswarehouse-70a47bcd9c79.json");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), @"imswarehouse-fc02aefc2168.json");
             
             _bigQueryClient = BigQueryClient.Create(GCC_PROJECTID,
                 GoogleCredential.FromStream(new StreamReader(path).BaseStream));

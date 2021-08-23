@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "imswarehouse",
+  "private_key_id": "fc02aefc21685468f4df3ccfddb7a638dbb24b9c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCNHM84qsNu3LZU\nAfkZ82TetxLDyAg5yN17g2+O+IW+FcyqWdUzdUef5SIn383wC368QWGaWVRw7UTr\noX/G/suzrAKT6pfa1QSyfEaOmZJLBtbJOjyH4Uf7203QGo9pg+yedLmlon/WnAE2\nXyQtFHIXlUZSGCRLdx1xtUKyWghoTVRUaLc20FNsM/TRX5GP6+J+YJFxHYjzXwIu\nZRH/ra9BJQYV3/pfwZdjvAHjKov9gSCzN+4Mk2nCrsLXqZO/Cqek0xAM5hd+Zd18\nn0awqGYhmK+UPHmoibWiBgwnt5EZBTaAm/adkc2CrtuzY1oWLaDVbKE5n9c5mivR\nQteVpMUxAgMBAAECggEAM2QQFa+fABNydXLIgQpyrGeY9mM1l7HO84oBCVz5/Cmd\nQVb4/cYTASjmAQaRTgApti7LeHZa+ct3Y6cLzXGCxxr4T11K03/rt4LqAUntjNRf\nSaajX8sMN619D7J0kzVf6a9R4wAktYhYKrCIkMBW8r7C/ufa4/7r4rrkIOcIE8+3\nOQe4/XuyiBVkg/STkHHKll2c0BtXIVEuWRBiNNIe4DJdDpSmGNeAL7QAQChTTT1e\n3Gb8OGJS0TVHSKkZ4rE+qcSFzfqYAiHEQCy6liAOB7ohe4unDJfNkWQjY1zq4iDf\ntf+jRHFeRfgJUyHN98l+b1OVNBxwweSIE149BntE9wKBgQDGpGFdoGgjhIPCPJbk\n4Fzr1XHNSuRHdW9nKzR7SSGH/p4eIp0L7kuGd8ijFCywx7si3E7Vdbo0fIZdP6+z\nHpp3WfGoY1tcv05WavxeI/TbuzZnauBbEd0Mpa17H4lMJ7WfciRRkG5O+V50XJHl\nTSGJ/AeYmPZds2gqLQPFABf8mwKBgQC129gy4Ydv1AoNd0VIQ7S1IkBBEkF648p8\noPcNXE/+wWq+FnTLTMnRoEWuZ1Sc71ROjd/RHQX/SlRCq7wBNBQf5Hp+oxjEYZjH\n92rLC1W/GTm9vJ6QuFV3uZt4uiLM+n6vC9tzmqjsBGgGNublaranvIEaXxk35lFO\nDGmr7KV0IwKBgGD1WYUux8YWZ43Gr0yWayS98adoF9b9blwoTZyjzJcp5BoHgSqS\nrRC8pRVcwpejViek62Hr7fCym48mh+dhV7pMD9XGcZDq3Bz4aai12k3qqpp+I3aw\nWHpU4EHJ2eVvOIrUVv/tBLrNo5oemSQYqvdEKp0EhLSl3oE/qahd7FdjAoGALGmN\nKhfj4I6TCejX1acbSaUctgeEUEOzHq6cxvmFW7zWmaeYTFHrc7NFcSsxAcZ8+1Yw\nk7wXy9nWLBYOquiSBZvhwm2ITeVbz3H/9ahF/45kiI641rT9wmhkrJ4gg5ilOZCW\nvmvF1yXYVbQwvVRLWTly+gLBgOJRdtMXN3JqkasCgYEAtnH84Ch4ZHyoSWgEEvbQ\nF97P4WZashTZ83BPq+xIAXCyQ/UUjyMupO7Lh9ww5rme7uSBxv7zMvWBtlEgQvcT\nctEmxkII8uNbr9gqP4bLcbDmBaiytdZOEJ8VZM/VFmPeiyGAPzh63ozC/lyM0j/k\nMBFq7I+b3j8oj1k7050MdaA=\n-----END PRIVATE KEY-----\n",
+  "client_email": "my-bigquery-sa@imswarehouse.iam.gserviceaccount.com",
+  "client_id": "106066203919392674273",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/my-bigquery-sa%40imswarehouse.iam.gserviceaccount.com"
+}
