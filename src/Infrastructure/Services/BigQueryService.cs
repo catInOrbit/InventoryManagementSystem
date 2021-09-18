@@ -14,11 +14,11 @@ namespace Infrastructure.Services
 {
     public class BigQueryService
     {
-        private const string GCC_PROJECTID = "imswarehouse";
+        private const string GCC_PROJECTID = "imsls-324015";
         private BigQueryClient _bigQueryClient;
         public BigQueryService()
         {
-            var path = Path.Combine(Directory.GetCurrentDirectory(), @"imswarehouse-fc02aefc2168.json");
+            var path = Path.Combine(Directory.GetCurrentDirectory(), @"imsls-324015-fda1175f83a8.json");
             
             _bigQueryClient = BigQueryClient.Create(GCC_PROJECTID,
                 GoogleCredential.FromStream(new StreamReader(path).BaseStream));
@@ -97,7 +97,7 @@ namespace Infrastructure.Services
             BigQueryTable factTable = null;
             
             string query = @"SELECT productname,date,quantitysold,cost, transactiontype, quantitysold*cost as totalvaluesold, quantityavailable * price as onhandvalue
-                            FROM `imswarehouse.IMSWH01.mock2`
+                            FROM `imsls-324015.productdim.productdim`
                             GROUP BY productname, date, quantitysold, cost,transactiontype, onhandvalue
                             ORDER BY date DESC";
             
@@ -114,10 +114,10 @@ namespace Infrastructure.Services
         public async Task<string> TrainMLWithLargestSoldProduct()
         {
             string queryLargestSoldProduct =
-                @"Select a.name, a.quantitysold from `imswarehouse.IMSWH01.mock10ksequential` as a
+                @"Select a.name, a.quantitysold from `imswarehouse.productdim.mock10ksequential` as a
                     inner join(
                         Select name, Max(quantitysold) as quantitysold 
-                        from `imswarehouse.IMSWH01.mock10ksequential`
+                        from `imsls-324015.IMSWH01.mock10ksequential`
                         Group by name 
                     ) as b ON a.name = b.name and a.quantitysold = b.quantitysold
                     ORDER BY a.quantitysold
@@ -165,7 +165,7 @@ namespace Infrastructure.Services
                         NULL AS prediction_interval_upper_bound 
 
                         FROM ( SELECT name, EXTRACT(DATE from date) AS date, 
-                        quantitysold FROM `imswarehouse.IMSWH01.mock10ksequential`
+                        quantitysold FROM `imsls-324015.productdim.productdim`
                         WHERE name=@name
                         GROUP BY name, date, quantitysold) 
                         UNION ALL 
@@ -237,9 +237,9 @@ namespace Infrastructure.Services
         {
             
             ServiceAccountCredential serviceAccountCredential;
-            var jsonPath = Path.Combine(Directory.GetCurrentDirectory(), @"imswarehouse-70a47bcd9c79.json");
+            var jsonPath = Path.Combine(Directory.GetCurrentDirectory(), @"imsls-324015-fda1175f83a8.json");
             string[] scopes = { SheetsService.Scope.Spreadsheets };
-            string serviceAccountEmail = "my-bigquery-sa@imswarehouse.iam.gserviceaccount.com";
+            string serviceAccountEmail = "my-bigquery-sa@imsls-324015.iam.gserviceaccount.com";
             using (Stream stream = new FileStream(jsonPath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 serviceAccountCredential = (ServiceAccountCredential)

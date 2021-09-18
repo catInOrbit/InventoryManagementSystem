@@ -9,12 +9,14 @@
   <component name="ChangeListManager">
     <list default="true" id="e9bb64e3-f5df-4330-ae7e-db06423994ac" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.InventoryManagementSystem/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.InventoryManagementSystem/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/IMSPublicApi/ManagerEndpoints/UserManagementEndpoint.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/IMSPublicApi/ManagerEndpoints/UserManagementEndpoint.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/IMSPublicApi/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/IMSPublicApi/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/IMSPublicApi/imswarehouse-70a47bcd9c79.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/IMSPublicApi/IMSPublicApi.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/IMSPublicApi/IMSPublicApi.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/IMSPublicApi/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/IMSPublicApi/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/IMSPublicApi/imswarehouse-fc02aefc2168.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Identity/DbContexts/AppDbContextMain.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Identity/DbContexts/AppDbContextMain.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Infrastructure.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Infrastructure.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Infrastructure/Services/BigQueryService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Services/BigQueryService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Services/ElasticSearchConfigHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Services/ElasticSearchConfigHelper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Services/ElasticSearchHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Services/ElasticSearchHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/Services/RedisWorkerService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/src/Infrastructure/Services/RedisWorkerService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Infrastructure/imswarehouse-70a47bcd9c79.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +49,6 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/187649C7-DF8C-4476-A73A-18E4E041A8A7/F/Hub.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/src/Infrastructure/Services/BigQueryService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/187649C7-DF8C-4476-A73A-18E4E041A8A7/1a/1784e96c/IHubContext`1.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file:///usr/share/dotnet/sdk/5.0.300/Microsoft.Common.CurrentVersion.targets" root0="SKIP_INSPECTION" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/536761DE-D0F0-447E-B641-CDC11D2BF1BE/1D/BigQueryInsertRow.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/B8957DCD-9417-46C6-AD6B-8DCEEBF9CF2B/f9/ec534989/IAuthorizationService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/687CD3EF-1206-406C-8B82-2CB02EE0595E/1/ConfigurationExtensions.cs" root0="SKIP_HIGHLIGHTING" />
@@ -64,6 +65,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/187A6DE7-99CE-4E64-88B5-B6D55E8B7D18/382/MemoryStream.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/EC82BD6D-F324-4BC1-AE2C-F38A1BBAA701/538/Requests.NoNamespace.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../.nuget/packages/microsoft.net.test.sdk/16.7.1/build/netcoreapp2.1/Microsoft.NET.Test.Sdk.Program.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/cbe24be972b14296af7b50a52ffef84ebe00/a6/57886645/GpgKey.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/ec82bd6df3244bc1ae2cf38a1bbaa7014b0a00/ad/6c83d572/TextQueryType.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/53B92D81-C9E0-42BD-9EF0-E70966A02EED/ca/071c3fb6/FromQueryAttribute.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/01ae3607adf645ecb30b3644519a824210400/3/IdentityUser.cs" root0="SKIP_HIGHLIGHTING" />
@@ -330,6 +332,10 @@
       <workItem from="1629621869311" duration="3941000" />
       <workItem from="1629638360890" duration="2055000" />
       <workItem from="1629644318417" duration="1358000" />
+      <workItem from="1630521361960" duration="2014000" />
+      <workItem from="1631643338838" duration="2506000" />
+      <workItem from="1631683023124" duration="2816000" />
+      <workItem from="1631686906539" duration="152000" />
     </task>
     <servers />
   </component>
@@ -418,19 +424,6 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="71" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/src/Infrastructure/Services/BigQueryService.cs</url>
-          <line>74</line>
-          <properties documentPath="$PROJECT_DIR$/src/Infrastructure/Services/BigQueryService.cs" initialLine="72" containingFunctionPresentation="method 'InsertProductRowBQ'">
-            <startOffsets>
-              <option value="3373" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3401" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="83" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/src/IMSPublicApi/ProductEndpoints/Create/ProductAPI.cs</url>

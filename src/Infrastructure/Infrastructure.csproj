@@ -42,7 +42,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="imswarehouse-70a47bcd9c79.json">
+      <Content Include="imsls-324015-fda1175f83a8.json">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>

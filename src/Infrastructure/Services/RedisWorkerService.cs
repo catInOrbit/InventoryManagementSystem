@@ -1,10 +1,13 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Infrastructure.Identity.DbContexts;
+using InventoryManagementSystem.ApplicationCore;
 using InventoryManagementSystem.ApplicationCore.Constants;
 using InventoryManagementSystem.ApplicationCore.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -41,8 +44,13 @@ namespace Infrastructure.Services
                     options.UseSqlServer(_configuration.GetConnectionString(ConnectionPropertiesConstant.MAIN_CONNECTION_STRING));
                     using(var dbContext = new IdentityAndProductDbContext(options.Options))
                     {
-                        await dbContext.AddRangeAsync(data, stoppingToken);
-                        await dbContext.SaveChangesAsync(stoppingToken);
+                        var activated = from p in dbContext.AdminControlOptions select p;
+                        var adminControl = activated as AdminControlOptions;
+                        if (adminControl.IsActivatingRedisNotiWorker == true)
+                        {
+                            await dbContext.AddRangeAsync(data, stoppingToken);
+                            await dbContext.SaveChangesAsync(stoppingToken);    
+                        }
                     }
                 }
                 await Task.Delay(3600000, stoppingToken);

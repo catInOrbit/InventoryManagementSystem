@@ -1,4 +1,5 @@
-﻿using InventoryManagementSystem.ApplicationCore.Entities;
+﻿using InventoryManagementSystem.ApplicationCore;
+using InventoryManagementSystem.ApplicationCore.Entities;
 using InventoryManagementSystem.ApplicationCore.Entities.Orders;
 using InventoryManagementSystem.ApplicationCore.Entities.Products;
 using Microsoft.AspNetCore.Identity;
@@ -29,6 +30,7 @@ namespace Infrastructure.Identity.DbContexts
         public DbSet<TransactionRecord> TransactionRecord { get; set; }
         public DbSet<Product> Product { get; set; }
         public DbSet<Location> Location { get; set; }
+        public DbSet<AdminControlOptions> AdminControlOptions { get; set; }
 
         // public DbSet<ProductSerialNumber> ProductSerialNumber { get; set; }
         public DbSet<ProductVariant> ProductVariant { get; set; }
