@@ -11,9 +11,9 @@ Project is organized following CLEAN architecture from Microsoft
 https://docs.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures
 
 Architecture Diagram:
-![](https://drive.google.com/file/d/1-hQ6cJdW4CuDxMiGPY3eHeBG82x0PKx3/view?usp=sharing)
-
+![](https://raw.githubusercontent.com/catInOrbit/InventoryManagementSystem/main/kUtqdF.png?token=AL4BUCQTI4MAZHHO4QP2RWDBJ27LI)
 Visualization: 
+![](https://raw.githubusercontent.com/catInOrbit/InventoryManagementSystem/main/Screenshot%20from%202021-09-18%2012-45-37.png?token=AL4BUCUNT3ZONSMPICQ6Q5DBJ27GY)
 
 ### Tech stack:
 - .NET Core 5 with Entity Framework
@@ -33,3 +33,4 @@ Designed for deployement on Heroku Cloud
 - Management of Location (assume single shelf location with no constraint on maximum storage threshold) for stock taking purpose
 - Management of accounts for authorized role
 - Real time notification with SignalR
+- Report visualized with Google Data Studio (disabled for billing purpose)
