@@ -2,7 +2,8 @@
 
 ### Overview
 
-Maintain by: https://github.com/catInOrbit (Mao Nguyen Minh Tam)
+Maintain by: 
+https://github.com/catInOrbit (Mao Nguyen Minh Tam thmmao2017@gmail.com)
 A backend project built in .NET core with Entity Framework for FPT Final Capstone project 2021: Inventory Management System
 
 ### Architecture:
